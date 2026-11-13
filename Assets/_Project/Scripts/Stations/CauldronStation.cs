@@ -36,6 +36,7 @@ namespace BilgiAdasi.Order
             cachedSpecies = s;
             cachedPrompt = pendingNow ? texts.TakeProductPrompt
                 : s == null ? texts.EmptyHandPrompt
+                : s.IsTool ? texts.ToolNotPourable
                 : string.Format(texts.PourPrompt, s.FormulaRich);
             return cachedPrompt;
         }

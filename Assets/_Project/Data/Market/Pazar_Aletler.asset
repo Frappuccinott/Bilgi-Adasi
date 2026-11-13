@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 183048bf976fba0409f94982fff228d7, type: 3}
+  m_Name: Pazar_Aletler
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.MarketCatalog
+  entries:
+  - species: {fileID: 11400000, guid: 4d3c850907591ae4da9da9145f4630e2, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: 729a282929a793040a1fca454a754b1e, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: 64dcada6b2a0e8e4685b262fa819e829, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: b192df99803118b40a13bee7fd3ea322, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: 2c606761ac147c04ca77de4a893ebac3, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: d1ad021f96ee1ac42bb942f090d59b73, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: 01a79056c3fc85c4d85622f9252b04b7, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: e2ff8d4a868b06c47b47bc82cfb02740, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}

@@ -33,6 +33,7 @@ namespace BilgiAdasi.Order
         [SerializeField] private string placeShelfPrompt = "Rafa koy: {0} ×{1}";
         [SerializeField] private string emptyShelfPrompt = "Boş raf";
         [SerializeField] private string marketPrompt = "Pazar";
+        [SerializeField] private string toolNotPourable = "Alet kazana dökülmez.";
 
         public string SealNote => sealNote;
         public string NotEnoughMoney => notEnoughMoney;
@@ -55,5 +56,6 @@ namespace BilgiAdasi.Order
         public string PlaceShelfPrompt => placeShelfPrompt;
         public string EmptyShelfPrompt => emptyShelfPrompt;
         public string MarketPrompt => marketPrompt;
+        public string ToolNotPourable => toolNotPourable;
     }
 }

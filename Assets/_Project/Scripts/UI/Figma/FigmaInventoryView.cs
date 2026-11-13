@@ -73,7 +73,7 @@ namespace BilgiAdasi.UI
                 counts[i].gameObject.SetActive(has && slots[i].Count > 1);
                 if (!has) continue;
                 var species = slots[i].Species;
-                var sprite = th.IconFor(species.Formula);
+                var sprite = th.IconFor(species);
                 icons[i].sprite = sprite != null ? sprite : UiKit.Disc;
                 icons[i].color = sprite != null ? Color.white : species.JarColor;
                 icons[i].rectTransform.sizeDelta = sprite != null ? new Vector2(slotSize - 22f, slotSize - 22f) : new Vector2(slotSize * 0.42f, slotSize * 0.42f);

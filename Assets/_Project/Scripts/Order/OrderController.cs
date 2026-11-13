@@ -174,6 +174,11 @@ namespace BilgiAdasi.Order
             }
             if (!CanPour) return;
             var s = inventory.SelectedSpecies;
+            if (s != null && s.IsTool)
+            {
+                Notice(texts != null ? texts.ToolNotPourable : null);
+                return;
+            }
             if (s == null || !inventory.RemoveSelected(1)) return;
 
             session.Pour(s);

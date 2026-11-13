@@ -88,14 +88,27 @@ namespace BilgiAdasi.UI
         /// <summary>"Ca(OH)2" → Malzeme_CaOH2. Yoksa null (view kavanoz rengiyle disk çizer).</summary>
         public Sprite IconFor(string formula)
         {
-            if (string.IsNullOrEmpty(formula) || speciesIcons == null) return null;
+            if (string.IsNullOrEmpty(formula)) return null;
+            return IconNamed("Malzeme_" + formula.Replace("(", string.Empty).Replace(")", string.Empty));
+        }
+
+        /// <summary>Maddenin kendi simge adı varsa (aletler: Alet_Havan) onu, yoksa Malzeme_&lt;formül&gt;'ü döner.</summary>
+        public Sprite IconFor(Chemistry.SpeciesData species)
+        {
+            if (species == null) return null;
+            return !string.IsNullOrEmpty(species.IconName) ? IconNamed(species.IconName) : IconFor(species.Formula);
+        }
+
+        private Sprite IconNamed(string iconName)
+        {
+            if (string.IsNullOrEmpty(iconName) || speciesIcons == null) return null;
             if (iconMap == null)
             {
                 iconMap = new System.Collections.Generic.Dictionary<string, Sprite>();
                 foreach (var s in speciesIcons)
                     if (s != null) iconMap[s.name] = s;
             }
-            return iconMap.TryGetValue("Malzeme_" + formula.Replace("(", string.Empty).Replace(")", string.Empty), out var icon) ? icon : null;
+            return iconMap.TryGetValue(iconName, out var icon) ? icon : null;
         }
 
         private static Color Hex(int rgb) =>

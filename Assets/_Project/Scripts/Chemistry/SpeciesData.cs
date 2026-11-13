@@ -36,6 +36,10 @@ namespace BilgiAdasi.Chemistry
         [SerializeField] private GameObject jarPrefab;
         [Tooltip("Pazarda bir kavanozun akçe fiyatı.")]
         [Min(0)] [SerializeField] private int price = 1;
+        [Tooltip("Alet (havan, elek, huni…): envantere ve rafa girer, pazarda satılır; kazana dökülmez, terazide yoktur.")]
+        [SerializeField] private bool isTool;
+        [Tooltip("İsteğe bağlı simge adı (UI/Ikonlar). Boşsa Malzeme_<formül>.")]
+        [SerializeField] private string iconName = "";
 
         [NonSerialized] private string formulaRichCache;
 
@@ -47,6 +51,8 @@ namespace BilgiAdasi.Chemistry
         public Color JarColor => jarColor;
         public GameObject JarPrefab => jarPrefab;
         public int Price => price;
+        public bool IsTool => isTool;
+        public string IconName => iconName;
 
         private void OnValidate() => formulaRichCache = null;
 

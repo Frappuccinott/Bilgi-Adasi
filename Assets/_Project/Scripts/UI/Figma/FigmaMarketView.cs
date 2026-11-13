@@ -125,7 +125,7 @@ namespace BilgiAdasi.UI
             var icon = UiKit.Img(paper.transform, "Icon", Color.white);
             UiKit.Place(icon.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -14f), new Vector2(112f, 112f));
             icon.preserveAspect = true;
-            var sprite = th.IconFor(item.Species.Formula);
+            var sprite = th.IconFor(item.Species);
             icon.sprite = sprite != null ? sprite : UiKit.Disc;
             icon.color = sprite != null ? Color.white : item.Species.JarColor;
             if (sprite == null) icon.rectTransform.sizeDelta = new Vector2(64f, 64f);

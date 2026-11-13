@@ -18,6 +18,8 @@ namespace BilgiAdasi.Order
     /// </summary>
     public sealed class MarketStall : WorldInteractable, IMarketCommands, IMarketState
     {
+        [Tooltip("Boşsa ortak \"Pazar\" ipucu. Birden çok tezgâhta ayırt etmek için: \"Element pazarı\", \"Alet pazarı\".")]
+        [SerializeField] private string promptOverride = "";
         [Tooltip("Bu tezgâhın satış listesi. İkinci pazar = başka bir katalog.")]
         [SerializeField] private MarketCatalog catalog;
         [Tooltip("Borç miktarı buradan okunur.")]
@@ -38,7 +40,8 @@ namespace BilgiAdasi.Order
 
         public override bool CanInteract => base.CanInteract && !open && catalog != null && economy != null;
 
-        public override string GetPrompt(PlayerInteractor interactor) => texts != null ? texts.MarketPrompt : string.Empty;
+        public override string GetPrompt(PlayerInteractor interactor) =>
+            !string.IsNullOrEmpty(promptOverride) ? promptOverride : texts != null ? texts.MarketPrompt : string.Empty;
 
         private static SaveData Data => SaveSystem.Instance != null ? SaveSystem.Instance.Data : null;
         private string CatalogId => catalog != null ? catalog.name : string.Empty;
