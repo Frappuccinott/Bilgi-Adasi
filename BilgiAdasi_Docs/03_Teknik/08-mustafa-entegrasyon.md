@@ -6,6 +6,7 @@
 ## 1. Sahne
 
 - Tek oyun sahnesi: `Assets/_Project/Scenes/Town.unity` (atölye + şehir). `Boot` ve `Classroom` sahnelerine dokunma.
+- `Town` şu an test sahnesidir: `_Placeholder` kökü (zemin, duvar, basamak, rampa, ham HUD) senin düzenin gelince silinir. Prefab örnekleri (`PlayerSpawn`, `Station_*`, `Neighborhood_*`, `LockedZone_Example`) kalır, yalnızca yerlerini değiştirirsin.
 - Kendi düzenini ayrı bir sahnede kurup sonra `Town`'a taşıyabilirsin; aynı sahnede aynı anda ikimiz çalışmayalım (merge çakışır). Sahneyi açmadan önce haber ver.
 - Ölçek: 1 birim = 1 m. Göz yüksekliği 1.56 → 1.68 m (oyuncu büyür). Kapı ≥ 2.1 m, tezgâh ~0.9 m, raf üstü ≤ 1.8 m.
 - Uçtan uca yürüyüş ≤ 40 sn (yürüme hızı 3.8 m/s → yol ~150 m'yi geçmesin).
@@ -15,7 +16,8 @@
 
 | Obje (önerilen ad) | Adet | Bileşen / ayar | Ne yapar |
 |---|---|---|---|
-| `PlayerSpawn` | 1 | `PlayerSpawn` | Oyuncu burada başlar. Mavi ok = bakış yönü. Zeminin hemen üstüne koy. |
+| `PlayerSpawn` | 1 | `Prefabs/PlayerSpawn.prefab` | Oyuncu (ve Main Camera) Play'de burada doğar. Mavi ok = bakış yönü. Zeminin hemen üstüne koy. Sahneye ayrıca kamera koyma. |
+| `EventSystem` | 1 | EventSystem + *Input System UI Input Module* | UI tıklamaları için |
 | `Station_Cauldron` | 1 | Benim prefab'ım (`_Project/Prefabs/Stations/`) | Kazan istasyonu |
 | `Station_Desk` | 1 | Benim prefab'ım | Çalışma masası |
 | `Station_Door` | 1 | Benim prefab'ım | Kapı (sakinler burada konuşur) |
@@ -69,7 +71,9 @@ Kod hiçbir Canvas'a ya da objeye bağlı değildir. Her UI parçası için bir 
 | `IRealLifeCardView` | "Gerçek hayatta" kartı | 6 |
 | `IMapView` | Harita: mahalle durumu + 5 nokta | 6 |
 
-Her arayüzün ham bir `Placeholder…View` versiyonu `_Placeholder` altında durur; seninki hazır olunca onu sil, seninkini aynı alana sürükle. Arayüzün tam metotları kod geldikçe bu tabloya eklenecek.
+View script'i `RegisteredView<IArayüz>`'den türer ve açılınca kendini kaydeder; bu yüzden **sahnede bir yere sürükleyip bağlaman gerekmez**, objenin açık olması yeterli. Örnek: `Scripts/UI/Placeholder/PlaceholderInteractPromptView.cs`.
+
+Her arayüzün ham bir `Placeholder…View` versiyonu sahnede `_Placeholder` altında durur; seninki hazır olunca onu sil, seninkini aynı alana sürükle. Arayüzün tam metotları kod geldikçe bu tabloya eklenecek.
 
 UI ayarları: Canvas Scaler → *Scale With Screen Size*, 1920×1080. Yazı en az 28 px. Formüller TMP'de `H<sub>2</sub>O`. Fontta ğ ş ı İ ve `→` olmalı.
 

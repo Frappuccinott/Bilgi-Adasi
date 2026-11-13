@@ -51,7 +51,8 @@ Yeni paket eklemeden önce **sor**.
 
 **Kural:** Eklenen her aksiyon, aynı commit'te hem **Keyboard&Mouse** hem **Gamepad** bağlamasıyla eklenir. Sadece klavye bağlaması olan aksiyon "bitmiş" sayılmaz.
 
-- Tek asset: `Assets/_Project/Input/BilgiAdasiControls.inputactions`, C# sınıfı üretilir (`Generate C# Class`).
+- Tek asset: `Assets/_Project/Input/BilgiAdasiControls.inputactions`, C# sınıfı üretilir (`Generate C# Class` → `Scripts/Core/Input/`).
+- Kodda tek giriş noktası: `GameInput.Controls` (tek örnek), map değişimi yalnızca `GameInput.SetMode(InputMode.Player|Station|UI)`. Son cihaz: `GameInput.LastDevice` / `DeviceChanged`.
 - Control scheme'ler: `KeyboardMouse`, `Gamepad`.
 - Action map'ler aynı anda yalnızca biri açık olacak şekilde yönetilir: `Player`, `Station`, `UI`.
 - Ekrandaki tuş ipuçları **son kullanılan cihaza göre** değişir (`E` ↔ `Ⓐ`). `InputUser.onChange` / `PlayerInput.onControlsChanged` ile.
@@ -173,6 +174,7 @@ Oyuncu öğrendikçe büyür: sınıf atladıkça belirgin, her mahalle bittikç
 - `[SerializeField] private` alanlar; public alan yok (property kullan).
 - `Update` içinde `Find`, `GetComponent`, LINQ, `new` (gereksiz ayırma) yok. Referanslar Inspector'dan.
 - Sistemler arası iletişim `GameEvents` üzerinden; denetleyiciler görsel efektleri doğrudan bilmez.
+- UI view'ları `RegisteredView<IXView>`'den türer (açılınca `ViewLocator`'a kaydolur); denetleyiciler `ViewLocator.Get<IXView>()` ile bulur, Canvas/obje referansı tutmaz.
 - Singleton yalnızca `GameManager`, `SaveSystem`, `SceneFlow` için.
 - Veri ScriptableObject'te (`BilgiAdasi_Docs/03_Teknik/04-teknik-mimari.md` §3).
 - Kimya hesabı (`AtomMath`) saf C#; Unity'ye bağımlı değil; EditMode testleri var.

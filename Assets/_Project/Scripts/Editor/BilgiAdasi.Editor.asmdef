@@ -4,7 +4,10 @@
     "references": [
         "BilgiAdasi",
         "BilgiAdasi.Chemistry",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "Unity.Cinemachine",
+        "Unity.TextMeshPro",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [
         "Editor"
