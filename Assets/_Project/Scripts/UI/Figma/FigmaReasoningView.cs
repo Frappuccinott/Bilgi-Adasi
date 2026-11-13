@@ -198,7 +198,8 @@ namespace BilgiAdasi.UI
             column = UiKit.Rect(rootRt, "Column");
             column.anchorMin = column.anchorMax = new Vector2(0f, 0f);
             column.pivot = new Vector2(0f, 0f);
-            column.anchoredPosition = new Vector2(left, 120f);
+            // Envanter çubuğunun (altta ~150 px) üstünde kalır; sorgu sırasında envanter açık durur.
+            column.anchoredPosition = new Vector2(left, 190f);
             column.sizeDelta = new Vector2(textWidth, 0f);
             var col = column.gameObject.AddComponent<VerticalLayoutGroup>();
             col.spacing = 12f;
