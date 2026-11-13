@@ -21,6 +21,7 @@ namespace BilgiAdasi.UI
         [SerializeField] private string pausedTitle = "Duraklatıldı";
         [SerializeField] private string resumeWord = "Devam et";
         [SerializeField] private string achievementsWord = "Başarımlar";
+        [SerializeField] private string discoveryWord = "Keşif Defteri";
         [SerializeField] private string quitWord = "Oyundan çık";
         [SerializeField] private string backWord = "Geri";
 
@@ -96,12 +97,29 @@ namespace BilgiAdasi.UI
 
         public bool TryGoBack()
         {
+            var book = ViewLocator.Get<IDiscoveryBookView>();
+            if (book != null && book.IsOpen)
+            {
+                book.Close();
+                return true;
+            }
             if (!treePage.activeSelf) return false;
             ShowMain(achievementsButton);
             return true;
         }
 
         // ---------- Sayfalar ----------
+
+        private Button discoveryButtonRef;
+
+        /// <summary>Keşif Defteri (öğrenme katmanı) menünün üstünde açılır; kapanınca menüye dönülür.</summary>
+        private void OpenDiscoveryBook(Button returnTo)
+        {
+            var commands = ViewLocator.Get<IDiscoveryBookCommands>();
+            if (commands == null) return;
+            mainPage.SetActive(false);
+            commands.OpenBook(() => ShowMain(returnTo));
+        }
 
         private void ShowMain(Button select)
         {
@@ -377,7 +395,7 @@ namespace BilgiAdasi.UI
             overlay = ov.gameObject;
 
             // Ana sayfa
-            var main = PlaceholderUi.Panel(ov, "Main", panelColor, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(560, 470));
+            var main = PlaceholderUi.Panel(ov, "Main", panelColor, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(560, 556));
             ApplySprite(main.GetComponent<Image>(), panelSprite);
             mainPage = main.gameObject;
             var title = PlaceholderUi.Text(main, "<b>" + pausedTitle + "</b>", 44, titleColor, TextAlignmentOptions.Top);
@@ -394,6 +412,9 @@ namespace BilgiAdasi.UI
             resumeButton = PlaceholderUi.MakeButton(listRt, resumeWord, () => ViewLocator.Get<IPauseMenuCommands>()?.Resume(), buttonColor, 72);
             achievementsButton = PlaceholderUi.MakeButton(listRt, achievementsWord, ShowTreePage, buttonColor, 72);
             achievementsLabel = achievementsButton.GetComponentInChildren<TMP_Text>();
+            var discoveryButton = PlaceholderUi.MakeButton(listRt, discoveryWord, () => OpenDiscoveryBook(discoveryButtonRef), buttonColor, 72);
+            discoveryButtonRef = discoveryButton;
+            Style(discoveryButton);
             var quit = PlaceholderUi.MakeButton(listRt, quitWord, () => ViewLocator.Get<IPauseMenuCommands>()?.QuitGame(), lockedNodeColor, 72);
             Style(resumeButton);
             Style(achievementsButton);

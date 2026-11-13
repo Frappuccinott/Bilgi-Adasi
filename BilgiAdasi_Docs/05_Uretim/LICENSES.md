@@ -47,6 +47,7 @@ Kayıtsız hiçbir hazır dosya projeye girmez. Bu tablo oyun içi **Emeği Geç
 | Claude | Oyun arayüzü tasarımı (Figma: ana menü, duraklatma, HUD, istasyonlar, harita, ayarlar, Keşif Defteri ve açılış animasyonu, başarı ağacı), UI/UX planı, arka plan için Unity sahne render'ları | Figma "Bilgi Adası — Marka Kimliği", `BilgiAdasi_Docs/01_Tasarim/11-ui-ux-plani.md`, `ArtSource/Marka/oyun_goruntu/`, `ArtSource/Referans/oyun_ui.md` | Mustafa |
 | Claude | Marka kimliği: ada amblemi (elle yazılmış SVG), logo kilidi, UI paleti türetimi, font araştırması, Figma marka sayfası (mühür, sipariş kartı, ipucu, ilerleme, düğme bileşenleri) | `ArtSource/Marka/`, Figma "Bilgi Adası — Marka Kimliği" | Mustafa |
 | Claude | Terazi atom modelleri (H küre, O halka, C küp, N piramit, Ca altıgen; mühür koduyla aynı) — Blender scripti, elle yazılmış Python | `ArtSource/Blender/Script/atom.py`, `Assets/_Project/Art/Atom/` | Mustafa |
+| Claude | Ustanın Sorgusu + Keşif Defteri (LearningDirector, LearningData, IReasoningView/IDiscoveryBookView, ham yer tutucu görünümler, Esc menüsünde defter düğmesi, Seviye 1–5 veri üreticisi) | `Assets/_Project/Scripts/Order/Learning/`, `Scripts/UI/LearningViews.cs`, `Scripts/UI/Placeholder/PlaceholderReasoningView.cs`, `PlaceholderDiscoveryBookView.cs`, `Scripts/Editor/LearningDataBuilder.cs` | Mustafa (Mehmet'in yetkisiyle) |
 | Claude | Tema ve model kuralları dokümanının uyarlanması (ekibin kendi Simya notlarından), repo kuralları | `BilgiAdasi_Docs/01_Tasarim/09-…`, `03_Teknik/08-…` §6 | Mustafa |
 | | | | |
 

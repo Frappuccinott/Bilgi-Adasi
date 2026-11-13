@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70a7545f25adcf545bcac7e27d0293e2, type: 3}
+  m_Name: LearningData
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.LearningData
+  masterName: "C\xE2bir Usta"
+  bookTitle: "Ke\u015Fif Defteri"
+  writtenNote: "Ke\u015Fif Defteri'ne yaz\u0131ld\u0131 ({0}):\n{1}"
+  writtenNotice: "Ke\u015Fif Defteri'ne yeni sayfa: {0}"
+  continueWord: Devam
+  closeWord: Kapat
+  emptyBook: "Defter hen\xFCz bo\u015F. G\xF6rd\xFC\u011F\xFCn\xFC yaz: her sipari\u015Ften
+    sonra bir sayfa eklenir."
+  delayAfterReaction: 0.6
+  entries:
+  - taskId: denk_1
+    reasoning:
+      question: "Peki \xE7\u0131rak, neden iki su molek\xFCl\xFC elde ettin?"
+      options:
+      - "Bir O<sub>2</sub>'de iki oksijen atomu var; her su bir oksijen al\u0131yor,
+        o y\xFCzden iki su olu\u015Fuyor."
+      - "Suyun form\xFCl\xFC 2H<sub>2</sub>O'dur."
+      - "\u0130ki hidrojen kavanozu koydum, oksijenin say\u0131s\u0131 \xF6nemli
+        de\u011Fil."
+      correctIndex: 0
+      replies:
+      - "Aynen \xF6yle. Atomlar\u0131 sayd\u0131n, kazan da sana hak verdi."
+      - "Hay\u0131r \xE7\u0131rak: 2, ka\xE7 tane su oldu\u011Funu s\xF6yler. Suyun
+        form\xFCl\xFC yine H<sub>2</sub>O'dur; katsay\u0131 form\xFCl\xFCn par\xE7as\u0131
+        de\u011Fildir."
+      - "Tek elemente bakma. Oksijen de say\u0131l\u0131r: bir O<sub>2</sub> iki
+        oksijen getirir, ikisi de bir suya gider."
+    discoveryId: K-1
+    discoveryText: "Tepkimede atomlar\u0131n t\xFCr\xFC ve say\u0131s\u0131 korunur;
+      de\u011Fi\u015Fen, atomlar\u0131n birbirine ba\u011Flan\u0131\u015F\u0131d\u0131r.
+      Su olu\u015Furken her 2 H<sub>2</sub> i\xE7in 1 O<sub>2</sub> harcan\u0131r."
+  - taskId: denk_2
+    reasoning:
+      question: "Neden bir de\u011Fil iki O<sub>2</sub> koydun?"
+      options:
+      - "CO<sub>2</sub>'deki 2 ve iki suyun i\xE7indeki 2 oksijen eder 4; her O<sub>2</sub>
+        iki oksijen getirir."
+      - "Metan \xE7ok yan\u0131c\u0131, fazladan hava iyi gelir."
+      - Karbon iki oksijen istiyor, bir O<sub>2</sub> yeter.
+      correctIndex: 0
+      replies:
+      - "Aynen \xF6yle. Oksijeni iki \xFCr\xFCn\xFCn i\xE7inde ayr\u0131 ayr\u0131
+        sayd\u0131n."
+      - "Sezgi g\xFCzel ama say\u0131m yok. Fazla hava iyi gelmez, yaln\u0131zca
+        artar. 4 oksijen gerekir, o kadar."
+      - "Suyu unuttun. Karbondioksit 2 oksijen al\u0131r, iki su da 2 oksijen daha:
+        toplam 4, yani iki O<sub>2</sub>."
+    discoveryId: K-2
+    discoveryText: "Yanma tepkimelerinde oksijenin rol\xFC vard\u0131r: yak\u0131t
+      O<sub>2</sub> ile birle\u015Fir. Karbon ve hidrojen i\xE7eren yak\u0131tlar
+      CO<sub>2</sub> ve H<sub>2</sub>O verir. Hava yetmezse is (karbon) ve CO \xE7\u0131kar."
+  - taskId: denk_3
+    reasoning:
+      question: 
+      options:
+      - 
+      - 
+      - 
+      correctIndex: 0
+      replies:
+      - 
+      - 
+      - 
+    discoveryId: K-3
+    discoveryText: "Dengesizli\u011Fi bulmak i\xE7in her elementi iki kefede ayr\u0131
+      say. Denkle\u015Ftirirken \xF6nce tek yerde ge\xE7en elementler (C, H), oksijen
+      en son."
+  - taskId: denk_4
+    reasoning:
+      question: "Kire\xE7 ta\u015F\u0131n\u0131n i\xE7indeki karbon nereye gitti?"
+      options:
+      - "CO<sub>2</sub> olarak havaya kar\u0131\u015Ft\u0131; atomlar\u0131 kaybolmad\u0131,
+        ba\u015Fka bir maddede."
+      - "Is\u0131yla yan\u0131p yok oldu."
+      - "CaO'nun i\xE7inde sakl\u0131 duruyor."
+      correctIndex: 0
+      replies:
+      - "Aynen \xF6yle. Ne girerse o \xE7\u0131kar: karbon ta\u015Ftan havaya ge\xE7ti."
+      - "Hi\xE7bir atom yok olmaz, \xE7\u0131rak. Karbon CO<sub>2</sub>'nin i\xE7inde
+        havaya kar\u0131\u015Ft\u0131."
+      - "CaO'ya bak: i\xE7inde Ca ve O var, karbon yok. Karbon CO<sub>2</sub> ile
+        \xE7\u0131kt\u0131."
+    discoveryId: K-4
+    discoveryText: "Bir tepkimenin \xFCr\xFCn\xFC ba\u015Fka bir tepkimenin gireni
+      olabilir (ara \xFCr\xFCn). Kire\xE7: CaCO<sub>3</sub> \u2192 CaO \u2192 Ca(OH)<sub>2</sub>."
+  - taskId: denk_5
+    reasoning:
+      question: "Fazladan N<sub>2</sub> alsayd\u0131n neden kazanda kal\u0131rd\u0131?"
+      options:
+      - "H<sub>2</sub> biterdi; N<sub>2</sub> e\u015Fle\u015Fecek hidrojen bulamaz,
+        tepkime dururdu."
+      - "Kazan dolar, s\u0131\u011Fmazd\u0131."
+      - "N<sub>2</sub> a\u011F\u0131r oldu\u011Fu i\xE7in dibe \xE7\xF6ker, kar\u0131\u015Fmazd\u0131."
+      correctIndex: 0
+      replies:
+      - "Aynen \xF6yle. Biri biterse tepkime durur, fazla olan artar."
+      - "Hacim de\u011Fil, say\u0131 meselesi. Hidrojen biterse azot e\u015Fsiz kal\u0131r."
+      - "Kar\u0131\u015Fmak tepkimeye girmek demek de\u011Fil. Azot e\u015Fle\u015Fecek
+        hidrojen bulamad\u0131\u011F\u0131 i\xE7in artar."
+    discoveryId: K-5
+    discoveryText: "Tepkime girenleri katsay\u0131lar\u0131 oran\u0131nda harcar.
+      Biri biterse tepkime durur; fazla olan artar."
