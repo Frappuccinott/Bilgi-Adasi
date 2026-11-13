@@ -60,14 +60,18 @@ namespace BilgiAdasi.Order
     {
         [SerializeField] private OrderMode mode = OrderMode.Exact;
         [SerializeField] private List<OrderStep> steps = new List<OrderStep>();
-        [Tooltip("Raftaki mühürlü kavanozlar. Purchase modunda boş; malzeme sandıktan alınır.")]
+        [Tooltip("Teslimde keseye giren akçe.")]
+        [Min(0)] [SerializeField] private int reward = 10;
+        [Header("Eski (13.11 öncesi; malzeme artık pazardan alınır, kullanılmıyor)")]
         [SerializeField] private List<SpeciesData> shelf = new List<SpeciesData>();
-        [Header("Yalnızca Purchase")]
         [SerializeField] private int budget;
         [SerializeField] private List<SpeciesPrice> prices = new List<SpeciesPrice>();
 
         public OrderMode Mode => mode;
         public IReadOnlyList<OrderStep> Steps => steps;
+        public int Reward => reward;
+        /// <summary>Teslim edilecek ürünler: son adımın hedef ürünleri.</summary>
+        public IReadOnlyList<SpeciesAmount> DeliveryProducts => steps[steps.Count - 1].TargetProducts;
         public IReadOnlyList<SpeciesData> Shelf => shelf;
         public int Budget => budget;
         public IReadOnlyList<SpeciesPrice> Prices => prices;

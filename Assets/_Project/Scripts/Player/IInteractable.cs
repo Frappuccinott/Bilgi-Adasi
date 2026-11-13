@@ -1,11 +1,14 @@
 namespace BilgiAdasi.Player
 {
-    /// <summary>Oyuncunun bakıp Interact ile kullanabildiği her şey (istasyonlar).</summary>
+    /// <summary>Oyuncunun bakıp Interact ile kullanabildiği her şey (kazan, raf, pazar, kapı, istasyonlar).</summary>
     public interface IInteractable
     {
         bool CanInteract { get; }
-        /// <summary>Ekranda tuş simgesinin yanında görünen metin ("Kazana geç"). Inspector'dan gelir.</summary>
-        string PromptText { get; }
+        /// <summary>
+        /// Ekranda tuş simgesinin yanında görünen metin ("Kazana dök: O₂"). Duruma göre değişebilir; her karede
+        /// sorulur, bu yüzden uygulayan metni önbellekte tutmalı (durum değişmedikçe aynı string'i döndürmeli).
+        /// </summary>
+        string GetPrompt(PlayerInteractor interactor);
         void SetHighlighted(bool highlighted);
         void Interact(PlayerInteractor interactor);
     }

@@ -18,7 +18,69 @@ namespace BilgiAdasi.Core
             public int count;
         }
 
+        /// <summary>Bir yığın: envanter slotu ya da raf yeri. Madde formülüyle saklanır.</summary>
+        [Serializable]
+        public struct StackEntry
+        {
+            public string key;      // envanter: "0".."5", raf: "<rafId>/<yer>"
+            public string species;  // SpeciesData.Formula
+            public int count;
+        }
+
         public const int DefaultGrade = 10;
+
+        [SerializeField] private bool economyStarted;
+        [SerializeField] private int money;
+        [SerializeField] private List<StackEntry> inventory = new List<StackEntry>();
+        [SerializeField] private List<StackEntry> shelves = new List<StackEntry>();
+        [Tooltip("Tepkimesi bitmiş, teslim bekleyen sipariş (yeniden açılışta kaybolmasın).")]
+        [SerializeField] private string readyTaskId = "";
+
+        /// <summary>İlk açılışta false: başlangıç kesesi verilir.</summary>
+        public bool EconomyStarted { get => economyStarted; set => economyStarted = value; }
+        public int Money { get => money; set => money = value; }
+        public List<StackEntry> Inventory => inventory;
+        public string ReadyTaskId { get => readyTaskId; set => readyTaskId = value ?? ""; }
+
+        public bool TryGetShelf(string key, out StackEntry entry)
+        {
+            for (int i = 0; i < shelves.Count; i++)
+                if (shelves[i].key == key) { entry = shelves[i]; return true; }
+            entry = default;
+            return false;
+        }
+
+        /// <summary>Raf yerini yazar; species boşsa yeri siler.</summary>
+        public void SetShelf(string key, string species, int count)
+        {
+            for (int i = shelves.Count - 1; i >= 0; i--)
+                if (shelves[i].key == key) shelves.RemoveAt(i);
+            if (!string.IsNullOrEmpty(species) && count > 0)
+                shelves.Add(new StackEntry { key = key, species = species, count = count });
+        }
+
+        [Tooltip("Pazarda satılan adetler (stoklu satırlar için). key = katalog adı, species = formül.")]
+        [SerializeField] private List<StackEntry> marketSold = new List<StackEntry>();
+
+        public int GetMarketSold(string catalogId, string species)
+        {
+            for (int i = 0; i < marketSold.Count; i++)
+                if (marketSold[i].key == catalogId && marketSold[i].species == species) return marketSold[i].count;
+            return 0;
+        }
+
+        public void AddMarketSold(string catalogId, string species, int amount)
+        {
+            for (int i = 0; i < marketSold.Count; i++)
+            {
+                if (marketSold[i].key != catalogId || marketSold[i].species != species) continue;
+                var e = marketSold[i];
+                e.count += amount;
+                marketSold[i] = e;
+                return;
+            }
+            marketSold.Add(new StackEntry { key = catalogId, species = species, count = amount });
+        }
 
         [SerializeField] private int grade = DefaultGrade;
         [SerializeField] private List<string> completedNeighborhoods = new List<string>();
@@ -40,6 +102,10 @@ namespace BilgiAdasi.Core
         public void MarkNeighborhoodCompleted(string id) => AddUnique(completedNeighborhoods, id);
         public void MarkHintOpened(string taskId) => AddUnique(hintsOpened, taskId);
         public void AddBoardEquation(string richEquation) => AddUnique(boardEquations, richEquation);
+
+        // Yalnızca geliştirici kısayolları (görev atlama geri de gidebilir).
+        public void UnmarkTaskCompleted(string taskId) => completedTasks.Remove(taskId);
+        public void UnmarkNeighborhoodCompleted(string id) => completedNeighborhoods.Remove(id);
 
         public int GetFailCount(string taskId)
         {

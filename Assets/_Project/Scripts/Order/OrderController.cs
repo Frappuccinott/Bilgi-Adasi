@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using BilgiAdasi.Chemistry;
 using BilgiAdasi.Core;
-using BilgiAdasi.Player;
 using BilgiAdasi.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,12 +10,12 @@ using UnityEngine.InputSystem;
 namespace BilgiAdasi.Order
 {
     /// <summary>
-    /// Sipariş akışı (04 §5): Preparing ⇄ Foam → Reacting → (sonraki adım | RealLife → Done).
-    /// Kazan istasyonunun üzerinde durur. Görünümleri yalnızca arayüzlerle (ViewLocator) tanır;
-    /// görünüm tıklamaları IOrderCommands ile gelir. Görev verisi BeginTask ile verilir (Faz 4: NeighborhoodRunner).
+    /// Sipariş akışı (04 §5, karar 13.11): sipariş kapıda alınır → oyuncu malzemeyi pazardan/raftan envantere alır →
+    /// kazana döker (geri alınamaz) → 3D terazi dengelenince ateşi yakar → ürün envantere gelir → kapıda teslim.
+    /// Preparing ⇄ Foam (malzeme gider) → Reacting → (sonraki adım | ReadyToDeliver → [kapıda Deliver] → Done).
+    /// Kazan objesinde durur; kazan/ocak/kol etkileşimleri buraya gelir. Görünümleri yalnızca arayüzle (ViewLocator) tanır.
     /// </summary>
-    [RequireComponent(typeof(CauldronStation))]
-    public sealed class OrderController : MonoBehaviour, IOrderCommands
+    public sealed class OrderController : MonoBehaviour
     {
         public enum State
         {
@@ -24,73 +23,75 @@ namespace BilgiAdasi.Order
             Preparing,
             Foam,
             Reacting,
-            RealLife,
+            ReadyToDeliver,
             Done
         }
 
         private const int HintFailThreshold = 2;
-        private const float RealLifeTimeoutWithoutView = 3f;
 
         [SerializeField] private OrderTexts texts;
-        [Tooltip("Görev verilmeden istasyona girilirse bu görev başlar (test için). Faz 4'te NeighborhoodRunner verir.")]
-        [SerializeField] private OrderTask testTask;
         [SerializeField] private float foamDuration = 1.2f;
         [SerializeField] private float reactionDuration = 1.5f;
+        [Tooltip("\"Gerçek hayatta\" kartının ekranda kalma süresi (sn).")]
+        [SerializeField] private float realLifeSeconds = 8f;
 
-        private CauldronStation station;
         private OrderSession session;
-        private SpeciesData selected;
         private bool sealNoteShown;
-        private bool realLifeClosed;
-        private bool stationOpen;
+        private PlayerInventory lastInventory;
+        private InputAction hintAction;
+        private Coroutine realLifeRoutine;
 
-        private readonly List<ShelfItem> shelfBuffer = new List<ShelfItem>();
+        private readonly List<SpeciesAmount> pending = new List<SpeciesAmount>();
         private readonly List<SpeciesData> reactantBuffer = new List<SpeciesData>();
         private readonly List<string> localBoard = new List<string>();
 
-        private IOrderStationView stationView;
         private IOrderCardView cardView;
-        private IShelfView shelfView;
         private ICauldronView cauldronView;
         private IScaleView scaleView;
         private IChalkboardView boardView;
         private IHintBookView hintView;
         private IRealLifeCardView realLifeView;
+        private INoticeView noticeView;
 
         public State Current { get; private set; } = State.Idle;
         public OrderSession Session => session;
-        public bool IsBusy => Current == State.Foam || Current == State.Reacting || Current == State.RealLife;
+        public OrderTexts Texts => texts;
+        public OrderTask ActiveTask => session != null && Current != State.Done ? session.Task : null;
+        public bool IsBusy => Current == State.Foam || Current == State.Reacting;
+        public bool IsReadyToDeliver => Current == State.ReadyToDeliver;
+        public bool CanPour => session != null && Current == State.Preparing;
 
-        /// <summary>Görev bitti (teslim edildi). NeighborhoodRunner dinler.</summary>
+        public bool HasPendingProduct => pending.Count > 0;
+
+        /// <summary>Ürün hazır, kapıda teslim bekliyor.</summary>
+        public event Action<OrderTask> ReadyToDeliver;
+        /// <summary>Görev bitti (kapıda teslim edildi). NeighborhoodRunner dinler.</summary>
         public event Action<OrderTask> TaskFinished;
+        /// <summary>Kazan içeriği ya da durum değişti (etkileşim ipuçları tazelenir).</summary>
+        public event Action StateChanged;
 
-        private void Awake()
-        {
-            station = GetComponent<CauldronStation>();
-        }
+        private static SaveData Data => SaveSystem.Instance != null ? SaveSystem.Instance.Data : null;
 
         private void OnEnable()
         {
-            StationBase.Entered += OnStationEntered;
-            StationBase.Exited += OnStationExited;
             ViewLocator.Changed += OnViewsChanged;
+            hintAction = GameInput.FindAction("Player/OpenHint");
+            hintAction.performed += OnHintAction;
             CacheViews();
+            RefreshAll();
         }
 
         private void OnDisable()
         {
-            StationBase.Entered -= OnStationEntered;
-            StationBase.Exited -= OnStationExited;
             ViewLocator.Changed -= OnViewsChanged;
-            if (stationOpen) CloseStation();
+            if (GameInput.TryGetControls(out _)) hintAction.performed -= OnHintAction;
 
             // Devre dışı kalınca coroutine'ler durur; köpürme/tepkime ortasında kalırsa görev kilitlenmesin.
-            if (Current == State.Foam || Current == State.Reacting)
+            if (IsBusy)
             {
                 StopAllCoroutines();
+                session?.Clear();
                 Current = State.Preparing;
-                scaleView?.ClearFoamDifference();
-                cauldronView?.SetStoveLit(false);
             }
         }
 
@@ -105,162 +106,110 @@ namespace BilgiAdasi.Order
             }
             StopAllCoroutines();
             session = new OrderSession(task);
-            selected = null;
+            pending.Clear();
             Current = State.Preparing;
             hintView?.HideHint();
             hintView?.SetGlowing(false);
             realLifeView?.Hide();
             cauldronView?.SetStoveLit(false);
+            scaleView?.ClearFoamDifference();
+            SetReadySave(null);
+            RefreshAll();
+            GameEvents.RaiseActiveOrderChanged(task);
+        }
+
+        /// <summary>Kayıttan: tepkimesi bitmiş, teslim bekleyen siparişi geri kurar (ürün envanterde).</summary>
+        public void RestoreReady(OrderTask task)
+        {
+            if (task == null) return;
+            BeginTask(task);
+            session.Clear();
+            Current = State.ReadyToDeliver;
+            SetReadySave(task.Id);
             RefreshAll();
         }
 
-        // ---------- İstasyon ----------
-
-        private void OnStationEntered(StationBase s)
+        /// <summary>Görevi bırakır (geliştirici kısayolu: başka göreve atlama).</summary>
+        public void ClearTask()
         {
-            if (s != station) return;
-            if (session == null && testTask != null) BeginTask(testTask);
-
-            stationOpen = true;
-            ViewLocator.Register<IOrderCommands>(this);
-            var a = GameInput.Controls.Station;
-            a.Increase.performed += OnIncreaseAction;
-            a.Decrease.performed += OnDecreaseAction;
-            a.FireStove.performed += OnFireAction;
-            a.OpenHint.performed += OnHintAction;
-            a.Confirm.performed += OnConfirmAction;
-            a.SelectPrevious.performed += OnSelectPreviousAction;
-            a.SelectNext.performed += OnSelectNextAction;
-
-            // Gamepad'de imleç yok: girişte bir kavanoz seçili olsun ki vurgu hemen görünsün.
-            if (selected == null) selected = CurrentSelection();
-
-            stationView?.SetOpen(true);
-            RefreshAll();
-        }
-
-        private void OnStationExited(StationBase s)
-        {
-            if (s == station && stationOpen) CloseStation();
-        }
-
-        private void CloseStation()
-        {
-            stationOpen = false;
-            ViewLocator.Unregister<IOrderCommands>(this);
-            if (GameInput.TryGetControls(out var c))
-            {
-                var a = c.Station;
-                a.Increase.performed -= OnIncreaseAction;
-                a.Decrease.performed -= OnDecreaseAction;
-                a.FireStove.performed -= OnFireAction;
-                a.OpenHint.performed -= OnHintAction;
-                a.Confirm.performed -= OnConfirmAction;
-                a.SelectPrevious.performed -= OnSelectPreviousAction;
-                a.SelectNext.performed -= OnSelectNextAction;
-            }
+            StopAllCoroutines();
+            session = null;
+            pending.Clear();
+            Current = State.Idle;
             hintView?.HideHint();
-            stationView?.SetOpen(false);
+            hintView?.SetGlowing(false);
+            realLifeView?.Hide();
+            cauldronView?.SetStoveLit(false);
+            scaleView?.ClearFoamDifference();
+            SetReadySave(null);
+            RefreshAll();
+            GameEvents.RaiseActiveOrderChanged(null);
         }
 
-        private void OnIncreaseAction(InputAction.CallbackContext _) => Increase(CurrentSelection());
-        private void OnDecreaseAction(InputAction.CallbackContext _) => Decrease(CurrentSelection());
-        private void OnFireAction(InputAction.CallbackContext _) => FireStove();
-        private void OnHintAction(InputAction.CallbackContext _) => ToggleHint();
-        private void OnSelectPreviousAction(InputAction.CallbackContext _) => StepSelection(-1);
-        private void OnSelectNextAction(InputAction.CallbackContext _) => StepSelection(1);
-
-        /// <summary>A / Enter: kart açıksa kapatır, defter açıksa kapatır, yoksa seçili kavanozu ekler.</summary>
-        private void OnConfirmAction(InputAction.CallbackContext _)
+        /// <summary>Kapıda teslim: görev biter (TaskCompleted → kayıt). Ürünleri envanterden runner alır.</summary>
+        public void Deliver()
         {
-            if (Current == State.RealLife)
+            if (session == null || Current != State.ReadyToDeliver) return;
+            var task = session.Task;
+            Current = State.Done;
+            SetReadySave(null);
+            RefreshAll();
+            GameEvents.RaiseTaskCompleted(task.Id);
+            // Görev kayda işlendikten sonra: pazar "bitince açılır/kalkar" satırlarını doğru görür.
+            GameEvents.RaiseActiveOrderChanged(null);
+            TaskFinished?.Invoke(task);
+        }
+
+        // ---------- Etkileşimler (kazan, ocak, kol) ----------
+
+        /// <summary>Eldeki maddeden bir kavanoz kazana dökülür.</summary>
+        public void Pour(PlayerInventory inventory)
+        {
+            if (inventory == null) return;
+            if (session == null || Current == State.Done)
             {
-                CloseRealLifeCard();
+                Notice(texts != null ? texts.NoOrder : null);
                 return;
             }
-            if (hintView != null && hintView.IsHintOpen)
-            {
-                hintView.HideHint();
-                return;
-            }
-            AddToCauldron(CurrentSelection());
-        }
+            if (!CanPour) return;
+            var s = inventory.SelectedSpecies;
+            if (s == null || !inventory.RemoveSelected(1)) return;
 
-        /// <summary>↑/↓: raftaki kavanozlar arasında döner.</summary>
-        private void StepSelection(int direction)
-        {
-            if (session == null || session.ShelfItems.Count == 0) return;
-            var items = session.ShelfItems;
-            var current = CurrentSelection();
-            int index = -1;
-            for (int i = 0; i < items.Count; i++)
-                if (items[i] == current) index = i;
-            index = index < 0 ? 0 : (index + direction + items.Count) % items.Count;
-            Select(items[index]);
-        }
-
-        private SpeciesData CurrentSelection()
-        {
-            if (selected != null) return selected;
-            if (session == null) return null;
-            if (session.Contents.Count > 0) return session.Contents[0].Species;
-            return session.ShelfItems.Count > 0 ? session.ShelfItems[0] : null;
-        }
-
-        // ---------- IOrderCommands ----------
-
-        public void AddToCauldron(SpeciesData species)
-        {
-            if (!CanEdit() || species == null) return;
-            selected = species;
-            var result = session.Add(species);
-            if (result == AddResult.NotEnoughMoney && texts != null) cardView?.ShowMessage(texts.NotEnoughMoney);
-            AfterCauldronChanged();
-        }
-
-        public void Increase(SpeciesData species) => AddToCauldron(species);
-
-        public void Decrease(SpeciesData species)
-        {
-            if (!CanEdit() || species == null) return;
-            selected = species;
-            session.Remove(species);
-            AfterCauldronChanged();
-        }
-
-        public void Select(SpeciesData species)
-        {
-            selected = species;
+            session.Pour(s);
+            cauldronView?.PlayPour(s);
             RefreshCauldron();
         }
 
-        public void TouchLabel(SpeciesData species)
+        /// <summary>Kazan boşalır; içindekiler gider (hata sayılmaz).</summary>
+        public void Drain()
         {
-            if (species == null) return;
-            string note = !sealNoteShown && texts != null ? texts.SealNote : null;
-            sealNoteShown = true;
-            shelfView?.PlaySealShake(species, note);
+            if (session == null || !CanPour || session.IsEmpty) return;
+            session.Clear();
+            cauldronView?.PlayDrain();
+            Notice(texts != null ? texts.Drained : null);
+            RefreshCauldron();
         }
 
-        public void FireStove()
+        public void Fire(PlayerInventory inventory)
         {
-            if (!CanEdit()) return;
-
-            if (session.IsSatisfied)
+            if (session == null || Current == State.Done)
             {
-                StartCoroutine(ReactRoutine());
+                Notice(texts != null ? texts.NoOrder : null);
                 return;
             }
+            if (!CanPour || session.IsEmpty) return;
+            lastInventory = inventory;
+            StartCoroutine(session.IsSatisfied ? ReactRoutine() : FoamRoutine());
+        }
 
-            if (session.TryForgiveShortage())
-            {
-                if (texts != null) cardView?.ShowMessage(texts.ShortageForgiven);
-                RefreshAll();
-                StartCoroutine(ReactRoutine());
-                return;
-            }
-
-            StartCoroutine(FoamRoutine());
+        /// <summary>Envanter doluyken kazanda bekleyen ürünü alır.</summary>
+        public void TakePending(PlayerInventory inventory)
+        {
+            if (inventory == null || pending.Count == 0) return;
+            for (int i = pending.Count - 1; i >= 0; i--)
+                if (inventory.Add(pending[i].Species, pending[i].Amount)) pending.RemoveAt(i);
+            if (pending.Count > 0) Notice(texts != null ? texts.InventoryFull : null);
+            RefreshAll();
         }
 
         public void ToggleHint()
@@ -276,85 +225,110 @@ namespace BilgiAdasi.Order
             GameEvents.RaiseHintOpened(session.Task.Id);
         }
 
-        public void CloseRealLifeCard() => realLifeClosed = true;
-
-        private bool CanEdit() => session != null && Current == State.Preparing;
+        private void OnHintAction(InputAction.CallbackContext _) => ToggleHint();
 
         // ---------- Akış ----------
-
-        // Ocak kendiliğinden yanmaz (karar 13.11): oyuncu dengeyi görüp ateşi kendisi yakar.
-        private void AfterCauldronChanged() => RefreshCauldron();
 
         private IEnumerator FoamRoutine()
         {
             Current = State.Foam;
+            StateChanged?.Invoke();
             int fails = session.RegisterFail();
             GameEvents.RaiseFailed(session.Task.Id);
 
+            cauldronView?.SetStoveLit(true);
             cauldronView?.PlayFoam(foamDuration);
             scaleView?.ShowFoamDifference(session.Rows);
+            yield return new WaitForSeconds(foamDuration);
 
-            // Mühür kuralı (02 §3.4): öğrenci ilk dengesizlikte formülü değiştirmeyi düşünür.
-            // Not ilk köpürmede kendiliğinden bir kez gösterilir; etikete tıklayan da aynı notu alır.
+            // Karar 13.11: köpüren kazanın malzemesi gider; sipariş için baştan dökülür.
+            session.Clear();
+            scaleView?.ClearFoamDifference();
+            cauldronView?.SetStoveLit(false);
+            Current = State.Preparing;
+
+            // Mühür kuralı (02 §3.4): öğrenci ilk dengesizlikte formülü değiştirmeyi düşünür; not bir kez.
+            string note = texts != null ? texts.FoamLost : null;
             if (!sealNoteShown && texts != null)
             {
                 sealNoteShown = true;
-                shelfView?.PlaySealShake(CurrentSelection(), texts.SealNote);
+                note += "\n" + texts.SealNote;
             }
-            yield return new WaitForSeconds(foamDuration);
-            scaleView?.ClearFoamDifference();
-
-            // Kazan boşalmaz; oyuncunun seçimi korunur (02 §3.5).
-            Current = State.Preparing;
+            Notice(note);
             if (fails >= HintFailThreshold) hintView?.SetGlowing(true);
+            RefreshAll();
         }
 
         private IEnumerator ReactRoutine()
         {
             Current = State.Reacting;
+            StateChanged?.Invoke();
             cauldronView?.SetStoveLit(true);
             cauldronView?.PlayReaction(reactionDuration);
             yield return new WaitForSeconds(reactionDuration);
 
-            WriteToBoard(FormulaFormatter.Equation(session.Step.Reaction));
+            var step = session.Step;
+            WriteToBoard(FormulaFormatter.Equation(step.Reaction));
             cauldronView?.SetStoveLit(false);
+            session.Clear();
+
+            // Ürünler soldan ilk boş slota; yer yoksa kazanda bekler.
+            var products = step.TargetProducts;
+            for (int i = 0; i < products.Count; i++)
+                if (lastInventory == null || !lastInventory.Add(products[i].Species, products[i].Amount))
+                    pending.Add(products[i]);
+            if (pending.Count > 0) Notice(texts != null ? texts.ProductWaiting : null);
 
             if (session.HasNextStep)
             {
-                // Zincir: adım ürünü rafa düşer, sonraki adım başlar.
+                // Zincir: adım ürünü envantere düştü, sonraki adımda malzeme olur.
                 session.AdvanceStep();
-                selected = null;
                 Current = State.Preparing;
+                if (pending.Count == 0) Notice(texts != null ? texts.NextStep : null);
                 RefreshAll();
                 yield break;
             }
 
             var task = session.Task;
-            if (!string.IsNullOrEmpty(task.RealLifeText))
-            {
-                Current = State.RealLife;
-                realLifeClosed = false;
-                realLifeView?.Show(task.RealLifeText);
-                float waitUntil = Time.time + RealLifeTimeoutWithoutView;
-                while (!realLifeClosed && (realLifeView != null || Time.time < waitUntil)) yield return null;
-                realLifeView?.Hide();
-            }
-
-            Current = State.Done;
+            Current = State.ReadyToDeliver;
             hintView?.SetGlowing(false);
             hintView?.HideHint();
-            if (task.DeliveryLines.Length > 0) cardView?.ShowMessage(task.DeliveryLines[0]);
+            SetReadySave(task.Id);
+            if (pending.Count == 0) Notice(texts != null ? texts.ReadyToDeliver : null);
+            if (!string.IsNullOrEmpty(task.RealLifeText) && realLifeView != null)
+            {
+                if (realLifeRoutine != null) StopCoroutine(realLifeRoutine);
+                realLifeRoutine = StartCoroutine(RealLifeRoutine(task.RealLifeText));
+            }
+            RefreshAll();
+            ReadyToDeliver?.Invoke(task);
+        }
 
-            GameEvents.RaiseTaskCompleted(task.Id);
-            TaskFinished?.Invoke(task);
+        private IEnumerator RealLifeRoutine(string text)
+        {
+            realLifeView?.Show(text);
+            yield return new WaitForSeconds(realLifeSeconds);
+            realLifeView?.Hide();
+            realLifeRoutine = null;
         }
 
         private void WriteToBoard(string richEquation)
         {
-            var data = SaveSystem.Instance != null ? SaveSystem.Instance.Data : null;
+            var data = Data;
             if (data != null) data.AddBoardEquation(richEquation);
             else if (!localBoard.Contains(richEquation)) localBoard.Add(richEquation);
             RefreshBoard();
+        }
+
+        private static void SetReadySave(string taskId)
+        {
+            var data = Data;
+            if (data != null) data.ReadyTaskId = taskId;
+        }
+
+        private void Notice(string text)
+        {
+            if (!string.IsNullOrEmpty(text)) noticeView?.ShowNotice(text);
         }
 
         // ---------- Görünüm ----------
@@ -367,30 +341,32 @@ namespace BilgiAdasi.Order
 
         private void CacheViews()
         {
-            stationView = ViewLocator.Get<IOrderStationView>();
             cardView = ViewLocator.Get<IOrderCardView>();
-            shelfView = ViewLocator.Get<IShelfView>();
             cauldronView = ViewLocator.Get<ICauldronView>();
             scaleView = ViewLocator.Get<IScaleView>();
             boardView = ViewLocator.Get<IChalkboardView>();
             hintView = ViewLocator.Get<IHintBookView>();
             realLifeView = ViewLocator.Get<IRealLifeCardView>();
-            stationView?.SetOpen(stationOpen);
+            noticeView = ViewLocator.Get<INoticeView>();
         }
 
         private void RefreshAll()
         {
             RefreshBoard();
-            if (session == null) return;
             RefreshCard();
             RefreshCauldron();
-            hintView?.SetGlowing(session.FailCount >= HintFailThreshold && Current != State.Done);
-            cauldronView?.SetStoveLit(Current == State.Reacting);
+            hintView?.SetGlowing(session != null && session.FailCount >= HintFailThreshold && Current == State.Preparing);
+            cauldronView?.SetStoveLit(IsBusy);
         }
 
         private void RefreshCard()
         {
-            if (cardView == null || session == null) return;
+            if (cardView == null) return;
+            if (session == null || Current == State.Done)
+            {
+                cardView.ClearOrder();
+                return;
+            }
             var step = session.Step;
             reactantBuffer.Clear();
             if (step.CardShowsReactants)
@@ -398,42 +374,33 @@ namespace BilgiAdasi.Order
 
             cardView.ShowOrder(new OrderCardInfo(
                 session.Task.GiverName,
-                step.TargetProducts,
+                Current == State.ReadyToDeliver ? session.Task.DeliveryProducts : step.TargetProducts,
                 step.CardShowsReactants ? reactantBuffer : null,
                 session.StepIndex,
                 session.Task.Steps.Count,
-                session.IsPurchase,
-                session.Money,
-                session.Task.Budget,
-                texts != null ? texts.CurrencyName : ""));
+                session.Task.Reward,
+                Current == State.ReadyToDeliver));
         }
 
         private void RefreshCauldron()
         {
-            if (session == null) return;
-
-            if (shelfView != null)
+            if (session != null)
             {
-                shelfBuffer.Clear();
-                var items = session.ShelfItems;
-                for (int i = 0; i < items.Count; i++)
-                {
-                    var s = items[i];
-                    shelfBuffer.Add(new ShelfItem(s, session.CountInCauldron(s),
-                        session.IsPurchase ? session.OwnedCount(s) : -1, session.PriceOf(s)));
-                }
-                shelfView.ShowShelf(shelfBuffer, selected);
+                cauldronView?.ShowContents(session.Contents);
+                scaleView?.ShowAtoms(session.Rows, session.IsSatisfied);
             }
-
-            cauldronView?.ShowContents(session.Contents, selected);
-            scaleView?.ShowAtoms(session.Rows, session.IsSatisfied);
-            if (session.IsPurchase) RefreshCard(); // para değişti
+            else
+            {
+                cauldronView?.ShowContents(Array.Empty<SpeciesAmount>());
+                scaleView?.ShowAtoms(Array.Empty<AtomRow>(), false);
+            }
+            StateChanged?.Invoke();
         }
 
         private void RefreshBoard()
         {
             if (boardView == null) return;
-            var data = SaveSystem.Instance != null ? SaveSystem.Instance.Data : null;
+            var data = Data;
             boardView.ShowEquations(data != null ? data.BoardEquations : localBoard);
         }
     }

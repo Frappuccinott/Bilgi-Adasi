@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.OrderTask
   id: denk_5
   giverName: "\xC7ift\xE7i Elif"
+  giverPortrait: {fileID: 0}
   giverLines:
   - "D\xF6rt kavanoz g\xFCbre ruhu istiyorum, ne eksik ne fazla. Paras\u0131n\u0131
     pe\u015Fin veriyorum. Artan\u0131n hesab\u0131 senin cebinden."
@@ -29,6 +30,7 @@ MonoBehaviour:
     - species: {fileID: 11400000, guid: 22efa628d4955a043956e0eedbb0503e, type: 2}
       amount: 4
     cardShowsReactants: 0
+  reward: 25
   shelf: []
   budget: 20
   prices:

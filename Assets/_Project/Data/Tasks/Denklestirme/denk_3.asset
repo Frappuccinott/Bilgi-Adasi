@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.OrderTask
   id: denk_3
   giverName: "F\u0131r\u0131nc\u0131 Zehra"
+  giverPortrait: {fileID: 0}
   giverLines:
   - "Fenercinin fenerlerini yakm\u0131\u015Fs\u0131n, duydum. Benim f\u0131r\u0131n
     onun fenerinden b\xFCy\xFCk ama. Kasaba iki g\xFCnd\xFCr peksimet yiyor."
@@ -31,6 +32,7 @@ MonoBehaviour:
     - species: {fileID: 11400000, guid: 4d7d1e9c4ee5640419e910786ab51966, type: 2}
       amount: 4
     cardShowsReactants: 0
+  reward: 15
   shelf:
   - {fileID: 11400000, guid: 2bcd2662ada36e448b01974ed7f2bbe4, type: 2}
   - {fileID: 11400000, guid: c3372ae1a20c7b040be0a7644035caaf, type: 2}

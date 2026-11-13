@@ -15,7 +15,13 @@ namespace BilgiAdasi.Core
         Decrease,
         FireStove,
         OpenHint,
-        ExitStation
+        ExitStation,
+        /// <summary>Atölyede (Player map) ustanın defteri: H / Y.</summary>
+        WorkshopHint,
+        /// <summary>Envanter slotu değiştir: tekerlek, 1–6 / LB-RB.</summary>
+        CycleSlot,
+        /// <summary>UI'dan çık (pazar): Esc / B.</summary>
+        Cancel
     }
 
     /// <summary>
@@ -26,7 +32,7 @@ namespace BilgiAdasi.Core
     /// </summary>
     public static class ControlGlyphs
     {
-        private enum Pad { South, East, West, North, LeftShoulder, RightShoulder, Start, Select, LeftStickPress, DpadVertical }
+        private enum Pad { South, East, West, North, LeftShoulder, RightShoulder, Start, Select, LeftStickPress, DpadVertical, Shoulders }
 
         public static string For(PromptAction action) => For(action, GameInput.LastScheme);
 
@@ -53,6 +59,9 @@ namespace BilgiAdasi.Core
                 case PromptAction.FireStove: return "F";
                 case PromptAction.OpenHint: return "H";
                 case PromptAction.ExitStation: return "Esc";
+                case PromptAction.WorkshopHint: return "H";
+                case PromptAction.CycleSlot: return "1–6 / Tekerlek";
+                case PromptAction.Cancel: return "Esc";
                 default: return "?";
             }
         }
@@ -74,6 +83,9 @@ namespace BilgiAdasi.Core
                 case PromptAction.FireStove: return Pad.North;
                 case PromptAction.OpenHint: return Pad.West;
                 case PromptAction.ExitStation: return Pad.East;
+                case PromptAction.WorkshopHint: return Pad.North;
+                case PromptAction.CycleSlot: return Pad.Shoulders;
+                case PromptAction.Cancel: return Pad.East;
                 default: return Pad.South;
             }
         }
@@ -101,6 +113,7 @@ namespace BilgiAdasi.Core
                         case Pad.Select: return Text("Create");
                         case Pad.LeftStickPress: return Text("L3");
                         case Pad.DpadVertical: return Text("↑↓");
+                        case Pad.Shoulders: return Text("L1/R1");
                     }
                     break;
 
@@ -118,6 +131,7 @@ namespace BilgiAdasi.Core
                         case Pad.Select: return Text("−");
                         case Pad.LeftStickPress: return Text("L-çubuk");
                         case Pad.DpadVertical: return Text("↑↓");
+                        case Pad.Shoulders: return Text("L/R");
                     }
                     break;
 
@@ -134,6 +148,7 @@ namespace BilgiAdasi.Core
                         case Pad.Select: return Text("View");
                         case Pad.LeftStickPress: return Text("LS");
                         case Pad.DpadVertical: return Text("↑↓");
+                        case Pad.Shoulders: return Text("LB/RB");
                     }
                     break;
             }

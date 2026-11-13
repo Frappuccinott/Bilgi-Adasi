@@ -12,6 +12,8 @@ namespace BilgiAdasi.Core
         [SerializeField] private string id = "task_";
         [Tooltip("Görevi veren: Muhtar Yusuf, ulak …")]
         [SerializeField] private string giverName = "";
+        [Tooltip("Konuşma balonundaki portre (2D). Boş bırakılabilir.")]
+        [SerializeField] private Sprite giverPortrait;
         [TextArea(2, 5)] [SerializeField] private string[] giverLines = new string[0];
         [TextArea(1, 3)] [SerializeField] private string[] deliveryLines = new string[0];
         [TextArea(2, 4)] [SerializeField] private string hintText = "";
@@ -19,6 +21,7 @@ namespace BilgiAdasi.Core
 
         public string Id => id;
         public string GiverName => giverName;
+        public Sprite GiverPortrait => giverPortrait;
         public string[] GiverLines => giverLines;
         public string[] DeliveryLines => deliveryLines;
         public string HintText => hintText;

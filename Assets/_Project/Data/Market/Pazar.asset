@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 183048bf976fba0409f94982fff228d7, type: 3}
+  m_Name: Pazar
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.MarketCatalog
+  entries:
+  - species: {fileID: 11400000, guid: e9fe8dc75e00bcb4a86f169ee7fbbcc2, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: c3372ae1a20c7b040be0a7644035caaf, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: 4d7d1e9c4ee5640419e910786ab51966, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: ba4254c41fdabb04ca1ac3351b4d6ec6, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: 2bcd2662ada36e448b01974ed7f2bbe4, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: 1f1b54aa2a08c644996bdfb5693632dd, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: 7365f7085cd6aad49b7f944cb76c871f, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}

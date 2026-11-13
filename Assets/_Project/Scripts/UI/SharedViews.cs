@@ -19,10 +19,16 @@ namespace BilgiAdasi.UI
         bool IsHintOpen { get; }
     }
 
-    /// <summary>"Gerçek hayatta" kartı. Kapatma düğmesi IOrderCommands.CloseRealLifeCard'ı çağırır.</summary>
+    /// <summary>"Gerçek hayatta" kartı. Kod belli bir süre sonra ya da yeni bir etkileşimde kapatır.</summary>
     public interface IRealLifeCardView
     {
         void Show(string text);
         void Hide();
+    }
+
+    /// <summary>Kısa bilgi notu (HUD): "Envanter dolu", "Kese yetmiyor", mühür notu… Birkaç saniye görünür.</summary>
+    public interface INoticeView
+    {
+        void ShowNotice(string text);
     }
 }

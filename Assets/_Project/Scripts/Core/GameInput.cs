@@ -57,6 +57,12 @@ namespace BilgiAdasi.Core
             return result != null;
         }
 
+        /// <summary>
+        /// Aksiyonu adıyla bulur ("Player/OpenHint"). Yeni eklenen aksiyonlar için: üretilen C# sınıfı
+        /// yeniden üretilmeden de derlenir. Bir kez çağırıp sonucu saklayın (her karede değil).
+        /// </summary>
+        public static InputAction FindAction(string mapAndAction) => Controls.asset.FindAction(mapAndAction, true);
+
         public static InputMode Mode { get; private set; } = InputMode.None;
         public static InputDeviceKind LastDevice { get; private set; } = InputDeviceKind.KeyboardMouse;
         /// <summary>Son kullanılan cihazın tuş düzeni (klavye / Xbox / PlayStation / Switch).</summary>
@@ -83,9 +89,7 @@ namespace BilgiAdasi.Core
             }
 
             // Oyuncu modunda imleç kilitli ve gizli; istasyon/UI'da serbest.
-            bool locked = mode == InputMode.Player;
-            Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
-            Cursor.visible = !locked;
+            SetCursorFree(mode != InputMode.Player);
 
             // UI'ın kendi yön gezinmesi (çubukla düğmeden düğmeye atlama) yalnızca UI modunda açık.
             // İstasyonda gamepad seçimi denetleyicinin SelectPrevious/Next aksiyonlarıyla yapılır.
@@ -99,6 +103,16 @@ namespace BilgiAdasi.Core
             if (Mode == mode) return;
             Mode = mode;
             ModeChanged?.Invoke(mode);
+        }
+
+        /// <summary>
+        /// İmleci serbest bırakır (görünür) ya da kilitler. Mod değişmeden kısa süreli serbestlik için
+        /// (ör. kapıdaki konuşma: hareket durur, fareyle tıklanır). Bitince SetCursorFree(Mode != Player).
+        /// </summary>
+        public static void SetCursorFree(bool free)
+        {
+            Cursor.lockState = free ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = free;
         }
 
         private static void Initialize()
@@ -127,6 +141,11 @@ namespace BilgiAdasi.Core
             if (device is Mouse && control is UnityEngine.InputSystem.Controls.Vector2Control v2
                 && v2.ReadValue().sqrMagnitude < MouseNoiseThresholdSqr) return;
 
+            // Klavye/fareyle oynarken bağlı gamepad'in çubuk/tetik kayması ipuçlarını gamepad'e çevirmesin.
+            // (Look/Move hem fareye hem çubuğa bağlı: fare durunca aksiyon kayan çubuğa geçip "performed" verir.)
+            // Gamepad yalnızca bilinçli girdiyle seçilir: tuş basımı ya da yarıdan fazla itilmiş çubuk/tetik.
+            if (device is Gamepad && !IsDeliberateGamepadInput(control)) return;
+
             var scheme = SchemeOf(device);
             if (scheme == LastScheme) return;
 
@@ -141,6 +160,23 @@ namespace BilgiAdasi.Core
         }
 
         private const float MouseNoiseThresholdSqr = 9f; // 3 piksel
+        private const float GamepadAnalogThreshold = 0.5f;
+
+        private static bool IsDeliberateGamepadInput(InputControl control)
+        {
+            switch (control)
+            {
+                case UnityEngine.InputSystem.Controls.ButtonControl button:
+                    // Tetikler de ButtonControl'dür; analog değerleri yarıyı geçmeli.
+                    return button.ReadValue() >= GamepadAnalogThreshold;
+                case UnityEngine.InputSystem.Controls.Vector2Control stick:
+                    return stick.ReadValue().sqrMagnitude >= GamepadAnalogThreshold * GamepadAnalogThreshold;
+                case UnityEngine.InputSystem.Controls.AxisControl axis:
+                    return Mathf.Abs(axis.ReadValue()) >= GamepadAnalogThreshold;
+                default:
+                    return true;
+            }
+        }
 
         private static ControlScheme SchemeOf(InputDevice device)
         {

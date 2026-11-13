@@ -79,11 +79,12 @@ Her faz sonunda: Play mode testi + commit. Süre daralırsa §2'deki sırayla ke
 | `IChalkboardView` | `FormulaFormatter` çıktısı |
 
 ### Faz 4 — Köy akışı + veri · P0
-- `NeighborhoodData`, `NeighborhoodRunner`, `DoorStation` (`IDialogueView`)
-- Görev 4 zinciri, Görev 5 `Purchase` + `SupplyChest` + bütçe
-- Denkleştirme verisi (`05` §1–2)
-- **Geliştirici kısayolları** (demo + test için öne çekildi)
-- **🔨 Build 1** — Denkleştirme uçtan uca oynanıyor
+- `NeighborhoodData`, `NeighborhoodRunner`, `DoorStation` (`IDialogueView`, `DialogueDirector`) — kod yazıldı, menü **Kurulum → 6**
+- Görev 4 zinciri, Görev 5 `Purchase` + bütçe — Faz 3'te yapıldı (sandık = Purchase rafı)
+- Denkleştirme verisi (`05` §1–2) — görevler Faz 3'te, köy asset'i Kurulum → 6
+- **Geliştirici kısayolları** (`DevShortcuts`, `Dev` map) — yazıldı
+- **Atölye (karar 13.11, `02` baştan):** pazar + kese, 6 slotlu envanter, raf, FPS kazan (1'er döküm, geri alma yok, boşaltma kolu), 3D terazi, ocak (köpürmede malzeme gider), ürün envantere, kapıda elle teslim + ödeme + kayıt. Menü **Kurulum → 8** (Kurulum 7 kaldırıldı). Kazan/kapı istasyon değil.
+- **🔨 Build 1** — Denkleştirme uçtan uca oynanıyor (Play testi + build bekliyor)
 
 ### Faz 5 — Masa mekaniği · P1
 - `DeskStation`, `DeskController`, zarf, `IPaperView`

@@ -72,6 +72,9 @@ Yeni paket eklemeden önce **sor**.
 | CrouchToggle (aç/kapa) | Player | C | B (East) |
 | OpenMap | Player | M / Tab | Select (View) |
 | Pause | Player | Esc | Start (Menu) |
+| OpenHint (ustanın defteri, atölye) | Player | H | Y (North) |
+| NextSlot / PrevSlot (envanter) | Player | Fare tekeri ↓ / ↑ | RB / LB |
+| SelectSlot (envanter) | Player | 1–6 | — (RB/LB ile aynı iş) |
 | Pause | Station | P (Esc istasyondan çıkar) | Start (Menu) |
 | Point | Station | Fare pozisyonu | — (imleç yok) |
 | Click / Drag | Station | Sol tık | — (Confirm kullanılır) |
@@ -82,6 +85,10 @@ Yeni paket eklemeden önce **sor**.
 | OpenHint | Station | H | X (West) |
 | ExitStation | Station | Esc / sağ tık | B (East) |
 | Navigate / Submit / Cancel | UI | Ok tuşları, Enter, Esc | D-pad / sol çubuk, A, B |
+| DevJumpTask (yalnızca geliştirici) | Dev | F1–F5 (o göreve atla) | LT+RT+D-pad → (sıradaki görevi bitmiş say) |
+| DevResetSave (yalnızca geliştirici) | Dev | Ctrl+R | LT+RT+D-pad ← |
+
+`Dev` map'i oyun modundan bağımsız hep açıktır ama yalnızca editörde, Development Build'de ya da `BILGIADASI_DEMO` tanımlıyken (`DevShortcuts`).
 
 Yeni aksiyon eklenirse bu tablo güncellenir.
 
@@ -137,15 +144,24 @@ Tüm değerler `PlayerMovementSettings` ScriptableObject'inde; play mode'da canl
 
 ---
 
-## 5. İstasyon modu (kazan, masa, kapı, harita)
+## 5. Atölye (kazan, raf, pazar, kapı) ve istasyon modu
 
-Oyuncu bir istasyona yaklaşıp Interact yapınca:
+**Karar 13.11: kazan ve kapı istasyon değil; kamera hep birinci şahısta kalır.** Her şey crosshair'le bakıp Interact (E / X) ile yapılır (`WorldInteractable`):
+- **Pazar tezgâhı** (şehirde, `MarketStall`): E → pazar ekranı (UI modu); alınan kavanoz envantere girer, akçe düşer. Para en ucuz kavanoza yetmezse Usta borç verir.
+- **Envanter** (`PlayerInventory`, oyuncuda): ekranın altında 6 slot; slot = tek maddenin yığını. Seçili slot "eldeki" maddedir. Yeni madde aynı yığına, yoksa soldan ilk boş slota.
+- **Raf** (`Shelf` / `ShelfSlot`): dolu yerden yığının tamamı envantere, boş yere eldeki yığının tamamı. Kayıtlı.
+- **Kazan** (`CauldronStation` + `OrderController`): E → eldeki maddeden 1 kavanoz dökülür. **Dökülen geri alınmaz.** Boşaltma kolu (`CauldronDrain`) kazanı boşaltır, malzeme gider.
+- **3D terazi** (`ScaleModel`): sol kefe kazan, sağ kefe sipariş; UI değil.
+- **Ocak** (`CauldronStove`): dengedeyse tepkime → ürün envantere (doluysa kazanda bekler); değilse ya da tepkimeye girmeyen madde varsa köpürür, malzeme gider, hata sayılır.
+- **Kapı** (`DoorStation`): konuşmada hareket durur, E/Space ilerletir. Sipariş burada alınır; teslim elle: seçili slotta istenen ürün olmalı ("Ben bunu istemedim"). Teslimde ödeme alınır ve oyun kaydedilir.
+
+İstasyon modu yalnızca masa ve tahtada kalır (Faz 5). Oyuncu bir istasyona yaklaşıp Interact yapınca:
 1. `Player` map kapanır, `Station` map açılır; hareket ve bakış durur.
 2. Cinemachine istasyonun sabit kamerasına **0.5 sn blend** ile geçer (istasyon kamerası oyuncunun boyundan bağımsızdır; okunurluk her zaman aynı).
 3. İmleç açılır (fare) ya da sanal imleç belirir (gamepad).
 4. ExitStation ile tersine döner; oyuncu bıraktığı noktaya ve bakış açısına geri gelir.
 
-İstasyonlar: `CauldronStation` (sipariş), `DeskStation` (masa), `DoorStation` (sakinle konuşma), `ChalkboardStation` (okuma). Hepsi `StationBase`'ten türer.
+İstasyonlar: `DeskStation` (masa), `ChalkboardStation` (okuma); `StationBase`'ten türer.
 
 ---
 

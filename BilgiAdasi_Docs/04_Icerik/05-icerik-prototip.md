@@ -48,7 +48,11 @@ Kimya şehri → Etkileşim ilçesi → iki oynanabilir köy. Bu dosyadaki her s
 | 2 | Fenerci Demir | Çarşı fenerleri | R_methane | Exact | CH₄, O₂ | 1 CO₂ + 2 H₂O | Evet |
 | 3 | Fırıncı Zehra | Fırın | R_propane | Exact | C₃H₈, O₂ | 3 CO₂ + 4 H₂O | Hayır |
 | 4 | Duvarcı Halil | Taş köprü | R_lime1 → R_lime2 | Exact (2 adım) | CaCO₃, H₂O | 1 Ca(OH)₂ | Hayır |
-| 5 | Çiftçi Elif | Tarlalar | R_ammonia | Purchase | (boş; sandık: N₂ 3 akçe, H₂ 2 akçe) bütçe 20 | 4 NH₃ | Hayır |
+| 5 | Çiftçi Elif | Tarlalar | R_ammonia | Purchase | (pazardan; fazlası artan) | 4 NH₃ | Hayır |
+
+**Ekonomi (karar 13.11, taslak — oynanarak ayarlanacak):** başlangıç kesesi 30 akçe, Usta borcu 10 (`Data/Economy.asset`). Sipariş ödemeleri: 10, 12, 15, 15, 25 (görevin `reward` alanı). "Raf" sütunu artık kullanılmıyor; malzeme pazardan alınır.
+
+**Pazar (`Data/Market/Pazar.asset`):** H₂ 2, O₂ 1, H₂O 1, CH₄ 3, C₃H₈ 5, CaCO₃ 4, N₂ 3 akçe (maddenin kendi fiyatı), hepsi stoğu sınırsız ve baştan açık. Alınmış siparişin ürünü pazarda otomatik görünmez (ör. Görev 1'de H₂O). Satıra stok, "şu görev bitince açılır / kalkar" ya da farklı fiyat vermek yalnızca veri işidir (02 §2.1).
 
 **Replikler ve kartlar:**
 

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.OrderTask
   id: denk_1
   giverName: Muhtar Yusuf
+  giverPortrait: {fileID: 0}
   giverLines:
   - "\xC7e\u015Fme kurudu evlad\u0131m! \xC7ocuklar dereye iniyor, dere de kurudu.
     Sen de bilirsin de\u011Fil mi?"
@@ -29,6 +30,7 @@ MonoBehaviour:
     - species: {fileID: 11400000, guid: 4d7d1e9c4ee5640419e910786ab51966, type: 2}
       amount: 2
     cardShowsReactants: 1
+  reward: 10
   shelf:
   - {fileID: 11400000, guid: e9fe8dc75e00bcb4a86f169ee7fbbcc2, type: 2}
   - {fileID: 11400000, guid: c3372ae1a20c7b040be0a7644035caaf, type: 2}

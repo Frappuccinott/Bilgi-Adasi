@@ -24,6 +24,15 @@ namespace BilgiAdasi.Player
         private IInteractable current;
         private IInteractPromptView promptView;
         private bool controlEnabled = true;
+        private string shownPrompt;
+
+        /// <summary>Oyuncunun envanteri ve kesesi (aynı objede ya da üstünde).</summary>
+        public Order.PlayerInventory Inventory { get; private set; }
+
+        private void Awake()
+        {
+            Inventory = GetComponentInParent<Order.PlayerInventory>();
+        }
 
         /// <summary>Oyuncu kontrolü açılıp kapanınca (istasyon girişi/çıkışı) tetiklenir.</summary>
         public event Action<bool> ControlEnabledChanged;
@@ -75,6 +84,16 @@ namespace BilgiAdasi.Player
 
             if (found != null && !found.CanInteract) found = null;
             if (!ReferenceEquals(found, current)) SetCurrent(found);
+            else if (current != null) RefreshPrompt(false);
+        }
+
+        /// <summary>İpucu metni duruma göre değişebilir (eldeki madde); değişince yeniden çizilir.</summary>
+        private void RefreshPrompt(bool force)
+        {
+            string text = current.GetPrompt(this);
+            if (!force && ReferenceEquals(text, shownPrompt)) return;
+            shownPrompt = text;
+            promptView?.ShowPrompt(text, ControlGlyphs.For(PromptAction.Interact));
         }
 
         private void SetCurrent(IInteractable target)
@@ -88,10 +107,11 @@ namespace BilgiAdasi.Player
             if (current != null)
             {
                 current.SetHighlighted(true);
-                promptView?.ShowPrompt(current.PromptText, ControlGlyphs.For(PromptAction.Interact));
+                RefreshPrompt(true);
             }
             else
             {
+                shownPrompt = null;
                 promptView?.HidePrompt();
             }
         }
@@ -99,9 +119,8 @@ namespace BilgiAdasi.Player
         private void OnInteractPerformed(InputAction.CallbackContext ctx)
         {
             if (!controlEnabled || current == null || !current.CanInteract) return;
-            var target = current;
-            SetCurrent(null);
-            target.Interact(this);
+            // Hedef seçili kalır: aynı kazana art arda dökülebilsin. İpucu bir sonraki karede tazelenir.
+            current.Interact(this);
         }
 
         /// <summary>İstasyonlar çağırır: false → hareket, bakış, ışın ve crosshair kapanır.</summary>
@@ -125,7 +144,7 @@ namespace BilgiAdasi.Player
 
         private void OnSchemeChanged(ControlScheme scheme)
         {
-            if (current != null) promptView?.ShowPrompt(current.PromptText, ControlGlyphs.For(PromptAction.Interact, scheme));
+            if (current != null) RefreshPrompt(true);
         }
 
         private void OnViewsChanged(Type type)
@@ -133,7 +152,7 @@ namespace BilgiAdasi.Player
             if (type != typeof(IInteractPromptView)) return;
             promptView = ViewLocator.Get<IInteractPromptView>();
             promptView?.SetCrosshairVisible(controlEnabled);
-            if (current != null) promptView?.ShowPrompt(current.PromptText, ControlGlyphs.For(PromptAction.Interact));
+            if (current != null) RefreshPrompt(true);
         }
     }
 }

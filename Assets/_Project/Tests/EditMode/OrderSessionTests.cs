@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace BilgiAdasi.Tests
 {
+    /// <summary>Sipariş mantığı (karar 13.11): dökme geri alınmaz, yabancı madde dengeyi bozar, Clear malzemeyi siler.</summary>
     public class OrderSessionTests
     {
         private PrototypeChemistrySeed chem;
@@ -26,9 +27,9 @@ namespace BilgiAdasi.Tests
 
         private SpeciesData S(string f) => chem.Species[f];
 
-        private static void AddN(OrderSession s, SpeciesData sp, int n)
+        private static void PourN(OrderSession s, SpeciesData sp, int n)
         {
-            for (int i = 0; i < n; i++) Assert.AreEqual(AddResult.Added, s.Add(sp));
+            for (int i = 0; i < n; i++) s.Pour(sp);
         }
 
         [Test]
@@ -36,119 +37,77 @@ namespace BilgiAdasi.Tests
         {
             var s = new OrderSession(tasks[0]);
             Assert.IsFalse(s.IsSatisfied);
-
-            AddN(s, S("H2"), 1);
-            AddN(s, S("O2"), 1);
-            Assert.IsFalse(s.IsSatisfied, "1 H2 + 1 O2 dengede olmamalı");
-
-            AddN(s, S("H2"), 1);
-            Assert.IsTrue(s.IsSatisfied, "2 H2 + 1 O2 → 2 H2O dengede olmalı");
-
-            AddN(s, S("O2"), 1);
-            Assert.IsFalse(s.IsSatisfied, "fazla O2 dengeyi bozmalı");
+            PourN(s, S("H2"), 1);
+            PourN(s, S("O2"), 1);
+            Assert.IsFalse(s.IsSatisfied, "1 H2 + 1 O2 dengede değil");
+            PourN(s, S("H2"), 1);
+            Assert.IsTrue(s.IsSatisfied, "2 H2 + 1 O2 → 2 H2O");
+            PourN(s, S("H2"), 1);
+            Assert.IsFalse(s.IsSatisfied, "fazla H2 geri alınamaz, denge bozulur");
         }
 
         [Test]
-        public void Remove_ToZero_ReturnsJarToShelf()
+        public void ProductPouredDirectly_IsForeign_NotBalanced()
         {
             var s = new OrderSession(tasks[0]);
-            AddN(s, S("H2"), 1);
-            Assert.AreEqual(1, s.Contents.Count);
-            Assert.IsTrue(s.Remove(S("H2")));
-            Assert.AreEqual(0, s.Contents.Count);
-            Assert.IsFalse(s.Remove(S("H2")));
-        }
-
-        [Test]
-        public void NotOnShelf_IsRejected()
-        {
-            var s = new OrderSession(tasks[0]);
-            Assert.AreEqual(AddResult.NotOnShelf, s.Add(S("CH4")));
-        }
-
-        [TestCase(1, "CH4", 1, "O2", 2)]
-        [TestCase(2, "C3H8", 1, "O2", 5)]
-        public void Combustion_Orders_Balance(int index, string fuel, int fuelN, string ox, int oxN)
-        {
-            var s = new OrderSession(tasks[index]);
-            AddN(s, S(fuel), fuelN);
-            AddN(s, S(ox), oxN - 1);
+            PourN(s, S("H2O"), 2); // atomlar eşit ama ürün dökülmüş: hile
+            Assert.IsTrue(s.HasForeign);
             Assert.IsFalse(s.IsSatisfied);
-            AddN(s, S(ox), 1);
+        }
+
+        [Test]
+        public void Clear_EmptiesCauldron()
+        {
+            var s = new OrderSession(tasks[0]);
+            PourN(s, S("H2"), 2);
+            s.Clear();
+            Assert.IsTrue(s.IsEmpty);
+            Assert.AreEqual(0, s.CountInCauldron(S("H2")));
+        }
+
+        [Test]
+        public void Order3_Propane_Balances()
+        {
+            var s = new OrderSession(tasks[2]);
+            PourN(s, S("C3H8"), 1);
+            PourN(s, S("O2"), 5);
             Assert.IsTrue(s.IsSatisfied);
         }
 
         [Test]
-        public void Order4_Chain_StepProductGoesToShelf()
+        public void Order4_Chain_SecondStepUsesCaO()
         {
             var s = new OrderSession(tasks[3]);
-            Assert.AreEqual(AddResult.NotOnShelf, s.Add(S("CaO")), "CaO başta rafta olmamalı");
-
-            AddN(s, S("CaCO3"), 1);
+            PourN(s, S("CaCO3"), 1);
             Assert.IsTrue(s.IsSatisfied);
             Assert.IsTrue(s.HasNextStep);
-
             s.AdvanceStep();
-            Assert.AreEqual(1, s.StepIndex);
-            Assert.AreEqual(0, s.Contents.Count, "yeni adımda kazan boş");
-
-            AddN(s, S("CaO"), 1);
-            AddN(s, S("H2O"), 1);
+            Assert.IsTrue(s.IsEmpty);
+            PourN(s, S("CaO"), 1);
+            PourN(s, S("H2O"), 1);
             Assert.IsTrue(s.IsSatisfied);
-            Assert.IsFalse(s.HasNextStep);
         }
 
         [Test]
-        public void Order5_Purchase_ExactBuy_SatisfiesWithMoneyLeft()
+        public void Order5_Purchase_ExcessAllowedAsLeftover()
         {
             var s = new OrderSession(tasks[4]);
-            Assert.AreEqual(20, s.Money);
-
-            AddN(s, S("N2"), 2);   // 6 akçe
-            AddN(s, S("H2"), 6);   // 12 akçe
-            Assert.IsTrue(s.IsSatisfied);
-            Assert.AreEqual(2, s.Money);
+            PourN(s, S("N2"), 2);
+            PourN(s, S("H2"), 5);
+            Assert.IsFalse(s.IsSatisfied, "6 H2 gerekli");
+            PourN(s, S("H2"), 2);
+            Assert.IsTrue(s.IsSatisfied, "fazla H2 artan olarak kabul");
+            bool leftover = false;
+            foreach (var r in s.Rows) if (r.Leftover > 0) leftover = true;
+            Assert.IsTrue(leftover);
         }
 
         [Test]
-        public void Order5_Purchase_ExcessIsLeftoverAndStillSatisfied()
+        public void FailCount_Increments()
         {
-            var s = new OrderSession(tasks[4]);
-            AddN(s, S("N2"), 2);
-            AddN(s, S("H2"), 7);   // 1 fazla
-            Assert.IsTrue(s.IsSatisfied);
-            Assert.AreEqual(0, s.Money);
-
-            int hLeftover = 0;
-            foreach (var row in s.Rows)
-                if (row.Element.Symbol == "H") hLeftover = row.Leftover;
-            Assert.AreEqual(2, hLeftover, "1 fazla H2 = 2 artan H atomu");
-        }
-
-        [Test]
-        public void Order5_Purchase_RemoveDoesNotRefund_ReAddIsFree()
-        {
-            var s = new OrderSession(tasks[4]);
-            AddN(s, S("N2"), 1);
-            Assert.AreEqual(17, s.Money);
-            s.Remove(S("N2"));
-            Assert.AreEqual(17, s.Money, "çıkarınca akçe geri gelmez");
-            AddN(s, S("N2"), 1);
-            Assert.AreEqual(17, s.Money, "elde olan kavanoz tekrar bedava eklenir");
-        }
-
-        [Test]
-        public void Order5_Purchase_OutOfMoney_ShortageForgivenOnce()
-        {
-            var s = new OrderSession(tasks[4]);
-            AddN(s, S("N2"), 5);   // 15 akçe, 3 fazla N2
-            AddN(s, S("H2"), 2);   // 4 akçe → kalan 1
-            Assert.AreEqual(AddResult.NotEnoughMoney, s.Add(S("H2")));
-            Assert.IsFalse(s.IsSatisfied);
-
-            Assert.IsTrue(s.TryForgiveShortage());
-            Assert.IsTrue(s.IsSatisfied);
-            Assert.IsFalse(s.TryForgiveShortage(), "yalnızca bir kez");
+            var s = new OrderSession(tasks[0]);
+            Assert.AreEqual(1, s.RegisterFail());
+            Assert.AreEqual(2, s.RegisterFail());
         }
     }
 }

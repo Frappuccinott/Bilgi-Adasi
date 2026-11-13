@@ -3,109 +3,100 @@ using BilgiAdasi.Chemistry;
 
 namespace BilgiAdasi.Order
 {
-    // Sipariş istasyonu görünüm arayüzleri. Mustafa'nın view'ları bunları uygular ve
-    // RegisteredView<IArayüz>'den türeyerek kendini kaydeder. OrderController yalnızca bu arayüzleri tanır.
-    // Görünümden gelen tıklamalar IOrderCommands üzerinden denetleyiciye döner.
+    // Atölye (sipariş) görünüm arayüzleri. Mustafa'nın view'ları bunları uygular ve
+    // RegisteredView<IArayüz>'den türeyerek kendini kaydeder. Denetleyiciler yalnızca bu arayüzleri tanır.
+    // Kazan, terazi ve raf 3D'dir (dünyada); envanter, sipariş kartı ve pazar ekranı HUD'dadır.
 
-    /// <summary>Raftaki bir kavanoz.</summary>
-    public readonly struct ShelfItem
-    {
-        public readonly SpeciesData Species;
-        /// <summary>Şu an kazanda kaç tane.</summary>
-        public readonly int InCauldron;
-        /// <summary>Purchase: elde (satın alınmış) kaç tane. Exact'te sınırsız → -1.</summary>
-        public readonly int Owned;
-        /// <summary>Purchase: birim fiyat. Exact'te 0.</summary>
-        public readonly int Price;
-
-        public ShelfItem(SpeciesData species, int inCauldron, int owned, int price)
-        {
-            Species = species;
-            InCauldron = inCauldron;
-            Owned = owned;
-            Price = price;
-        }
-    }
-
-    /// <summary>Sipariş kartında gösterilecek bilgi.</summary>
+    /// <summary>Sipariş kartında (HUD) gösterilecek bilgi.</summary>
     public readonly struct OrderCardInfo
     {
         public readonly string GiverName;
+        /// <summary>Bu adımın hedef ürünleri (sağ kefe).</summary>
         public readonly IReadOnlyList<SpeciesAmount> Products;
         /// <summary>Kart girenleri gösteriyorsa (Görev 1–2) adları; katsayı verilmez. Göstermiyorsa null.</summary>
         public readonly IReadOnlyList<SpeciesData> Reactants;
         public readonly int StepIndex;
         public readonly int StepCount;
-        public readonly bool IsPurchase;
-        public readonly int Money;
-        public readonly int Budget;
-        public readonly string CurrencyName;
+        public readonly int Reward;
+        /// <summary>Ürün hazır, kapıda teslim bekliyor.</summary>
+        public readonly bool ReadyToDeliver;
 
         public OrderCardInfo(string giverName, IReadOnlyList<SpeciesAmount> products, IReadOnlyList<SpeciesData> reactants,
-            int stepIndex, int stepCount, bool isPurchase, int money, int budget, string currencyName)
+            int stepIndex, int stepCount, int reward, bool readyToDeliver)
         {
             GiverName = giverName;
             Products = products;
             Reactants = reactants;
             StepIndex = stepIndex;
             StepCount = stepCount;
-            IsPurchase = isPurchase;
-            Money = money;
-            Budget = budget;
-            CurrencyName = currencyName;
+            Reward = reward;
+            ReadyToDeliver = readyToDeliver;
         }
     }
 
-    /// <summary>Görünümden denetleyiciye komutlar (düğme, sürükle-bırak, tıklama).</summary>
-    public interface IOrderCommands
-    {
-        /// <summary>Raftan kazana bir kavanoz (sürükle-bırak ya da tıkla).</summary>
-        void AddToCauldron(SpeciesData species);
-        void Increase(SpeciesData species);
-        void Decrease(SpeciesData species);
-        /// <summary>Fare tekeri / RB-LB bu türü değiştirir.</summary>
-        void Select(SpeciesData species);
-        /// <summary>Kavanoz etiketine tıklandı → mühür notu.</summary>
-        void TouchLabel(SpeciesData species);
-        void FireStove();
-        void ToggleHint();
-        void CloseRealLifeCard();
-    }
-
-    /// <summary>İstasyon paneli açık/kapalı (oyuncu kazana girince açılır).</summary>
-    public interface IOrderStationView
-    {
-        void SetOpen(bool open);
-    }
-
+    /// <summary>HUD'daki sipariş kartı. Aktif sipariş boyunca görünür.</summary>
     public interface IOrderCardView
     {
         void ShowOrder(OrderCardInfo info);
-        /// <summary>Kısa bilgi/replik: "Keseden yeterince akçe kalmadı", teslim repliği…</summary>
-        void ShowMessage(string text);
+        /// <summary>Aktif sipariş yok: kart gizlenir.</summary>
+        void ClearOrder();
     }
 
-    public interface IShelfView
+    /// <summary>Ekranın altındaki 6 slotluk envanter + kese.</summary>
+    public interface IInventoryView
     {
-        void ShowShelf(IReadOnlyList<ShelfItem> items, SpeciesData selected);
-        /// <summary>Etikete tıklandı: mühür titrer. note null değilse not metni de gösterilir (yalnızca ilk sefer).</summary>
-        void PlaySealShake(SpeciesData species, string note);
+        void ShowInventory(IReadOnlyList<InventorySlot> slots, int selected, int money);
     }
 
+    /// <summary>3D kazan görselleri: sıvı, döküm, köpük, ateş.</summary>
     public interface ICauldronView
     {
-        void ShowContents(IReadOnlyList<SpeciesAmount> contents, SpeciesData selected);
+        /// <summary>Kazandaki maddeler (eklenme sırasıyla). Boşsa sıvı görünmez.</summary>
+        void ShowContents(IReadOnlyList<SpeciesAmount> contents);
+        /// <summary>Bir kavanoz döküldü (sıçrama).</summary>
+        void PlayPour(SpeciesData species);
+        /// <summary>Kazan boşaltıldı (kol).</summary>
+        void PlayDrain();
         void SetStoveLit(bool lit);
         void PlayFoam(float duration);
         void PlayReaction(float duration);
     }
 
-    /// <summary>İki terazi + atom sayaçları. Satır başına: sol / sağ / artan.</summary>
+    /// <summary>3D terazi: sol kefe kazandaki atomlar, sağ kefe siparişin ürünleri. Satır başına: sol / sağ / artan.</summary>
     public interface IScaleView
     {
         void ShowAtoms(IReadOnlyList<AtomRow> rows, bool balanced);
-        /// <summary>Köpürme: Left &gt; Right olan elementler fazla (kırmızı), Left &lt; Right eksik (kesikli boş daire).</summary>
+        /// <summary>Köpürme: Left &gt; Right olan elementler fazla, Left &lt; Right eksik.</summary>
         void ShowFoamDifference(IReadOnlyList<AtomRow> rows);
         void ClearFoamDifference();
+    }
+
+    /// <summary>Pazarda satılan bir kalem.</summary>
+    public readonly struct MarketItem
+    {
+        public readonly SpeciesData Species;
+        public readonly int Price;
+        /// <summary>Envanterde bu maddeden kaç tane var.</summary>
+        public readonly int Owned;
+
+        public MarketItem(SpeciesData species, int price, int owned)
+        {
+            Species = species;
+            Price = price;
+            Owned = owned;
+        }
+    }
+
+    /// <summary>Pazar tezgâhı ekranı (UI modu). Düğmeler IMarketCommands'ı çağırır.</summary>
+    public interface IMarketView
+    {
+        void Open(IReadOnlyList<MarketItem> items, int money);
+        void Close();
+    }
+
+    public interface IMarketCommands
+    {
+        void Buy(SpeciesData species);
+        void CloseMarket();
     }
 }

@@ -18,23 +18,35 @@
 |---|---|---|---|
 | `PlayerSpawn` | 1 | `Prefabs/PlayerSpawn.prefab` | Oyuncu (ve Main Camera) Play'de burada doğar. Mavi ok = bakış yönü. Zeminin hemen üstüne koy. Sahneye ayrıca kamera koyma. |
 | `EventSystem` | 1 | EventSystem + *Input System UI Input Module* | UI tıklamaları için |
-| `Station_Cauldron` | 1 | Benim prefab'ım (`_Project/Prefabs/Stations/`) | Kazan istasyonu |
+| `Station_Cauldron` | 1 | Benim prefab'ım (`_Project/Prefabs/Stations/`) | Kazan + ocak + boşaltma kolu + 3D terazi (FPS, kamera değişmez) |
+| `Shelf` | 1+ | `Prefabs/Workshop/Shelf.prefab` | Atölye rafı (8 yer). Birden fazla koyarsan her birinin **Shelf Id**'si farklı olsun |
+| `MarketStall` | 1+ | `Prefabs/Workshop/MarketStall.prefab` | Şehirdeki pazar tezgâhı (meydanda). Ne sattığı **Catalog** alanındaki pazar kataloğundan gelir (`Data/Market/Pazar.asset`). İkinci pazar koyarsan ona yeni bir katalog ver (Create → Bilgi Adası → Pazar Kataloğu); aynı kataloğu paylaşan tezgâhlar stoğu da paylaşır |
 | `Station_Desk` | 1 | Benim prefab'ım | Çalışma masası |
-| `Station_Door` | 1 | Benim prefab'ım | Kapı (sakinler burada konuşur) |
+| `Station_Door` | 1 | Benim prefab'ım | Kapı (sakinler burada konuşur; FPS, kamera değişmez) |
 | `Station_Chalkboard` | 1 | Benim prefab'ım | Tahta (okuma) |
 | `Neighborhood_Denklestirme` | 1 | `NeighborhoodView` (`neighborhoodId = denklestirme`) | Köyün önce/sonra hali |
 | `Neighborhood_TepkimeTurleri` | 1 | `NeighborhoodView` (`neighborhoodId = tepkime_turleri`) | 〃 |
+| `NeighborhoodRunner` | 1 | `NeighborhoodRunner` + `DialogueDirector` + `DevShortcuts` (menü **Kurulum → 6** ekler) | Köy akışı: kapıda sipariş, teslim konuşması, köy ilerlemesi. Görünmez; yerinin önemi yok |
 | Kilitli bölge bariyerleri | gerektiği kadar | `LockedZone` + collider (trigger **değil**) | Kilitli köy/ilçeye girişi keser |
 
-### İstasyon prefab'ları
+### Atölye prefab'ları (karar 13.11: kazan ve kapı FPS, istasyon kamerası yok — menü **Kurulum → 8**)
 ```
-Station_Cauldron            ← kök: StationBase türevi + BoxCollider, layer = Interactable
-├── Visual                  ← modelini buraya koy (eski küpü sil)
-└── CameraPoint             ← istasyon kamerasının yeri ve bakışı; okunurluk için ayarla
+Station_Cauldron            ← CauldronStation + OrderController + BoxCollider, layer = Interactable ("Kazana dök")
+├── Visual                  ← kazan modelin (eski küpü sil)
+├── Effects                 ← CauldronVisuals: Liquid (sıvı yüzeyi), Foam, Fire — yer tutucu; kendi objelerini alanlara sürükle
+├── Stove                   ← CauldronStove + collider, layer Interactable ("Ateşi yak")
+├── Drain                   ← CauldronDrain + collider, layer Interactable ("Kazanı boşalt"); Lever = dönen kol (pivot menteşede)
+└── Scale                   ← ScaleModel (3D terazi): Beam (ortadan döner) / LeftHook/LeftPan, RightHook/RightPan, Status yazısı
+Shelf                       ← Shelf (Shelf Id, ekonomi, varsayılan kavanoz)
+└── Slot_1 … Slot_8         ← ShelfSlot + BoxCollider, layer Interactable; kavanoz bu noktaya (taban ortası) konur
+    └── PlaceMarker         ← yeşil işaret (ShelfSlot.Place Marker): elde madde varken boş yerde yanar, bakılan yer açık yeşil. Kendi modelini koyarsan alanı ona ver (URP Lit, _BaseColor); collider olmasın
+MarketStall                 ← MarketStall (Catalog, Economy, Texts) + BoxCollider, layer Interactable ("Pazar")
 ```
-- Prefab'ı istediğin yere taşı/döndür; kök bileşenine ve `CameraPoint` adına dokunma.
-- BoxCollider'ı modele göre boyutlandır (oyuncu baktığında yakalanacak alan).
-- Kamera `CameraPoint`'in **ileri (mavi) eksenine** bakar. Game view'da kontrol et: kazan + iki terazi tek kadrajda.
+- Prefab'ları istediğin yere taşı/döndür; kök bileşenlerine ve bu adlara dokunma. Terazi ve raf **önü -Z**: oyuncu -Z tarafından bakar.
+- Etkileşim collider'ları (kazan kökü, Stove, Drain, Slot_*, MarketStall) layer `Interactable` ve **trigger değil**; birbirinin önünü kesmesin (Drain kazan kutusunun dışında).
+- **Kavanoz modeli:** kökünde `JarProp` olan bir prefab yap (etiket TMP + boyanacak renderer'lar), `Data/Species/` altındaki maddenin **Jar Prefab** alanına ver. Boş bırakılan maddeler `Prefabs/Jars/Jar_Placeholder` (renkli küp) kullanır. Pivot taban ortası; kavanozda collider olmasın (ya da trigger).
+- **Atom küresi:** terazideki küre `Prefabs/Workshop/Atom_Placeholder` (kökünde Renderer); kendi modelin varsa ScaleModel'in Atom Prefab alanına ver.
+- Masa ve tahta hâlâ istasyon (`StationBase` + `CameraPoint`); Faz 5'te kullanılır. Tahtanın önünde 3D yazı (`BoardText`, `ChalkboardText`).
 
 ### Köy önce/sonra
 ```
@@ -49,7 +61,7 @@ Kod yalnızca bu objeleri aç/kapa yapar; içine istediğini koy.
 
 | Layer | Kim kullanır |
 |---|---|
-| `Interactable` | İstasyon kökleri. Başka objeye verme (raycast bunu arar). |
+| `Interactable` | Etkileşilen collider'lar: istasyon/kazan kökü, Stove, Drain, raf yerleri, pazar tezgâhı. Başka objeye verme. |
 | `Player` | Yalnızca oyuncu prefab'ı. |
 
 Layer'ları menü **BilgiAdasi → Kurulum** ekler; elle ekleme.
@@ -62,19 +74,20 @@ Kod hiçbir Canvas'a ya da objeye bağlı değildir. Her UI parçası için bir 
 |---|---|---|
 | `IInteractPromptView` | Crosshair + ipucu: `ShowPrompt(metin, simge)`. Simge hazır gelir (klavye `[E]`, Xbox `(X)`, PS `(□)`, Switch `(Y)`); view yalnızca çizer | 2 |
 | `IScreenFader` | Sahne geçişi kararması | 1 |
-| `IOrderStationView` | Kazan paneli açık/kapalı (`SetOpen`) | 3 |
-| `IOrderCardView` | Sipariş kartı: veren, istenen ürünler, (Görev 1–2) girenlerin adı, kese; kısa mesaj | 3 |
-| `IShelfView` | Raf: kavanozlar (kazanda kaç, elde kaç, fiyat); etiket tıklanınca mühür titremesi + ilk seferde not | 3 |
-| `ICauldronView` | Kazandaki türler (adet), ocak yanık/sönük, köpürme ve tepkime animasyonu | 3 |
-| `IScaleView` | **İki terazi birlikte**: element başına sol / sağ / artan; dengede mi; köpürmede fazla (kırmızı) / eksik (kesikli) | 3 |
-| `IChalkboardView` | Tahtadaki denklemler (alt indisli TMP) | 3 |
-| `IHintBookView` | Ustanın defteri: 2 hatadan sonra parlar, açılınca ipucu | 3 |
-| `IRealLifeCardView` | "Gerçek hayatta" kartı (kapat düğmesi) | 3 |
-| `IDialogueView` | Konuşma balonu + portre | 4 |
+| `IInventoryView` | **HUD:** ekranın altında 6 slot (madde + adet, seçili slot vurgulu) + kese: `ShowInventory(slotlar, seçili, para)` | 4 |
+| `IOrderCardView` | **HUD:** aktif sipariş kartı: veren, istenen ürünler, (Görev 1–2) girenler, ödeme, "hazır" durumu; `ClearOrder()` | 4 |
+| `INoticeView` | **HUD:** kısa not ("Envanterde yer yok", mühür notu, köpürme…) birkaç saniye | 4 |
+| `IMarketView` | **HUD (UI modu):** pazar listesi (madde, fiyat, elde kaç) + kese; düğmeler `IMarketCommands.Buy / CloseMarket` | 4 |
+| `IHintBookView` | **HUD:** ustanın defteri: 2 hatadan sonra parlar (H / Y), açılınca ipucu | 4 |
+| `IRealLifeCardView` | **HUD:** "Gerçek hayatta" kartı; kod birkaç saniye sonra kapatır | 4 |
+| `ICauldronView` | **3D:** sıvı, döküm, boşaltma, köpük, ateş (`CauldronVisuals`) | 4 |
+| `IScaleView` | **3D terazi** (`ScaleModel`): element başına sol / sağ / artan; dengede mi; köpürmede fark | 4 |
+| `IChalkboardView` | **3D:** tahtadaki denklemler (`ChalkboardText`, alt indisli TMP) | 4 |
+| `IDialogueView` | Konuşma balonu + portre: `ShowLine(satır, devamıVar)`, `Hide()`. Satırda konuşan adı, metin, portre (sprite, boş olabilir). Kapıda hareket durur, E/Space (X/A) ilerletir; tıklayınca `IDialogueCommands.Advance()` | 4 |
 | `IPaperView` | Masa kâğıdı ve sorular | 5 |
 | `IMapView` | Harita: köy durumu + 5 nokta | 6 |
 
-**Tıklamalar → kod:** Düğmeler, sürükle-bırak ve etiket tıklaması `ViewLocator.Get<IOrderCommands>()` üzerinden çağrılır: `AddToCauldron`, `Increase`, `Decrease`, `Select`, `TouchLabel`, `FireStove`, `ToggleHint`, `CloseRealLifeCard`. Tam imzalar: `Scripts/Order/OrderViews.cs`, `Scripts/UI/SharedViews.cs`. Bir view birden fazla arayüzü uygulayabilir (örnek: `PlaceholderOrderView`).
+**Etkileşim → kod:** Atölyede (kazan, raf, ocak, kol, pazar, kapı) her şey crosshair + E/X ile; UI düğmesi yalnızca pazar ekranında (`ViewLocator.Get<IMarketCommands>()`). Tam imzalar: `Scripts/Order/OrderViews.cs`, `Scripts/UI/SharedViews.cs`. Bir view birden fazla arayüzü uygulayabilir (örnek: `PlaceholderWorkshopHud`).
 
 View script'i `RegisteredView<IArayüz>`'den türer ve açılınca kendini kaydeder; bu yüzden **sahnede bir yere sürükleyip bağlaman gerekmez**, objenin açık olması yeterli. Örnek: `Scripts/UI/Placeholder/PlaceholderInteractPromptView.cs`.
 
