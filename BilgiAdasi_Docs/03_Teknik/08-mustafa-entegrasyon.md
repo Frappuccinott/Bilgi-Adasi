@@ -180,7 +180,7 @@ Kod yalnızca: `animator.Play("Klip_Adi")` (ya da `CrossFade`). Her klip iskelet
 - **Çakışma olursa:** durdur, zorla birleştirme (`--force`, "theirs/ours" ile ezme) yapma. Çakışan dosya kimin alanındaysa onun sürümü geçerlidir. Sahne/prefab çakışmasında dosya elle düzeltilmez; sahibi kendi sürümünü alır, diğeri değişikliğini Unity içinde yeniden uygular. Sebebi buraya kural olarak eklenir.
 - **Mutlaka haber verilecekler:** `ProjectSettings/` ya da `Packages/` değişikliği, §2'deki bir adın değişmesi, klasör taşıma.
 
-## 7. Tuş simgeleri
+## 10. Tuş simgeleri
 
 Kendi UI'ında tuş göstereceksen yazıyı elle yazma: `ControlGlyphs.For(PromptAction.FireStove)` son kullanılan cihaza göre doğru simgeyi verir (klavye / Xbox / PlayStation / Switch). Değişimi dinlemek için `GameInput.SchemeChanged`. İkon (sprite) kullanmak istersen aynı olaya bağlanıp kendi sprite'ını seçebilirsin; düzen `GameInput.LastScheme`'de.
 
