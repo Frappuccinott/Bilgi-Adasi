@@ -78,6 +78,7 @@ Yeni paket eklemeden önce **sor**.
 | Increase / Decrease | Station | Fare tekeri / + − | RB / LB |
 | FireStove | Station | F | Y (North) |
 | OpenHint | Station | H | X (West) |
+| Navigate (hedef seç) | Station | Ok tuşları | Sol çubuk / D-pad |
 | ExitStation | Station | Esc / sağ tık | B (East) |
 | Navigate / Submit / Cancel | UI | Ok tuşları, Enter, Esc | D-pad / sol çubuk, A, B |
 

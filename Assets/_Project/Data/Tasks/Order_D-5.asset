@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c85bcfdecb2bfc42ab2993334a93d5c, type: 3}
+  m_Name: Order_D-5
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.OrderTask
+  taskId: D-5
+  title: "G\xFCbre Ruhu"
+  residentName: "\xC7ift\xE7i Elif"
+  requestLine: "D\xF6rt kavanoz g\xFCbre ruhu istiyorum, ne eksik ne fazla. Paras\u0131n\u0131
+    pe\u015Fin veriyorum: kesede yirmi ak\xE7e. Artan\u0131n hesab\u0131 senin cebinden."
+  reminderLine: "D\xF6rt kavanoz, \xE7\u0131rak. Sand\u0131ktan almadan \xF6nce hesab\u0131n\u0131
+    yap."
+  deliverLine: "D\xF6rt kavanoz, tastamam. Hesab\u0131n\u0131 bilen simyac\u0131!"
+  afterLine: "Tarla ye\u015Ferdi! Hasatta seni de \xE7a\u011F\u0131raca\u011F\u0131m."
+  hint: "\xD6nce bir kavanozluk denklemi kur, sonra ikiye katla."
+  realLife: "Amonyak en \xE7ok \xFCretilen g\xFCbre hammaddelerindendir; keskin kokulu,
+    zararl\u0131 bir gazd\u0131r ve kapal\u0131 fabrikalarda \xFCretilir."
+  reasoning:
+    question: "Fazladan ald\u0131\u011F\u0131n N<sub>2</sub> olsayd\u0131 neden kazanda
+      kal\u0131rd\u0131?"
+    options:
+    - "H<sub>2</sub> biterdi; N<sub>2</sub> e\u015Fle\u015Fecek hidrojen bulamaz,
+      tepkime dururdu."
+    - "Kazan dolar, s\u0131\u011Fmazd\u0131."
+    - "N<sub>2</sub> a\u011F\u0131r oldu\u011Fu i\xE7in dibe \xE7\xF6ker, kar\u0131\u015Fmazd\u0131."
+    correctIndex: 0
+    replies:
+    - "Aynen \xF6yle. Biri biterse tepkime durur, fazla olan artar."
+    - "Hacim de\u011Fil, say\u0131 meselesi. Hidrojen biterse azot e\u015Fsiz kal\u0131r."
+    - "Kar\u0131\u015Fmak tepkimeye girmek demek de\u011Fil. Azot e\u015Fle\u015Fecek
+      hidrojen bulamad\u0131\u011F\u0131 i\xE7in artar."
+  discoveryId: K-5
+  discoveryText: "Tepkime girenleri katsay\u0131lar\u0131 oran\u0131nda harcar. Biri
+    biterse tepkime durur; fazla olan artar."
+  mode: 1
+  steps:
+  - reaction: {fileID: 11400000, guid: e720008e0ba2fe844b431ad346b2e904, type: 2}
+    multiplier: 2
+    dropToShelf: []
+  shelf: []
+  showReactantsOnCard: 0
+  budget: 20
+  prices:
+  - species: {fileID: 11400000, guid: 7365f7085cd6aad49b7f944cb76c871f, type: 2}
+    price: 3
+  - species: {fileID: 11400000, guid: e9fe8dc75e00bcb4a86f169ee7fbbcc2, type: 2}
+    price: 2
