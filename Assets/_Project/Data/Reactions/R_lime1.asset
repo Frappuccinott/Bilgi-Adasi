@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 464fb02b8ce9c8c46b3777c229c2acbe, type: 3}
+  m_Name: R_lime1
+  m_EditorClassIdentifier: BilgiAdasi.Chemistry::BilgiAdasi.Chemistry.ReactionData
+  id: R_lime1
+  reactants:
+  - species: {fileID: 11400000, guid: 1f1b54aa2a08c644996bdfb5693632dd, type: 2}
+    amount: 1
+  products:
+  - species: {fileID: 11400000, guid: 09de350f5713fc441bf45c8c039b8186, type: 2}
+    amount: 1
+  - species: {fileID: 11400000, guid: 50ddecd6f6537fd48aa42ccc142f47e6, type: 2}
+    amount: 1
+  type: 1
