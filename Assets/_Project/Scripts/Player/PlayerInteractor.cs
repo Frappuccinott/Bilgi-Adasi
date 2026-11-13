@@ -41,6 +41,11 @@ namespace BilgiAdasi.Player
         public bool ControlEnabled => controlEnabled;
         /// <summary>Bisiklette: yürüme ve ışın kapalı, bakış ve crosshair açık. Interact'i bisiklet dinler.</summary>
         public bool IsRiding => riding;
+        /// <summary>Şu an bakılan bir etkileşim hedefi var (ipucu onundur).</summary>
+        public bool HasTarget => current != null;
+        public Transform RayOrigin => rayOrigin;
+        public LayerMask RayMask => rayMask;
+        public float Range => range;
 
         private void OnEnable()
         {

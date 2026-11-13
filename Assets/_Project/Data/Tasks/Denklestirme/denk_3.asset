@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.OrderTask
   id: denk_3
   giverName: "F\u0131r\u0131nc\u0131 Zehra"
-  giverPortrait: {fileID: 0}
+  giverPortrait: {fileID: 21300000, guid: 0366aa63b404f6742aec29adebb7f8d1, type: 3}
   giverLines:
   - "Fenercinin fenerlerini yakm\u0131\u015Fs\u0131n, duydum. Benim f\u0131r\u0131n
     onun fenerinden b\xFCy\xFCk ama. Kasaba iki g\xFCnd\xFCr peksimet yiyor."

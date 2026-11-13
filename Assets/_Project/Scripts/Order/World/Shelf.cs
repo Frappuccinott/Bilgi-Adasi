@@ -33,6 +33,9 @@ namespace BilgiAdasi.Order
         {
             JarProp prefab = null;
             if (species.JarPrefab != null) prefab = species.JarPrefab.GetComponent<JarProp>();
+            // Model JarProp'suz bir sanat prefab'ıysa (Malzeme_*/Alet_*): yer tutucu kavanoz etiket için açılır,
+            // gövdesi modelle değiştirilir.
+            bool plainModel = prefab == null && species.JarPrefab != null;
             if (prefab == null) prefab = defaultJarPrefab;
             if (prefab == null) return null;
 
@@ -40,6 +43,7 @@ namespace BilgiAdasi.Order
             jar.transform.localPosition = Vector3.zero;
             jar.transform.localRotation = Quaternion.identity;
             jar.name = "Jar_" + species.Formula;
+            if (plainModel) jar.AttachModel(species.JarPrefab);
             jar.Setup(species);
             return jar;
         }

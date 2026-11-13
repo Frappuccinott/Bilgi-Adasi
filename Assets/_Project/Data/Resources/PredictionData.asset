@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0ec17313cd2e7e4bb095310566fcc37, type: 3}
+  m_Name: PredictionData
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.PredictionData
+  masterName: "C\xE2bir Usta"
+  continueWord: Devam
+  delay: 0.8
+  entries:
+  - taskId: denk_1
+    stepIndex: 0
+    prompt:
+      question: "Muhtar su istiyor. Kazana ba\u015Flamadan s\xF6yle \xE7\u0131rak:
+        su yapmak i\xE7in kazana ne koymal\u0131y\u0131z?"
+      options:
+      - "Yaln\u0131zca H\u2082"
+      - "H\u2082 ve O\u2082"
+      - "H\u2082 ve CO\u2082"
+      correctIndex: 1
+      replies:
+      - "Suyun i\xE7inde oksijen de var: H\u2082O. Yaln\u0131z hidrojenle su olmaz."
+      - "Aynen \xF6yle. Suyun i\xE7inde ne varsa kazana o girer: hidrojen ve oksijen."
+      - "CO\u2082 karbon getirir, suda karbon yok. Gereken oksijen O\u2082'den gelir."
+  - taskId: denk_2
+    stepIndex: 0
+    prompt:
+      question: "Fenerler isli yan\u0131yor. Bir fener temiz yans\u0131n diye neler
+        gerekir?"
+      options:
+      - "Yaln\u0131zca CH\u2084 ve bir k\u0131v\u0131lc\u0131m"
+      - "CH\u2084 ve H\u2082O"
+      - "CH\u2084 (yak\u0131t), O\u2082 (hava) ve k\u0131v\u0131lc\u0131m"
+      correctIndex: 2
+      replies:
+      - "Havas\u0131z ate\u015F s\xF6ner, yar\u0131m yanarsa is \xE7\u0131kar. Yanma
+        oksijen ister."
+      - "Su yang\u0131n\u0131 s\xF6nd\xFCr\xFCr. Yak\u0131t\u0131n yan\u0131nda hava
+        ve bir k\u0131v\u0131lc\u0131m gerekir."
+      - "Do\u011Fru. Yak\u0131t, hava, \u0131s\u0131: \xFC\xE7\xFC bir arada olunca
+        fener temiz yanar."
+  - taskId: denk_4
+    stepIndex: 1
+    prompt:
+      question: "Ta\u015F\u0131 \u0131s\u0131tt\u0131n, kazandan s\xF6nmemi\u015F
+        kire\xE7 \xE7\u0131kt\u0131. Har\xE7 i\xE7in su ile neyi birle\u015Ftireceksin?"
+      options:
+      - "CaO, az \xF6nce yapt\u0131\u011F\u0131m s\xF6nmemi\u015F kire\xE7"
+      - "CaCO\u2083, kire\xE7 ta\u015F\u0131n\u0131n kendisi"
+      - "CO\u2082, ta\u015Ftan \xE7\u0131kan gaz"
+      correctIndex: 0
+      replies:
+      - "Evet. Birinci ad\u0131m\u0131n \xFCr\xFCn\xFC ikinci ad\u0131m\u0131n malzemesi
+        olur: buna ara \xFCr\xFCn denir."
+      - "Ta\u015F zaten \u0131s\u0131t\u0131ld\u0131, art\u0131k CaO oldu. Tahtadaki
+        ilk sat\u0131ra bak: \xFCr\xFCn neydi?"
+      - "CO\u2082 havaya kar\u0131\u015Ft\u0131. Harc\u0131 su ile CaO yapar."
+  - taskId: denk_5
+    stepIndex: 0
+    prompt:
+      question: "Elif 4 NH\u2083 istiyor. Pazarda N\u2082 3 ak\xE7e, H\u2082 2 ak\xE7e.
+        Kesende 30 ak\xE7e var. En az ka\xE7 ak\xE7e harcars\u0131n?"
+      options:
+      - "18 ak\xE7e"
+      - "9 ak\xE7e"
+      - "30 ak\xE7e, hepsini"
+      correctIndex: 0
+      replies:
+      - "Do\u011Fru hesap. 2 N\u2082 + 6 H\u2082 = 6 + 12 = 18 ak\xE7e. Fazlas\u0131
+        bo\u015Fa gider."
+      - "9 ak\xE7e yaln\u0131zca 2 NH\u2083 eder: 1 N\u2082 + 3 H\u2082. Elif d\xF6rt
+        istedi, denklemi ikiyle \xE7arp."
+      - "Kesenin hepsini harcamak gerekmez. Denklemin istedi\u011Fi kadar\u0131n\u0131
+        al: fazlas\u0131 artar."

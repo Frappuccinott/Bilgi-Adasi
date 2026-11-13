@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 290509bf506ad4e4ba3469e7b40932bb, type: 3}
+  m_Name: Ciraklik
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.ApprenticeshipData
+  task: {fileID: 11400000, guid: cea3c30e633e33441823eb697f4a9832, type: 2}
+  classroomCards:
+  - "Sonbahar sabah\u0131. 10. s\u0131n\u0131f\u0131n ilk kimya dersi."
+  - "\xD6\u011Fretmen tahtaya yaz\u0131yor: <b>Kimyasal Tepkimeler</b>."
+  - "S\u0131n\u0131f \u0131l\u0131k, sesler uzakla\u015F\u0131yor\u2026 G\xF6zlerin
+    a\u011F\u0131rla\u015F\u0131yor."
+  - "\u2026bir yerde bir kazan fokurduyor."
+  cardSeconds: 3.2
+  masterName: "C\xE2bir Usta"
+  wakeLines:
+  - "Nihayet uyand\u0131n. Kap\u0131m\u0131n \xF6n\xFCnde yat\u0131yordun; \xE7\u0131rak
+    ar\u0131yordum zaten."
+  - "Bu \u015Fehirde her k\xF6y\xFCn bir derdi var; dertler de ancak \xF6l\xE7\xFCyle
+    \xE7\xF6z\xFCl\xFCr. Gel, sana ilk kural\u0131 g\xF6stereyim."
+  - "Al, bu defter senin. G\xF6rd\xFC\u011F\xFCn\xFC yaz. G\xF6rd\xFC\u011F\xFCn
+    \u015Fey kazanda kaybolmaz."
+  predictionQuestion: "Kazana iki kavanoz hidrojen koyup \u0131s\u0131t\u0131rsam,
+    i\xE7indeki hidrojen azal\u0131r m\u0131?"
+  predictionOptions:
+  - "Hay\u0131r, ayn\u0131 kal\u0131r."
+  - "Azal\u0131r, buhar olup gider."
+  - "Artar, \u0131s\u0131 yeni hidrojen yapar."
+  predictionCorrect: 0
+  predictionReplies:
+  - "G\xF6rece\u011Fiz. Kazana d\xF6k, teraziye bak."
+  - "\xD6yle mi dersin? D\xF6k de teraziyle birlikte bakal\u0131m."
+  - "Is\u0131 madde yapsayd\u0131 ocak zengin olurdu. D\xF6k de g\xF6relim."
+  continueWord: Devam
+  giftSpecies: {fileID: 11400000, guid: e9fe8dc75e00bcb4a86f169ee7fbbcc2, type: 2}
+  giftCount: 2
+  giftNotice: "Usta eline iki kavanoz H<sub>2</sub> verdi. Kazana d\xF6k, ate\u015Fi
+    yak."
+  doneNotice: "Kavanozlar geri geldi: ne girerse o \xE7\u0131kar. Kap\u0131ya bak;
+    k\xF6yden biri seni ar\u0131yor."

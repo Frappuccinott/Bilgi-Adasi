@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.OrderTask
   id: denk_4
   giverName: "Duvarc\u0131 Halil"
-  giverPortrait: {fileID: 0}
+  giverPortrait: {fileID: 21300000, guid: 02a92025a19d72b46a1c23446050f9bb, type: 3}
   giverLines:
   - "Har\xE7 i\xE7in s\xF6nm\xFC\u015F kire\xE7 laz\u0131m. Kire\xE7 ta\u015F\u0131
     var ama. Ustan ta\u015Ftan kire\xE7 \xE7\u0131kar\u0131rd\u0131, iki ad\u0131mda.

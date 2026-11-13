@@ -19,7 +19,7 @@ namespace BilgiAdasi.UI
     public sealed class PlaceholderReasoningView : RegisteredView<IReasoningView>, IReasoningView
     {
         private const int MaxOptions = 3;
-        private static readonly string[] Letters = { "A)  ", "B)  ", "C)  " };
+        private static readonly string[] Letters = { "1)  ", "2)  ", "3)  " };
 
         // Çalışma anında kurulur; Play'de yeniden derlemeden sağ çıksın diye serileştirilir.
         [SerializeField, HideInInspector] private GameObject panel;
@@ -167,6 +167,7 @@ namespace BilgiAdasi.UI
                 jump = GameInput.FindAction("Player/Jump");
                 interact.performed += OnSubmit;
                 jump.performed += OnSubmit;
+                GameInput.LockInventory(true); // soru açıkken envanterde gezinilmez
             }
             else if (!on && move != null)
             {
@@ -175,6 +176,7 @@ namespace BilgiAdasi.UI
                     interact.performed -= OnSubmit;
                     jump.performed -= OnSubmit;
                 }
+                GameInput.LockInventory(false);
                 move = interact = jump = null;
             }
         }

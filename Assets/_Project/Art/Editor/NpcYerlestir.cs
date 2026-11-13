@@ -80,8 +80,9 @@ namespace BilgiAdasi.SanatAraclari
                 Not = "atölye: tahtaya yazar ↔ tartım tezgâhında çalışır", Hiz = 0.75f, IcMekan = true, Mod = NpcPathMode.PingPong,
                 Duraklar = new[]
                 {
-                    Calis(new Vector3(-3.2f, 0f, -0.4f), 9f, 14f, new Vector3(-3.95f, 0f, -0.4f)),
-                    Gec(new Vector3(-2.8f, 0f, 0.4f)),               // tezgâhın köşesinden açık geçer
+                    // Tahtanın yan ucunda yazar: tahta istasyonunun kamerası (-2.25, 1.7, -0.35) ile tahta arasına girmez.
+                    Calis(new Vector3(-3.3f, 0f, 1.05f), 9f, 14f, new Vector3(-3.95f, 0f, 0.5f)),
+                    Gec(new Vector3(-3.05f, 0f, 1.2f)),
                     Calis(new Vector3(-2.8f, 0f, 1.3f), 6f, 10f, new Vector3(-3.6f, 0f, 1.3f)),   // asma kat direğinin önü
                 },
                 Sohbet = new[]

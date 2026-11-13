@@ -52,6 +52,7 @@ namespace BilgiAdasi.Order
         private IHintBookView hintView;
         private IRealLifeCardView realLifeView;
         private INoticeView noticeView;
+        private IAtomVisionView atomView;
 
         public State Current { get; private set; } = State.Idle;
         public OrderSession Session => session;
@@ -69,6 +70,8 @@ namespace BilgiAdasi.Order
         public event Action<OrderTask> TaskFinished;
         /// <summary>Kazan içeriği ya da durum değişti (etkileşim ipuçları tazelenir).</summary>
         public event Action StateChanged;
+        /// <summary>Zincir görevde sonraki adım başladı (adım indeksi). Ara ürün sorusu dinler.</summary>
+        public event Action<OrderTask, int> StepStarted;
 
         private static SaveData Data => SaveSystem.Instance != null ? SaveSystem.Instance.Data : null;
 
@@ -271,6 +274,8 @@ namespace BilgiAdasi.Order
             StateChanged?.Invoke();
             cauldronView?.SetStoveLit(true);
             cauldronView?.PlayReaction(reactionDuration);
+            // Atom Görüşü: kazan boşalmadan önce girenler, artanlar ve ürünler (view kopyalar).
+            atomView?.Play(session.Used, session.Extra, session.Step.TargetProducts);
             yield return new WaitForSeconds(reactionDuration);
 
             var step = session.Step;
@@ -292,6 +297,7 @@ namespace BilgiAdasi.Order
                 Current = State.Preparing;
                 if (pending.Count == 0) Notice(texts != null ? texts.NextStep : null);
                 RefreshAll();
+                StepStarted?.Invoke(session.Task, session.StepIndex);
                 yield break;
             }
 
@@ -354,6 +360,7 @@ namespace BilgiAdasi.Order
             hintView = ViewLocator.Get<IHintBookView>();
             realLifeView = ViewLocator.Get<IRealLifeCardView>();
             noticeView = ViewLocator.Get<INoticeView>();
+            atomView = ViewLocator.Get<IAtomVisionView>();
         }
 
         private void RefreshAll()

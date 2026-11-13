@@ -113,6 +113,44 @@ namespace BilgiAdasi.Core
             poses.Add(entry);
         }
 
+        // ---------- Dünyaya bırakılan eşyalar (alet, kavanoz: yere ya da masaya) ----------
+
+        [Serializable]
+        public struct PlacedEntry
+        {
+            public string id;
+            public string species;  // SpeciesData.Formula
+            public int count;
+            public Vector3 position;
+            public float yaw;
+        }
+
+        [SerializeField] private List<PlacedEntry> placedItems = new List<PlacedEntry>();
+
+        public IReadOnlyList<PlacedEntry> PlacedItems => placedItems ??= new List<PlacedEntry>();
+
+        public void SetPlaced(PlacedEntry entry)
+        {
+            placedItems ??= new List<PlacedEntry>();
+            for (int i = 0; i < placedItems.Count; i++)
+                if (placedItems[i].id == entry.id) { placedItems[i] = entry; return; }
+            placedItems.Add(entry);
+        }
+
+        public void RemovePlaced(string id)
+        {
+            if (placedItems == null) return;
+            for (int i = placedItems.Count - 1; i >= 0; i--)
+                if (placedItems[i].id == id) placedItems.RemoveAt(i);
+        }
+
+        // ---------- Görev katmanlarının bir kez olan adımları (tahmin soruldu, hata dedektifi çözüldü …) ----------
+
+        [SerializeField] private List<string> flags = new List<string>();
+
+        public bool HasFlag(string id) => flags != null && flags.Contains(id);
+        public void SetFlag(string id) => AddUnique(flags ??= new List<string>(), id);
+
         [SerializeField] private int grade = DefaultGrade;
         [SerializeField] private List<string> completedNeighborhoods = new List<string>();
         [SerializeField] private List<string> completedTasks = new List<string>();

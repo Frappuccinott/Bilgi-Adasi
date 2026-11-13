@@ -294,7 +294,8 @@ def rig_ocak_ates():
 # ================================================================== TAŞINABİLİR EŞYALAR: al / dök / bırak
 ITEM_KIND = {"Malzeme_H2": "gaz", "Malzeme_O2": "gaz", "Malzeme_N2": "gaz", "Malzeme_CO2": "gaz", "Malzeme_CO": "gaz",
              "Malzeme_CH4": "gaz", "Malzeme_C3H8": "gaz", "Malzeme_H2O": "sivi", "Malzeme_NH3": "sivi",
-             "Malzeme_CaO": "toz", "Malzeme_CaOH2": "toz", "Malzeme_CaCO3": "tas"}
+             "Malzeme_CaO": "toz", "Malzeme_CaOH2": "toz", "Malzeme_CaCO3": "tas",
+             "Malzeme_C": "tas", "Malzeme_C6H12O6": "toz"}
 TILT = {"gaz": -62, "sivi": -115, "toz": -125, "tas": -130}
 
 def _effect_mesh(kind, name):
@@ -329,7 +330,7 @@ def _effect_mesh(kind, name):
         b = bmesh.new()
         bmesh.ops.create_icosphere(b, subdivisions=1, radius=rr.uniform(0.014, 0.022))
         jitter(b, 0.004, seed=k)
-        paint_flat(b, mix(pal("kaya", 0), pal("kil", 0), 0.45))
+        paint_flat(b, ELEM["C"]() if name.startswith("Malzeme_C_") else mix(pal("kaya", 0), pal("kil", 0), 0.45))   # kömür koyu
         parts.append((b, Matrix.Translation((rr.uniform(-0.01, 0.01), rr.uniform(-0.01, 0.01), -0.05 - k * 0.09))))
     return to_object(bm_merge(*parts), name, col, sharp_angle=0)
 

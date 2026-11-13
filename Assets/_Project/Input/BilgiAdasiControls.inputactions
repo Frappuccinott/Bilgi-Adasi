@@ -19,7 +19,9 @@
                 { "name": "OpenHint", "type": "Button", "id": "6a1e2b3c-4d5e-4f60-8a71-b2c3d4e5f601", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
                 { "name": "NextSlot", "type": "Button", "id": "7b2f3c4d-5e6f-4071-9b82-c3d4e5f60712", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
                 { "name": "PrevSlot", "type": "Button", "id": "8c304d5e-6f70-4182-ac93-d4e5f6071823", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
-                { "name": "SelectSlot", "type": "Button", "id": "9d415e6f-7081-4293-bda4-e5f607182934", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false }
+                { "name": "SelectSlot", "type": "Button", "id": "9d415e6f-7081-4293-bda4-e5f607182934", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "Drop", "type": "Button", "id": "9a9dad35-53fd-496c-a0c5-b423c02b32dd", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "OpenBook", "type": "Button", "id": "7f27c6d6-c7c8-456d-a158-ebe7693f0ee3", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false }
             ],
             "bindings": [
                 { "name": "WASD", "id": "07b6113c-9f3d-44e1-8ca8-8bc6fabca80e", "path": "2DVector", "interactions": "", "processors": "", "groups": "", "action": "Move", "isComposite": true, "isPartOfComposite": false },
@@ -39,6 +41,10 @@
                 { "name": "", "id": "0cb8a4f8-c4ff-4d03-90e7-ca80527c8c06", "path": "<Gamepad>/buttonWest", "interactions": "", "processors": "", "groups": "Gamepad", "action": "Interact", "isComposite": false, "isPartOfComposite": false },
                 { "name": "", "id": "f4a2b3c5-6d7e-4f80-9bac-1d2e3f4a5b62", "path": "<Keyboard>/f", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Use", "isComposite": false, "isPartOfComposite": false },
                 { "name": "", "id": "a5b3c4d6-7e8f-4091-acbd-2e3f4a5b6c73", "path": "<Gamepad>/buttonWest", "interactions": "", "processors": "", "groups": "Gamepad", "action": "Use", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "6a117bee-5a8e-4327-b231-e7e5263573a9", "path": "<Keyboard>/g", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Drop", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "04d3f2ce-c999-4d7a-9edf-9af0a1d25b77", "path": "<Gamepad>/dpad/down", "interactions": "", "processors": "", "groups": "Gamepad", "action": "Drop", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "d58be71c-38ac-430a-9c5b-8b0bfe4040cf", "path": "<Keyboard>/n", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "OpenBook", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "b8b8da1e-a0b7-4f0c-b3b4-43860a2e8f05", "path": "<Gamepad>/dpad/up", "interactions": "", "processors": "", "groups": "Gamepad", "action": "OpenBook", "isComposite": false, "isPartOfComposite": false },
 { "name": "", "id": "61b6b88a-f146-4fba-99a7-f211188810ec", "path": "<Keyboard>/space", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Jump", "isComposite": false, "isPartOfComposite": false },                { "name": "", "id": "1e97641c-950d-44e9-9645-1dfbfc785c6b", "path": "<Gamepad>/buttonSouth", "interactions": "", "processors": "", "groups": "Gamepad", "action": "Jump", "isComposite": false, "isPartOfComposite": false },                { "name": "", "id": "8c7c7a4f-d97e-4370-bd51-3bca9a0ab4a7", "path": "<Keyboard>/leftCtrl", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Crouch", "isComposite": false, "isPartOfComposite": false },                { "name": "", "id": "01491daa-e356-4266-b437-48471144d9c4", "path": "<Keyboard>/c", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "CrouchToggle", "isComposite": false, "isPartOfComposite": false },                { "name": "", "id": "74f22e70-fcdf-4ff6-bfe4-e87730c9f991", "path": "<Gamepad>/buttonEast", "interactions": "", "processors": "", "groups": "Gamepad", "action": "CrouchToggle", "isComposite": false, "isPartOfComposite": false },
 
                 { "name": "", "id": "06105590-b437-4d29-8cbf-7946d4bdd6fb", "path": "<Keyboard>/m", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "OpenMap", "isComposite": false, "isPartOfComposite": false },
@@ -129,7 +135,9 @@
             "actions": [
                 { "name": "Navigate", "type": "PassThrough", "id": "a6944372-7afa-4d3f-8e9b-5f1f913a8df6", "expectedControlType": "Vector2", "processors": "", "interactions": "", "initialStateCheck": false },
                 { "name": "Submit", "type": "Button", "id": "f430f049-191d-4a5b-a4bd-326837c9c5f4", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
-                { "name": "Cancel", "type": "Button", "id": "f89414a4-4fd6-4d19-b97e-8048fe6a4793", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false }
+                { "name": "Cancel", "type": "Button", "id": "f89414a4-4fd6-4d19-b97e-8048fe6a4793", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "PrevTab", "type": "Button", "id": "37224f88-ca01-4251-ad98-a259b347b4a5", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "NextTab", "type": "Button", "id": "1b6dccb7-2804-4a9b-93ae-39aff67bba5b", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false }
             ],
             "bindings": [
                 { "name": "Arrows", "id": "fa92d5e8-44dd-4fc2-9d98-d33f2375b03e", "path": "2DVector", "interactions": "", "processors": "", "groups": "", "action": "Navigate", "isComposite": true, "isPartOfComposite": false },
@@ -144,7 +152,11 @@
                 { "name": "", "id": "8b7e0716-956c-4780-ba6e-2e066e8b852d", "path": "<Gamepad>/buttonSouth", "interactions": "", "processors": "", "groups": "Gamepad", "action": "Submit", "isComposite": false, "isPartOfComposite": false },
 
                 { "name": "", "id": "17f43e84-d790-441c-85e5-b23e08c9bead", "path": "<Keyboard>/escape", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Cancel", "isComposite": false, "isPartOfComposite": false },
-                { "name": "", "id": "9d8958f9-ff89-43f8-98c5-acac5fe2a6f5", "path": "<Gamepad>/buttonEast", "interactions": "", "processors": "", "groups": "Gamepad", "action": "Cancel", "isComposite": false, "isPartOfComposite": false }
+                { "name": "", "id": "9d8958f9-ff89-43f8-98c5-acac5fe2a6f5", "path": "<Gamepad>/buttonEast", "interactions": "", "processors": "", "groups": "Gamepad", "action": "Cancel", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "29f2a716-c332-44f1-bd21-49c8e8b137c5", "path": "<Keyboard>/q", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "PrevTab", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "b391f44e-fe9a-40ac-bd0b-d0cc1d7b0b93", "path": "<Gamepad>/leftShoulder", "interactions": "", "processors": "", "groups": "Gamepad", "action": "PrevTab", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "587995e1-7370-4346-9420-59f030aadec0", "path": "<Keyboard>/e", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "NextTab", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "9fda7072-950a-4f91-8376-1e9a9a4b0b04", "path": "<Gamepad>/rightShoulder", "interactions": "", "processors": "", "groups": "Gamepad", "action": "NextTab", "isComposite": false, "isPartOfComposite": false }
             ]
         },
         {

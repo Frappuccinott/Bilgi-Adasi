@@ -76,6 +76,8 @@ Yeni paket eklemeden önce **sor**.
 | OpenHint (ustanın defteri, atölye) | Player | H | Y (North) |
 | NextSlot / PrevSlot (envanter) | Player | Fare tekeri ↓ / ↑ | RB / LB |
 | SelectSlot (envanter) | Player | 1–6 | — (RB/LB ile aynı iş) |
+| Drop (eldekini yere / masaya bırak) | Player | G | D-pad ↓ |
+| OpenBook (defteri aç: Ustanın Notları / Keşiflerim / Ustalık) | Player | N | D-pad ↑ |
 | Pause | Station | P (Esc istasyondan çıkar) | Start (Menu) |
 | Point | Station | Fare pozisyonu | — (imleç yok) |
 | Click / Drag | Station | Sol tık | — (Confirm kullanılır) |
@@ -86,6 +88,7 @@ Yeni paket eklemeden önce **sor**.
 | OpenHint | Station | H | X (West) |
 | ExitStation | Station | Esc / sağ tık | B (East) |
 | Navigate / Submit / Cancel | UI | Ok tuşları, Enter, Esc | D-pad / sol çubuk, A, B |
+| PrevTab / NextTab (defter ayracı) | UI | Q / E | LB / RB |
 | DevJumpTask (yalnızca geliştirici) | Dev | F1–F5 (o göreve atla) | LT+RT+D-pad → (sıradaki görevi bitmiş say) |
 | DevResetSave (yalnızca geliştirici) | Dev | Ctrl+R | LT+RT+D-pad ← |
 
@@ -174,7 +177,8 @@ Oyuncu köyler arasında **yürüyerek** gider (karar: 13.11). Bu, dokümanlarda
 - Prototipteki şehir **küçük ve kompakt**: atölye + iki köy alanı + aradaki tek sokak/meydan. Uçtan uca yürüyüş ≤ 40 sn.
 - Kilitli köy/ilçeler: sis + kapalı kapı/bariyer ile kesilir, içleri modellenmez.
 - Şehir greybox'ı ve modelleri **Mustafa** yapar; kod `08-mustafa-entegrasyon.md`'deki bağlantı noktalarına dayanır. Tek oyun sahnesi: `Harita` (atölye + şehir; `SceneFlow.GameScene`). Boot/Classroom/Town kaldırıldı (13.11).
-- Harita ekranı (`OpenMap`) kalır: bilgi + ilerleme ekranı (köy durumu, 5 nokta). Hızlı seyahat: P2, zaman kalırsa.
+- Harita ekranı (`OpenMap`: M / Tab / Select; aynı tuş ya da Esc/B kapatır): bilgi + ilerleme ekranı (köy durumu, 5 nokta, kilitli şehirler). Sol altta dönen mini harita (yalnızca oyuncu modunda). Görüntü sahneden pişirilir; veri `Data/Map/MapData.asset`. Kurulum: **Kurulum → 19** (harita modeli değişince yeniden çalıştır). Hızlı seyahat: P2, zaman kalırsa.
+- Yön tabelalarında simge yok, hedefin adı yazar (karar 14.11): `Tabela_Yazi_*` çapalarına TMP, Kurulum → 19.
 - Görev akışı: köydeki sakin/ulak oyuncuyu **atölyeye** çağırır; görevler atölyedeki istasyonlarda çözülür. Köyde yalnızca "önce/sonra" değişimi görülür.
 
 ### Bisiklet (karar 13.11, P2)

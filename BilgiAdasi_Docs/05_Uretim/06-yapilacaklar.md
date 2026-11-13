@@ -33,7 +33,7 @@
 - [x] `[KOD]` `BalanceEquationQ` (ReactionData'dan otomatik) — 13.11, Mustafa dalı (Kurulum 16)
 - [x] `[KOD]` Lonca Sınavı: rastgele çekme + yanlışta soru değişimi — 13.11, Mustafa dalı (Kurulum 16)
 - [x] `[İÇERİK]` Tepkime Türleri köyünün 5 görevi SO olarak girildi — `DeskDataBuilder`
-- [ ] `[KOD]` Harita: şehir/ilçe/köy düğümleri, kilit durumları, 5 nokta göstergesi
+- [x] `[KOD]` Harita: şehir/ilçe/köy düğümleri, kilit durumları, 5 nokta göstergesi — 14.11, mini harita dahil (Kurulum 19)
 - [ ] `[KOD]` İpucu defteri (iki tip için ortak)
 - [ ] `[KOD]` Boy uzama (`PlayerGrowth`, `CLAUDE.md` §7)
 - [x] `[KOD]` Gamepad istasyon kontrolü (odak tabanlı, imleçsiz)

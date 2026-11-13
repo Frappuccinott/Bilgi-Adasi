@@ -6,7 +6,7 @@ using UnityEngine;
 namespace BilgiAdasi.EditorTools
 {
     /// <summary>
-    /// Ustanın Sorgusu + Keşif Defteri verisini (04-gorev-plani §4, Seviye 1–10) üretir:
+    /// Ustanın Sorgusu + Keşif Defteri verisini (04-gorev-plani §4, Seviye 0–10) üretir:
     /// Assets/_Project/Data/Resources/LearningData.asset. Metin düzeltmeleri burada yapılıp menü yeniden çalıştırılır.
     /// Görev kimlikleri DenklestirmeSeed (denk_1 … denk_5) ve DeskDataBuilder (tur_1 … tur_5) ile aynı.
     /// </summary>
@@ -28,6 +28,23 @@ namespace BilgiAdasi.EditorTools
 
             data.SetEntries(new[]
             {
+                // ---------- Çıraklık (Seviye 0) ----------
+                Entry("cirak_0",
+                    "Terazinin iki kefesi neden eşit kaldı?",
+                    new[]
+                    {
+                        "Atomlar yok olmaz, yoktan da var olmaz.",
+                        "Kazan kapalı olduğu için hava girmedi.",
+                        "Hidrojen hafif olduğu için tartılmaz."
+                    }, 0,
+                    new[]
+                    {
+                        "Aynen öyle. Ne girdiyse o çıktı; deftere ilk kuralı yaz.",
+                        "Kapak tek başına açıklamaz. Isıtsan da açık bıraksan da bu kazanda atom ne kaybolur ne türer.",
+                        "Hafif de olsa her atom sayılır. Dört H girdi, dört H çıktı."
+                    },
+                    "K-0", "Kazana ne girerse o çıkar: tepkimede atomlar kaybolmaz, yoktan var olmaz."),
+
                 Entry("denk_1",
                     "Peki çırak, neden iki su molekülü elde ettin?",
                     new[]
@@ -139,6 +156,10 @@ namespace BilgiAdasi.EditorTools
                     "K-10", "Tür, atomların nasıl yeniden dizildiğini anlatır. Aynı atomlar (C, H, O) doğada döngü hâlinde dolaşır: yakıtta, havada, bitkide, bizde."),
             });
 
+            // Defter sayfası alanları (görev adı, yer, denklem, saha notları) ve şeritler: LessonNotesData.
+            foreach (var e in data.Entries) LessonNotesData.ApplyPage(e);
+            LessonNotesData.ApplyNotebookTexts(data.NotebookTexts);
+
             EditorUtility.SetDirty(data);
             AssetDatabase.SaveAssets();
             Debug.Log("[Öğrenme] Sorgu + Keşif Defteri verisi üretildi: " + Path);
@@ -150,7 +171,8 @@ namespace BilgiAdasi.EditorTools
             ReasoningPrompt prompt = question == null
                 ? new ReasoningPrompt()
                 : new ReasoningPrompt(Rich(question), RichAll(options), correct, RichAll(replies));
-            return new LearningEntry(taskId, prompt, discoveryId, Rich(discovery));
+            // Ders Notu (görevden önce): LessonNotesData; notu olmayan görevde boş kalır.
+            return new LearningEntry(taskId, prompt, discoveryId, Rich(discovery), LessonNotesData.For(taskId));
         }
 
         internal static string[] RichAll(string[] values)

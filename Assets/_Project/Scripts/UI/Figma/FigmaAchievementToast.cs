@@ -24,7 +24,7 @@ namespace BilgiAdasi.UI
         [Header("Yerleşim (1920×1080 referans)")]
         [SerializeField] private Vector2 size = new Vector2(640, 170);
         [Tooltip("Sağ ve alt kenardan uzaklık. Alt: envanter şeridinin (alttan ~135) ve tuş ipuçlarının üstünde kalır.")]
-        [SerializeField] private Vector2 margin = new Vector2(72, 150);
+        [SerializeField] private Vector2 margin = new Vector2(72, 210);
 
         [Header("Renk")]
         [Tooltip("Kapalı: renk türden gelir (Görev altın, Köy mühür, Meydan okuma su — marka paleti). Açık: sekme asset'indeki tür rengi.")]

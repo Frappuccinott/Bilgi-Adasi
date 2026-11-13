@@ -20,5 +20,7 @@ MonoBehaviour:
   - element: {fileID: 11400000, guid: f46fe3c19f0ceb74eb64d9bcfe316c16, type: 2}
     count: 1
   jarColor: {r: 0.6, g: 0.8, b: 1, a: 1}
-  jarPrefab: {fileID: 0}
+  jarPrefab: {fileID: 8479346361115843910, guid: 8e154cb3bffb54f4fa04e0ed61933bb1, type: 3}
   price: 3
+  isTool: 0
+  iconName: 

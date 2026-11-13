@@ -22,6 +22,9 @@ namespace BilgiAdasi.UI
         [SerializeField] private Color inkDark = Hex(0x4A3427);
         [SerializeField] private Color inkDeep = Hex(0x3E281B);
 
+        [Header("Bakır (defter başlıkları, numaralar)")]
+        [SerializeField] private Color copper = Hex(0x9F4E2B);
+
         [Header("Ahşap çerçeve")]
         [SerializeField] private Color wood = Hex(0x8A5A3A);
         [SerializeField] private Color woodDark = Hex(0x5C3A26);
@@ -66,6 +69,7 @@ namespace BilgiAdasi.UI
         public Color Ink => ink;
         public Color InkDark => inkDark;
         public Color InkDeep => inkDeep;
+        public Color Copper => copper;
         public Color Wood => wood;
         public Color WoodDark => woodDark;
         public Color Wax => wax;

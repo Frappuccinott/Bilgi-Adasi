@@ -180,11 +180,19 @@ namespace BilgiAdasi.Order
 
         // ---------- Girdi ----------
 
-        private void OnNext(InputAction.CallbackContext _) => Select((Selected + 1) % SlotCount);
-        private void OnPrev(InputAction.CallbackContext _) => Select((Selected + SlotCount - 1) % SlotCount);
+        private void OnNext(InputAction.CallbackContext _)
+        {
+            if (!GameInput.InventoryLocked) Select((Selected + 1) % SlotCount);
+        }
+
+        private void OnPrev(InputAction.CallbackContext _)
+        {
+            if (!GameInput.InventoryLocked) Select((Selected + SlotCount - 1) % SlotCount);
+        }
 
         private void OnSelectSlot(InputAction.CallbackContext ctx)
         {
+            if (GameInput.InventoryLocked) return;
             if (ctx.control is KeyControl key)
             {
                 int index = key.keyCode - Key.Digit1;

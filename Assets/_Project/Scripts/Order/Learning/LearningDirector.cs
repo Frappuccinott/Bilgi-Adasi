@@ -18,7 +18,7 @@ namespace BilgiAdasi.Order
     /// Defterdeki sayfalar ayrıca kaydedilmez: görevi bitmiş ya da ürünü teslim bekleyen her siparişin sayfası
     /// yazılmış sayılır (kayıttaki completedTasks + readyTaskId).
     /// </summary>
-    public sealed class LearningDirector : MonoBehaviour, IDiscoveryBookCommands
+    public sealed class LearningDirector : MonoBehaviour, IDiscoveryBookCommands, ILessonCommands
     {
         private const string ObjectName = "_LearningDirector";
 
@@ -28,6 +28,10 @@ namespace BilgiAdasi.Order
         private readonly List<string> pages = new List<string>(8);
         private PlayerInteractor blockedUser;
         private Coroutine routine;
+        // Ders notu: alınmış siparişin kimliği (Esc menüsünden yeniden okumak için) ve açıkken önceki girdi modu.
+        private string currentTaskId;
+        private InputMode modeBeforeLesson;
+        private bool lessonOpen;
 
         /// <summary>Sorgu ya da defter açıkken true (oyuncu hareketi kapalıdır).</summary>
         public static bool IsBusy { get; private set; }
@@ -83,13 +87,18 @@ namespace BilgiAdasi.Order
             // Play'de yeniden derlemede Awake tekrar çalışmaz; statik Instance burada da kurulur.
             if (Instance == null) Instance = this;
             if (orderController != null) orderController.ReadyToDeliver += OnReadyToDeliver;
+            GameEvents.ActiveOrderChanged += OnActiveOrderChanged;
             ViewLocator.Register<IDiscoveryBookCommands>(this);
+            ViewLocator.Register<ILessonCommands>(this);
         }
 
         private void OnDisable()
         {
             if (orderController != null) orderController.ReadyToDeliver -= OnReadyToDeliver;
+            GameEvents.ActiveOrderChanged -= OnActiveOrderChanged;
             ViewLocator.Unregister<IDiscoveryBookCommands>(this);
+            ViewLocator.Unregister<ILessonCommands>(this);
+            if (lessonOpen) ViewLocator.Get<ILessonView>()?.Close();
             if (routine != null)
             {
                 StopCoroutine(routine);
@@ -166,6 +175,68 @@ namespace BilgiAdasi.Order
         {
             if (string.IsNullOrEmpty(entry.DiscoveryId)) return;
             ViewLocator.Get<INoticeView>()?.ShowNotice(string.Format(data.WrittenNotice, entry.DiscoveryId));
+        }
+
+        // ---------- ders notu (görevden önce) ----------
+
+        /// <summary>Görevin gösterilecek ders notu var mı?</summary>
+        public bool HasLesson(string taskId)
+        {
+            var entry = data != null ? data.Find(taskId) : null;
+            return entry != null && entry.Lesson != null && entry.Lesson.HasPages;
+        }
+
+        /// <summary>Kapı konuşmasının sonuna eklenecek ustanın satırı (ders notu öncesi).</summary>
+        public string LessonIntroLine => data != null ? data.LessonTexts.IntroLine : string.Empty;
+
+        /// <summary>
+        /// Görevin ders notunu açar; kapanınca onDone. Not ya da view yoksa false döner ve onDone çağrılmaz
+        /// (çağıran akışı kendisi sürdürür). Açıkken IsBusy true, oyuncu kilitli, girdi UI modunda.
+        /// </summary>
+        public bool ShowLesson(string taskId, Action onDone) => OpenLesson(taskId, false, onDone);
+
+        private bool OpenLesson(string taskId, bool fromMenu, Action onDone)
+        {
+            if (lessonOpen || !HasLesson(taskId)) return false;
+            var view = ViewLocator.Get<ILessonView>();
+            if (view == null) return false;
+
+            var texts = data.LessonTexts;
+            lessonOpen = true;
+            if (!fromMenu)
+            {
+                Block();
+                modeBeforeLesson = GameInput.Mode;
+                GameInput.SetMode(InputMode.UI);
+            }
+            view.Open(data.Find(taskId).Lesson, texts, fromMenu ? texts.CloseWord : texts.StartWord, () =>
+            {
+                lessonOpen = false;
+                if (!fromMenu)
+                {
+                    GameInput.SetMode(modeBeforeLesson == InputMode.None ? InputMode.Player : modeBeforeLesson);
+                    Unblock();
+                }
+                onDone?.Invoke();
+            });
+            return true;
+        }
+
+        private void OnActiveOrderChanged(TaskData task)
+        {
+            // Teslimden sonra (null) not menüden kalkar; yeni sipariş gelince onun notu.
+            currentTaskId = task != null ? task.Id : null;
+        }
+
+        public bool HasCurrentLesson => !string.IsNullOrEmpty(currentTaskId) && HasLesson(currentTaskId);
+
+        /// <summary>Alınmış (kazana verilmiş) sipariş bu mu? Defter, notunu buna göre açık gösterir.</summary>
+        public bool IsCurrentTask(string taskId) => !string.IsNullOrEmpty(taskId) && taskId == currentTaskId;
+
+        /// <summary>Esc menüsünden: menü zaten UI modunda ve oyuncu duraklatılmış; kapanınca menüye dönülür.</summary>
+        public void OpenCurrentLesson(Action onClosed)
+        {
+            if (!HasCurrentLesson || !OpenLesson(currentTaskId, true, onClosed)) onClosed?.Invoke();
         }
 
         // ---------- defter ----------

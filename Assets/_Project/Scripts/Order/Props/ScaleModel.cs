@@ -41,7 +41,14 @@ namespace BilgiAdasi.Order
         [Header("Yerleşim")]
         [SerializeField] private float atomSize = 0.045f;
         [SerializeField] private int maxPerRow = 8;
-        [SerializeField] private float labelFontSize = 0.32f;
+        [SerializeField] private float labelFontSize = 0.6f;
+        [Tooltip("Satır etiketlerinin kefe merkezinden oyuncuya doğru uzaklığı (m).")]
+        [SerializeField] private float labelForward = 0.16f;
+        [Tooltip("Satır etiketlerinin arkasındaki levha (düz, ışıksız malzeme; renk plaqueColor). Boşsa levha yok.")]
+        [SerializeField] private Material plaqueMaterial;
+        [SerializeField] private Color plaqueColor = new Color(0.886f, 0.859f, 0.694f);   // 09 palet: kâğıt aydınlık #E2DBB1
+        [Tooltip("Durum yazısının yerel konumu (kolun üstünde).")]
+        [SerializeField] private Vector3 statusLocal = new Vector3(0f, 1.85f, 0f);
         [SerializeField] private float tiltPerAtom = 1.5f;
         [SerializeField] private float maxTilt = 12f;
 
@@ -60,6 +67,7 @@ namespace BilgiAdasi.Order
             public Transform Root;
             public readonly List<Renderer> Atoms = new List<Renderer>();
             public readonly List<TMP_Text> Labels = new List<TMP_Text>();
+            public Transform Plaque;
         }
 
         private readonly Pan left = new Pan();
@@ -75,7 +83,11 @@ namespace BilgiAdasi.Order
         {
             left.Root = leftPan;
             right.Root = rightPan;
-            if (statusLabel != null) statusLabel.text = string.Empty;
+            if (statusLabel != null)
+            {
+                statusLabel.text = string.Empty;
+                statusLabel.transform.localPosition = statusLocal;
+            }
             // Dünya içi yazılar (başlıklar, durum, satır etiketleri) HUD ile aynı tema fontunda.
             themeFont = UI.UiTheme.OrDefault(null).BodyFont;
             if (themeFont != null)
@@ -173,8 +185,12 @@ namespace BilgiAdasi.Order
                     Tint(atom, c);
                 }
 
+                // Etiket yığının üstünde ve kefe kenarının önünde (oyuncu tarafı, yerel -Z): kenarın arkasında kalmasın.
+                // İlk satır en üstte; satırlar alt alta.
                 var label = GetLabel(pan, r);
-                label.transform.localPosition = new Vector3(-(maxPerRow * 0.5f + 0.8f) * spacing, y, -atomSize * 0.6f);
+                float lineH = labelFontSize * 0.11f;
+                float top = rows.Count * spacing + 0.05f;
+                label.transform.localPosition = new Vector3(0f, top + (rows.Count - 1 - r) * lineH, -labelForward);
                 string symbol = row.Element != null ? row.Element.Symbol : "?";
                 string extra = count > drawn ? "+" : "";
                 string leftover = isLeft && row.Leftover > 0 ? $" <size=70%>(+{row.Leftover} artan)</size>" : "";
@@ -184,6 +200,7 @@ namespace BilgiAdasi.Order
                 label.fontStyle = foam && bad ? FontStyles.Bold | FontStyles.Underline : FontStyles.Normal;
             }
 
+            UpdatePlaque(pan);
             for (int i = atomIndex; i < pan.Atoms.Count; i++) pan.Atoms[i].gameObject.SetActive(false);
             for (int i = rows.Count; i < pan.Labels.Count; i++) pan.Labels[i].gameObject.SetActive(false);
         }
@@ -216,6 +233,38 @@ namespace BilgiAdasi.Order
 
         private Mesh defaultMesh;
 
+        /// <summary>Etiket yığınının arkasına kâğıt levha (koyu raf ve duvar önünde de okunsun).</summary>
+        private void UpdatePlaque(Pan pan)
+        {
+            if (plaqueMaterial == null) return;
+            if (pan.Plaque == null)
+            {
+                var go = GameObject.CreatePrimitive(PrimitiveType.Quad);
+                go.name = "Levha";
+                Destroy(go.GetComponent<Collider>());
+                go.transform.SetParent(pan.Root, false);
+                var r = go.GetComponent<MeshRenderer>();
+                r.sharedMaterial = plaqueMaterial;
+                r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                block ??= new MaterialPropertyBlock();
+                r.GetPropertyBlock(block);
+                block.SetColor(BaseColorId, plaqueColor);
+                block.SetColor(ColorId, plaqueColor);
+                r.SetPropertyBlock(block);
+                pan.Plaque = go.transform;
+            }
+            bool show = rows.Count > 0;
+            pan.Plaque.gameObject.SetActive(show);
+            if (!show) return;
+            float spacing = atomSize * 1.1f;
+            float lineH = labelFontSize * 0.11f;
+            float top = rows.Count * spacing + 0.05f;
+            float h = rows.Count * lineH + 0.03f;
+            pan.Plaque.localPosition = new Vector3(0f, top + (rows.Count - 1) * lineH * 0.5f, -labelForward + 0.004f);
+            pan.Plaque.localRotation = Quaternion.identity;
+            pan.Plaque.localScale = new Vector3(0.26f, h, 1f);
+        }
+
         private Renderer GetAtom(Pan pan, int index)
         {
             while (pan.Atoms.Count <= index)
@@ -240,11 +289,11 @@ namespace BilgiAdasi.Order
             {
                 var go = new GameObject("RowLabel", typeof(RectTransform));
                 go.transform.SetParent(pan.Root, false);
-                ((RectTransform)go.transform).sizeDelta = new Vector2(0.3f, 0.06f);
+                ((RectTransform)go.transform).sizeDelta = new Vector2(0.5f, 0.08f);
                 var t = go.AddComponent<TextMeshPro>();
                 if (themeFont != null) t.font = themeFont;
                 t.fontSize = labelFontSize;
-                t.alignment = TextAlignmentOptions.Right;
+                t.alignment = TextAlignmentOptions.Center;
                 t.textWrappingMode = TextWrappingModes.NoWrap;
                 pan.Labels.Add(t);
             }

@@ -216,6 +216,16 @@ namespace BilgiAdasi.Order
                 for (int j = 0; j < products.Count; j++)
                     if (products[j].Species != null) orderProducts.Add(products[j].Species.Formula);
             }
+            // Siparişin herhangi bir adımında girdi olan madde gizlenmez; yoksa görev kilitlenir
+            // (cirak_0: H2 → H2, denk_4: 2. adım CaO ister).
+            for (int i = 0; i < steps.Count; i++)
+            {
+                var reaction = steps[i].Reaction;
+                if (reaction == null) continue;
+                var reactants = reaction.Reactants;
+                for (int j = 0; j < reactants.Count; j++)
+                    if (reactants[j].Species != null) orderProducts.Remove(reactants[j].Species.Formula);
+            }
         }
 
         private void AddSold(string key)

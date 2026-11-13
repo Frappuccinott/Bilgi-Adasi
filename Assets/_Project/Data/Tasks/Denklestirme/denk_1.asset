@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.OrderTask
   id: denk_1
   giverName: Muhtar Yusuf
-  giverPortrait: {fileID: 0}
+  giverPortrait: {fileID: 21300000, guid: 02a92025a19d72b46a1c23446050f9bb, type: 3}
   giverLines:
   - "\xC7e\u015Fme kurudu evlad\u0131m! \xC7ocuklar dereye iniyor, dere de kurudu.
     Sen de bilirsin de\u011Fil mi?"
