@@ -12,8 +12,9 @@ Kasabada oyuncuya görev veren, yol gösteren ve "önce/sonra" değişimini yaş
 | **Câbir Usta** | Atölyenin ustası, görev veren | Büyük sarık, uzun ak sakal, önlük, kemerde şişeler, ucu kıvrık pabuç |
 | **Hesap Hocası** | Kasabanın tuhaf matematikçisi (kilitli Matematik şehrinin habercisi) | Çok uzun boy, ucu bükük sivri külah, iri yuvarlak gözlük, göğüste usturlap, kemerde pergel, sırtta tomar kutusu |
 | **Köpük Efendi** | Deneyleri hep köpüren tuhaf simyacı (komik unsur) | Kısa ve tombul, kabarık dağınık saç, alnında gözlük-maske, göğüste şişe kayışı, iri eldivenler |
-| **Köylü (erkek)** | Köy sakini / ulak | Geniş hasır şapka, diz boyu tunik, kemer + kese |
+| **Köylü (erkek)** | Köy sakini | Geniş hasır şapka, diz boyu tunik, kemer + kese |
 | **Köylü (kadın)** | Köy sakini | Başörtüsü, uzun etek + önlük, sıvanmış kollar |
+| **Ulak** | Köyden atölyeye haber getiren genç; oyuncuyu atölyeye çağırır | Kısa turuncu omuz pelerini, sırtta toplanmış kapüşon, çapraz heybe + taşan mektup tomarı, tüylü yumuşak başlık, kısa tunik ve çizme (çevik, yolda olan biri) |
 
 Görünmesi gereken her parça bir mesleğe ya da kişiliğe bağlıdır (§5 madde 3: sebepsiz nesne yok).
 
@@ -40,10 +41,25 @@ Görünmesi gereken her parça bir mesleğe ya da kişiliğe bağlıdır (§5 ma
 | Karar | Gerekçe |
 |---|---|
 | **Oran:** baş yarıçapı ~0,13–0,145 m (boyun ~6 baş), eller ve ayaklar %20–30 iri | Stilize okunurluk (#9, #10). Oyuncu 1,56 m gözden bakar: baş ve eller göz hizasında, detay oraya. |
-| **Boylar:** Hesap Hocası 1,86 · Câbir 1,76 · köylü erkek 1,72 · kadın 1,64 · Köpük Efendi 1,50 (şapka hariç) | Siluet farkı en çok boyla okunur; oyuncu (1,66) ortada kalır. |
+| **Boylar:** Hesap Hocası 1,86 · Câbir 1,76 · köylü erkek 1,72 · kadın 1,64 · ulak 1,62 · Köpük Efendi 1,50 (şapka hariç) | Siluet farkı en çok boyla okunur; oyuncu (1,66) ortada kalır. |
 | **Yüz:** göz = koyu küçük elips, kalın kaş, iri burun; ağız yalnız sakalsızlarda küçük bir çizgi | Kütlede detay (09 §3). Yüz animasyonu yok → ifade kaş ve burunla. |
 | **Cüppe/etek tek kütle**, bacak yok (yalnız pabuç) | Az üçgen, temiz siluet; durağan NPC'de etek sorun çıkarmaz. |
-| **Rig:** 16 kemikli basit iskelet, katı (rigid) ağırlık: her parça tek kemiğe | Script ile kurulabilir; eklem yerleri kol/omuz kütleleriyle örtülür. |
-| **Animasyon:** `Bekleme` (nefes, baş çevirme) + `Konusma` (el hareketi, baş sallama), döngülü | Görev veren NPC'nin ihtiyacı bu ikisi; yürüme yok (NPC'ler yerinde durur). |
-| **Renk:** köşe rengi, tek `M_Stilize`; ten rengi paletten türetildi (kil + çatı) | 09 §3 ve §7. Turuncu vurgu yalnızca Câbir'in kuşağında (görev veren). |
+| **Rig:** 17 kemikli basit iskelet, katı (rigid) ağırlık: her parça tek kemiğe | Script ile kurulabilir; eklem yerleri kol/omuz kütleleriyle örtülür. |
+| **Animasyon:** `<Ad>_Bekle_Dongu` (nefes, baş çevirme; varsayılan durum) + `<Ad>_Konus_Dongu` (el hareketi, baş sallama), döngülü | Görev veren NPC'nin ihtiyacı bu ikisi; yürüme yok (NPC'ler yerinde durur). |
+| **Renk:** köşe rengi, tek `M_Stilize`; ten rengi paletten türetildi (kil + çatı) | 09 §3 ve §7. Turuncu vurgu yalnızca görev veren ya da oyuncuyu çağıranda: Câbir'in kuşağı, ulağın pelerini. |
 | **Üçgen bütçesi:** karakter başına ≤ 4.000 | 09 §7 tablosuna "İnsan NPC" satırı olarak eklenir. |
+
+## 4. Sahneye yerleştirme
+
+Menü: **BilgiAdasi → Sanat → NPC'leri açık sahneye yerleştir** (`Assets/_Project/Art/Editor/NpcYerlestir.cs`). Harita ve atölye yerleştirildikten sonra çalıştırılır; `NPC_Sanat` kökü altına koyar, eskisini siler.
+
+| NPC | Yer | Bakış |
+|---|---|---|
+| Câbir Usta | Atölye içi, kazanın yanı (Unity −2, 0, −1) | Kapıya |
+| Ulak | Atölye kapısının önü, bisiklet parkının yanı | Kapıdan çıkan oyuncuya |
+| Hesap Hocası | Meydan, çınarın yanı | Atölyeden inen yola |
+| Köpük Efendi | Meydan, çeşmenin yanı | Atölyeden inen yola |
+| Köylü erkek | Denkleştirme köyü girişi, pazar tezgâhının yanı (yol kenarı) | Köprüye |
+| Köylü kadın | Tepkime Türleri köyü, ilan panosunun yanı (yol kenarı) | Meydana |
+
+Her NPC'ye yalnızca çarpışma kapsülü eklenir (r 0,3 m, boy 1,7 m). Konuşma/etkileşim bileşenleri oyun kodudur (Mehmet): `Animator.Play("<Ad>_Konus_Dongu")` / `"<Ad>_Bekle_Dongu"`.

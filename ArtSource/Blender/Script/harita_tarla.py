@@ -240,29 +240,47 @@ def traktor_govde_bm():
         tb.faces.new(vs)
         flat(tb, pal("cati", 1) if i % 2 == 0 else pal("siva", 0))
         parts.append(tb)
-    # çamurluk (arka tekerler üstü)
+    # çamurluk (arka tekerler üstü): 3 cm kalın bant + dış kenarda yuvarlak kenet + iç yan levha (aks yuvasından
+    # çamurluğa) + gövdeye iki destek. Eski sürüm tek yüzlü, hiçbir yere bağlı olmayan ince levhaydı: Play'de tekerin
+    # dışında havada duran ayrı bir halka gibi görünüyordu (13.11).
+    RF = R_ARKA_T + 0.1
+    a_lo, a_hi, nseg = math.radians(12), math.radians(168), 12
+    angs = [a_lo + (a_hi - a_lo) * i / nseg for i in range(nseg + 1)]
     for sx in (-1, 1):
-        fn = bm_lathe([(R_ARKA_T + 0.1, -0.24), (R_ARKA_T + 0.12, 0.24)], sides=18, close_top=False, close_bottom=False)
-        for v in fn.verts:
-            if v.co.y < -0.05 or math.atan2(v.co.y, v.co.x) < -0.3:
-                pass
-        fender = []
-        for i in range(9):
-            a0 = math.radians(20 + i * 15)
-            a1 = math.radians(20 + (i + 1) * 15)
-            fb_ = bmesh.new()
-            p = [(sx * 0.98, math.cos(a0) * (R_ARKA_T + 0.1), math.sin(a0) * (R_ARKA_T + 0.1)),
-                 (sx * 1.48, math.cos(a0) * (R_ARKA_T + 0.1), math.sin(a0) * (R_ARKA_T + 0.1)),
-                 (sx * 1.48, math.cos(a1) * (R_ARKA_T + 0.1), math.sin(a1) * (R_ARKA_T + 0.1)),
-                 (sx * 0.98, math.cos(a1) * (R_ARKA_T + 0.1), math.sin(a1) * (R_ARKA_T + 0.1))]
-            vs = [fb_.verts.new(q) for q in p]
-            fb_.faces.new(vs if sx > 0 else list(reversed(vs)))
-            fender.append(fb_)
-        fm = merge(fender)
-        transform_bm(fm, Matrix.Translation((0, Y_ARKA, R_ARKA_T)))
-        flat(fm, c_iron(0.45))
-        parts.append(fm)
-        fn.free()
+        fb_ = bmesh.new()
+        rows = []
+        for a in angs:
+            ca, sa = math.cos(a), math.sin(a)
+            r0, r1 = RF, RF + 0.03
+            rows.append([fb_.verts.new((sx * 0.95, ca * r0, sa * r0)), fb_.verts.new((sx * 1.50, ca * r0, sa * r0)),
+                         fb_.verts.new((sx * 1.50, ca * r1, sa * r1)), fb_.verts.new((sx * 0.95, ca * r1, sa * r1))])
+        for A, B in zip(rows, rows[1:]):
+            for k in range(4):
+                j = (k + 1) % 4
+                fb_.faces.new((A[k], A[j], B[j], B[k]))
+        fb_.faces.new(rows[0])
+        fb_.faces.new(list(reversed(rows[-1])))
+        bmesh.ops.recalc_face_normals(fb_, faces=fb_.faces)
+        flat(fb_, c_iron(0.45))
+        parts.append(fb_)
+        kenet = tube_pts([(sx * 1.5, math.cos(a) * (RF + 0.015), math.sin(a) * (RF + 0.015)) for a in angs], 0.022, sides=5)
+        flat(kenet, c_iron(0.62))
+        parts.append(kenet)
+        # iç yan levha: aks yuvasından çamurluğun iç kenarına yarım disk (tekerin iç yüzünü örter, çamurluğu taşır)
+        pl = bmesh.new()
+        cen = pl.verts.new((sx * 0.93, 0.0, 0.0))
+        rv = [pl.verts.new((sx * 0.93, math.cos(a) * (RF + 0.03), math.sin(a) * (RF + 0.03))) for a in angs]
+        for i in range(nseg):
+            pl.faces.new((cen, rv[i], rv[i + 1]) if sx > 0 else (cen, rv[i + 1], rv[i]))
+        flat(pl, c_iron(0.38))
+        parts.append(pl)
+        for a in (math.radians(55), math.radians(125)):      # gövde kirişinden levhaya destek
+            dst = tube_pts([(sx * 0.58, math.cos(a) * 0.55, -0.1), (sx * 0.93, math.cos(a) * (RF - 0.15), math.sin(a) * (RF - 0.15))], 0.025, sides=5)
+            flat(dst, c_iron(0.5))
+            parts.append(dst)
+    # yukarıdaki parçalar aks merkezine göre kuruldu → yerine taşı
+    for p_ in parts[-10:]:                                    # 2 yan × (bant, kenet, levha, 2 destek)
+        transform_bm(p_, Matrix.Translation((0, Y_ARKA, R_ARKA_T)))
     # arka bağlantı çatalı (alet pimi)
     hk = box(0.3, 0.45, 0.12, y=HITCH.y - 0.2, z=HITCH.z - 0.06)
     flat(hk, c_iron(0.5))
@@ -312,7 +330,7 @@ def traktor_direksiyon_bm():
     parts.append(kn)
     return merge(parts)
 
-def build_traktor(loc=(46.0, 14.8), yaw_deg=90.0):          # ön tarla girişine (doğu) bakar
+def build_traktor(loc=(44.6, 14.8), yaw_deg=90.0):          # doğuya bakar; çit köşesinden 0.9 m, ekiciden 0.9 m (13.11)
     col = collection(TR_COL)
     clear_collection(TR_COL)
     for me in list(bpy.data.meshes):
@@ -321,6 +339,7 @@ def build_traktor(loc=(46.0, 14.8), yaw_deg=90.0):          # ön tarla girişin
     x, y = loc
     z = ground_min(x, y, 1.4, 2.2, math.radians(yaw_deg))
     root = empty("Traktor", col, loc=(x, y, z), rot=(0, 0, yaw_deg), kind="ARROWS", size=0.8)
+    empty("Konum_Traktor", collection(COL), loc=(x, y, z), rot=(0, 0, yaw_deg), kind="ARROWS", size=0.8)   # Unity yerleşimi
     bpy.context.view_layer.update()          # parent_keep yeni kökün dünya matrisini okur
     W = root.matrix_world
     def mk(bm, name, local_pivot, sharp=40):
@@ -375,7 +394,9 @@ def alet_pulluk_bm():
     bm_ = tube_pts([(0, 0, 0), (0, 0.5, -0.05), (0, 1.9, -0.15)], 0.06, sides=6)
     flat(bm_, c_iron(0.5))
     parts.append(bm_)
-    cr = box(1.4, 0.12, 0.1, y=1.2, z=-0.12)
+    # çapraz çerçeve: üç ayağın tepesinden geçer (düz çapraz kirişte iki ayak havada kalıyordu, 13.11)
+    cr = box(1.5, 0.12, 0.1, y=0.0, z=0.0, origin="center")
+    transform_bm(cr, M(0.0, 1.25, -0.07, yaw=math.atan2(0.7, 1.1)))
     flat(cr, c_iron(0.5))
     parts.append(cr)
     for k, x in enumerate((-0.55, 0.0, 0.55)):
@@ -401,6 +422,9 @@ def alet_pulluk_bm():
     wh = _teker_bm(0.25, 0.08, 6, 77, cleats=False)
     transform_bm(wh, Matrix.Translation((0.7, 1.9, -0.3)))
     parts.append(wh)
+    ak = tube_pts([(0.0, 1.9, -0.15), (0.35, 1.9, -0.26), (0.7, 1.9, -0.3)], 0.03, sides=5)   # teker kolu (tekerlek kopuktu)
+    flat(ak, c_iron(0.5))
+    parts.append(ak)
     hd = tube_pts([(0, 1.9, -0.15), (0, 2.3, 0.4), (-0.25, 2.45, 0.55)], 0.03, sides=5)
     grad(hd, "ahsap", 2, 1)
     parts.append(hd)
@@ -408,7 +432,7 @@ def alet_pulluk_bm():
 
 def alet_ekici_bm():
     parts = []
-    dr = tube_pts([(0, 0, 0), (0, 0.6, -0.05)], 0.05, sides=6)
+    dr = tube_pts([(0, 0, 0), (0, 0.88, -0.05)], 0.05, sides=6)        # çeki demiri hazneye girer (havadaydı, 13.11)
     flat(dr, c_iron(0.5))
     parts.append(dr)
     hp = bm_lathe([(0.0, 0.0), (0.2, 0.0), (0.55, 0.45), (0.55, 0.6), (0.0, 0.6)], sides=4)
@@ -441,7 +465,7 @@ def alet_ekici_bm():
 
 def alet_su_tanki_bm():
     parts = []
-    dr = tube_pts([(0, 0, 0), (0, 0.7, -0.05)], 0.05, sides=6)
+    dr = tube_pts([(0, 0, 0), (0, 0.98, -0.05)], 0.05, sides=6)        # çeki demiri fıçıya girer (havadaydı, 13.11)
     flat(dr, c_iron(0.5))
     parts.append(dr)
     cask = bm_lathe(chaikin([(0.0, -0.75), (0.45, -0.75), (0.55, -0.4), (0.58, 0.0), (0.55, 0.4), (0.45, 0.75), (0.0, 0.75)], 1), sides=14)
@@ -463,11 +487,19 @@ def alet_su_tanki_bm():
         wh = _teker_bm(0.42, 0.12, 8, 85 + sx, cleats=False)
         transform_bm(wh, Matrix.Translation((sx * 0.85, 1.4, -0.15)))
         parts.append(wh)
+    # aks + fıçı beşiği: tekerler hiçbir şeye bağlı değildi (13.11)
+    ax = tube_pts([(-0.85, 1.4, -0.15), (0.85, 1.4, -0.15)], 0.035, sides=6)
+    flat(ax, c_iron(0.5))
+    parts.append(ax)
+    for xx in (-0.45, 0.45):                                   # fıçının oturduğu iki beşik tahtası aksa biner
+        bs = box(0.1, 0.9, 0.14, x=xx, y=1.4, z=-0.3)
+        grad(bs, "ahsap", 2, 1)
+        parts.append(bs)
     return merge(parts)
 
 def alet_serpici_bm():
     parts = []
-    dr = tube_pts([(0, 0, 0), (0, 0.6, -0.05)], 0.05, sides=6)
+    dr = tube_pts([(0, 0, 0), (0, 0.95, -0.05)], 0.05, sides=6)        # çeki demiri huniye girer
     flat(dr, c_iron(0.5))
     parts.append(dr)
     hp = bm_lathe(chaikin([(0.08, -0.2), (0.15, 0.0), (0.55, 0.45), (0.58, 0.55)], 1), sides=10, close_bottom=True, close_top=False)
@@ -487,10 +519,25 @@ def alet_serpici_bm():
         transform_bm(vn, M(0, 1.0, -0.35, yaw=k * math.pi / 4) @ Matrix.Translation((0.13, 0, 0)))
         flat(vn, c_iron(0.5))
         parts.append(vn)
+    # tekerler diskin arkasında bir aks üstünde; aks yan kollarla huniyi taşır, disk mille huniye bağlanır.
+    # Eski sürümde iki teker huninin iki yanında, hiçbir şeye bağlı değildi (Play 13.11).
+    YA = 1.45
     for sx in (-1, 1):
         wh = _teker_bm(0.35, 0.1, 6, 88 + sx, cleats=False)
-        transform_bm(wh, Matrix.Translation((sx * 0.75, 1.0, -0.35)))
+        transform_bm(wh, Matrix.Translation((sx * 0.75, YA, -0.35)))
         parts.append(wh)
+        kol = tube_pts([(sx * 0.68, YA, -0.35), (sx * 0.55, 1.2, 0.0), (sx * 0.4, 1.0, 0.2)], 0.028, sides=5)
+        flat(kol, c_iron(0.5))
+        parts.append(kol)
+        on = tube_pts([(0.0, 0.62, -0.04), (sx * 0.62, YA, -0.35)], 0.025, sides=5)
+        flat(on, c_iron(0.5))
+        parts.append(on)
+    ax = tube_pts([(-0.75, YA, -0.35), (0.75, YA, -0.35)], 0.03, sides=6)
+    flat(ax, c_iron(0.5))
+    parts.append(ax)
+    mil = tube_pts([(0.0, 1.0, -0.22), (0.0, 1.0, -0.39)], 0.03, sides=6)
+    flat(mil, c_iron(0.6))
+    parts.append(mil)
     return merge(parts)
 
 def alet_bicer_bm():
@@ -519,6 +566,21 @@ def alet_bicer_bm():
     wh = _teker_bm(0.4, 0.12, 8, 91, cleats=False)
     transform_bm(wh, Matrix.Translation((-0.25, 1.0, -0.2)))
     parts.append(wh)
+    # çark mili + iki taşıyıcı kol + teker kolu + çeki demirinden bıçak kirişine dikme. Eski sürümde döner çark
+    # hiçbir şeye bağlı değildi, tekerlek de çerçeveden kopuktu (Play 13.11).
+    mil = tube_pts([(0.05, 1.3, -0.05), (2.35, 1.3, -0.05)], 0.035, sides=6)
+    flat(mil, c_iron(0.55))
+    parts.append(mil)
+    for xx in (0.05, 2.35):
+        kol = tube_pts([(xx, 1.3, -0.5), (xx, 1.3, -0.05)], 0.03, sides=5)
+        flat(kol, c_iron(0.5))
+        parts.append(kol)
+    tk = tube_pts([(-0.25, 1.0, -0.2), (-0.05, 1.15, -0.4), (0.05, 1.3, -0.5)], 0.035, sides=5)
+    flat(tk, c_iron(0.5))
+    parts.append(tk)
+    dk = tube_pts([(0.9, 0.9, -0.3), (0.9, 1.25, -0.5)], 0.04, sides=5)
+    flat(dk, c_iron(0.5))
+    parts.append(dk)
     return merge(parts)
 
 def alet_kizak_bm():
@@ -537,7 +599,9 @@ def alet_kizak_bm():
         parts.append(ch)
     for k in range(3):
         lg = bm_cyl(0.2 - k * 0.02, 0.18 - k * 0.02, 2.2, sides=8)
-        transform_bm(lg, M(-0.28 + k * 0.28 + (0.14 if k == 2 else 0), 0.45, -0.18 + (0.3 if k == 2 else 0), rx=-math.pi / 2))
+        # üstteki kütük alttaki ikisinin arasına oturur (eskiden x 0.42'de havada duruyordu, denetim 13.11)
+        lx, lz = ((-0.28 + k * 0.28), -0.18) if k < 2 else (-0.14, 0.13)
+        transform_bm(lg, M(lx, 0.45, lz, rx=-math.pi / 2))
         paint_by(lg, lambda f, l: pal("ahsap", 1) if abs(f.normal.y) < 0.7 else _halka_renk(l.vert.co.x, l.vert.co.z, 0.2))
         parts.append(lg)
     return merge(parts)
@@ -558,14 +622,19 @@ def build_aletler(origin=(40.0, 10.5)):
     out = []
     for i, (nm, fn) in enumerate(fns):
         x, y = origin[0] + i * 3.4, origin[1]
-        z = height(x, y)
         bm = fn()
         minz = min(v.co.z for v in bm.verts)
+        xs = [v.co.x for v in bm.verts]
+        ys = [v.co.y for v in bm.verts]
+        z = ground_min(x + (min(xs) + max(xs)) / 2, y + (min(ys) + max(ys)) / 2,
+                       (max(xs) - min(xs)) / 2, (max(ys) - min(ys)) / 2, 0.0)      # alet tabanı ağın en alçak noktasına
         ob = to_object(bm, nm, col, loc=(x, y, z - minz), sharp_angle=40)
         out.append(ob)
+        # Unity bu işareti aynen kullanır (Blender ile birebir konum; Unity'de ayrıca yere oturtma yok)
+        empty("Konum_" + nm, collection(COL), loc=(x, y, z - minz), kind="PLAIN_AXES", size=0.4)
     yc = bpy.data.collections.get(YER_COL)
     if yc:                                                    # aletlerin ve traktörün altına düşen doğa yerleri
-        pts = [Vector((o.location.x, o.location.y + 1.2)) for o in out] + [Vector((46.0, 14.8))]
+        pts = [Vector((o.location.x, o.location.y + 1.2)) for o in out] + [Vector((44.6, 14.8))]
         for o in list(yc.objects):
             if any((Vector((o.location.x, o.location.y)) - q).length < 3.2 for q in pts):
                 bpy.data.objects.remove(o, do_unlink=True)
@@ -584,7 +653,8 @@ def parsel_bm(cx, cy, w, d, durum, seed):
     nu, nv = 4, 16
     pitch = d / 5.0
     def gz(u, v):
-        return height(cx + u, cy + v) - height(BT_C.x, BT_C.y)
+        # arazi AĞINA oturur (zemin_ust): parsel kenarlarında ağ toprağın içinden çıkıyordu (13.11)
+        return zemin_ust(cx + u, cy + v) - height(BT_C.x, BT_C.y)
     bm = bmesh.new()
     lay = bm.loops.layers.float_color.new("Col")
     grid = []
@@ -595,7 +665,7 @@ def parsel_bm(cx, cy, w, d, durum, seed):
         row = []
         for i in range(nu + 1):
             u = -w / 2 + w * i / nu
-            row.append((bm.verts.new((u, v, gz(u, v) + 0.03 + (0.13 * rr if ridged else 0.0))), rr))
+            row.append((bm.verts.new((u, v, gz(u, v) + 0.04 + (0.13 * rr if ridged else 0.0))), rr))
         grid.append(row)
     for j in range(nv):
         for i in range(nu):
@@ -676,6 +746,7 @@ def build_bereket():
     clear_collection(TARLA_COL)
     z0 = height(BT_C.x, BT_C.y)
     root = empty("Bereket_Tarlasi", col, loc=(BT_C.x, BT_C.y, z0), kind="CUBE", size=1.0)
+    empty("Konum_Bereket_Tarlasi", collection(COL), loc=(BT_C.x, BT_C.y, z0), kind="PLAIN_AXES", size=1.0)   # Unity kökü buraya
     bpy.context.view_layer.update()          # parent_keep yeni kökün dünya matrisini okur
     pw, pd = BT_W / BT_NX, BT_D / BT_NY
     n = 0
@@ -717,22 +788,25 @@ def build_bereket():
                 rl = tube_pts([rail[-2], rail[-1]], 0.045, sides=4)
                 grad(rl, "ahsap", 2, 1)
                 parts.append(rl)
-    for sx in (-1, 1):                                              # giriş direkleri + tarla levhası
-        gp = box(0.22, 0.22, 2.2, x=sx * 3.0, y=-BT_D / 2 - 0.5, z=-0.3)
+    # giriş direkleri + tarla levhası. Levha altı 2.9 m: oyuncu (1.66) ve traktör (≈2.6) altından geçer
+    # (eskiden 1.45 m'deydi, kapıdan yürünemiyordu — denetim 13.11)
+    GZ = 1.45
+    for sx in (-1, 1):
+        gp = box(0.22, 0.22, 2.2 + GZ, x=sx * 3.0, y=-BT_D / 2 - 0.5, z=-0.3)
         grad(gp, "ahsap", 2, 1)
         parts.append(gp)
-    sg = box(1.6, 0.08, 0.6, y=-BT_D / 2 - 0.55, z=1.45, bevel=0.02)
+    sg = box(1.6, 0.08, 0.6, y=-BT_D / 2 - 0.55, z=1.45 + GZ, bevel=0.02)
     grad(sg, "ahsap", 1, 0)
     parts.append(sg)
     em = simge_bm("basak", size=0.4, th=0.12, color=pal("cimen", 1))
-    transform_bm(em, Matrix.Translation((0, -BT_D / 2 - 0.55, 1.75)))
+    transform_bm(em, Matrix.Translation((0, -BT_D / 2 - 0.55, 1.75 + GZ)))
     parts.append(em)
-    cb = box(6.4, 0.14, 0.14, y=-BT_D / 2 - 0.5, z=1.9)
+    cb = box(6.4, 0.14, 0.14, y=-BT_D / 2 - 0.5, z=1.9 + GZ)
     grad(cb, "ahsap", 2, 1)
     parts.append(cb)
     ob = to_object(merge(parts), "SM_Bereket_Cit", col, loc=(BT_C.x, BT_C.y, z0), sharp_angle=40)
     parent_keep(ob, root)
-    e = empty("Tabela_Yazi_Bereket_Tarlasi", col, loc=(BT_C.x, BT_C.y - BT_D / 2 - 0.62, z0 + 1.45), rot=(90, 0, 0), kind="SINGLE_ARROW", size=0.3)
+    e = empty("Tabela_Yazi_Bereket_Tarlasi", col, loc=(BT_C.x, BT_C.y - BT_D / 2 - 0.62, z0 + 1.45 + GZ), rot=(90, 0, 0), kind="SINGLE_ARROW", size=0.3)
     parent_keep(e, root)
     print("Bereket tarlası:", n, "parsel mesh,", tot, "üçgen (hepsi; aynı anda görünen ≈ 1/6)")
     # tarlanın altına düşen doğa yerlerini temizle
@@ -802,6 +876,7 @@ def build_koru():
     clear_collection(KORU_COL)
     z0 = height(KORU_C.x, KORU_C.y)
     root = empty("Ormanci_Korusu", col, loc=(KORU_C.x, KORU_C.y, z0), kind="CUBE", size=1.0)
+    empty("Konum_Ormanci_Korusu", collection(COL), loc=(KORU_C.x, KORU_C.y, z0), kind="PLAIN_AXES", size=1.0)   # Unity kökü buraya
     bpy.context.view_layer.update()          # parent_keep yeni kökün dünya matrisini okur
     def add(bm, name, x, y, hide=False, mat=None):
         ob = to_object(bm, name, col, loc=(x, y, height(x, y)), sharp_angle=0 if "Agac" in name else 40, mat=mat)
@@ -811,8 +886,10 @@ def build_koru():
             ob.hide_render = True
         return ob
     # 1) genç sağlıklı (korunur)
+    # genç ağaç derenin içindeydi (KORU_C - 5 m, denetim 13.11): kıyının dışına, korunun kuzeybatısına
+    gx_, gy_ = KORU_C.x + 0.7, KORU_C.y + 4.6          # dere kıyısına 3 m+ (Play'de su kenarında görünüyordu)
     g = make_tree("Koru_Agac_Genc", 8801, height=4.4, crown=2.5, col=col)
-    g.location = (KORU_C.x - 5.0, KORU_C.y + 1.0, height(KORU_C.x - 5.0, KORU_C.y + 1.0))
+    g.location = (gx_, gy_, height(gx_, gy_))
     parent_keep(g, root)
     # 2) yaşlı kuru (kesilecek): ayakta / çentikli / devrik + kütük
     kx, ky = KORU_C.x, KORU_C.y - 1.0
@@ -840,14 +917,14 @@ def build_koru():
     transform_bm(nb, Matrix.Translation((0.55, 0.3, 3.0)))
     add(nb, "Koru_Kus_Yuvasi", KORU_C.x + 5.5, KORU_C.y + 0.5)
     # işaret kurdeleleri (üçünde de; kesilecekte kırmızımsı çatı tonu, korunanlarda yeşil)
-    for (x, y, kim) in ((KORU_C.x - 5.0, KORU_C.y + 1.0, "yaprak"), (kx, ky, "cati"), (KORU_C.x + 5.5, KORU_C.y + 0.5, "yaprak")):
+    for (x, y, kim, etiket) in ((gx_, gy_, "yaprak", "Koru_35"), (kx, ky, "cati", "Kes"), (KORU_C.x + 5.5, KORU_C.y + 0.5, "yaprak", "Koru_46")):
         rb = bm_lathe([(0.0, 1.35), (0.0, 1.35)], sides=3) if False else None
         band = bm_lathe([(0.47, 1.3), (0.5, 1.33), (0.5, 1.47), (0.47, 1.5)], sides=12, close_top=False, close_bottom=False)
         tail = bm_prism([(0, 0), (0.08, -0.45), (0.16, -0.4), (0.1, 0)], -0.01, 0.01)
         transform_bm(tail, Matrix.Translation((0.45, -0.1, 1.42)))
         b2 = merge([band, tail])
         flat(b2, pal(kim, 1))
-        add(b2, "Koru_Kurdele_%s" % ("Kes" if kim == "cati" else "Koru_%d" % int(x)), x, y)
+        add(b2, "Koru_Kurdele_" + etiket, x, y)          # adlar sabit (kod bu adlarla bulur)
     # kızağa yüklenecek kütük destesi (B4) — kesimden sonra görünür
     ld = []
     for k in range(4):
@@ -879,7 +956,7 @@ def build_koru():
     hd = bm_prism([(0, 0), (0.22, -0.06), (0.24, 0.1), (0.0, 0.08)], -0.02, 0.02)
     transform_bm(hd, M(0.05, 0.0, 1.05, rx=math.radians(-25), yaw=math.pi / 2))
     flat(hd, c_iron(0.85))
-    add(merge([bk, ax_, hd]), "SM_Koru_Baltalik", kx - 2.6, ky - 2.4)
+    add(merge([bk, ax_, hd]), "SM_Koru_Baltalik", kx - 1.6, ky - 3.0)          # dere kıyısı eğiminden uzak (taban havadaydı)
     # koru alanını temizle (doğa yerleri)
     yc = bpy.data.collections.get(YER_COL)
     if yc:

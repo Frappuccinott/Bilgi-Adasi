@@ -128,6 +128,13 @@ Kod yalnızca: `animator.Play("Klip_Adi")` (ya da `CrossFade`). Her klip iskelet
 | `Koruk_Rig` | `Koruk_Bosta` (kapalı), `Koruk_Pompala_Dongu` (1 sn) | Ateşi harlatma |
 | `Esya/<Ad>` (39 eşya) | `El_Bosta`, `El_Al` (0,33 sn), `El_Birak` (0,27 sn); oyun malzemelerinde (12) ayrıca `El_Dok` (2,2 sn) | Al/bırak/kazana dök (elde, viewmodel) |
 
+| `Ogrenci_Kol_Rig` (FPS kolları) | `Kol_Bosta` (kadraj altında, gizli), `Kol_Kaldir` (0,37 sn), `Kol_Bekle_Dongu` (3 sn), `Kol_Uzan` (0,77 sn; 0,4 sn'de dokunma anı), `Kol_Tut_Dongu` (3 sn), `Kol_Indir` (0,3 sn) | Etkileşimde Uzan; elde eşya varken Tut; istasyona girince Indir → Bosta |
+
+**FPS kolları (`Ogrenci_Kol_Rig`, 13.11):** öğrencinin okul sweatshirt'ü (kolları sıvalı) + eller; tek SkinnedMeshRenderer, 4.936 üçgen, 39 kemik, `BilgiAdasi/Stilize`. Gerekçe: `ArtSource/Referans/ogrenci_kol.md`. Yeniden üretim: `blender -b --factory-startup --python ArtSource/Blender/Script/ogrenci_kur.py -- disa`.
+- Prefab `Assets/_Project/Art/Prefablar/Ogrenci_Kol_Rig.prefab` **`Main Camera`'nın çocuğu**, yerel konum/dönüş 0, ölçek 1. Pozlar FOV 70 (16:9) için ayarlı; Unity'de ölçüldü.
+- **Tutma noktası:** `Tutma_R` kemiği (deform yok, `El_R` çocuğu). `Kol_Tut_Dongu`'da kameraya göre tam (+0,22; −0,19; +0,42) — §7'deki eşya tutma çapasıyla aynı. Eşya `Tutma_R`'nin çocuğu yapılırsa elle birlikte nefes alır; kemiğin ekseni el yönündedir, eşyanın dönüşü yerelde düzeltilir.
+- Kamera near = 0,05 (PlayerRig'de zaten). Kollar duvara girerse §7'deki ViewModel katmanı/Overlay kamera önerisi kollar için de geçerli; gölge düşürmesin.
+
 **`El_Dok` zamanlaması** (kazana sayımı buna bağlayın): 0-0,4 sn kaldır, 0,7 sn'de tam eğim; **akış/efekt 0,73 sn'de başlar, 1,63 sn'de biter**; 2,2 sn'de el eski hâline döner. Gazlar 62° eğilir ve buhar bırakır; sıvılar (H₂O, NH₃) 115° akıtır; tozlar (CaO, Ca(OH)₂) 125°; kireç taşı 130° taş döker.
 
 **Eşya iskeleti:** `<Ad>_Rig` → kemik `Kok` (tutma noktasında; model, `_Tutma_Noktasi`, `_Etiket_Yuzu`, `_Agiz_Noktasi` buna bağlı) + `Efekt` (ağız noktasında; dökme efekti). Elde: prefab tutma çapasına konur, `Kok` kemiği klipte tutma noktası etrafında döner.
@@ -157,8 +164,8 @@ Kod yalnızca: `animator.Play("Klip_Adi")` (ya da `CrossFade`). Her klip iskelet
 - **Köyler:** `Neighborhood_Denklestirme` / `Neighborhood_TepkimeTurleri` kökleri `NeighborhoodView` taşır (id: `denklestirme`, `tepkime_turleri`); `Before`, `After`, `Parts/Part_1…5` adlarla kurulur (önekler: `_Once_` → Before, `_Sonra_` → After, `_P<n>_` → Part_n). Town sahnesinde Mehmet'in Neighborhood prefab'ı varsa bu çocuklar onun altına taşınır.
 - **Kilitli bölgeler:** `LockedZone_Hesaplamalar`, `_Tepkimeler`, `_Matematik`, `_Turkce` → BoxCollider + `LockedZone` (unlockedBy boş = hep kilitli).
 - **Çarpışma:** arazi, meydan döşemesi, bütün yapılar, köprüler, kapılar MeshCollider; ağaç/kavak/çam/meyve gövde kapsülü; kayalar dışbükey mesh; çimen, çiçek, saz, ekin, yol şeritleri çarpışmasız. Atölye duvar/zemin/mobilyası da artık MeshCollider alır (`SanatIceAktarma.cs`).
-- **Doğa:** `Harita_Doga.fbx` türleri `Art/Harita/Prefablar/SM_<Tür>.prefab` olarak kaydedilir (LODGroup; ağaçta LOD0/LOD1, çimen ~35 m'de kesilir); `Harita_Yerler.fbx` noktalarına ~2.500 kopya, araziye oturtularak dizilir.
-- **Araçlar:** Traktör tarla girişine bakar (Blender 46, 14,8), 6 alet ahır önünde, bisiklet atölye kapısının doğusunda (park yerinin yanı); üçünde BoxCollider.
+- **Doğa:** `Harita_Doga.fbx` türleri `Art/Harita/Prefablar/SM_<Tür>.prefab` olarak kaydedilir (LODGroup; ağaçta LOD0/LOD1, çimen ~35 m'de kesilir); `Harita_Yerler.fbx` noktalarına ~2.000 kopya, Blender'daki konum/yükseklik **aynen** (Unity ayrıca oturtmaz, §9.2).
+- **Araçlar:** Traktör doğuya bakar (Blender 44,6, 14,8), 6 alet ahır önünde, Bereket Tarlası ve Ormancı Korusu kökleri — hepsi Harita.fbx'teki `Konum_*` işaretlerinden birebir yerleşir; bisiklet atölye kapısının doğusunda (park yerinin yanı). Araçlarda BoxCollider.
 - **Test sahnesi:** `Assets/_Project/Scenes/Deneme_Mustafa_Harita.unity` (Mustafa'nın; Town'a dokunulmadı).
 
 **Test sonucu (Play modu, gerçek PlayerRig + CharacterController):**
@@ -172,3 +179,44 @@ Kod yalnızca: `animator.Play("Klip_Adi")` (ya da `CrossFade`). Her klip iskelet
 2. URP `PC_RPAsset`: 4 gölge kademesi × 50 m. Gölge düşüren üçgenler 4 kez çizilir; 2 kademe önerilir.
 3. Atölye kapısı: `Kapi_Rig` kökü artık menteşede, kanatta BoxCollider var; açma için `animator.Play("Kapi_Ac")` (etkileşim kodu).
 4. `Tabela_Yazi_*` boş objeleri TMP yazıları içindir (font seçilince).
+
+### 9.1 Harita denetimi (13.11 akşam)
+
+**Araç:** `ArtSource/Blender/Script/harita_denetim.py` (arka planda, canlı Blender'a dokunmaz). Her mesh'i ayrık parçalarına (ada) böler; araziye, meydana, yollara, dereye, bina gövdelerine göre ölçer. Yeniden kurulum: `harita_kur.py` (≈30 sn, bütün harita FBX'lerini dışa aktarır).
+```
+blender -b ArtSource/Blender/harita.blend --python ArtSource/Blender/Script/harita_kur.py
+blender -b ArtSource/Blender/harita.blend --python ArtSource/Blender/Script/harita_denetim.py -- rapor.txt
+```
+İlk tarama 198 bulgu → düzeltmelerden sonra 24 (kalanlar bilerek: kemer flamaları ve kule tepelikleri "asılı", değirmen kanadının göbeği gövdede, köy zemininde ≤ 3 mm tek nokta).
+
+**Düzeltilenler (kaynak scriptlerde):**
+- Taş duvarlar ve mil taşları meydan döşemesinin içinden başlıyordu → R 11'in dışına alındı; duvar kapak taşları 5 cm havadaydı → oturtuldu.
+- Dere iki uçta tepeye tırmanıyordu (su yokuş yukarı) → kuzeyde vadi basamağından **çağlayan + havuz**, güneyde **sazlık gölet**te biter (`GOLLER`, su seviyesi arazi mesh'inin kıyısından). Tepelerde kıyıdan 0,9 m havada kalan su şeridi gitti.
+- `Yol_Tarla` Bereket Tarlası'nın çit köşesine çıkıyordu → güney giriş kapısına (60, 15,5) varır. Kapı levhası 1,45 m'deydi (oyuncu geçemiyordu) → 2,9 m.
+- `Yol_Kule` Tepkimeler yoluna paralel ikinci yol gibiydi → kısa sapak.
+- Denkleştirme 2. ev yolun ve tarlanın üstündeydi → fırının yanına (59,4, 2,9); 3. tarla Bereket kapısının önündeydi → Hesaplamalar yolunun doğusuna; araba ev içindeydi, odun yığınları iki evin duvarındaydı, ilk fener köprü patikasının ortasındaydı, 6 ve 2/4 numaralı tabelalar yolun üstündeydi → hepsi dışarı.
+- Tepkime 3. ev loncaya yapışıktı (çatılar iç içe) → 1,6 m batıya.
+- Ormancı Korusu'nun genç ağacı derenin içindeydi → kıyının dışına (kurdele adları aynı: `Koru_Kurdele_Koru_35/_46/_Kes`).
+- Köy zeminleri seyrek halkalıydı, arazi içinden çıkıyordu (z-fighting) → sık halka; yol şeridinin (0,035) altında kalır.
+- Kızaktaki üst kütük havadaydı; saman yığını tarla çitinin içindeydi; Türkçe kapısında çalı duvara giriyordu; arka planda bina konumları güncellenmeden okunduğu için 79 ot öbeği bina içindeydi → hepsi düzeldi.
+
+**Unity'de doğrulama:** 401 ağaç/kaya/çalı kopyası zemine oturuyor, hiçbiri bina/çit collider'ıyla iç içe değil. 9 güzergâhta oyuncu kapsülü (1,66 m × r 0,3) yarım metrede bir: atölye→meydan, meydan→geçici köprü→Denkleştirme→tarla kapısı, Hesaplamalar, Tepkime→kule, Matematik, Türkçe, taş köprü → **engel yok**.
+
+### 9.2 Play testi + Blender–Unity eşitleme (13.11 gece)
+
+**Play'de bulunan ve düzeltilen hatalar:**
+- **Animasyonlu düzenekler Play'de 2 kat kayıyordu** (kapı kasanın 2 m dışında, kazan arka duvarın dışında): FBX kökünün konum eğrileri Blender'daki dünya/katalog konumunu taşıyordu, prefab sarmalayıcısı da aynı konumdaydı. `SanatIceAktarma.OnPostprocessAnimation` kök konum eğrilerini ilk anahtara göre göreli yapar (471 eğri). **Mehmet:** taşınabilir eşyalar (Alet_/Kulce_/Madde_/Malzeme_, 38 FBX) da aynı hatayı taşıyordu — raftaki eşya Play'de 14–18 m öteye kayacaktı; artık kaymaz. NPC'ler ve FPS kolları etkilenmiyordu.
+- **Oyuncu haritadan düşüyordu** (kaya basamağına zıplayıp tepeden arazinin kenarına; 72 yönün 72'si): `COL_Sinir_Duvari` (harita.py `build_sinir`) — oyun alanını çevreleyen içi dolu görünmez duvar + Matematik/Türkçe boğazlarında kapıya kadar yan duvarlar. Unity'de `COL_` önekli obje: yalnız MeshCollider, renderer silinir. Test: 72 yönden 71'i duruyor; kalan Türkçe boğazı, kapıda biter.
+- **Çakışmalar (titreme, delinme):** katmanlar artık arazi AĞINA oturur (`arazi_z` / `zemin_ust`: SM_Arazi'nin 2,5 m ızgara üçgenlemesinin aynısı). Sıra: arazi < köy zemini (+3 cm) < patika/kule sapağı (+4,5) < yan yollar (+6) < ana yollar (+7,5) < meydan levhaları (+8…10,5). Atölye tabanının altında arazide delik (arazi döşemeyle aynı yükseklikte titriyordu). Meydan levhaları birbirine ve bordüre binmez. Çıkmaz yol uçları sivrilip toprağa iner (kare uç kalmaz). Su kenarı kıyının altına iner. Unity çakışma taraması (0,4 m ızgara, yukarı bakan yüzeyler arası < 6 mm): kalanlar yalnız yol/zemin eteklerinin araziyle kesiştiği çizgi ve atölye çatısındaki görünmez kiriş temasları.
+- **Dere:** kuzey ucu basamaktaki çağlayan şeridi Play'de yamaçta düz beyaz levha gibi duruyordu → dere basamağın dibindeki pınar havuzundan doğar (üç kaya kütlesi arkasında).
+- **Traktör ve aletler:** arka çamurluk tek yüzlü, bağlantısız levhaydı → kalın bant + kenet + iç yan levha + destek; serpici, su tankı, biçer ve pulluğun kopuk parçaları (tekerlek, aks, çark mili, ayaklar) bağlandı; traktör ekiciden ve çitten 0,9 m uzakta.
+- **Taş duvarlar** "masa dizisi" gibi görünüyordu → üç sıra irili ufaklı taş + ince kapak taşı (kuru taş tarla duvarı).
+
+**Blender = Unity (karşılaştırma):** iki taraftaki bütün objeler sayısal olarak karşılaştırıldı. Unity kendi yerleştirme kodunda doğayı yeniden oturtuyor ve türe göre gömüyordu (kayalar 0,5–1,6 m fazla gömülü, köprü altındaki saz/çimen köprünün üstüne çıkıyordu). Artık:
+- Doğa yüksekliği tek kaynaktan: Blender `harita_doga.yer_z` (arazi ağının kapladığı alandaki en alçak noktası, türe göre hafif gömülü). Unity bu değeri aynen kullanır, ayrıca oturtmaz.
+- Traktör, 6 alet, Bereket Tarlası ve Ormancı Korusu kökleri Blender'daki `Konum_*` işaretlerinden (Harita.fbx içinde) yerleşir.
+- Sonuç: 253 meshin sınır kutusu Blender'la 1 cm içinde aynı; 2.034 doğa kopyasının yüksekliği en fazla 0,1 mm farklı.
+
+**Çarpışma eklenenler:** mil taşları, çamaşır direkleri, tarla çitleri (`SM_Denk_Tarla_Citleri`) ve bahçe çitleri (`SM_Bahce_Citleri` — toprak/ekinden ayrı obje), köy bitince çıkan sancak/bayrak direkleri, korudaki kütük ve odun destesi. Kapsül süpürme testinde mil taşı 7/7, bahçe çiti 8/8, taş duvar 12/12 durdurur.
+
+**Mehmet için öneri:** oyuncu yine de bir yerden düşerse, belli bir yüksekliğin altına inince (ör. y < −20) doğuş noktasına geri koyan küçük bir güvenlik kodu.

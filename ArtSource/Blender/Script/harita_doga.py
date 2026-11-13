@@ -183,6 +183,29 @@ def build_doga_modelleri():
     return obs
 
 # ------------------------------------------------------------------ DAĞITIM
+def yer_z(kind, x, y, s=1.0):
+    """Doğa kopyasının taban yüksekliği: arazi AĞININ (SM_Arazi) kapladığı alandaki en alçak noktası, türe göre biraz
+    gömülü. Blender önizlemesi ve Unity aynı değeri kullanır; Unity ayrıca yere oturtmaz (13.11: Unity'nin kendi
+    oturtması kayaları 0.5–1.6 m fazla gömüyor, köprü altındaki sazı köprünün üstüne taşıyordu)."""
+    if kind.startswith("Kaya_Kitle"):
+        r, gom = 1.6 * s, 0.35 * s
+    elif kind.startswith("Kaya"):
+        r, gom = 0.45 * s, 0.12 * s
+    elif kind.startswith(("Agac", "Cam", "Kavak", "Meyve")):
+        r, gom = 0.35, 0.08
+    elif kind.startswith("Cali"):
+        r, gom = 0.5 * s, 0.05
+    else:                                                   # çimen, çiçek, çakıl, saz
+        r, gom = 0.12, 0.02
+    zs = [arazi_z(x, y)] + [arazi_z(x + dx, y + dy) for dx, dy in ((r, 0), (-r, 0), (0, r), (0, -r))]
+    return min(zs) - gom
+
+def egim(x, y, e=0.6):
+    """Arazi eğimi (tan): 0 düz, 1 = 45°."""
+    gx = (height(x + e, y) - height(x - e, y)) / (2 * e)
+    gy = (height(x, y + e) - height(x, y - e)) / (2 * e)
+    return math.hypot(gx, gy)
+
 def _keep_out(p):
     """Bu noktaya ağaç/kaya konmaz: yol, meydan, atölye, dere, köy merkezleri."""
     if (p - MEYDAN).length < MEYDAN_R + 3.0:
@@ -207,10 +230,13 @@ def scatter():
     def put(kind, p, r, scale=(0.85, 1.2)):
         if _keep_out(p) or any((p - q).length < r for q in placed):
             return False
+        # dik yamaçta (boğaz duvarı, kaya basamağı) ağaç/kaya bir yanı havada kalıyordu (Play 13.11): eğim sınırı
+        if egim(p.x, p.y) > (0.62 if kind.startswith("Kaya") else 1.0):
+            return False
         placed.append(p)
-        z = height(p.x, p.y)
         s = rnd.uniform(*scale)
-        ob = empty("Yer_%s_%03d" % (kind, len(placed)), col, loc=(p.x, p.y, z - 0.05),
+        z = yer_z(kind, p.x, p.y, s)
+        ob = empty("Yer_%s_%03d" % (kind, len(placed)), col, loc=(p.x, p.y, z),
                    rot=(0, 0, rnd.uniform(0, 360)), kind="SINGLE_ARROW", size=1.0)
         ob.scale = (s, s, s)
         return True
@@ -303,10 +329,15 @@ def export_harita():
     keep = {o.name: tuple(o.location) for o in roots}
     for o in roots:
         o.location = (0, 0, 0)
+    # Arka planda (blender -b) çocukların (_LOD0/_LOD1) dünya matrisi güncellenmeden yazılıyordu: FBX'te LOD parçaları
+    # model rafının konumunu (x 200–238) taşıyordu → Unity'de 354 ağaç/çalı kökünden 190–290 m uzakta çiziliyordu,
+    # köyün üstünde uçan ağaç dahil (Play QA 13.11). Taşıdıktan sonra sahne güncellenir.
+    bpy.context.view_layer.update()
     try:
         out.append(_fbx(os.path.join(EXPORT_DIR, "Harita_Doga.fbx"), models))
     finally:
         for o in roots:
             o.location = keep[o.name]
+        bpy.context.view_layer.update()
     out.append(_fbx(os.path.join(EXPORT_DIR, "Harita_Yerler.fbx"), list(bpy.data.collections[YER_COL].objects)))
     return out

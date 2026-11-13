@@ -221,8 +221,9 @@ def koy_zemin_bm(c, rx, ry, yaw, seed):
     rnd = random.Random(seed)
     bm = bmesh.new()
     lay = bm.loops.layers.float_color.new("Col")
-    rings = [0.0, 0.35, 0.65, 0.88, 1.0, 1.12]
-    segs = 28
+    # sık halka: seyrek halkada arazi üçgenleri zeminin içinden çıkıyordu (z-fighting, denetim 13.11)
+    rings = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.88, 0.95, 1.0, 1.05]     # kısa, dik etek: arazi ile kesişme bandı dar
+    segs = 56
     cs, sn = math.cos(yaw), math.sin(yaw)
     vs = []
     for k, r in enumerate(rings):
@@ -233,8 +234,15 @@ def koy_zemin_bm(c, rx, ry, yaw, seed):
             wob = 1.0 + 0.09 * n2(math.cos(a) * 5, math.sin(a) * 5, 1.5, seed)
             u, v = math.cos(a) * rx * r * wob, math.sin(a) * ry * r * wob
             x, y = c.x + u * cs - v * sn, c.y + u * sn + v * cs
-            lift = 0.022 if r < 1.0 else (0.0 if r == 1.0 else -0.07)
-            ring.append(bm.verts.new((x - c.x, y - c.y, height(x, y) - height(c.x, c.y) + lift)))
+            # yükseklik arazi AĞINDAN (zemin_ust): fonksiyona göre konunca ağ zeminin içinden çıkıyordu (656 nokta,
+            # 13.11). Yan yollar 0.042, ana yollar 0.062'de → zemin (0.03) hep yolların altında kalır.
+            if r < 1.0:
+                zz_ = zemin_ust(x, y) + 0.03
+            elif r == 1.0:
+                zz_ = zemin_ust(x, y) + 0.02
+            else:
+                zz_ = min(height(x, y), arazi_z(x, y)) - 0.09
+            ring.append(bm.verts.new((x - c.x, y - c.y, zz_ - height(c.x, c.y))))
         vs.append(ring)
     def col_at(v, k):
         p = Vector((v.co.x + c.x, v.co.y + c.y))
@@ -640,20 +648,21 @@ TABELALAR = [  # (konum, [(kimlik, hedef konum, etiket)])
     (Vector((1.4, -4.6)), [("Atolye", ATOLYE, "Atolye"), ("Mat", Vector((14.0, 2.0)), "Matematik_Sehri"),
                            ("Denk", DENK, "Denklestirme"), ("Tepk", TEPK, "Tepkime_Turleri"),
                            ("Tur", Vector((-12.0, -16.0)), "Turkce_Sehri")]),
-    (Vector((11.6, -6.6)), [("Mat", Vector((15.0, 2.0)), "Matematik_Sehri"), ("Denk", DENK, "Denklestirme"),
+    (Vector((11.0, -5.4)), [("Mat", Vector((15.0, 2.0)), "Matematik_Sehri"), ("Denk", DENK, "Denklestirme"),
                             ("Atolye", MEYDAN, "Atolye")]),
     (Vector((-17.6, -9.6)), [("Tur", Vector((-22.0, -18.0)), "Turkce_Sehri"), ("Tepk", TEPK, "Tepkime_Turleri"),
                              ("Atolye", MEYDAN, "Atolye")]),
-    (Vector((18.2, 40.0)), [("Mat", Vector((20.5, 60.0)), "Matematik_Sehri"), ("Atolye", Vector((17.0, 14.0)), "Atolye")]),
+    (Vector((16.9, 40.0)), [("Mat", Vector((20.5, 60.0)), "Matematik_Sehri"), ("Atolye", Vector((17.0, 14.0)), "Atolye")]),
     (Vector((-20.8, -55.0)), [("Tur", Vector((-24.5, -70.0)), "Turkce_Sehri"), ("Atolye", Vector((-24.0, -34.0)), "Atolye")]),
-    (Vector((60.0, -8.6)), [("Tarla", Vector((68.0, 8.0)), "Tarlalar"), ("Kilitli", Vector((72.0, -24.0)), "Hesaplamalar"),
+    (Vector((57.6, -9.4)), [("Tarla", Vector((66.0, 7.0)), "Tarlalar"), ("Kilitli", Vector((72.0, -24.0)), "Hesaplamalar"),
                             ("Atolye", Vector((40.0, -7.0)), "Atolye")]),
     (Vector((-47.5, 1.8)), [("Tepk", Vector((-53.0, 9.0)), "Guvercin_Kulesi"), ("Kilitli", Vector((-58.0, 9.0)), "Tepkimeler"),
                             ("Atolye", Vector((-38.0, -3.0)), "Atolye")]),
 ]
 KEMERLER = [("Denk", Vector((41.8, -7.0)), "Yol_Dogu"), ("Tepk", Vector((-33.5, -3.6)), "Yol_Bati")]
-MIL_YOLLARI = [("Denk", "Yol_Dogu", 8.0, 24.0), ("Tepk", "Yol_Bati", 8.0, 30.0),
-               ("Mat", "Yol_Matematik", 8.0, 86.0), ("Tur", "Yol_Turkce", 8.0, 82.0)]   # (köy, yol, başlangıç, bitiş: meydandan uzaklık)
+# (köy, yol, başlangıç, bitiş: meydandan uzaklık). Başlangıç meydan döşemesinin (R 11) dışında.
+MIL_YOLLARI = [("Denk", "Yol_Dogu", 13.5, 24.0), ("Tepk", "Yol_Bati", 13.5, 30.0),
+               ("Mat", "Yol_Matematik", 13.5, 86.0), ("Tur", "Yol_Turkce", 13.5, 82.0)]
 ALLE_YOLLARI = [("Yol_Dogu", 12.0, 25.0), ("Yol_Bati", -32.0, -10.0)]
 
 def _road(name):
@@ -708,6 +717,8 @@ def build_yon():
                 continue
             if poly_dist(q, STREAM) < STREAM_HALF + 0.5:
                 continue
+            if (q - MEYDAN).length < MEYDAN_R + 1.5:
+                continue
             b = mil_tasi_bm(kim, 900 + k)
             yaw = math.atan2(-side.x, side.y)                # simgeli yüz (yerel -Y) yola bakar
             transform_bm(b, M(q.x, q.y, height(q.x, q.y), yaw))
@@ -740,7 +751,7 @@ def build_yon():
         if any((Vector((o.location.x, o.location.y)) - q).length < 4.0 for q in alle):
             bpy.data.objects.remove(o, do_unlink=True)
     for i, q in enumerate(alle):
-        e = empty("Yer_Agac_Yesil_2_A%03d" % i, yc, loc=(q.x, q.y, height(q.x, q.y) - 0.05), rot=(0, 0, rnd.uniform(0, 360)),
+        e = empty("Yer_Agac_Yesil_2_A%03d" % i, yc, loc=(q.x, q.y, yer_z("Agac_Yesil_2", q.x, q.y)), rot=(0, 0, rnd.uniform(0, 360)),
                   kind="SINGLE_ARROW", size=1.0)
         s = rnd.uniform(0.72, 0.82)
         e.scale = (s, s, s)
@@ -759,6 +770,7 @@ def build_yon():
     e = empty("Tabela_Yazi_Harita", col, loc=tuple(ob.location + yazi), rot=(90, 0, 0), kind="SINGLE_ARROW", size=0.3)
     parent_keep(e, ob)
     # 7) kilitli şehir kapıları + pus + uzak siluetler (Matematik kuzey, Türkçe güney)
+    kapi_q = []
     for kim, rname, sehir in (("Mat", "Yol_Matematik", "Matematik"), ("Tur", "Yol_Turkce", "Turkce")):
         gx, gy = GECIT_KAPI[rname]
         pts, w = _road(rname)
@@ -769,6 +781,7 @@ def build_yon():
         yaw = math.atan2(-d.x, d.y)                                            # yerel +Y = dışarı
         ob = put_yon(sehir_kapisi_bm(kim, 70 + len(made)), "SM_Sehir_Kapisi_" + sehir, q.x, q.y, yaw, z=height(q.x, q.y) - 0.05)
         made.append(ob)
+        kapi_q.append(q.copy())
         pb = pus_bm(len(sehir) * 31, n=9, spread=9.0, depth=14.0)
         transform_bm(pb, Matrix.Rotation(yaw, 4, "Z") @ Matrix.Translation((0, 6.5, 0)))   # kapının arkasında kalsın
         po = to_object(pb, "Pus_" + sehir, collection(YON_COL), loc=(q.x, q.y, height(q.x, q.y)), sharp_angle=0, mat=m_bulut())
@@ -793,7 +806,9 @@ def build_yon():
     ko = put_yon(kb, "Degirmen_Kanat", dx + hp.x, dy + hp.y, dyaw, z=ob.location.z + hp.z)
     made.append(ko)
     sm = []
-    for i, (sx_, sy_) in enumerate(((70.5, -1.5), (73.5, 0.5), (82.0, 21.0), (66.0, 20.5))):
+    # dördüncüsü (66, 20.5) Bereket Tarlası çitinin içindeydi → çitin batısına; ilk ikisi buğday tarlasının çit
+    # köşesine giriyordu (Play 13.11) → tarlanın güneyine, açığa
+    for i, (sx_, sy_) in enumerate(((75.0, -1.8), (77.6, -0.6), (82.0, 21.0), (45.4, 18.6))):
         b = saman_bm(1400 + i)
         transform_bm(b, M(sx_, sy_, height(sx_, sy_), rnd.uniform(0, 6)))
         sm.append(b)
@@ -817,7 +832,11 @@ def build_yon():
     # şehir yollarının ve gezinti noktalarının üstüne düşen doğa yerlerini temizle
     for o in list(yc.objects):
         pp = Vector((o.location.x, o.location.y))
-        if (pp - Vector((dx, dy))).length < 5.0 or (pp - Vector((kx, ky))).length < 3.0:
+        # şehir kapısı duvarına giren çalı (denetim 13.11); kapının arkasındaki yamaç ağaçları Play'de kapının
+        # üstünde bitmiş gibi görünüyordu → kapı çevresi 16 m ağaçsız
+        agac = any(k in o.name for k in ("Agac", "Cam", "Kavak", "Meyve"))
+        if (pp - Vector((dx, dy))).length < 5.0 or (pp - Vector((kx, ky))).length < 3.0 or \
+                any((pp - g).length < (16.0 if agac else 8.5) for g in kapi_q):
             bpy.data.objects.remove(o, do_unlink=True)
     tot = sum(tri_count([o]) for o in made)
     print("Yön bulma:", len(made), "obje,", tot, "üçgen;", len(alle), "yol ağacı")

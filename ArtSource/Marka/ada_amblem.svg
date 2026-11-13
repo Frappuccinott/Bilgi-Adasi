@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420">
+  <!-- Bilgi Adası amblemi: 6 şehirli ada. Ortada açık Kimya şehri (atölye), çevrede pusla kapalı 5 şehir. Renkler 09 §3 paletinden. -->
+  <!-- deniz -->
+  <ellipse cx="320" cy="350" rx="304" ry="62" fill="#1E86C4"/>
+  <ellipse cx="320" cy="340" rx="300" ry="60" fill="#35BDEB"/>
+  <ellipse cx="320" cy="326" rx="258" ry="44" fill="#C8F6FF"/>
+  <path d="M70 352 q14 -8 28 0 t28 0 M500 362 q14 -8 28 0 t28 0 M250 378 q14 -8 28 0 t28 0" fill="none" stroke="#C8F6FF" stroke-width="5" stroke-linecap="round"/>
+  <!-- kilitli 5 şehir: açık mavi pus içinde tombul tepeler -->
+  <path d="M84 258 A50 56 0 0 1 184 258 Z" fill="#9AD3D6"/>
+  <path d="M150 258 A64 74 0 0 1 278 258 Z" fill="#9AD3D6"/>
+  <path d="M362 258 A64 74 0 0 1 490 258 Z" fill="#9AD3D6"/>
+  <path d="M456 258 A50 56 0 0 1 556 258 Z" fill="#9AD3D6"/>
+  <!-- kilitli şehirlerin siluetleri (kule, ev, kubbe) -->
+  <g fill="#6FA9B8">
+    <rect x="127" y="186" width="14" height="40"/><path d="M122 188 L134 172 L146 188 Z"/>
+    <rect x="196" y="172" width="24" height="40"/><path d="M192 174 L208 158 L224 174 Z"/>
+    <rect x="224" y="168" width="12" height="44"/><circle cx="230" cy="168" r="7"/>
+    <rect x="420" y="172" width="24" height="40"/><path d="M416 174 L432 158 L448 174 Z"/>
+    <rect x="404" y="168" width="11" height="44"/><path d="M401 170 L409.5 156 L418 170 Z"/>
+    <rect x="499" y="188" width="16" height="40"/><path d="M494 190 L507 176 L520 190 Z"/>
+  </g>
+  <!-- pus: kilitli bölgeleri açık mavi bulut kapatır -->
+  <g fill="#BDEFFA">
+    <circle cx="112" cy="232" r="18"/><circle cx="138" cy="222" r="20"/><circle cx="166" cy="232" r="16"/>
+    <circle cx="188" cy="214" r="20"/><circle cx="218" cy="204" r="22"/><circle cx="250" cy="216" r="18"/>
+    <circle cx="390" cy="216" r="18"/><circle cx="422" cy="204" r="22"/><circle cx="452" cy="214" r="20"/>
+    <circle cx="474" cy="232" r="16"/><circle cx="502" cy="222" r="20"/><circle cx="528" cy="232" r="18"/>
+    <rect x="100" y="226" width="440" height="34"/>
+  </g>
+  <!-- en uzak dağ (6. şehrin ardı) -->
+  <path d="M262 214 A58 60 0 0 1 378 214 Z" fill="#9AD3D6"/>
+  <!-- ada gövdesi: kaya uçurum + çimen -->
+  <path d="M92 262 C98 302 140 330 204 334 L436 334 C500 330 542 302 548 262 Z" fill="#A3B1BE"/>
+  <path d="M112 294 C134 320 172 334 222 336 L418 336 C468 334 506 320 528 294 C470 314 170 314 112 294 Z" fill="#6E8090"/>
+  <path d="M150 300 l10 16 M210 306 l6 18 M400 308 l-6 16 M470 302 l-10 14" stroke="#6E8090" stroke-width="5" stroke-linecap="round"/>
+  <path d="M82 262 C82 236 150 220 320 218 C490 220 558 236 558 262 C558 280 500 290 320 290 C140 290 82 280 82 262 Z" fill="#6CC02E"/>
+  <path d="M120 252 C150 236 230 230 320 230 C410 230 490 236 520 252 C470 246 410 244 320 244 C230 244 170 246 120 252 Z" fill="#A6E03C"/>
+  <path d="M82 262 C82 280 140 290 320 290 C500 290 558 280 558 262 C540 272 470 280 320 280 C170 280 100 272 82 262 Z" fill="#2F8A3A"/>
+  <!-- Kimya tepesi -->
+  <path d="M236 250 A84 86 0 0 1 404 250 Z" fill="#3FA83A"/>
+  <path d="M262 214 A58 40 0 0 1 360 196 C330 196 290 204 262 214 Z" fill="#7ED63B"/>
+  <!-- patika: atölyeden kıyıya -->
+  <path d="M320 212 C306 228 300 244 318 262 C330 274 352 278 372 286" fill="none" stroke="#DDDCC5" stroke-width="9" stroke-linecap="round"/>
+  <!-- altın ağaç (sol) -->
+  <rect x="262" y="176" width="8" height="34" rx="3" fill="#5C3A26"/>
+  <circle cx="252" cy="178" r="20" fill="#D07A00"/>
+  <circle cx="272" cy="160" r="25" fill="#F7A800"/>
+  <circle cx="288" cy="180" r="18" fill="#F7A800"/>
+  <circle cx="266" cy="152" r="13" fill="#FFD23F"/>
+  <circle cx="246" cy="172" r="9" fill="#FFD23F"/>
+  <!-- yeşil ağaç (sağ) -->
+  <rect x="381" y="186" width="7" height="28" rx="3" fill="#5C3A26"/>
+  <circle cx="384" cy="176" r="19" fill="#1F6E3A"/>
+  <circle cx="378" cy="168" r="15" fill="#3FA83A"/>
+  <circle cx="392" cy="162" r="12" fill="#7ED63B"/>
+  <!-- atölye -->
+  <rect x="296" y="168" width="52" height="44" fill="#DDDCC5"/>
+  <rect x="296" y="200" width="52" height="12" fill="#A7A09B"/>
+  <rect x="296" y="168" width="5" height="44" fill="#8A5A3A"/>
+  <rect x="343" y="168" width="5" height="44" fill="#8A5A3A"/>
+  <rect x="314" y="186" width="16" height="26" rx="8" fill="#5C3A26"/>
+  <rect x="300" y="178" width="10" height="10" rx="2" fill="#F7A800"/>
+  <rect x="334" y="178" width="10" height="10" rx="2" fill="#F7A800"/>
+  <rect x="332" y="126" width="12" height="30" fill="#8A5A3A"/>
+  <path d="M282 174 L322 130 L362 174 Z" fill="#E8602A"/>
+  <path d="M282 174 L322 130 L322 174 Z" fill="#FF7A3D"/>
+  <path d="M280 172 L364 172 L362 180 L282 180 Z" fill="#B5431C"/>
+  <!-- kazan buharı: bilgi yükselir -->
+  <circle cx="340" cy="114" r="8" fill="#C8F6FF"/>
+  <circle cx="350" cy="98" r="11" fill="#C8F6FF"/>
+  <circle cx="366" cy="78" r="14" fill="#BDEFFA"/>
+  <!-- altın çalılar ve kıyı kayaları -->
+  <circle cx="200" cy="262" r="9" fill="#FFD23F"/>
+  <circle cx="212" cy="266" r="7" fill="#F7A800"/>
+  <circle cx="440" cy="264" r="9" fill="#FFD23F"/>
+  <circle cx="452" cy="268" r="6" fill="#F7A800"/>
+  <path d="M96 300 q8 -16 24 -10 q10 6 4 16 z" fill="#D5DEE6"/>
+  <path d="M520 306 q6 -18 22 -12 q10 8 2 18 z" fill="#D5DEE6"/>
+</svg>

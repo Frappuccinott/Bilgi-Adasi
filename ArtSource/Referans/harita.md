@@ -43,7 +43,7 @@ Bağlı belgeler: `CLAUDE.md` §6 (şehirde yürüme), `08-mustafa-entegrasyon.m
 | Kilitli ilçe/şehirler | güney pusu, kuzeyde uzak dağ siluetleri | Açık mavi pus (09 §3) | — |
 
 - Uçtan uca yol: batı köy kenarı (−58) → doğu tarlalar (+75) ≈ **133 m** (yürüyüş ~35 sn, bisiklet ~20 sn) — `08` §1 sınırı içinde.
-- Dere kuzey tepeden güneye akar, doğu yolunu x ≈ 32'de keser → köprü tek geçiş. Köprü "önce" hâlinde yıkık taş köprünün yanında geçici tahta köprü (geçilebilir), "sonra" hâlinde onarılmış taş köprü.
+- Dere kuzeyde vadi basamağından çağlayanla bir havuza düşer, vadiyi güneye geçer, güneydeki sazlık gölette biter (13.11 denetimi: önceden iki ucu tepeye tırmanıyordu). Doğu yolunu x ≈ 32'de keser → köprü tek geçiş. Köprü "önce" hâlinde yıkık taş köprünün yanında geçici tahta köprü (geçilebilir), "sonra" hâlinde onarılmış taş köprü.
 - Sınırlar: kuzeyde ve iki yanda tepeler (> 45° yamaç, yürünmez), güneyde pus + çit. Görünmez duvar son çare.
 - Zemin: oyun alanı neredeyse düz (yol eğimi ≤ %5), kenarlara doğru tepeler yükselir (vadi).
 

@@ -48,7 +48,8 @@ def ground_min(x, y, hw, hd, yaw):
     zs = []
     for u in (-hw, 0, hw):
         for v in (-hd, 0, hd):
-            zs.append(height(x + u * c - v * s, y + u * s + v * c))
+            px, py = x + u * c - v * s, y + u * s + v * c
+            zs.append(min(height(px, py), arazi_z(px, py)))      # arazi AĞI da sayılır (Unity'de görünen yüzey)
     return min(zs)
 
 _PARENTS = {}
@@ -562,14 +563,17 @@ def kopru_gecici_bm(length=11.0, seed=51):
     return merge(parts)
 
 # ------------------------------------------------------------------ TARLA
-def tarla_bm(cx, cy, w, d, yaw, crops=None, seed=0):
-    """Sürülmüş tarla (sırtlar yerel X boyunca). crops: None | 'bugday' | 'sebze' → yalnız ekin döner."""
+def tarla_bm(cx, cy, w, d, yaw, crops=None, seed=0, parca=None):
+    """Sürülmüş tarla (sırtlar yerel X boyunca). crops: None | 'bugday' | 'sebze' → yalnız ekin döner.
+    parca (crops None iken): None = toprak + çit, 'toprak' = yalnız toprak, 'cit' = yalnız çit. Çit ayrı objeye
+    çıkar: toprak/ekinle birleşikken çarpışma verilemiyordu, oyuncu çitin içinden geçiyordu (Play 13.11)."""
     rnd = random.Random(seed)
     c, s = math.cos(yaw), math.sin(yaw)
     def world(u, v, dz):
         x = cx + u * c - v * s
         y = cy + u * s + v * c
-        return Vector((x - cx, y - cy, height(x, y) - height(cx, cy) + dz))
+        # arazi AĞINA oturur (zemin_ust): fonksiyona göre konunca ağ toprağın içinden çıkıyordu (13.11)
+        return Vector((x - cx, y - cy, zemin_ust(x, y) - height(cx, cy) + dz))
     pitch_v = 0.75
     nrows = int(d / pitch_v)
     if crops is None:
@@ -585,7 +589,7 @@ def tarla_bm(cx, cy, w, d, yaw, crops=None, seed=0):
             for i in range(nu + 1):
                 u = -w / 2 + w * i / nu
                 edge = min(1.0, min(abs(u) - w / 2, abs(v) - d / 2) * -1.2)
-                row.append((bm.verts.new(world(u, v, 0.03 + 0.14 * ridge * max(0.0, edge))), ridge))
+                row.append((bm.verts.new(world(u, v, 0.045 + 0.14 * ridge * max(0.0, edge))), ridge))
             grid.append(row)
         for j in range(nv):
             for i in range(nu):
@@ -597,8 +601,12 @@ def tarla_bm(cx, cy, w, d, yaw, crops=None, seed=0):
         for f in bm.faces:
             if f.normal.z < 0:
                 f.normal_flip()
+        if parca == "toprak":
+            return bm
         # kenarda alçak çit: kazık + tek kol
-        parts = [bm]
+        parts = [] if parca == "cit" else [bm]
+        if parca == "cit":
+            bm.free()
         corners = [(-w / 2 - 0.4, -d / 2 - 0.4), (w / 2 + 0.4, -d / 2 - 0.4), (w / 2 + 0.4, d / 2 + 0.4), (-w / 2 - 0.4, d / 2 + 0.4)]
         for k in range(4):
             if k == 0:
@@ -979,22 +987,22 @@ def pus_bm(seed, n=7, spread=11.0, depth=9.0):
 # ================================================================== KURULUM
 DENK_EVLER = [  # (x, y, yaw, W, D, H, seed) — aralarında 3-5 m bahçe/geçit
     (42.5, 1.4, 0.06, 5.6, 4.6, 3.0, 1001),
-    (61.2, 3.6, 0.32, 5.0, 4.4, 2.9, 1003),
+    (59.4, 2.9, 0.12, 5.0, 4.4, 2.9, 1003),        # denetim 13.11: tarla yolunun ve tarlanın üstündeydi
     (41.5, -14.0, math.pi + 0.05, 6.0, 4.8, 3.2, 1004),
     (50.5, -14.3, math.pi - 0.06, 5.2, 4.4, 2.8, 1005),
     (59.0, -16.5, math.pi + 0.18, 5.4, 4.6, 3.1, 1006),
 ]
 FIRIN = (50.0, 1.8, -0.04)
-FENERLER = [(39.5, -4.2), (44.0, -9.6), (48.5, -3.6), (53.0, -9.0), (57.2, -2.6)]
+FENERLER = [(37.3, -5.3), (44.0, -9.6), (48.5, -3.6), (53.0, -9.0), (57.2, -2.6)]   # ilki köprü patikasından çekildi
 TARLALAR = [(75.5, 6.0, 0.35, 8.5, 7.0, "bugday", 2001), (76.5, 16.0, 0.2, 8.0, 6.5, "sebze", 2002),
-            (60.5, 11.0, 0.5, 7.5, 6.0, "bugday", 2003)]
+            (69.4, -7.6, -0.85, 6.0, 5.0, "bugday", 2003)]    # üçüncüsü Bereket Tarlası kapısının önündeydi
 CESME = (6.6, -2.8, math.radians(-52))
 CINAR = (-5.5, -4.2)
 
 TEPK_EVLER = [
     (-37.5, 3.6, 0.05, 5.4, 4.6, 3.0, 1101),
     (-36.5, -11.6, math.pi + 0.08, 5.8, 4.6, 3.1, 1102),
-    (-56.0, -9.2, math.pi + 0.1, 5.2, 4.4, 2.9, 1103),
+    (-57.6, -9.2, math.pi + 0.1, 5.2, 4.4, 2.9, 1103),   # loncaya yapışıktı, çatılar iç içe geçiyordu
     (-44.8, 10.6, -0.2, 5.0, 4.2, 2.8, 1104),
 ]
 LONCA = (-48.0, -10.6, math.pi)
@@ -1025,7 +1033,7 @@ def build_yapilar():
     # ---------------- MEYDAN (çeşme Denk P1'e bağlı)
     cb, can = cesme_bm()
     x, y, yaw = CESME
-    z = ground_min(x, y, 1.3, 1.3, yaw) + 0.05
+    z = ground_min(x, y, 1.3, 1.3, yaw) + 0.085          # alt basamak üstü meydan levhasıyla 4 mm'deydi (13.11) → +3.5 cm
     made.append(put(cb, "SM_Meydan_Cesme", x, y, yaw, z=z))
     made.append(put(cesme_su_bm(can), "Denk_P1_Cesme_Su", x, y, yaw, z=z, parent=KD, mat=m_su(), sharp=0))
     made.append(put(kuru_yaprak_bm(can, 5), "Denk_Once_Cesme_Yaprak", x, y, yaw, z=z, parent=KD))
@@ -1076,15 +1084,18 @@ def build_yapilar():
           height(gp.x + 5.5 * math.cos(gyaw), gp.y + 5.5 * math.sin(gyaw))) / 2
     made.append(put(kopru_gecici_bm(), "SM_Denk_Kopru_Gecici", gp.x, gp.y, gyaw, z=gz, parent=KD))
     # tarlalar
-    soil, crops = [], []
+    soil, crops, citler = [], [], []
     for (tx, ty, tyaw, w, d, kind, sd) in TARLALAR:
-        b0 = tarla_bm(tx, ty, w, d, tyaw, None, sd)
+        b0 = tarla_bm(tx, ty, w, d, tyaw, None, sd, parca="toprak")
         b1 = tarla_bm(tx, ty, w, d, tyaw, kind, sd)
-        for b_ in (b0, b1):
+        b2 = tarla_bm(tx, ty, w, d, tyaw, None, sd, parca="cit")
+        for b_ in (b0, b1, b2):
             transform_bm(b_, Matrix.Translation((tx - DENK.x, ty - DENK.y, height(tx, ty) - KD.location.z)))
         soil.append(b0)
         crops.append(b1)
+        citler.append(b2)
     made.append(put(merge(soil), "SM_Denk_Tarlalar", DENK.x, DENK.y, 0, z=KD.location.z, parent=KD))
+    made.append(put(merge(citler), "SM_Denk_Tarla_Citleri", DENK.x, DENK.y, 0, z=KD.location.z, parent=KD))
     made.append(put(merge(crops), "Denk_P5_Ekin", DENK.x, DENK.y, 0, z=KD.location.z, parent=KD))
     # köy bitince: yol üstünde bayrak dizileri
     bd = merge([bayrak_dizisi_bm(Vector((46.0, -3.4)), Vector((46.4, -10.4)), 61),

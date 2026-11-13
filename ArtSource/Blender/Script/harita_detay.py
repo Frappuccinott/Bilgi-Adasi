@@ -546,33 +546,64 @@ def bahce_bm(w, d, seed):
         v.co.z -= height(0, 0) * 0           # tarla_bm yüksekliği (cx, cy)'ye göre göreli verir
     return m_
 
-def tas_duvar_bm(pts, seed, h=0.7):
-    """Kuru taş duvar: yol boyunca iri taş sırası + kapak taşları. pts dünya XY."""
+def _yol_noktasi(pts, s):
+    """Çoklu çizgi üzerinde s metredeki nokta ve teğet."""
+    for a, b in zip(pts, pts[1:]):
+        L = (b - a).length
+        if s <= L or b is pts[-1]:
+            t = (b - a).normalized()
+            return a + t * min(s, L), t
+        s -= L
+    return pts[-1], (pts[-1] - pts[-2]).normalized()
+
+def tas_duvar_bm(pts, seed, h=0.67):
+    """Kuru taş tarla duvarı (Anadolu, harç yok): üç sıra irili ufaklı yassı taş, her sıra yukarı doğru incelir,
+    derzler sıradan sıraya kayar; üstte ince kapak taşı dizisi. Taşlar boyca ve sıralar arasında 1-2 cm bindirilir
+    → arada boşluk ya da havada taş kalmaz. Eski sürümde iri kapak taşları alttaki taşlardan geniş, aralıklıydı:
+    Play'de duvar "masa dizisi" gibi görünüyordu (13.11). pts dünya XY."""
     rnd = random.Random(seed)
     parts = []
-    rs = resample(pts, 0.75)
-    for i in range(len(rs) - 1):
-        a, b = rs[i], rs[i + 1]
-        d = (b - a)
-        yaw = math.atan2(d.y, d.x)
-        for row, (zz, sh) in enumerate(((0.0, 0.36), (0.33, 0.32))):
-            m = a.lerp(b, 0.5 + (0.25 if row else 0.0))
-            st = box(0.6 + rnd.uniform(-0.08, 0.1), 0.5 + rnd.uniform(-0.05, 0.05), sh + rnd.uniform(-0.04, 0.04),
-                     x=m.x, y=m.y, z=height(m.x, m.y) + zz - 0.1, yaw=yaw + rnd.uniform(-0.12, 0.12), bevel=0.05)
-            jitter(st, 0.03, seed=seed + i * 2 + row)
-            k = rnd.uniform(0.9, 1.08)
-            paint_by(st, lambda f, l, k=k: tone(mix(pal("kaya", 1), pal("kaya", 0), 0.3 + 0.5 * max(0.0, f.normal.z)), k))
+    pts = [Vector(p) for p in pts]
+    L = sum((b - a).length for a, b in zip(pts, pts[1:]))
+    sira = [(-0.08, 0.27, 0.52), (0.18, 0.24, 0.47), (0.40, 0.21, 0.42)]      # (alt z, boy, derinlik)
+    for ri, (z0, sh, dep) in enumerate(sira):
+        s = 0.0 if ri == 0 else rnd.uniform(0.12, 0.3)
+        if ri:                                                     # kayık başlangıç: uçta yarım taş
+            ln = s
+            p, t = _yol_noktasi(pts, ln / 2)
+            st = box(ln + 0.05, dep, sh, x=p.x, y=p.y, z=height(p.x, p.y) + z0, yaw=math.atan2(t.y, t.x), bevel=0.03)
             parts.append(st)
-        if i % 2 == 0:
-            m = a.lerp(b, 0.5)
-            cp = box(1.05, 0.62, 0.12, x=m.x, y=m.y, z=height(m.x, m.y) + 0.6, yaw=yaw + rnd.uniform(-0.06, 0.06), bevel=0.04)
-            grad(cp, "kaya", 1, 0)
-            parts.append(cp)
-        if rnd.random() < 0.18:                                 # duvar dibinde çimen/yosun
-            m = a.lerp(b, 0.5)
-            g = cimen_bm(seed + i, n=6, hmax=0.3)
-            transform_bm(g, Matrix.Translation((m.x + rnd.uniform(-0.3, 0.3), m.y + rnd.uniform(-0.4, 0.4), height(m.x, m.y))))
-            parts.append(g)
+        while s < L - 0.05:
+            ln = min(rnd.uniform(0.36, 0.6) * (1.0 - 0.12 * ri), L - s)
+            p, t = _yol_noktasi(pts, s + ln / 2)
+            yaw = math.atan2(t.y, t.x) + rnd.uniform(-0.07, 0.07)
+            off = Vector((-t.y, t.x)) * rnd.uniform(-0.03, 0.03)
+            st = box(ln + 0.05, dep + rnd.uniform(-0.04, 0.03), sh + rnd.uniform(-0.03, 0.025),
+                     x=p.x + off.x, y=p.y + off.y, z=height(p.x, p.y) + z0, yaw=yaw, bevel=0.03)
+            jitter(st, 0.018, seed=seed + int(s * 37) + ri * 1000)
+            k = rnd.uniform(0.88, 1.08)
+            ilik = rnd.random() < 0.22                             # bazı taşlar sıcak tonlu (kireçtaşı / toprak lekesi)
+            paint_by(st, lambda f, l, k=k, ilik=ilik: tone(mix(mix(pal("kaya", 1), pal("kaya", 0), 0.25 + 0.55 * max(0.0, f.normal.z)),
+                                                               pal("kil", 0), 0.28 if ilik else 0.0), k))
+            parts.append(st)
+            s += ln
+    s = 0.0
+    while s < L - 0.05:                                            # kapak taşları: ince, sık, hafif eğik
+        ln = min(rnd.uniform(0.42, 0.66), L - s)
+        p, t = _yol_noktasi(pts, s + ln / 2)
+        cp = box(ln + 0.03, 0.46 + rnd.uniform(-0.03, 0.03), 0.085, x=p.x, y=p.y, z=height(p.x, p.y) + 0.595,
+                 yaw=math.atan2(t.y, t.x) + rnd.uniform(-0.05, 0.05), rx=rnd.uniform(-0.04, 0.04), bevel=0.022)
+        grad(cp, "kaya", 1, 0)
+        parts.append(cp)
+        s += ln
+    s = rnd.uniform(0.2, 0.8)
+    while s < L:                                                   # duvar dibinde çimen/yosun öbekleri
+        p, t = _yol_noktasi(pts, s)
+        side = Vector((-t.y, t.x)) * rnd.choice((-1, 1)) * rnd.uniform(0.26, 0.4)
+        g = cimen_bm(seed + int(s * 13), n=6, hmax=0.3)
+        transform_bm(g, Matrix.Translation((p.x + side.x, p.y + side.y, height(p.x + side.x, p.y + side.y))))
+        parts.append(g)
+        s += rnd.uniform(0.9, 2.2)
     return merge(parts)
 
 def araba_bm(seed):
@@ -736,20 +767,24 @@ def bulut_bm(seed, n=14):
 
 # ================================================================== YERLEŞİM
 TEZGAHLAR = [(46.4, -2.3, 0.0, "manav"), (54.6, -2.2, 0.05, "ekmek"), (46.0, -10.9, math.pi, "baharat"), (-39.4, -6.6, math.pi, "kagit")]
-BAHCELER = [(42.5, 6.6, 0.06, 5.0, 3.6), (61.2, 9.0, 0.32, 4.5, 3.2), (50.5, -19.6, -0.06, 4.5, 3.4),
-            (-37.5, 8.9, 0.05, 4.8, 3.4), (-56.0, -14.4, 0.1, 4.6, 3.2)]
-DUVARLAR = [[(7.5, -12.2), (16.0, -12.8), (24.0, -12.0)], [(-8.0, -11.2), (-17.0, -10.4)], [(-26.0, -8.4), (-31.0, -7.6)],
-            [(63.0, -3.0), (68.0, 3.0)], [(44.0, -24.0), (57.0, -24.0)]]
-ARABA = (37.6, -11.6, 0.4)
-CAMASIR = [(Vector((-38.0, -14.8)), Vector((-33.4, -14.2))), (Vector((60.0, 6.8)), Vector((63.6, 9.2)))]
+# Denetim 13.11 (harita_denetim.py) sonrası: duvarlar meydan döşemesinin (R 11) dışında başlar, yola 1 m'den
+# yaklaşmaz; araba ve odun yığınları ev duvarlarının dışında; 2. bahçe/çamaşır taşınan evle birlikte.
+BAHCELER = [(42.5, 6.6, 0.06, 5.0, 3.6), (59.4, 7.5, 0.12, 4.5, 3.0), (50.5, -19.6, -0.06, 4.5, 3.4),
+            (-37.5, 8.9, 0.05, 4.8, 3.4), (-57.6, -14.5, 0.1, 4.6, 3.2)]
+DUVARLAR = [[(12.2, -12.6), (16.0, -12.8), (24.0, -12.0)], [(-12.3, -11.1), (-15.8, -10.6)], [(-26.0, -8.4), (-31.0, -7.6)],
+            [(65.5, -3.4), (70.0, 2.4)], [(44.0, -24.0), (57.0, -24.0)]]
+ARABA = (38.0, 6.6, 1.25)
+CAMASIR = [(Vector((-38.0, -14.8)), Vector((-33.4, -14.2))), (Vector((54.4, -19.8)), Vector((57.9, -21.0)))]
 KOVAN = (59.0, -27.5, 0.0)
-ODUNLAR = [(39.4, 3.6, 0.1), (-60.5, -10.8, 1.4), (-47.5, 12.8, 0.3)]
+ODUNLAR = [(38.3, 1.8, 1.63), (-61.7, -11.0, 1.4), (-48.5, 10.4, 1.37)]
 BAHCE_MEYVE = (50.5, -28.5, 5, 4, 4.2)     # (x, y, sütun, satır, aralık)
 
-def _yapi_kutulari(margin=1.2):
+def _yapi_kutulari(margin=1.2, kol=("Harita_Yapilar", "Harita_Yon", None)):
+    # arka planda (blender -b) yeni ebeveynlenen objelerin dünya matrisi güncellenmez → kutular yanlış çıkıyordu
+    bpy.context.view_layer.update()
     kut = []
-    for cn in ("Harita_Yapilar", "Harita_Yon", DETAY_COL):
-        c = bpy.data.collections.get(cn)
+    for cn in kol:
+        c = bpy.data.collections.get(cn or DETAY_COL)
         if not c:
             continue
         for o in c.all_objects:
@@ -770,12 +805,16 @@ def build_detay():
         par = bpy.data.objects["Koy_Denk"] if x > 0 else bpy.data.objects["Koy_Tepk"]
         made.append(put_detay(tezgah_bm(4000 + i, kind, "Denk" if x > 0 else "Tepk"), "SM_%s_Tezgah_%d_%s" % ("Denk" if x > 0 else "Tepk", i + 1, kind.capitalize()), x, y, yaw,
                               z=ground_min(x, y, 1.3, 0.8, yaw), parent=par))
-    bh = []
+    bh, bc = [], []
     for i, (x, y, yaw, w, d) in enumerate(BAHCELER):
-        b = merge([tarla_bm(x, y, w, d, yaw, None, 4100 + i), tarla_bm(x, y, w, d, yaw, "sebze", 4100 + i)])
+        b = merge([tarla_bm(x, y, w, d, yaw, None, 4100 + i, parca="toprak"), tarla_bm(x, y, w, d, yaw, "sebze", 4100 + i)])
         transform_bm(b, Matrix.Translation((x, y, height(x, y))))
         bh.append(b)
+        c_ = tarla_bm(x, y, w, d, yaw, None, 4100 + i, parca="cit")     # çit ayrı obje → Unity'de çarpışma alır
+        transform_bm(c_, Matrix.Translation((x, y, height(x, y))))
+        bc.append(c_)
     made.append(put_detay(merge(bh), "SM_Ev_Bahceleri", 0.0, 0.0, 0.0, z=0.0))
+    made.append(put_detay(merge(bc), "SM_Bahce_Citleri", 0.0, 0.0, 0.0, z=0.0))
     made.append(put_detay(merge([tas_duvar_bm([Vector(p) for p in pts], 4200 + i) for i, pts in enumerate(DUVARLAR)]),
                           "SM_Tas_Duvarlar", 0.0, 0.0, 0.0, z=0.0))
     x, y, yaw = ARABA
@@ -794,7 +833,17 @@ def build_detay():
     made.append(ob)
     made.append(to_object(uzak_zemin_bm(), "SM_Uzak_Zemin", col, sharp_angle=0))
     made.append(to_object(bulut_bm(3101), "Bulutlar", col, sharp_angle=0, mat=m_bulut()))
-    print("Detay yapıları:", {o.name: tri_count([o]) for o in made})
+    # tezgâh, araba, kovan ve yapıların altına düşmüş eski doğa yerlerini sil (çalı arabanın içindeydi, denetim 13.11)
+    kut = _yapi_kutulari(margin=1.0)
+    yc = bpy.data.collections.get(YER_COL)
+    sil = 0
+    if yc:
+        for o in list(yc.objects):
+            p = o.location
+            if any(a <= p.x <= b and c <= p.y <= d for (a, b, c, d) in kut):
+                bpy.data.objects.remove(o, do_unlink=True)
+                sil += 1
+    print("Detay yapıları:", {o.name: tri_count([o]) for o in made}, "| altında kalan doğa yeri silindi:", sil)
     return made
 
 def scatter_detay():
@@ -814,11 +863,11 @@ def scatter_detay():
     trees = [Vector((o.location.x, o.location.y)) for o in yc.objects]
     cnt = {}
     def yer(kind, p, s=(0.85, 1.25), yaw=None):
-        z = height(p.x, p.y)
         nm = "Yer_%s_D%04d" % (kind, sum(cnt.values()))
-        e = empty(nm, yc, loc=(p.x, p.y, z - 0.03), rot=(0, 0, yaw if yaw is not None else rnd.uniform(0, 360)), kind="SINGLE_ARROW", size=0.6)
+        e = empty(nm, yc, loc=(p.x, p.y, 0.0), rot=(0, 0, yaw if yaw is not None else rnd.uniform(0, 360)), kind="SINGLE_ARROW", size=0.6)
         sc = rnd.uniform(*s)
         e.scale = (sc, sc, sc)
+        e.location.z = yer_z(kind, p.x, p.y, sc)                  # arazi ağına oturur; Unity bu değeri aynen kullanır
         cnt[kind] = cnt.get(kind, 0) + 1
     def zemin_ok(p, road_min=0.35):
         if in_box(p):
@@ -883,6 +932,17 @@ def scatter_detay():
             q = sr[i] + nrm * s * (STREAM_HALF + rnd.uniform(1.5, 2.6))
             if zemin_ok(q, 2.0) and play_outside(q.x, q.y) < 6 and all((q - t).length > 3.0 for t in trees):
                 yer("Kavak", q, s=(0.85, 1.15))
+    # 4b) göletlerin kıyısı: saz halkası (güneydeki sazlık daha gür), çağlayanın iki yanında kaya kütlesi
+    for gc, gr in GOLLER:
+        n = 34 if gc.y < 0 else 16
+        for k in range(n):
+            a = 2 * math.pi * k / n + rnd.uniform(-0.08, 0.08)
+            q = gc + Vector((math.cos(a), math.sin(a))) * (gr - rnd.uniform(0.3, 1.1))
+            if road_info(q)[0] > 0.8 and not in_box(q):
+                yer("Saz", q, s=(0.9, 1.4))
+    # pınar: derenin doğduğu havuzun arkasında, basamağın dibinde üç kaya kütlesi (su kayaların arasından çıkar)
+    for i, q in enumerate((Vector((33.4, 39.2)), Vector((36.4, 40.4)), Vector((39.2, 39.0)))):
+        yer("Kaya_Kitle_%d" % (1 + i % 2), q, s=(0.6, 0.8))
     # 5) kavak sırası: Matematik yolunun vadideki ilk bölümü (uzaktan çizgi gibi okunur)
     pts, w = next((pp, ww) for (nn, pp, ww) in ROADS if nn == "Yol_Matematik")
     rs = [p for p in resample(pts, 1.0) if p.y < 30]
@@ -890,7 +950,7 @@ def scatter_detay():
         d = (rs[min(i + 1, len(rs) - 1)] - rs[i - 1]).normalized()
         for s in (-1, 1):
             q = rs[i] + Vector((-d.y, d.x)) * s * (w / 2 + 2.8)
-            if zemin_ok(q, 1.5):
+            if zemin_ok(q, 1.5) and (q - MEYDAN).length > MEYDAN_R + 3.0:     # taç meydan döşemesine taşmasın
                 yer("Kavak", q, s=(0.8, 1.0))
     # 6) meyve bahçesi (Denkleştirme güneyi) + arı kovanları yanında
     x0, y0, nc, nr, sp = BAHCE_MEYVE
@@ -903,6 +963,9 @@ def scatter_detay():
     for k in range(260):
         q = Vector((rnd.uniform(X0 + 25, X1 - 25), rnd.uniform(Y0 + 25, Y1 - 20)))
         if -1.0 < play_outside(q.x, q.y) < 8.0 and zemin_ok(q, 4.0) and rnd.random() < 0.5:
+            # boğaz duvarlarında ve dik yamaçta kaya kütlesi bir yanı havada kalıyordu (Play 13.11)
+            if egim(q.x, q.y) > 0.85 or any(poly_dist(q, pp) < ww / 2 + 12.0 for (nn, pp, ww) in ROADS if nn in GECIT_YOLLARI):
+                continue
             if all((q - t).length > 2.5 for t in trees):
                 yer("Kaya_Kitle_%d" % rnd.randint(1, 2), q, s=(0.8, 1.3))
     print("Detay yerleşimi:", cnt)

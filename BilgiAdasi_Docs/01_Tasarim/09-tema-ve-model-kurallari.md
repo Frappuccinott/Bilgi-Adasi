@@ -56,17 +56,29 @@ Değerler referanstan gözle alınmış başlangıç değerleridir; ilk sahne ku
 
 *Ten satırı türetilmedir:* aydınlık = sıva aydınlık %60 + çatı aydınlık %40; orta = kil orta %50 + çatı orta %30 + sıva aydınlık %20; gölge = kil gölge %60 + çatı gölge %40. Yalnız FPS kollarında; orta, belirli bir kimliğe işaret etmeyen sıcak ton (13.11).
 
+| Ten (NPC yüz ve el) — türetilmiş | `#D5A983` | `#AA775C` | `#9D6B4E` |
+
+*Ten satırı türetilmedir:* aydınlık = kil aydınlık %80 + çatı aydınlık %20; orta = kil orta %78 + çatı orta %22; gölge = orta %60 + ahşap orta %40. Değerler yaklaşıktır, karışım `npc.py` içinde lineer uzayda yapılır (`ten()`; 13.11).
+
 *Kil satırı türetilmedir:* aydınlık = sıva aydınlık %60 + ahşap aydınlık %40; orta = sıva orta %50 + ahşap orta %50; gölge = sıva gölge %50 + ahşap gölge %50 (13.11).
 
 *Bakır satırı türetilmedir:* aydınlık = çatı aydınlık %50 + ahşap aydınlık %50; orta = çatı gölge %50 + ahşap orta %50; gölge = çatı gölge %30 + ahşap gölge %70 (13.11).
 
 *Sıva satırı türetilmedir:* aydınlık = kaya aydınlık %80 + altın aydınlık %20; orta = kaya orta %70 + ahşap aydınlık %30; gölge = kaya gölge %70 + ahşap gölge %30. İç mekânın sıcak kalması için eklendi (13.11).
 
+| Kâğıt (UI zemini) — türetilmiş | `#E2DBB1` | `#D6CCB2` | `#9E8B7E` |
+
+| Mürekkep (UI metni) — türetilmiş | `#5A4437` | `#4A3427` | `#3E281B` |
+
+| Mühür mumu (UI mührü) — türetilmiş | `#C4532A` | `#A2411E` | `#7A2F15` |
+
+*UI satırları türetilmedir (13.11, marka kimliği):* Kâğıt aydınlık = sıva aydınlık %85 + altın aydınlık %15; orta = sıva aydınlık %60 + kil aydınlık %40; gölge = kil orta %60 + sıva orta %40. Mürekkep aydınlık = ahşap gölge %85 + uzak dağ gölge %15; orta ve gölge aynı tonun koyuları. Mühür orta = çatı gölge %70 + bakır gölge %30; aydınlık ve gölge aynı tonun açığı/koyusu.
+
 Oranlar: sahnenin yaklaşık **%60'ı yeşil**, **%25'i mavi**, **%15'i sarı-turuncu vurgu**. Vurgu rengi her yere yayılmaz; oyuncunun bakmasını istediğimiz yerde toplanır (aktif istasyon, görev veren sakin, sıradaki köy).
 
 **Yasak renkler:** saf siyah, saf beyaz, gri-kahverengi "çamur" tonları, neon mor-pembe. Gölgeler siyaha değil maviye ya da koyu yeşile kayar.
 
-**UI rengi:** UI paleti bu tablodan türetilir (ahşap, kâğıt, mürekkep, altın vurgu). Kâğıt ve mürekkep tonları henüz seçilmedi (§9); seçilince bu tabloya satır olarak eklenir. Metin rengi saf siyah değil, ahşabın en koyu tonuna yakın bir mürekkep rengidir.
+**UI rengi:** UI paleti bu tablodan türetilir (ahşap, kâğıt, mürekkep, altın vurgu). Kâğıt, mürekkep ve mühür tonları yukarıdaki tabloda (13.11). Metin rengi saf siyah değil, ahşabın en koyu tonuna yakın bir mürekkep rengidir.
 
 ### Işık
 
@@ -148,6 +160,7 @@ Sayılar üçgen (tri) cinsindendir ve başlangıç değeridir; sahne ağırlaş
 | Kaya | 600 |
 | Ağaç | 1.300 |
 | Çimen öbeği / çiçek | 80 / 120 |
+| İnsan NPC (rig'li, tek mesh, şapka/eşya dahil) | 4.000 |
 | Küçük yapı (kulübe, kuyu, çeşme) | 6.000 |
 | Ana yapı (atölye, ev) | 32.000 |
 | Kamera görüşündeki toplam (PC) | 250.000 |
@@ -237,12 +250,11 @@ Bir model ya da ekran sahneye girmeden önce:
 - [ ] Unity'de içe aktarılıp ışık altında bakıldı.
 - [ ] Hazır bir şey kullanıldıysa `05_Uretim/LICENSES.md`'de satırı var.
 
-**Onaylı fontlar:** (henüz seçilmedi — §9)
+**Onaylı fontlar (13.11):** Başlık **Alegreya** (Black/Bold/Italic), gövde **Alegreya Sans** (Regular/Medium/Bold). Huerta Tipográfica, SIL OFL 1.1. Türkçe ve `→` ₂ testini geçti. Elenenler: Grenze, Texturina, Vollkorn SC (`→` yok), Almendra (ğ ş yok), Alegreya SC (küçük büyük harfte i noktasız, "BILGI" okunur). Marka kimliği: Figma "Bilgi Adası — Marka Kimliği", amblem kaynağı `ArtSource/Marka/ada_amblem.svg`.
 
 ## 9. Açık konular
 
 - `BilgiAdasi/Stilize` URP shader'ı (köşe rengi + yumuşak gölge) bu projede yazılmadı; ilk model içe aktarılmadan önce gerekli.
-- Başlık ve gövde fontu seçilmedi. Şu an projede yalnızca Liberation Sans (TMP varsayılanı) var; §2 madde 1 gereği oyuncuya görünen metinde kullanılmayacak.
-- UI paleti (kâğıt, mürekkep, çerçeve tonları) seçilmedi.
+- Fontlar seçildi (§8) ama Unity'ye henüz alınmadı: TTF'ler `Assets/_Project/UI/Fontlar/` altına konup TMP Font Asset üretilecek (Türkçe karakter seti dahil). O zamana kadar Liberation Sans oyuncuya görünen metinde kullanılmaz.
 - Kalite ayarları (MSAA, gölge, son işleme) `ProjectSettings`'te; Mehmet'le birlikte ayarlanacak.
 - Poligon bütçeleri ilk sahne kurulduktan sonra ölçülüp gözden geçirilecek.

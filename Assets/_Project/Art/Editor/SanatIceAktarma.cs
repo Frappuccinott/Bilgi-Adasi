@@ -1,5 +1,5 @@
 // Bilgi Adası — Blender'dan gelen animasyonlu FBX'leri Unity'de elle ayar gerektirmeden kurar.
-// Kapsam: Assets/_Project/Art/Animasyon/*.fbx ve Assets/_Project/Art/Esya/*.fbx
+// Kapsam: Assets/_Project/Art/Animasyon/*.fbx, Esya/*.fbx ve NPC/*.fbx (npc.py)
 //   1) Rig = Generic, kamera/ışık içe aktarılmaz.
 //   2) Klip adları "Rig|Klip" önekinden temizlenir; adı "_Dongu" ile biten klipler döngüye alınır (Loop Time).
 //   3) Her FBX için Animator Controller kurulur (Kontrol/<Ad>.controller); "_Bosta" klibi varsayılan durumdur.
@@ -20,7 +20,7 @@ namespace BilgiAdasi.SanatAraclari
     {
         const string Kok = "Assets/_Project/Art/";
         const string ShaderYolu = Kok + "Shaders/Stilize.shader";
-        static readonly string[] Klasorler = { Kok + "Animasyon/", Kok + "Esya/" };
+        static readonly string[] Klasorler = { Kok + "Animasyon/", Kok + "Esya/", Kok + "NPC/" };
 
         static bool Fbx(string yol) => yol.EndsWith(".fbx", System.StringComparison.OrdinalIgnoreCase);
         static bool SanatFbx(string yol) => Fbx(yol) && yol.StartsWith(Kok);
@@ -121,6 +121,28 @@ namespace BilgiAdasi.SanatAraclari
             mi.clipAnimations = klipler;
         }
 
+        /// <summary>Kökün (Animator'lı obje) konum eğrileri Blender'daki dünya/katalog konumunu taşır. Prefab bu
+        /// konumu zaten sarmalayıcıda (düzenek) ya da sıfırlayarak (eşya) çözdüğü için Play'de Animator ofseti ikinci
+        /// kez yazıyordu: kapı kanadı kasanın 2 m dışına, kazan arka duvarın dışına, raftaki eşya 14–18 m öteye
+        /// kayıyordu (13.11 Play testi). Eğriler ilk anahtara göre göreli yapılır: sabitse 0, hareketliyse dönme
+        /// noktasından göreli hareket. Dönme eğrileri dokunulmaz (kök dönmesi Edit ile aynı).</summary>
+        void OnPostprocessAnimation(GameObject kok, AnimationClip klip)
+        {
+            if (!Kapsamda(assetPath)) return;
+            foreach (var b in AnimationUtility.GetCurveBindings(klip))
+            {
+                if (b.path != "" || b.type != typeof(Transform) || !b.propertyName.StartsWith("m_LocalPosition")) continue;
+                var egri = AnimationUtility.GetEditorCurve(klip, b);
+                if (egri == null || egri.length == 0) continue;
+                var anahtarlar = egri.keys;
+                var ilk = anahtarlar[0].value;
+                if (Mathf.Abs(ilk) < 1e-6f) continue;
+                for (int i = 0; i < anahtarlar.Length; i++) anahtarlar[i].value -= ilk;
+                egri.keys = anahtarlar;
+                AnimationUtility.SetEditorCurve(klip, b, egri);
+            }
+        }
+
         static void OnPostprocessAllAssets(string[] eklenen, string[] silinen, string[] tasinan, string[] eskiYollar)
         {
             var hedefler = eklenen.Where(Kapsamda).ToList();
@@ -164,6 +186,9 @@ namespace BilgiAdasi.SanatAraclari
                 durum.writeDefaultValues = true;
                 if (klip.name.EndsWith("_Bosta")) varsayilan = durum;
             }
+            // NPC'ler: hareketsiz "_Bosta" yok; varsayılan durum döngülü bekleme (nefes, bakınma)
+            if (varsayilan == null)
+                varsayilan = sm.states.Select(s => s.state).FirstOrDefault(s => s.name.EndsWith("_Bekle_Dongu"));
             if (varsayilan == null)
             {
                 // Boşta klibi yoksa hareketsiz durum: Write Defaults ile varsayılan poz (ör. kapı kapalı) korunur

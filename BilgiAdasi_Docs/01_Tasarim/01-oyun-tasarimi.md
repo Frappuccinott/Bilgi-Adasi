@@ -20,7 +20,7 @@
 
 | Karakter | Rol | Görsel | Not |
 |---|---|---|---|
-| Oyuncu (Çırak) | 10. sınıf öğrencisi | Görünmez (birinci şahıs bakış) | Adı/cinsiyeti yok; düşünceleri kısa notlar |
+| Oyuncu (Çırak) | 10. sınıf öğrencisi | Birinci şahıs; yalnız **kolları** görünür: okul sweatshirt'ü (kollar sıvalı) + nötr eller (`Ogrenci_Kol_Rig`) | Adı/cinsiyeti yok; düşünceleri kısa notlar |
 | Câbir Usta | Öğretmen, ipucu veren | **Model yok**: konuşma balonu + portre (2D) | Kısa, sakin, ikinci tekil; çözüm söylemez, nereye bakılacağını söyler |
 | Köy sakinleri | Sipariş verenler | Kapıda sabit low-poly figür ya da 2D kart | Ana renk + mesleğini gösteren tek nesne |
 | Ulak (postacı güvercin) | Masa görevlerini getirir | Pencereye konan güvercin (basit model/sprite) | Konuşmaz; mektup bırakır |

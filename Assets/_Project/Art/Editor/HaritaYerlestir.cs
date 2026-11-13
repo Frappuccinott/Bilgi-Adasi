@@ -53,17 +53,18 @@ namespace BilgiAdasi.SanatAraclari
             HaritayiHazirla(harita);
             KoyleriGrupla(harita);
 
-            // Tek kök objeli FBX'lerde Unity kökün konumunu atar: kök, Blender'daki merkezine (ve oradaki zemine) konur.
+            // Tek kök objeli FBX'lerde Unity kökün konumunu atar: kök, Blender'daki "Konum_" işaretine konur (birebir
+            // Blender konumu; işaret yoksa eski yol: merkezdeki zemin).
             Physics.SyncTransforms();
             var tarla = Ornek(TarlaFbx, kok.transform, "Bereket_Tarlasi");
-            if (tarla != null) { tarla.transform.position = ZemindeB(60f, 24f); TarlayiHazirla(tarla); }
+            if (tarla != null) { tarla.transform.position = KonumYa(harita, "Konum_Bereket_Tarlasi", () => ZemindeB(60f, 24f)); TarlayiHazirla(tarla); }
             var koru = Ornek(KoruFbx, kok.transform, "Ormanci_Korusu");
-            if (koru != null) { koru.transform.position = ZemindeB(40.5f, 24f); KoruyuHazirla(koru); }
+            if (koru != null) { koru.transform.position = KonumYa(harita, "Konum_Ormanci_Korusu", () => ZemindeB(40.5f, 24f)); KoruyuHazirla(koru); }
 
             Physics.SyncTransforms();
             int doga = DogayiDiz(kok.transform);
             Physics.SyncTransforms();
-            AraclariKoy(kok.transform);
+            AraclariKoy(kok.transform, harita);
 
             if (GameObject.Find("Atolye_Sanat") == null)
                 EditorApplication.ExecuteMenuItem("BilgiAdasi/Sanat/Atölyeyi açık sahneye yerleştir");
@@ -72,6 +73,16 @@ namespace BilgiAdasi.SanatAraclari
             Debug.Log($"[Harita] Yerleştirildi: {KokAdi} — doğa kopyası {doga}, " +
                       $"renderer {kok.GetComponentsInChildren<Renderer>(true).Length}, collider {kok.GetComponentsInChildren<Collider>(true).Length}.");
         }
+
+        /// <summary>Harita.fbx içindeki "Konum_*" işaretinin dünya konumu (Blender'daki yer, birebir); yoksa yedek.</summary>
+        static Vector3 KonumYa(GameObject harita, string ad, System.Func<Vector3> yedek)
+        {
+            var t = harita.GetComponentsInChildren<Transform>(true).FirstOrDefault(x => x.name == ad);
+            return t != null ? t.position : yedek();
+        }
+
+        static Transform Konum(GameObject harita, string ad) =>
+            harita.GetComponentsInChildren<Transform>(true).FirstOrDefault(x => x.name == ad);
 
         static GameObject Ornek(string yol, Transform ebeveyn, string ad)
         {
@@ -88,6 +99,15 @@ namespace BilgiAdasi.SanatAraclari
 
         static void HaritayiHazirla(GameObject harita)
         {
+            // Görünmez sınır (COL_ önekli; harita.py build_sinir): yalnız MeshCollider, renderer silinir. Oyuncu kaya
+            // basamağına zıplayıp arazinin kenarından boşluğa düşüyordu (Play testi 13.11).
+            foreach (var mr in harita.GetComponentsInChildren<MeshRenderer>(true).Where(m => m.name.StartsWith("COL_")).ToList())
+            {
+                var go = mr.gameObject;
+                if (go.GetComponent<Collider>() == null)
+                    go.AddComponent<MeshCollider>().sharedMesh = go.GetComponent<MeshFilter>().sharedMesh;
+                Object.DestroyImmediate(mr);
+            }
             foreach (var mr in harita.GetComponentsInChildren<MeshRenderer>(true))
             {
                 var go = mr.gameObject;
@@ -105,10 +125,11 @@ namespace BilgiAdasi.SanatAraclari
                     if (uzak) mr.receiveShadows = false;
                 }
                 // çarpışma: arazi + üstünde yürünen/çarpılan yapılar. Bahçe/tarla ekinleri, şeritler, uzak manzara hariç.
+                // Mil taşları ve çamaşır direkleri de çarpar (Play'de içlerinden geçiliyordu, 13.11); köy bitince çıkan
+                // sancak/bayrak direkleri de (görünür olduklarında içinden geçilmesin).
                 bool collider = ad == "SM_Arazi" || ad == "SM_Meydan_Doseme" ||
-                                (Bas(ad, "SM_") && !uzak && !serit && !Bas(ad, "SM_Ev_Bahceleri", "SM_Denk_Tarlalar", "SM_Mil_Taslari",
-                                                                            "SM_Camasir_Ipleri", "SM_Denk_Fener_Direkleri")) ||
-                                Bas(ad, "Denk_P4_Kopru_Tas", "Denk_Once_Kopru_Yikik");
+                                (Bas(ad, "SM_") && !uzak && !serit && !Bas(ad, "SM_Ev_Bahceleri", "SM_Denk_Tarlalar", "SM_Denk_Fener_Direkleri")) ||
+                                Bas(ad, "Denk_P4_Kopru_Tas", "Denk_Once_Kopru_Yikik", "Tepk_P5_Sancak", "Denk_Sonra_Bayraklar", "Tepk_Sonra_Bayraklar");
                 if (ad == "SM_Meydan_Cinar")
                 {
                     // yalnız gövde: tacın altından geçilir, taç yukarıdan bakan ışınları da kesmez
@@ -209,7 +230,8 @@ namespace BilgiAdasi.SanatAraclari
                     var cc = t.gameObject.AddComponent<CapsuleCollider>();
                     cc.center = new Vector3(0f, 1.5f, 0f); cc.height = 3f; cc.radius = t.name.Contains("Kuru") ? 0.5f : 0.4f;
                 }
-                if (t.name == "SM_Koru_Baltalik" && t.GetComponent<Collider>() == null) t.gameObject.AddComponent<MeshCollider>().convex = true;
+                if ((t.name == "SM_Koru_Baltalik" || t.name == "Koru_Kutuk_Halkali" || t.name == "Koru_Odun_Destesi") && t.GetComponent<Collider>() == null)
+                    t.gameObject.AddComponent<MeshCollider>().convex = true;     // görünür olunca içinden geçilmesin
             }
         }
 
@@ -295,14 +317,10 @@ namespace BilgiAdasi.SanatAraclari
                     gruplar[tur] = grup;
                 }
                 var ins = (GameObject)PrefabUtility.InstantiatePrefab(prefab, grup);
-                // Blender'daki yükseklik formülü ile 2,5 m ızgaralı arazi mesh'i tepelerde ayrışır (havada/gömülü kalma):
-                // kopya, arazinin gerçek yüzeyine oturtulur (ağaç/kaya biraz gömülür, çimen yüzeyde).
+                // Yükseklik Blender'dan AYNEN gelir (harita_doga.yer_z: arazi AĞININ kapladığı alandaki en alçak noktası,
+                // türe göre hafif gömülü). Unity'de ayrıca yere oturtma yapılmaz: eski oturtma kayaları 0,5–1,6 m fazla
+                // gömüyor, köprü altındaki sazı köprünün üstüne taşıyordu (Blender–Unity karşılaştırması 13.11).
                 var p = y.localPosition + HaritaOfset;
-                float z = Zemin(p);
-                // yamaçta tek kenardan havada kalmasın: kaya kütlesi boyunun ~%25'i, küçük kaya ~0,45 m gömülür
-                if (z != 0f || Mathf.Abs(p.y) < 0.5f) p.y = z - (tur.StartsWith("Agac") || tur == "Kavak" || tur == "Cam" || tur == "Meyve" ? 0.12f
-                                                             : tur.StartsWith("Kaya_Kitle") ? 1.1f * y.localScale.y
-                                                             : tur.StartsWith("Kaya") ? 0.45f * y.localScale.y : 0.03f);
                 ins.transform.SetPositionAndRotation(p, y.localRotation);
                 ins.transform.localScale = y.localScale;
                 n++;
@@ -326,16 +344,17 @@ namespace BilgiAdasi.SanatAraclari
 
         static Vector3 ZemindeB(float bx, float by) { var p = B2U(bx, by); p.y = Zemin(p); return p; }
 
-        static void AraclariKoy(Transform kok)
+        static void AraclariKoy(Transform kok, GameObject harita)
         {
             var araclar = new GameObject("Araclar").transform;
             araclar.SetParent(kok, false);
-            // Traktör: Blender (46, 14.8), yön 90° (doğu, tarla girişi) → Unity Y −90°
+            // Traktör: Blender'daki "Konum_Traktor" işareti (44.6, 14.8, yön 90° doğu) → konum birebir; yön Unity Y −90°.
             var tr = Ornek(TraktorFbx, araclar, "Traktor");
             if (tr != null)
             {
-                var p = B2U(46f, 14.8f);
-                p.y = Zemin(p);
+                var k = Konum(harita, "Konum_Traktor");
+                var p = k != null ? k.position : B2U(44.6f, 14.8f);
+                if (k == null) p.y = Zemin(p);
                 tr.transform.SetPositionAndRotation(p, Quaternion.Euler(0f, -90f, 0f));
                 KutuCollider(tr);
             }
@@ -349,11 +368,16 @@ namespace BilgiAdasi.SanatAraclari
                 {
                     var a = aletler.transform.Find(ad);
                     if (a == null) { i++; continue; }
-                    var p = B2U(40f + i * 3.4f, 10.5f);
-                    p.y = Zemin(p);
-                    a.position = p;
-                    var r = a.GetComponent<Renderer>();
-                    if (r != null) a.position += Vector3.up * (p.y - r.bounds.min.y);
+                    var k = Konum(harita, "Konum_" + ad);              // Blender'daki konum birebir
+                    if (k != null) a.position = k.position;
+                    else
+                    {
+                        var p = B2U(40f + i * 3.4f, 10.5f);
+                        p.y = Zemin(p);
+                        a.position = p;
+                        var r = a.GetComponent<Renderer>();
+                        if (r != null) a.position += Vector3.up * (p.y - r.bounds.min.y);
+                    }
                     KutuCollider(a.gameObject);
                     i++;
                 }
