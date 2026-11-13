@@ -326,6 +326,14 @@ def export_harita():
     out.append(_fbx(os.path.join(EXPORT_DIR, "Harita.fbx"), base))
     models = list(bpy.data.collections[DOGA_COL].objects)
     roots = [o for o in models if o.parent is None]
+    # LOD parçaları (_LOD0/_LOD1) kökün tam üstünde olmalı (meshleri kök merkezine göre kurulu). Dosyada yerel
+    # konumları model rafının konumunu (x 200–238) taşıyordu → sıfırlanır (kalıcı; harita_kur dosyayı kaydeder).
+    for o in models:
+        if o.parent is not None:
+            o.matrix_parent_inverse = Matrix.Identity(4)
+            o.location = (0, 0, 0)
+            o.rotation_euler = (0, 0, 0)
+            o.scale = (1, 1, 1)
     keep = {o.name: tuple(o.location) for o in roots}
     for o in roots:
         o.location = (0, 0, 0)
