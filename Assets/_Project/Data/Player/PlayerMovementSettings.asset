@@ -53,5 +53,4 @@ MonoBehaviour:
   pitchLimit: 80
   fieldOfView: 70
   headBobEnabled: 1
-  headBobAmplitude: 0.02
-  headBobFrequency: 1.9
+  headBobAmplitude: 0.025

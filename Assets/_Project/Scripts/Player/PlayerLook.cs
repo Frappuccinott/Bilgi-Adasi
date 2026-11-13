@@ -15,16 +15,42 @@ namespace BilgiAdasi.Player
         [Tooltip("Dikey dönen kamera pivotu (CinemachineCamera bunun üzerinde).")]
         [SerializeField] private Transform cameraPivot;
         [SerializeField] private CinemachineCamera playerCamera;
+        [Tooltip("Koşu FOV artışı için. Boşsa aynı objede aranır.")]
+        [SerializeField] private PlayerMotor motor;
 
         private float pitch;
         private float gamepadRamp;
+        private float currentFov;
 
         public float Pitch => pitch;
+
+        private void Awake()
+        {
+            if (motor == null) motor = GetComponent<PlayerMotor>();
+        }
 
         private void Start()
         {
             pitch = NormalizeAngle(cameraPivot.localEulerAngles.x);
             ApplyFieldOfView();
+        }
+
+        private void LateUpdate()
+        {
+            if (settings == null || playerCamera == null) return;
+            bool sprinting = motor != null && motor.isActiveAndEnabled && motor.IsSprinting
+                             && motor.HorizontalSpeed > settings.WalkSpeed + 0.1f;
+            float target = settings.FieldOfView + (sprinting ? settings.SprintFovBoost : 0f);
+            currentFov = Mathf.Lerp(currentFov, target, 1f - Mathf.Exp(-settings.FovSharpness * Time.deltaTime));
+            playerCamera.Lens.FieldOfView = currentFov;
+        }
+
+        private void OnDisable()
+        {
+            // İstasyona geçerken koşu FOV'u kalmasın.
+            if (settings == null || playerCamera == null) return;
+            currentFov = settings.FieldOfView;
+            playerCamera.Lens.FieldOfView = currentFov;
         }
 
         private void Update()
@@ -70,7 +96,9 @@ namespace BilgiAdasi.Player
         /// <summary>Ayarlar ekranından FOV değişince çağrılır.</summary>
         public void ApplyFieldOfView()
         {
-            if (playerCamera != null && settings != null) playerCamera.Lens.FieldOfView = settings.FieldOfView;
+            if (playerCamera == null || settings == null) return;
+            currentFov = settings.FieldOfView;
+            playerCamera.Lens.FieldOfView = currentFov;
         }
 
         private static float NormalizeAngle(float angle) => angle > 180f ? angle - 360f : angle;

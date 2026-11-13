@@ -100,6 +100,10 @@ Rigidbody değil `CharacterController` kullanılır (öngörülebilir, merdiven/
 | Hızlanma (zemin) | 45 m/s² | Tam hıza ~0.08 sn — oturaklı (14 kaygan hissettirdi, 13.11) |
 | Yavaşlama (zemin) | 55 m/s² | Bırakınca hemen durur, kaymaz |
 | Eğilme | Boy 1.10 m, hız 2.0 m/s, geçiş 4 m/s | Tavan varsa kalkmaz; koşunca/zıplayınca kalkar |
+| Yön | Geri ×0.7, yan ×0.85; koşu yalnızca ileri | Ağırlık hissi |
+| Eğim | Yokuş yukarı ×0.65'e kadar, aşağı ×1.1'e kadar | slopeLimit'e oranlı |
+| Sert iniş | > 7.5 m/s düşüşte 0.2 sn hız ×0.6 | Normal zıplama inişi (~6.3) etkilenmez |
+| Adım | Adım boyu 1.9 m (yürüyüşte ~2 adım/sn) | Kafa sallanması ve adım sesi aynı ritim |
 | Yön değiştirme | Hızlanma vektörel uygulanır | Ani dönüşte savrulma yok |
 | Havada kontrol | %30 | |
 | Zıplama | **Açık**, 1.0 m (karar: 13.11), coyote 0.1 sn, tampon 0.12 sn | `allowJump` ile kapatılabilir |
@@ -116,7 +120,10 @@ Tüm değerler `PlayerMovementSettings` ScriptableObject'inde; play mode'da canl
 
 ### 4.4 Rahatlık (baş dönmesi önleme)
 - Kafa sallanması (head bob) çok hafif: genlik ≤ 0.025 m, ayarlardan kapatılabilir.
-- Adım hissi: dikey sallanma + yarım frekansta küçük yan salınım (≤ 0.0125 m).
+- Adım hissi: ayak yere basınca kamera ≤ 0.025 m çöker ve ~0.3° öne eğilir (roll değil); iki adımda bir küçük yan salınım (≤ 0.0125 m).
+- Dururken çok yavaş nefes salınımı (0.004 m, dakikada 15).
+- Koşarken FOV +4° (yumuşak geçiş). İstasyona girince sıfırlanır.
+- Adım/zıplama/iniş sesleri: `PlayerFootsteps` (klipler Inspector'dan, CC0).
 - İniş sarsıntısı çok küçük: kamera en fazla 0.035 m çöker, hızla toparlanır.
 - Ekran ortasında küçük bir nokta (crosshair) — referans noktası baş dönmesini azaltır.
 

@@ -36,10 +36,21 @@ namespace BilgiAdasi.Player
         private float lastGroundedTime = float.NegativeInfinity;
         private float jumpPressedTime = float.NegativeInfinity;
         private bool wasGrounded = true;
+        private float hardLandingUntil = float.NegativeInfinity;
 
-        /// <summary>Yere iniş; parametre çarpma hızı (m/s, pozitif). Kamera çökmesi için.</summary>
+        private Vector3 groundNormal = Vector3.up;
+        private float stepCycle;
+        private bool isSprinting;
+
+        /// <summary>Yere iniş; parametre çarpma hızı (m/s, pozitif). Kamera çökmesi ve ses için.</summary>
         public event Action<float> Landed;
         public event Action Jumped;
+        /// <summary>Her adımda bir kez (ayak yere bastığında). Adım sesi için.</summary>
+        public event Action Footstep;
+
+        /// <summary>Atılan adım sayısı (kesirli). Kafa sallanması fazı buradan gelir: tam sayılar = ayak yere basar.</summary>
+        public float StepCycle => stepCycle;
+        public bool IsSprinting => isSprinting;
 
         public PlayerMovementSettings Settings => settings;
         public CharacterController Controller => controller;
@@ -104,8 +115,18 @@ namespace BilgiAdasi.Player
             bool grounded = controller.isGrounded;
             if (grounded)
             {
-                if (!wasGrounded && verticalVelocity < 0f) Landed?.Invoke(-verticalVelocity);
+                if (!wasGrounded && verticalVelocity < 0f)
+                {
+                    float impact = -verticalVelocity;
+                    if (impact >= settings.HardLandingSpeed) hardLandingUntil = now + settings.HardLandingDuration;
+                    Landed?.Invoke(impact);
+                    stepCycle = Mathf.Floor(stepCycle) + 0.5f; // iniş bir adım sayılır; sonraki adım yarım adım sonra
+                }
                 lastGroundedTime = now;
+            }
+            else
+            {
+                groundNormal = Vector3.up;
             }
             wasGrounded = grounded;
 
@@ -115,17 +136,23 @@ namespace BilgiAdasi.Player
             if (!hasInput) gamepadSprintToggled = false;
 
             bool keyboardSprint = a.Sprint.IsPressed() && !(a.Sprint.activeControl?.device is Gamepad);
-            bool sprinting = (keyboardSprint || gamepadSprintToggled) && hasInput;
+            // Koşu yalnızca ileri doğru (geri/yana koşu gerçekçi değil).
+            bool sprinting = (keyboardSprint || gamepadSprintToggled) && input.y > 0.1f;
             if (sprinting) crouchToggled = false; // koşmaya başlayınca ayağa kalkar
 
             // --- Eğilme ---
             bool wantCrouch = a.Crouch.IsPressed() || crouchToggled;
             UpdateHeight(wantCrouch ? settings.CrouchHeight : standingHeight, dt);
             bool crouching = IsCrouching;
+            isSprinting = sprinting && !crouching;
 
-            // --- Yatay hız ---
-            float speed = crouching ? settings.CrouchSpeed : sprinting ? settings.SprintSpeed : settings.WalkSpeed;
-            Vector3 desired = (transform.forward * input.y + transform.right * input.x) * speed;
+            // --- Yatay hız: yön (geri/yan yavaş), eğim, sert iniş ---
+            float speed = crouching ? settings.CrouchSpeed : isSprinting ? settings.SprintSpeed : settings.WalkSpeed;
+            float forwardScale = input.y >= 0f ? 1f : settings.BackwardMultiplier;
+            Vector3 desired = (transform.forward * (input.y * forwardScale) + transform.right * (input.x * settings.StrafeMultiplier)) * speed;
+
+            if (grounded && desired.sqrMagnitude > 0.0001f) desired *= SlopeSpeedFactor(desired);
+            if (now < hardLandingUntil) desired *= settings.HardLandingSpeedMultiplier;
 
             float rate = hasInput ? settings.GroundAcceleration : settings.GroundDeceleration;
             if (!grounded) rate *= settings.AirControl;
@@ -167,6 +194,40 @@ namespace BilgiAdasi.Player
                 actual.y = 0f;
                 if (actual.sqrMagnitude < horizontalVelocity.sqrMagnitude) horizontalVelocity = actual;
             }
+
+            UpdateStepCycle(grounded, dt);
+        }
+
+        /// <summary>Yerde alınan yola göre adım sayar; her tam adımda Footstep yayınlar.</summary>
+        private void UpdateStepCycle(bool grounded, float dt)
+        {
+            if (!grounded || settings.StrideLength <= 0f) return;
+            float speed = HorizontalSpeed;
+            if (speed < 0.1f) return;
+
+            int before = Mathf.FloorToInt(stepCycle);
+            stepCycle += speed * dt / settings.StrideLength;
+            if (Mathf.FloorToInt(stepCycle) != before) Footstep?.Invoke();
+        }
+
+        /// <summary>Yokuş yukarı yavaşlatır, aşağı hafif hızlandırır. Eğim slopeLimit'e oranlanır.</summary>
+        private float SlopeSpeedFactor(Vector3 desired)
+        {
+            if (groundNormal.y > 0.999f) return 1f;
+            Vector3 alongSlope = Vector3.ProjectOnPlane(desired, groundNormal).normalized;
+            float rise = alongSlope.y; // + yukarı, − aşağı (sinüs)
+            float maxRise = Mathf.Sin(settings.SlopeLimit * Mathf.Deg2Rad);
+            float t = Mathf.Clamp01(Mathf.Abs(rise) / maxRise);
+            return rise > 0f
+                ? Mathf.Lerp(1f, settings.UphillMultiplier, t)
+                : Mathf.Lerp(1f, settings.DownhillMultiplier, t);
+        }
+
+        private void OnControllerColliderHit(ControllerColliderHit hit)
+        {
+            // Yalnızca ayak altındaki temaslar zemin sayılır.
+            if (hit.normal.y > 0.5f && hit.point.y < transform.position.y + controller.radius)
+                groundNormal = hit.normal;
         }
 
         private void UpdateHeight(float targetHeight, float dt)

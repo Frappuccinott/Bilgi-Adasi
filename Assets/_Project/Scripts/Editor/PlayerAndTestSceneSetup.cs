@@ -115,6 +115,8 @@ namespace BilgiAdasi.EditorTools
             Set(interactor, "headBob", bob);
             SetInt(interactor, "rayMask", ~(1 << ProjectSetup.PlayerLayer));
 
+            UpgradePlayer(root);
+
             var camGo = new GameObject("Main Camera") { tag = "MainCamera" };
             camGo.transform.SetParent(root.transform, false);
             var cam = camGo.AddComponent<Camera>();
@@ -124,6 +126,59 @@ namespace BilgiAdasi.EditorTools
             brain.DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.EaseInOut, 0.5f);
 
             return SavePrefab(root, PlayerRigPath);
+        }
+
+        /// <summary>
+        /// Var olan PlayerRig prefab'ına sonradan eklenen bileşenleri ekler ve bağlar
+        /// (adım sesleri, PlayerLook → motor, PlayerMotor → CameraRoot). Tekrar çalıştırmak güvenlidir.
+        /// </summary>
+        [MenuItem("BilgiAdasi/Kurulum/4 - Oyuncu prefab'ını güncelle", priority = 3)]
+        public static void UpgradePlayerRigPrefab()
+        {
+            if (AssetDatabase.LoadAssetAtPath<GameObject>(PlayerRigPath) == null)
+            {
+                EditorUtility.DisplayDialog("PlayerRig", "Önce 'Kurulum → 3' çalıştırılmalı.", "Tamam");
+                return;
+            }
+
+            var root = PrefabUtility.LoadPrefabContents(PlayerRigPath);
+            try
+            {
+                UpgradePlayer(root);
+                PrefabUtility.SaveAsPrefabAsset(root, PlayerRigPath);
+            }
+            finally
+            {
+                PrefabUtility.UnloadPrefabContents(root);
+            }
+            Debug.Log("[BilgiAdasi] PlayerRig güncellendi: PlayerFootsteps + AudioSource, referanslar bağlandı.");
+        }
+
+        private static void UpgradePlayer(GameObject rigRoot)
+        {
+            var playerT = rigRoot.transform.Find("Player");
+            if (playerT == null)
+            {
+                Debug.LogError("[BilgiAdasi] PlayerRig içinde 'Player' bulunamadı.");
+                return;
+            }
+            var player = playerT.gameObject;
+            var motor = player.GetComponent<PlayerMotor>();
+            var look = player.GetComponent<PlayerLook>();
+
+            if (motor != null) Set(motor, "cameraRoot", playerT.Find("CameraRoot"));
+            if (look != null) Set(look, "motor", motor);
+
+            if (!player.TryGetComponent<AudioSource>(out var source))
+            {
+                source = player.AddComponent<AudioSource>();
+                source.playOnAwake = false;
+                source.spatialBlend = 0f; // oyuncunun kendi sesi: 2D
+            }
+            if (!player.TryGetComponent<PlayerFootsteps>(out var footsteps))
+                footsteps = player.AddComponent<PlayerFootsteps>();
+            Set(footsteps, "motor", motor);
+            Set(footsteps, "source", source);
         }
 
         private static GameObject EnsurePlayerSpawn(GameObject rig)
