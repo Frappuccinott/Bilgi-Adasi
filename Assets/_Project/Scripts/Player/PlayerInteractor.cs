@@ -33,7 +33,7 @@ namespace BilgiAdasi.Player
         private void OnEnable()
         {
             GameInput.Controls.Player.Interact.performed += OnInteractPerformed;
-            GameInput.DeviceChanged += OnDeviceChanged;
+            GameInput.SchemeChanged += OnSchemeChanged;
             ViewLocator.Changed += OnViewsChanged;
             promptView = ViewLocator.Get<IInteractPromptView>();
         }
@@ -41,7 +41,7 @@ namespace BilgiAdasi.Player
         private void OnDisable()
         {
             if (GameInput.TryGetControls(out var c)) c.Player.Interact.performed -= OnInteractPerformed;
-            GameInput.DeviceChanged -= OnDeviceChanged;
+            GameInput.SchemeChanged -= OnSchemeChanged;
             ViewLocator.Changed -= OnViewsChanged;
             SetCurrent(null);
         }
@@ -88,7 +88,7 @@ namespace BilgiAdasi.Player
             if (current != null)
             {
                 current.SetHighlighted(true);
-                promptView?.ShowPrompt(current.PromptText, GameInput.LastDevice);
+                promptView?.ShowPrompt(current.PromptText, ControlGlyphs.For(PromptAction.Interact));
             }
             else
             {
@@ -123,9 +123,9 @@ namespace BilgiAdasi.Player
             ControlEnabledChanged?.Invoke(enabled);
         }
 
-        private void OnDeviceChanged(InputDeviceKind device)
+        private void OnSchemeChanged(ControlScheme scheme)
         {
-            if (current != null) promptView?.ShowPrompt(current.PromptText, device);
+            if (current != null) promptView?.ShowPrompt(current.PromptText, ControlGlyphs.For(PromptAction.Interact, scheme));
         }
 
         private void OnViewsChanged(Type type)
@@ -133,7 +133,7 @@ namespace BilgiAdasi.Player
             if (type != typeof(IInteractPromptView)) return;
             promptView = ViewLocator.Get<IInteractPromptView>();
             promptView?.SetCrosshairVisible(controlEnabled);
-            if (current != null) promptView?.ShowPrompt(current.PromptText, GameInput.LastDevice);
+            if (current != null) promptView?.ShowPrompt(current.PromptText, ControlGlyphs.For(PromptAction.Interact));
         }
     }
 }

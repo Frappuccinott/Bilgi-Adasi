@@ -496,6 +496,33 @@ namespace BilgiAdasi.Core
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Confirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""d2798ae2-94dd-4f0a-bfb4-863de9f90573"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectPrevious"",
+                    ""type"": ""Button"",
+                    ""id"": ""79cf10f3-84d2-43cc-bce2-f40a0d1604a3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectNext"",
+                    ""type"": ""Button"",
+                    ""id"": ""7a9485af-2612-4758-8f91-4a40ff7ddc1e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -528,7 +555,7 @@ namespace BilgiAdasi.Core
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Click"",
+                    ""action"": ""Confirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -694,6 +721,116 @@ namespace BilgiAdasi.Core
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""ExitStation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""acda209b-bdaa-4555-8bf7-078c756e3d8d"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bf69d8a2-b277-415e-aecc-5ac2a5f5a77c"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d5af167f-5a85-4587-b0ef-4a103024948d"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""SelectPrevious"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""68a06ddb-036d-4cfe-822b-5d71259f184e"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""SelectPrevious"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ee5ad066-175a-4ebe-8565-14c332f43c4c"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SelectPrevious"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1afafc74-ab84-4be1-825f-2d89f368e638"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SelectPrevious"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""07cbc4fa-781a-4fe8-ac85-f2fb1880e3f4"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""SelectNext"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0b57ba4f-a0a7-47e1-b66f-1e630fd54924"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""SelectNext"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6c35ac8a-c02a-4878-979b-3a50f53886d1"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SelectNext"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""495a26ed-ab07-453f-9670-6b84078763f3"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SelectNext"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -929,6 +1066,9 @@ namespace BilgiAdasi.Core
             m_Station_OpenHint = m_Station.FindAction("OpenHint", throwIfNotFound: true);
             m_Station_ExitStation = m_Station.FindAction("ExitStation", throwIfNotFound: true);
             m_Station_Pause = m_Station.FindAction("Pause", throwIfNotFound: true);
+            m_Station_Confirm = m_Station.FindAction("Confirm", throwIfNotFound: true);
+            m_Station_SelectPrevious = m_Station.FindAction("SelectPrevious", throwIfNotFound: true);
+            m_Station_SelectNext = m_Station.FindAction("SelectNext", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1208,6 +1348,9 @@ namespace BilgiAdasi.Core
         private readonly InputAction m_Station_OpenHint;
         private readonly InputAction m_Station_ExitStation;
         private readonly InputAction m_Station_Pause;
+        private readonly InputAction m_Station_Confirm;
+        private readonly InputAction m_Station_SelectPrevious;
+        private readonly InputAction m_Station_SelectNext;
         /// <summary>
         /// Provides access to input actions defined in input action map "Station".
         /// </summary>
@@ -1251,6 +1394,18 @@ namespace BilgiAdasi.Core
             /// Provides access to the underlying input action "Station/Pause".
             /// </summary>
             public InputAction @Pause => m_Wrapper.m_Station_Pause;
+            /// <summary>
+            /// Provides access to the underlying input action "Station/Confirm".
+            /// </summary>
+            public InputAction @Confirm => m_Wrapper.m_Station_Confirm;
+            /// <summary>
+            /// Provides access to the underlying input action "Station/SelectPrevious".
+            /// </summary>
+            public InputAction @SelectPrevious => m_Wrapper.m_Station_SelectPrevious;
+            /// <summary>
+            /// Provides access to the underlying input action "Station/SelectNext".
+            /// </summary>
+            public InputAction @SelectNext => m_Wrapper.m_Station_SelectNext;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -1301,6 +1456,15 @@ namespace BilgiAdasi.Core
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @Confirm.started += instance.OnConfirm;
+                @Confirm.performed += instance.OnConfirm;
+                @Confirm.canceled += instance.OnConfirm;
+                @SelectPrevious.started += instance.OnSelectPrevious;
+                @SelectPrevious.performed += instance.OnSelectPrevious;
+                @SelectPrevious.canceled += instance.OnSelectPrevious;
+                @SelectNext.started += instance.OnSelectNext;
+                @SelectNext.performed += instance.OnSelectNext;
+                @SelectNext.canceled += instance.OnSelectNext;
             }
 
             /// <summary>
@@ -1336,6 +1500,15 @@ namespace BilgiAdasi.Core
                 @Pause.started -= instance.OnPause;
                 @Pause.performed -= instance.OnPause;
                 @Pause.canceled -= instance.OnPause;
+                @Confirm.started -= instance.OnConfirm;
+                @Confirm.performed -= instance.OnConfirm;
+                @Confirm.canceled -= instance.OnConfirm;
+                @SelectPrevious.started -= instance.OnSelectPrevious;
+                @SelectPrevious.performed -= instance.OnSelectPrevious;
+                @SelectPrevious.canceled -= instance.OnSelectPrevious;
+                @SelectNext.started -= instance.OnSelectNext;
+                @SelectNext.performed -= instance.OnSelectNext;
+                @SelectNext.canceled -= instance.OnSelectNext;
             }
 
             /// <summary>
@@ -1647,6 +1820,27 @@ namespace BilgiAdasi.Core
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnPause(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Confirm" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnConfirm(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "SelectPrevious" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSelectPrevious(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "SelectNext" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSelectNext(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

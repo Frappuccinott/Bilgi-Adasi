@@ -19,9 +19,18 @@ namespace BilgiAdasi.Core
         Gamepad
     }
 
+    /// <summary>Ekranda hangi tuş simgelerinin çizileceği. Tanınmayan gamepad'ler Xbox düzeninde gösterilir.</summary>
+    public enum ControlScheme
+    {
+        KeyboardMouse,
+        Xbox,
+        PlayStation,
+        Switch
+    }
+
     /// <summary>
     /// Tek BilgiAdasiControls örneği. Aynı anda yalnızca bir action map açık tutar (CLAUDE.md §3),
-    /// imleci moda göre ayarlar ve son kullanılan cihazı izler (ekrandaki E ↔ Ⓧ ipucu için).
+    /// imleci moda göre ayarlar ve son kullanılan cihazı / tuş düzenini izler (ekrandaki [E] ↔ (X) ↔ □ ipucu için).
     /// </summary>
     public static class GameInput
     {
@@ -50,9 +59,13 @@ namespace BilgiAdasi.Core
 
         public static InputMode Mode { get; private set; } = InputMode.None;
         public static InputDeviceKind LastDevice { get; private set; } = InputDeviceKind.KeyboardMouse;
+        /// <summary>Son kullanılan cihazın tuş düzeni (klavye / Xbox / PlayStation / Switch).</summary>
+        public static ControlScheme LastScheme { get; private set; } = ControlScheme.KeyboardMouse;
 
         public static event Action<InputMode> ModeChanged;
         public static event Action<InputDeviceKind> DeviceChanged;
+        /// <summary>Tuş düzeni değişti (ör. Xbox → PS). Tuş ipuçları bunu dinler.</summary>
+        public static event Action<ControlScheme> SchemeChanged;
 
         public static void SetMode(InputMode mode)
         {
@@ -106,13 +119,37 @@ namespace BilgiAdasi.Core
             if (change != InputActionChange.ActionPerformed) return;
             if (obj is not InputAction action) return;
 
-            var device = action.activeControl?.device;
+            var control = action.activeControl;
+            var device = control?.device;
             if (device == null) return;
 
-            var kind = device is Gamepad ? InputDeviceKind.Gamepad : InputDeviceKind.KeyboardMouse;
-            if (kind == LastDevice) return;
-            LastDevice = kind;
-            DeviceChanged?.Invoke(kind);
+            // Gamepad kullanırken masadaki farenin titremesi ipuçlarını klavyeye çevirmesin.
+            if (device is Mouse && control is UnityEngine.InputSystem.Controls.Vector2Control v2
+                && v2.ReadValue().sqrMagnitude < MouseNoiseThresholdSqr) return;
+
+            var scheme = SchemeOf(device);
+            if (scheme == LastScheme) return;
+
+            var kind = scheme == ControlScheme.KeyboardMouse ? InputDeviceKind.KeyboardMouse : InputDeviceKind.Gamepad;
+            LastScheme = scheme;
+            SchemeChanged?.Invoke(scheme);
+            if (kind != LastDevice)
+            {
+                LastDevice = kind;
+                DeviceChanged?.Invoke(kind);
+            }
+        }
+
+        private const float MouseNoiseThresholdSqr = 9f; // 3 piksel
+
+        private static ControlScheme SchemeOf(InputDevice device)
+        {
+            if (device is not Gamepad) return ControlScheme.KeyboardMouse;
+            if (device is UnityEngine.InputSystem.DualShock.DualShockGamepad) return ControlScheme.PlayStation; // DualSense dahil
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_STANDALONE_LINUX || UNITY_WSA
+            if (device is UnityEngine.InputSystem.Switch.SwitchProControllerHID) return ControlScheme.Switch;
+#endif
+            return ControlScheme.Xbox; // XInput ve tanınmayan gamepad'ler
         }
 
         private static void Shutdown()
@@ -131,8 +168,10 @@ namespace BilgiAdasi.Core
             isQuitting = false;
             Mode = InputMode.None;
             LastDevice = InputDeviceKind.KeyboardMouse;
+            LastScheme = ControlScheme.KeyboardMouse;
             ModeChanged = null;
             DeviceChanged = null;
+            SchemeChanged = null;
         }
     }
 }

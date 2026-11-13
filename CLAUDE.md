@@ -55,7 +55,7 @@ Yeni paket eklemeden önce **sor**.
 - Kodda tek giriş noktası: `GameInput.Controls` (tek örnek), map değişimi yalnızca `GameInput.SetMode(InputMode.Player|Station|UI)`. Son cihaz: `GameInput.LastDevice` / `DeviceChanged`.
 - Control scheme'ler: `KeyboardMouse`, `Gamepad`.
 - Action map'ler aynı anda yalnızca biri açık olacak şekilde yönetilir: `Player`, `Station`, `UI`.
-- Ekrandaki tuş ipuçları **son kullanılan cihaza göre** değişir (`E` ↔ `Ⓧ`). `GameInput.DeviceChanged` ile.
+- Ekrandaki tuş ipuçları **son kullanılan cihazın düzenine göre** değişir: klavye `[E]`, Xbox `(X)`, PlayStation `(□)`, Switch `(Y)`. Algılama `GameInput.LastScheme` / `SchemeChanged` (DualShock/DualSense → PS, Switch Pro → Switch, diğer gamepad'ler → Xbox). Simgeler tek yerde: `ControlGlyphs.For(PromptAction.X)`; kodda tuş adı yazılmaz. Bağlama değişirse `ControlGlyphs` tablosu da güncellenir.
 - Gamepad'de istasyon modunda **imleç yok** (karar 13.11, sanal imleç rahat değildi): ↑↓ ile odak/seçim, A onay, RB/LB artır-azalt. İstasyondayken UI'ın kendi yön gezinmesi kapalıdır (`GameInput.SetMode`). Ekranda tuş ipuçları cihaza göre değişir.
 - Ölü bölge (deadzone): çubuklar için 0.15 (Stick Deadzone processor).
 

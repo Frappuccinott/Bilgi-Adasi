@@ -20,15 +20,15 @@ namespace BilgiAdasi.UI
         IChalkboardView, IHintBookView, IRealLifeCardView
     {
         [Header("Ham etiketler (yer tutucu)")]
-        [SerializeField] private string fireLabelKeyboard = "Ateşi yak  [F]";
-        [SerializeField] private string fireLabelGamepad = "Ateşi yak  (Y)";
-        [SerializeField] private string hintLabelKeyboard = "Defter  [H]";
-        [SerializeField] private string hintLabelGamepad = "Defter  (X)";
-        [SerializeField] private string closeLabelKeyboard = "Tamam  [Enter]";
-        [SerializeField] private string closeLabelGamepad = "Tamam  (A)";
+        // Tuş simgeleri ControlGlyphs'ten gelir (klavye / Xbox / PS / Switch); burada yalnızca kelimeler var.
+        [SerializeField] private string fireLabel = "Ateşi yak";
+        [SerializeField] private string hintLabel = "Defter";
+        [SerializeField] private string closeLabel = "Tamam";
         [SerializeField] private string addLabel = "Kazana";
-        [SerializeField] private string controlsKeyboard = "W/S seç  ·  Enter / tekerlek ↑ ekle  ·  tekerlek ↓ çıkar  ·  Esc çık";
-        [SerializeField] private string controlsGamepad = "↑↓ seç  ·  (A)/RB ekle  ·  LB çıkar  ·  (B) çık";
+        [SerializeField] private string selectWord = "seç";
+        [SerializeField] private string addWord = "ekle";
+        [SerializeField] private string removeWord = "çıkar";
+        [SerializeField] private string exitWord = "çık";
 
         // Renk paleti (simya atölyesi)
         private static readonly Color Parchment = new Color(0.91f, 0.85f, 0.71f, 0.97f);
@@ -78,18 +78,25 @@ namespace BilgiAdasi.UI
             ViewLocator.Register<IChalkboardView>(this);
             ViewLocator.Register<IHintBookView>(this);
             ViewLocator.Register<IRealLifeCardView>(this);
-            GameInput.DeviceChanged += ApplyDeviceLabels;
-            ApplyDeviceLabels(GameInput.LastDevice);
+            GameInput.SchemeChanged += ApplySchemeLabels;
+            ApplySchemeLabels(GameInput.LastScheme);
         }
 
-        /// <summary>Tuş ipuçları son kullanılan cihaza göre (CLAUDE.md §3).</summary>
-        private void ApplyDeviceLabels(InputDeviceKind device)
+        /// <summary>Tuş ipuçları son kullanılan cihazın düzenine göre (CLAUDE.md §3).</summary>
+        private void ApplySchemeLabels(ControlScheme scheme)
         {
-            bool pad = device == InputDeviceKind.Gamepad;
-            if (fireButtonText != null) fireButtonText.text = pad ? fireLabelGamepad : fireLabelKeyboard;
-            if (hintButtonText != null) hintButtonText.text = pad ? hintLabelGamepad : hintLabelKeyboard;
-            if (closeButtonText != null) closeButtonText.text = pad ? closeLabelGamepad : closeLabelKeyboard;
-            if (selectText != null) selectText.text = pad ? controlsGamepad : controlsKeyboard;
+            if (fireButtonText != null) fireButtonText.text = fireLabel + "  " + ControlGlyphs.For(PromptAction.FireStove, scheme);
+            if (hintButtonText != null) hintButtonText.text = hintLabel + "  " + ControlGlyphs.For(PromptAction.OpenHint, scheme);
+            if (closeButtonText != null) closeButtonText.text = closeLabel + "  " + ControlGlyphs.For(PromptAction.Confirm, scheme);
+            if (selectText == null) return;
+
+            sb.Clear();
+            sb.Append(ControlGlyphs.For(PromptAction.Navigate, scheme)).Append(' ').Append(selectWord).Append("   ·   ")
+              .Append(ControlGlyphs.For(PromptAction.Confirm, scheme)).Append(" / ")
+              .Append(ControlGlyphs.For(PromptAction.Increase, scheme)).Append(' ').Append(addWord).Append("   ·   ")
+              .Append(ControlGlyphs.For(PromptAction.Decrease, scheme)).Append(' ').Append(removeWord).Append("   ·   ")
+              .Append(ControlGlyphs.For(PromptAction.ExitStation, scheme)).Append(' ').Append(exitWord);
+            selectText.text = sb.ToString();
         }
 
         private void OnDisable()
@@ -102,7 +109,7 @@ namespace BilgiAdasi.UI
             ViewLocator.Unregister<IChalkboardView>(this);
             ViewLocator.Unregister<IHintBookView>(this);
             ViewLocator.Unregister<IRealLifeCardView>(this);
-            GameInput.DeviceChanged -= ApplyDeviceLabels;
+            GameInput.SchemeChanged -= ApplySchemeLabels;
         }
 
         private void Update()
@@ -459,17 +466,17 @@ namespace BilgiAdasi.UI
             Text(cauldron, "<b>Kazan</b>", 30, Chalk, 0, TextAlignmentOptions.TopRight).rectTransform.offsetMax = new Vector2(-18, -14);
 
             cauldronList = List(cauldron, 60, 140);
-            selectText = Text(cauldron, "", 20, new Color(1, 1, 1, 0.65f), 0, TextAlignmentOptions.Center);
+            selectText = Text(cauldron, "", 18, new Color(1, 1, 1, 0.75f), 0, TextAlignmentOptions.Center);
             var sel = selectText.rectTransform;
             sel.anchorMin = new Vector2(0, 0);
             sel.anchorMax = new Vector2(1, 0);
-            sel.offsetMin = new Vector2(10, 92);
-            sel.offsetMax = new Vector2(-10, 122);
+            sel.offsetMin = new Vector2(10, 88);
+            sel.offsetMax = new Vector2(-10, 150);
 
-            var fire = MakeButton(cauldron, fireLabelKeyboard, () => Commands?.FireStove(), Fire, Color.white, 0, 30);
+            var fire = MakeButton(cauldron, fireLabel, () => Commands?.FireStove(), Fire, Color.white, 0, 30);
             fireButtonText = fire.GetComponentInChildren<TMP_Text>();
             Place((RectTransform)fire.transform, new Vector2(0, 0), new Vector2(0.62f, 0), new Vector2(16, 16), new Vector2(-6, 84));
-            var book = MakeButton(cauldron, hintLabelKeyboard, () => Commands?.ToggleHint(), ParchmentDark, Ink, 0, 26);
+            var book = MakeButton(cauldron, hintLabel, () => Commands?.ToggleHint(), ParchmentDark, Ink, 0, 26);
             hintButtonText = book.GetComponentInChildren<TMP_Text>();
             hintButtonImage = book.GetComponent<Image>();
             Place((RectTransform)book.transform, new Vector2(0.62f, 0), new Vector2(1, 0), new Vector2(6, 16), new Vector2(-16, 84));
@@ -484,13 +491,13 @@ namespace BilgiAdasi.UI
             realLifeBox = Panel(root, "RealLife", Parchment, new Vector2(0.5f, 0.5f), new Vector2(0, 60), new Vector2(820, 380)).gameObject;
             realLifeText = Text((RectTransform)realLifeBox.transform, "", 28, Ink, 0, TextAlignmentOptions.TopLeft);
             Inset(realLifeText.rectTransform, 30, 30, 100);
-            var ok = MakeButton((RectTransform)realLifeBox.transform, closeLabelKeyboard, () => Commands?.CloseRealLifeCard(), Brass, Ink, 0, 28);
+            var ok = MakeButton((RectTransform)realLifeBox.transform, closeLabel, () => Commands?.CloseRealLifeCard(), Brass, Ink, 0, 28);
             closeButtonText = ok.GetComponentInChildren<TMP_Text>();
             Place((RectTransform)ok.transform, new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(-110, 24), new Vector2(110, 84));
             realLifeBox.SetActive(false);
 
             SetStoveLit(false);
-            ApplyDeviceLabels(GameInput.LastDevice);
+            ApplySchemeLabels(GameInput.LastScheme);
             panel.SetActive(false);
         }
 

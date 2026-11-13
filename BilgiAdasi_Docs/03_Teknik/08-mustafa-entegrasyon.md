@@ -60,7 +60,7 @@ Kod hiçbir Canvas'a ya da objeye bağlı değildir. Her UI parçası için bir 
 
 | Arayüz | Gösterdiği | Faz |
 |---|---|---|
-| `IInteractPromptView` | `[E] Kazana geç` / `Ⓧ Kazana geç` + crosshair | 2 |
+| `IInteractPromptView` | Crosshair + ipucu: `ShowPrompt(metin, simge)`. Simge hazır gelir (klavye `[E]`, Xbox `(X)`, PS `(□)`, Switch `(Y)`); view yalnızca çizer | 2 |
 | `IScreenFader` | Sahne geçişi kararması | 1 |
 | `IOrderStationView` | Kazan paneli açık/kapalı (`SetOpen`) | 3 |
 | `IOrderCardView` | Sipariş kartı: veren, istenen ürünler, (Görev 1–2) girenlerin adı, kese; kısa mesaj | 3 |
@@ -87,3 +87,7 @@ UI ayarları: Canvas Scaler → *Scale With Screen Size*, 1920×1080. Yazı en a
 - Benim prefab'larımın kökündeki bileşenleri silme ya da adlarını değiştirme (`Visual` içi serbest).
 - `_Project/Scripts/` ve `_Project/Data/` içinde değişiklik yapma; ihtiyacın olursa söyle.
 - Hazır model/doku/font eklediysen `05_Uretim/LICENSES.md`'ye satır yaz (yoksa projeye girmez).
+
+## 6. Tuş simgeleri
+
+Kendi UI'ında tuş göstereceksen yazıyı elle yazma: `ControlGlyphs.For(PromptAction.FireStove)` son kullanılan cihaza göre doğru simgeyi verir (klavye / Xbox / PlayStation / Switch). Değişimi dinlemek için `GameInput.SchemeChanged`. İkon (sprite) kullanmak istersen aynı olaya bağlanıp kendi sprite'ını seçebilirsin; düzen `GameInput.LastScheme`'de.

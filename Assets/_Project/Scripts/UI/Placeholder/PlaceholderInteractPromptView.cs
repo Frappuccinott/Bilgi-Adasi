@@ -13,8 +13,6 @@ namespace BilgiAdasi.UI
     {
         [SerializeField] private TMP_Text promptLabel;
         [SerializeField] private GameObject crosshair;
-        [SerializeField] private string keyboardGlyph = "[E]";
-        [SerializeField] private string gamepadGlyph = "(X)";
 
         protected override void OnEnable()
         {
@@ -22,10 +20,10 @@ namespace BilgiAdasi.UI
             base.OnEnable();
         }
 
-        public void ShowPrompt(string text, InputDeviceKind device)
+        public void ShowPrompt(string text, string glyph)
         {
             if (promptLabel == null) return;
-            promptLabel.text = (device == InputDeviceKind.Gamepad ? gamepadGlyph : keyboardGlyph) + " " + text;
+            promptLabel.text = glyph + "  " + text;
             promptLabel.gameObject.SetActive(true);
         }
 
