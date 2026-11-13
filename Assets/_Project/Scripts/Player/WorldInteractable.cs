@@ -1,3 +1,4 @@
+using BilgiAdasi.Core;
 using UnityEngine;
 
 namespace BilgiAdasi.Player
@@ -12,6 +13,9 @@ namespace BilgiAdasi.Player
         [SerializeField] private GameObject highlight;
 
         public virtual bool CanInteract => isActiveAndEnabled;
+
+        /// <summary>Varsayılan E / X. Kapı ve bisiklet Use (F / X) döndürür.</summary>
+        public virtual PromptAction TriggerAction => PromptAction.Interact;
 
         protected virtual void Awake()
         {

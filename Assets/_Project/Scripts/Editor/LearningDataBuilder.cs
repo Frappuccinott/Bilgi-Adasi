@@ -6,9 +6,9 @@ using UnityEngine;
 namespace BilgiAdasi.EditorTools
 {
     /// <summary>
-    /// Ustanın Sorgusu + Keşif Defteri verisini (04-gorev-plani §4, Seviye 1–5) üretir:
+    /// Ustanın Sorgusu + Keşif Defteri verisini (04-gorev-plani §4, Seviye 1–10) üretir:
     /// Assets/_Project/Data/Resources/LearningData.asset. Metin düzeltmeleri burada yapılıp menü yeniden çalıştırılır.
-    /// Görev kimlikleri DenklestirmeSeed ile aynı (denk_1 … denk_5).
+    /// Görev kimlikleri DenklestirmeSeed (denk_1 … denk_5) ve DeskDataBuilder (tur_1 … tur_5) ile aynı.
     /// </summary>
     public static class LearningDataBuilder
     {
@@ -95,6 +95,48 @@ namespace BilgiAdasi.EditorTools
                         "Karışmak tepkimeye girmek demek değil. Azot eşleşecek hidrojen bulamadığı için artar."
                     },
                     "K-5", "Tepkime girenleri katsayıları oranında harcar. Biri biterse tepkime durur; fazla olan artar."),
+
+                // ---------- Tepkime Türleri (Seviye 6–10, masa) ----------
+                Entry("tur_1", null, null, 0, null,
+                    "K-6", "Sentez: birden çok madde → tek ürün. Analiz: tek madde → daha basit maddeler. Yanma: madde + O₂ → ısı ve ışık. (Kanıtlarım: çeşme, kireç taşı, fener.)"),
+
+                Entry("tur_2", null, null, 0, null,
+                    "K-7", "Türü anlamak için: tek giren varsa analiz, tek ürün varsa sentez, girenlerde O₂ var ve ısı-ışık çıkıyorsa yanma."),
+
+                Entry("tur_3",
+                    "Kazandan çıkan su buharı neden kimyasal değişimin kanıtı değil?",
+                    new[]
+                    {
+                        "Su hâlâ su; yeni madde oluşmadı, yalnızca hâli değişti.",
+                        "Çünkü buhar görünmez.",
+                        "Çünkü ısı yok."
+                    }, 0,
+                    new[]
+                    {
+                        "Aynen öyle. Hâl değişimi fizikseldir; kazandan yeni bir madde çıkmadı.",
+                        "Görünmek ölçüt değil, çırak. Buhar da sudur; yeni madde oluşmadı.",
+                        "Buharlaşma ısı ister aslında. Ölçüt ısı değil, yeni madde oluşup oluşmadığı."
+                    },
+                    "K-8", "Kimyasal değişimin kanıtları: yeni madde, gaz çıkışı, renk değişimi, ısı-ışık, koku. Yalnız şekil ya da hâl değişimi fizikseldir."),
+
+                Entry("tur_4", null, null, 0, null,
+                    "K-9", "Bir iddiayı çürütmek için tek karşı örnek yeter; düzeltirken kanıt göster."),
+
+                Entry("tur_5",
+                    "Fotosentezle solunum arasında nasıl bir ilişki gördün?",
+                    new[]
+                    {
+                        "Biri diğerinin tersi gibi: biri CO₂ ve suyu glikoza bağlar, öteki glikozu CO₂ ve suya geri çevirir.",
+                        "İkisi aynı tepkimedir.",
+                        "Fotosentez yalnız gece olur."
+                    }, 0,
+                    new[]
+                    {
+                        "Aynen öyle. Aynı atomlar bir yönde bağlanıyor, öbür yönde çözülüyor.",
+                        "Girenleri ve ürünleri karşılaştır: biri ötekinin tersi, aynısı değil.",
+                        "Fotosentez ışık ister, gündüz olur. Solunum ise gece gündüz sürer."
+                    },
+                    "K-10", "Tür, atomların nasıl yeniden dizildiğini anlatır. Aynı atomlar (C, H, O) doğada döngü hâlinde dolaşır: yakıtta, havada, bitkide, bizde."),
             });
 
             EditorUtility.SetDirty(data);
@@ -111,7 +153,7 @@ namespace BilgiAdasi.EditorTools
             return new LearningEntry(taskId, prompt, discoveryId, Rich(discovery));
         }
 
-        private static string[] RichAll(string[] values)
+        internal static string[] RichAll(string[] values)
         {
             var result = new string[values.Length];
             for (int i = 0; i < values.Length; i++) result[i] = Rich(values[i]);
@@ -119,7 +161,7 @@ namespace BilgiAdasi.EditorTools
         }
 
         /// <summary>Unicode alt indisleri (₀–₉) TMP &lt;sub&gt; etiketine çevirir: oyun fontunda bu glifler yok.</summary>
-        private static string Rich(string text)
+        internal static string Rich(string text)
         {
             if (string.IsNullOrEmpty(text)) return text;
             var sb = new StringBuilder(text.Length + 16);

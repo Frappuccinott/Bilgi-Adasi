@@ -36,6 +36,7 @@ namespace BilgiAdasi.Chemistry
             s.AddSpecies("N2", "Azot", ("N", 2));
             s.AddSpecies("NH3", "Amonyak", ("N", 1), ("H", 3));
             s.AddSpecies("CO", "Karbon monoksit", ("C", 1), ("O", 1));
+            s.AddSpecies("C6H12O6", "Glikoz", ("C", 6), ("H", 12), ("O", 6));
 
             s.AddReaction("R_water", ReactionType.Synthesis, new[] { (2, "H2"), (1, "O2") }, new[] { (2, "H2O") });
             s.AddReaction("R_methane", ReactionType.Combustion, new[] { (1, "CH4"), (2, "O2") }, new[] { (1, "CO2"), (2, "H2O") });
@@ -45,6 +46,9 @@ namespace BilgiAdasi.Chemistry
             s.AddReaction("R_ammonia", ReactionType.Synthesis, new[] { (1, "N2"), (3, "H2") }, new[] { (2, "NH3") });
             s.AddReaction("R_co", ReactionType.Combustion, new[] { (2, "CO"), (1, "O2") }, new[] { (2, "CO2") });
             s.AddReaction("R_waterSplit", ReactionType.Analysis, new[] { (2, "H2O") }, new[] { (2, "H2"), (1, "O2") });
+            // Lonca Sınavı transferi (04 §4 Seviye 10): tür kutularına tam uymaz.
+            s.AddReaction("R_photosynthesis", ReactionType.Other, new[] { (6, "CO2"), (6, "H2O") }, new[] { (1, "C6H12O6"), (6, "O2") });
+            s.AddReaction("R_respiration", ReactionType.Other, new[] { (1, "C6H12O6"), (6, "O2") }, new[] { (6, "CO2"), (6, "H2O") });
 
             return s;
         }

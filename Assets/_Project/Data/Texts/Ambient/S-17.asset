@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1da41bafda85774ca60ce994f284016, type: 3}
+  m_Name: S-17
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.AmbientDialogueData
+  id: S-17
+  lines:
+  - speaker: "Ya\u015Fl\u0131 Hayriye"
+    text: "Pusun ard\u0131nda eski simyac\u0131lar\u0131n k\xF6y\xFC var derler.
+      Ben gitmedim. Sen de daha gitme."
+  requireAll: []
+  requireAny: []
+  blockedBy: []
+  playOnce: 1

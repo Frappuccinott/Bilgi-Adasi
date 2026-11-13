@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8b7b0556d2c5864182957a5734cc9db, type: 3}
+  m_Name: HesapHocasi
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.NpcProfile
+  displayName: "Hesap Hocas\u0131"
+  portrait: {fileID: 0}
+  promptFormat: "{0} ile konu\u015F"
+  conversations:
+  - lines:
+    - "Hmm... Bu \xE7\u0131nar\u0131n g\xF6lgesi tam yedi ad\u0131m. D\xFCn alt\u0131
+      bu\xE7uktu!"
+    - "Matematik \u015Fehrinin kap\u0131s\u0131 h\xE2l\xE2 kapal\u0131. Ama say\u0131lar
+      bekler, acele etmez."
+  - lines:
+    - "Bir tepkimenin iki yan\u0131ndaki atomlar\u0131 say: e\u015Fit mi? \u0130\u015Fte
+      o kadar basit... ve o kadar zor."
+  - lines:
+    - "Usturlab\u0131mla y\u0131ld\u0131zlar\u0131 \xF6l\xE7erim, pergelimle d\xFCnyay\u0131.
+      Senin \xF6l\xE7\xFCn ne, gen\xE7?"

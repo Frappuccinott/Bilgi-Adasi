@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1da41bafda85774ca60ce994f284016, type: 3}
+  m_Name: S-08
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.AmbientDialogueData
+  id: S-08
+  lines:
+  - speaker: Mumcu Kenan
+    text: "Bak \u015Fu \u0131\u015F\u0131\u011Fa. \u0130s yok, koku yok."
+  - speaker: Fenerci Demir
+    text: "Bir batakl\u0131k gaz\u0131na iki can havas\u0131. \xC7\u0131rak kart\u0131na
+      yazd\u0131, ast\u0131m."
+  requireAll:
+  - denk_2
+  requireAny: []
+  blockedBy: []
+  playOnce: 1

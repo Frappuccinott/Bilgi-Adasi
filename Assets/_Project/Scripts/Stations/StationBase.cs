@@ -32,6 +32,7 @@ namespace BilgiAdasi.Player
         private PlayerInteractor user;
 
         public virtual bool CanInteract => Active == null && isActiveAndEnabled;
+        public virtual PromptAction TriggerAction => PromptAction.Interact;
         public string PromptText => promptText;
         public string GetPrompt(PlayerInteractor interactor) => promptText;
         public bool IsActive => Active == this;

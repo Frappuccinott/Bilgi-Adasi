@@ -56,8 +56,7 @@ ROADS = [
     ("Yol_Tarla", [(58, -5.4), (64.6, -0.2), (66.6, 6.8), (63.8, 12.6), (60.0, 15.2)], 2.6),
     ("Yol_Hesaplamalar", [(59, -6.0), (66, -14.0), (72, -24.0), (76, -32.0)], 3.0),   # kilitli
     ("Yol_Tepkimeler", [(-50, -1.6), (-56, 6.0), (-62, 15.0), (-66, 24.0)], 3.0),    # kilitli
-    # kuleye kısa sapak: Tepkimeler yolundan ayrılır (eskiden ona paralel ikinci yol gibi görünüyordu)
-    ("Yol_Kule", [(-56.4, 6.4), (-55.7, 8.5)], 2.2),
+    # güvercin kulesi Tepkimeler yolunun hemen kenarında: ayrı sapak yok (2 m'lik sapak kama gibi kesik duruyordu, QA 13.11)
     # geçici tahta köprüye inen patikalar (Denkleştirme Part_4 bitene kadar dereyi buradan geçeriz)
     # yıkık taş köprünün ayaklarının (x 24.6…38.6, y −9.9…−6.1) dışından geçer (Unity yürüme testi, 13.11)
     ("Patika_Kopru_Bati", [(21.5, -9.0), (23.6, -5.2), (26.0, -2.4)], 1.5),
@@ -169,6 +168,11 @@ def height(x, y, with_stream=True):
                 k = smooth01(1.0 - (dg - (gr - 2.0)) / 3.2) if dg > gr - 2.0 else 1.0
                 cut = max(cut, GOL_DEPTH * k)
         h -= cut
+    # arazi ağının dış kenarında yükselen sırt: ağın kenarı vadiden dikey kesik gibi görünüyordu (batı tepesi, QA 13.11).
+    # Kenar 14 m içinde 16 m'ye kadar yükselir → vadiden bakınca kenarın kendisi değil iç yamaç görünür.
+    de = min(x - X0, X1 - x, y - Y0, Y1 - y)
+    if de < 14.0:
+        h += 16.0 * smooth01(1.0 - de / 14.0)
     return h
 
 def gol_su_z(gc):
@@ -239,9 +243,10 @@ def terrain_color(x, y, z, nz):
     ds = poly_dist(p, STREAM)
     for gc, gr in GOLLER:
         ds = min(ds, max((p - gc).length - (gr - 2.0) + 1.6, 0.0))
-    if ds < STREAM_HALF + 0.5:
-        t = smooth01(1.0 - (ds - 1.5) / (STREAM_HALF - 1.0))
-        bed = mix(pal("kaya", 1), pal("dag", 1), 0.4)
+    if ds < 3.6:
+        # yalnız yatak tabanı ve alt kıyı taşlı-yosunlu (eski geniş gri bant kıyıyı "su levhası" gibi gösteriyordu, QA 13.11)
+        t = smooth01(1.0 - (ds - 1.1) / 2.3)
+        bed = mix(mix(pal("kaya", 1), pal("dag", 1), 0.4), pal("cimen", 2), 0.3)
         c = mix(c, bed, t)
     # yol kenarı: toprağa kayan aşınmış çimen
     dr, _ = road_info(p)
@@ -350,6 +355,22 @@ def build_roads(col):
     for k, (name, pts, w) in enumerate(ROADS):
         cik0, cik1 = _cikmaz_uc(name, pts[0]), _cikmaz_uc(name, pts[-1])
         pts = resample(pts, 1.25)
+        if name == "Yol_Dogu":
+            # yol, köprü ayağının tam ucunda (KOPRU'dan 7.05 m) bitsin: 1.25 m adımla 0.7–0.8 m çim boşluk kalıyordu
+            yeni = [pts[0]]
+            for a_, b_ in zip(pts, pts[1:]):
+                da, db = (a_ - KOPRU).length - 7.05, (b_ - KOPRU).length - 7.05
+                if da * db < 0:
+                    lo, hi = 0.0, 1.0
+                    for _ in range(30):
+                        m_ = (lo + hi) / 2
+                        if da * ((a_.lerp(b_, m_) - KOPRU).length - 7.05) <= 0:
+                            hi = m_
+                        else:
+                            lo = m_
+                    yeni.append(a_.lerp(b_, (lo + hi) / 2))
+                yeni.append(b_)
+            pts = yeni
         lift = _yol_lift(name)
         cum = [0.0]
         for a_, b_ in zip(pts, pts[1:]):
@@ -382,7 +403,7 @@ def build_roads(col):
         lay = bm.loops.layers.float_color.new("Col")
         vs = [[bm.verts.new(c) for (c, _) in row] for row in secs]
         # dere yatağında yol çizilmez (köprü geçer); köprü ayağı/rampası üstünde de çizilmez (yıkık köprüyle çakışıyordu)
-        wet = [poly_dist(p, STREAM) < STREAM_HALF - 0.6 or (name == "Yol_Dogu" and (p - KOPRU).length < 7.2) for p in pts]
+        wet = [poly_dist(p, STREAM) < STREAM_HALF - 0.6 or (name == "Yol_Dogu" and (p - KOPRU).length < 7.04) for p in pts]
         # meydan döşemesinin altında yol çizilmez (derz tabanıyla 1 cm içinde çakışıyordu)
         mey = [(p - MEYDAN).length < MEYDAN_R - 0.3 for p in pts]
         for i in range(len(vs) - 1):

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1da41bafda85774ca60ce994f284016, type: 3}
+  m_Name: S-18
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.AmbientDialogueData
+  id: S-18
+  lines:
+  - speaker: "G\xFCvercinci Selim"
+    text: "\u015Eu da\u011Flar\u0131n ard\u0131nda ba\u015Fka \u015Fehirler var.
+      Biri say\u0131larla, biri \u0131\u015F\u0131kla, biri canl\u0131larla u\u011Fra\u015F\u0131rm\u0131\u015F."
+  - speaker: "Lonca K\xE2tibi Nevin"
+    text: "Hepsi ayn\u0131 adada. Bir g\xFCn yolu a\xE7\u0131l\u0131r."
+  requireAll:
+  - denk_5
+  - tur_5
+  requireAny: []
+  blockedBy: []
+  playOnce: 1

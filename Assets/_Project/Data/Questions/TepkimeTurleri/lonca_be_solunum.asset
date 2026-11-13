@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6657210cf440b3a4abb605a95367560c, type: 3}
+  m_Name: lonca_be_solunum
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Desk.BalanceEquationQ
+  id: lonca_be_solunum
+  prompt: "H\xFCcrede (solunum) denklemi denkle\u015Ftir."
+  hint: "Fotosentezin tersine bak: ayn\u0131 katsay\u0131lar."
+  reaction: {fileID: 11400000, guid: f71fde68c5a0cda47a296aa44fae3120, type: 2}

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8b7b0556d2c5864182957a5734cc9db, type: 3}
+  m_Name: KoyluKadin
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.NpcProfile
+  displayName: Hatice Teyze
+  portrait: {fileID: 0}
+  promptFormat: "{0} ile konu\u015F"
+  conversations:
+  - lines:
+    - "\u0130lan panosuna yeni duyurular asm\u0131\u015Flar, okudun mu?"
+  - lines:
+    - "K\xE2\u011F\u0131t\xE7\u0131n\u0131n tezg\xE2h\u0131nda yeni defterler var."
+    - "Sen de \xE7\u0131rak m\u0131s\u0131n? Kolay gelsin evlad\u0131m."

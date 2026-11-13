@@ -676,7 +676,8 @@ def parsel_bm(cx, cy, w, d, durum, seed):
                 p = l.vert.co
                 blob = 0.5 + 0.5 * n2(cx + p.x, cy + p.y, 2.0, seed * 0.1)
                 if durum == "Nadas":
-                    c = mix(mix(pal("cimen", 2), pal("kil", 1), 0.45), pal("cimen", 1), blob * 0.5)
+                    # nadas: otlanmış toprak (gri-yeşil düz renk "yarı saydam levha" gibi okunuyordu, QA 13.11)
+                    c = mix(mix(pal("cimen", 1), pal("cimen", 2), 0.35), pal("kil", 1), 0.15 + 0.25 * blob)
                 elif durum in ("Surulmus", "Ekili", "Filiz"):
                     c = mix(mix(pal("ahsap", 2), pal("kil", 2), 0.4), pal("kil", 1), r * 0.8)
                     if durum != "Surulmus":

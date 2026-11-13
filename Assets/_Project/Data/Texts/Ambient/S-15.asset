@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1da41bafda85774ca60ce994f284016, type: 3}
+  m_Name: S-15
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.AmbientDialogueData
+  id: S-15
+  lines:
+  - speaker: "G\xFCvercinci Selim"
+    text: "Kulenin bayra\u011F\u0131 ilk kez dalgalan\u0131yor."
+  - speaker: "Lonca K\xE2tibi Nevin"
+    text: "Loncaya yeni bir m\xFCh\xFCr girdi. Kasaban\u0131n en gen\xE7 simyac\u0131s\u0131."
+  requireAll:
+  - tur_5
+  requireAny: []
+  blockedBy: []
+  playOnce: 1

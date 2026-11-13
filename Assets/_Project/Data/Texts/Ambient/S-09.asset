@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1da41bafda85774ca60ce994f284016, type: 3}
+  m_Name: S-09
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.AmbientDialogueData
+  id: S-09
+  lines:
+  - speaker: "F\u0131r\u0131nc\u0131 Zehra"
+    text: "Simit\xE7i Hatice'ye de s\xF6yledim, gaz az olursa alev sar\u0131 yanar."
+  - speaker: "A\u015F\xE7\u0131 Melek"
+    text: "Benimki hep sar\u0131yd\u0131, ben onu g\xFCzel san\u0131yordum!"
+  - speaker: "F\u0131r\u0131nc\u0131 Zehra"
+    text: "G\xFCzel ama isli. Mavisi do\u011Frusu."
+  requireAll:
+  - denk_3
+  requireAny: []
+  blockedBy: []
+  playOnce: 1

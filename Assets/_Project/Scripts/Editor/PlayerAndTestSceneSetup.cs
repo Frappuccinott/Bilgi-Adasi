@@ -28,7 +28,7 @@ namespace BilgiAdasi.EditorTools
         private const string SettingsPath = "Assets/_Project/Data/Player/PlayerMovementSettings.asset";
         private const string PlayerRigPath = PrefabsFolder + "/PlayerRig.prefab";
         private const string PlayerSpawnPath = PrefabsFolder + "/PlayerSpawn.prefab";
-        private const string TownScenePath = "Assets/_Project/Scenes/Town.unity";
+        private const string TownScenePath = BilgiAdasi.Core.SceneFlow.GameScenePath;
         private const string PlaceholderRootName = "_Placeholder";
 
         private const float EyeHeight = 1.56f;   // 10. sınıf
@@ -48,7 +48,7 @@ namespace BilgiAdasi.EditorTools
             var spawn = EnsurePlayerSpawn(rig);
             var cauldron = EnsureStation<CauldronStation>("Station_Cauldron", "Kazana geç");
             var desk = EnsureStation<DeskStation>("Station_Desk", "Masaya otur");
-            var door = EnsureStation<DoorStation>("Station_Door", "Kapıya bak");
+            var door = EnsureStation<DoorStation>("Station_Door", "Kapıyı aç");
             var board = EnsureStation<ChalkboardStation>("Station_Chalkboard", "Tahtaya bak");
 
             var scene = EditorSceneManager.OpenScene(TownScenePath);

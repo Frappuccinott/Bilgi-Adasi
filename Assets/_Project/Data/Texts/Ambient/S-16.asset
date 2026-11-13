@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1da41bafda85774ca60ce994f284016, type: 3}
+  m_Name: S-16
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.AmbientDialogueData
+  id: S-16
+  lines:
+  - speaker: "Bek\xE7i Tuncay"
+    text: "Bu kap\u0131 \u015Fimdilik kapal\u0131. \u0130\xE7eride herkes tart\u0131
+      ve hesapla u\u011Fra\u015F\u0131yor."
+  - speaker: "Bek\xE7i Tuncay"
+    text: "\xD6nce denkle\u015Ftirmeyi \xF6\u011Fren, sonra gel. Ka\xE7 tane oldu\u011Funu
+      bilmeyen, ne kadar oldu\u011Funu da bilemez."
+  requireAll: []
+  requireAny: []
+  blockedBy: []
+  playOnce: 1

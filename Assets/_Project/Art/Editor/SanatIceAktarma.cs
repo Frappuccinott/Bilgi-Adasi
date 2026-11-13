@@ -162,6 +162,28 @@ namespace BilgiAdasi.SanatAraclari
             AssetDatabase.CreateFolder(ust, Path.GetFileName(klasor));
         }
 
+        /// <summary>FPS kolları: oyun başlayınca kollar kalkar ve beklemede durur. Tek seferlik klipler
+        /// bitince kendiliğinden döner (Uzan → Bekle, Kaldır → Bekle, İndir → Boşta). Kod yalnızca Play çağırır.</summary>
+        static void KolAkisi(AnimatorStateMachine sm)
+        {
+            AnimatorState Durum(string n) => sm.states.Select(s => s.state).FirstOrDefault(s => s.name == n);
+            void Sonra(string a, string b, float gecis)
+            {
+                var s1 = Durum(a); var s2 = Durum(b);
+                if (s1 == null || s2 == null) return;
+                var t = s1.AddTransition(s2);
+                t.hasExitTime = true;
+                t.exitTime = 1f;
+                t.duration = gecis;
+                t.hasFixedDuration = true;
+            }
+            var kaldir = Durum("Kol_Kaldir");
+            if (kaldir != null) sm.defaultState = kaldir;
+            Sonra("Kol_Kaldir", "Kol_Bekle_Dongu", 0.1f);
+            Sonra("Kol_Uzan", "Kol_Bekle_Dongu", 0.1f);
+            Sonra("Kol_Indir", "Kol_Bosta", 0f);
+        }
+
         static void Kur(string fbxYolu)
         {
             var model = AssetDatabase.LoadAssetAtPath<GameObject>(fbxYolu);
@@ -196,6 +218,7 @@ namespace BilgiAdasi.SanatAraclari
                 varsayilan.writeDefaultValues = true;
             }
             sm.defaultState = varsayilan;
+            if (ad == "Ogrenci_Kol_Rig") KolAkisi(sm);
             EditorUtility.SetDirty(kontrol);
 
             // Prefab: dönüşü sıfır bir sarmalayıcı kök + altında model (Animator modelde).

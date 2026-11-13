@@ -67,6 +67,7 @@ Yeni paket eklemeden önce **sor**.
 | Look | Player | Fare delta | Sağ çubuk |
 | Sprint (hızlı yürü) | Player | Sol Shift (basılı) | Sol çubuk bas (L3, aç/kapa) |
 | Interact | Player | E | X (West) |
+| Use (kapı aç, bisiklete bin/in) | Player | F | X (West; Interact ile aynı tuş, hedef `TriggerAction`'a göre yalnızca birine cevap verir) |
 | Jump | Player | Space | A (South) |
 | Crouch (basılı) | Player | Sol Ctrl | — |
 | CrouchToggle (aç/kapa) | Player | C | B (East) |
@@ -96,7 +97,7 @@ Yeni aksiyon eklenirse bu tablo güncellenir.
 
 ## 4. Oyuncu: birinci şahıs (FPS) kamera ve hareket
 
-**Kamera kesinlikle birinci şahıs.** Üçüncü şahıs yok; oyuncu modeli kamerada görünmez.
+**Kamera kesinlikle birinci şahıs.** Üçüncü şahıs yok. **Karar 13.11:** baş hariç gövde görünür (aşağı bakınca göğüs, bacaklar, ayakkabı): `Player/Govde` = `Ogrenci_Govde_Rig` (`ogrenci_govde.py`) + `PlayerBodyView` (yürüme/çömelme/havada klipleri, tempo adım döngüsüne bağlı; aşağı bakınca gövde 0.16 m geri kayar; istasyonda gizli; başsız gölge olmasın diye yalnızca gölge veren baş). Kollar ayrı rig olarak kalır (`Ogrenci_Kol_Rig`, klipleri değişmedi). Kurulum: **Kurulum → 15**.
 
 ### 4.1 His hedefi
 Hedef kitle 15–16 yaş, çoğu FPS oyunlarına alışık ama bu bir aksiyon oyunu değil: **çevik ve tepkili, ama sakin ve gerçekçi.** Kaygan değil, baş döndürmez.
@@ -153,7 +154,7 @@ Tüm değerler `PlayerMovementSettings` ScriptableObject'inde; play mode'da canl
 - **Kazan** (`CauldronStation` + `OrderController`): E → eldeki maddeden 1 kavanoz dökülür. **Dökülen geri alınmaz.** Boşaltma kolu (`CauldronDrain`) kazanı boşaltır, malzeme gider.
 - **3D terazi** (`ScaleModel`): sol kefe kazan, sağ kefe sipariş; UI değil.
 - **Ocak** (`CauldronStove`): dengedeyse tepkime → ürün envantere (doluysa kazanda bekler); değilse ya da tepkimeye girmeyen madde varsa köpürür, malzeme gider, hata sayılır.
-- **Kapı** (`DoorStation`): konuşmada hareket durur, E/Space ilerletir. Sipariş burada alınır; teslim elle: seçili slotta istenen ürün olmalı ("Ben bunu istemedim"). Teslimde ödeme alınır ve oyun kaydedilir.
+- **Kapı** (`DoorStation`): **F** (gamepad X) ile açılır (`TriggerAction = Use`, karar 13.11); konuşmada hareket durur, E/Space ilerletir. Sipariş burada alınır; teslim elle: seçili slotta istenen ürün olmalı ("Ben bunu istemedim"). Teslimde ödeme alınır ve oyun kaydedilir.
 
 İstasyon modu yalnızca masa ve tahtada kalır (Faz 5). Oyuncu bir istasyona yaklaşıp Interact yapınca:
 1. `Player` map kapanır, `Station` map açılır; hareket ve bakış durur.
@@ -172,16 +173,19 @@ Oyuncu köyler arasında **yürüyerek** gider (karar: 13.11). Bu, dokümanlarda
 **24 saat kapsamı için sınırlar:**
 - Prototipteki şehir **küçük ve kompakt**: atölye + iki köy alanı + aradaki tek sokak/meydan. Uçtan uca yürüyüş ≤ 40 sn.
 - Kilitli köy/ilçeler: sis + kapalı kapı/bariyer ile kesilir, içleri modellenmez.
-- Şehir greybox'ı ve modelleri **Mustafa** yapar; kod `08-mustafa-entegrasyon.md`'deki bağlantı noktalarına dayanır. Tek oyun sahnesi: `Town` (atölye + şehir).
+- Şehir greybox'ı ve modelleri **Mustafa** yapar; kod `08-mustafa-entegrasyon.md`'deki bağlantı noktalarına dayanır. Tek oyun sahnesi: `Harita` (atölye + şehir; `SceneFlow.GameScene`). Boot/Classroom/Town kaldırıldı (13.11).
 - Harita ekranı (`OpenMap`) kalır: bilgi + ilerleme ekranı (köy durumu, 5 nokta). Hızlı seyahat: P2, zaman kalırsa.
 - Görev akışı: köydeki sakin/ulak oyuncuyu **atölyeye** çağırır; görevler atölyedeki istasyonlarda çözülür. Köyde yalnızca "önce/sonra" değişimi görülür.
 
 ### Bisiklet (karar 13.11, P2)
-- Şehirde duran bisiklet (`Bicycle`, `WorldInteractable`): Interact ile binilir/inilir; hızlıysa önce frenler, yanda/arkada boş yer bulunca indirir. Konum indikten sonra kaydedilir (`SaveData.TryGetPose/SetPose`).
-- Kinematik sürüş (CharacterController, devrilme yok). **Yeni aksiyon yok**, Player map'i kullanılır: Move ileri pedal / geri fren (dururken geri itme), Move yan gidon, Sprint hızlı pedal, Look serbest bakış (gidona göre ±110°, giderken öne döner), Interact in.
+- Şehirde duran bisiklet (`Bicycle`, `WorldInteractable`): **Use (F / X)** ile binilir/inilir (karar 13.11); hızlıysa önce frenler, yanda/arkada boş yer bulunca indirir. Konum indikten sonra kaydedilir (`SaveData.TryGetPose/SetPose`).
+- Kinematik sürüş (CharacterController, devrilme yok). Player map'i kullanılır (yalnızca Use eklendi): Move ileri pedal / geri fren (dururken geri itme), Move yan gidon, Sprint hızlı pedal, Look serbest bakış (gidona göre ±110°, giderken öne döner), Use (F) in.
 - Hızlanma eğriyle (kalkış ağır, sonra güçlü, hedefe yaklaşınca yumuşak); kesintisiz pedalda seyir hızı 5 → 7.5 m/s'ye yavaşça çıkar (momentum), fren/bırakınca söner.
 - Kaldırım: `maxCurbHeight` (0.3 m) altı basamaklara çıkar; kamera ve model yumuşak geçer, tekerler zemine oturur (öne/arkaya eğim).
 - Kamera birinci şahıs, roll yok; yatış yalnızca modelde (`BicycleRig`). Değerler `BicycleSettings` SO'sunda.
+- **Eller gidonda (karar 13.11):** binince FPS kolları gidondaki `Tutma_Sol/Sag` noktalarına uzanır (`RiderArmsIK`, `IRiderArmsView`; Generic iskelet için paketsiz iki kemik IK, `LateUpdate` sıra 10000 = Cinemachine'den sonra). Kol kökü sürerken kameraya değil gövdeye (bisiklet yönü) bağlı: yana bakınca eller gidonda kalır; kol yetmezse omuzlar öne gelir. Parmaklar kavrar. İnince bırakır.
+- **GTA tarzı sallanma:** hızlı pedalda (Sprint) sürücü ayağa kalkar (göz +0.07 m yukarı, +0.08 m öne), bisiklet pedal ritmiyle ±6° sallanır (en fazla 1.3 salınım/sn). Virajda ve sallanırken baş yalnızca **yana kayar** (roll yok). Kurulum: **Kurulum → 14**.
+- **Bacaklar pedalda (karar 13.11):** gövdenin kalçası `Visual/Sele_Oturma`'ya oturur (bisikletle yatar), ayaklar pedallara iki kemik IK ile basar (`TwoBoneIK`, `IRiderBodyView`); sol ayak bisikletin solundaki pedala (modeldeki pedal adlarına bakılmaz). Sele bunun için öne alındı (`bisiklet.py`: merkez y −0.08, üst 0.82, omurga çukuru 0.48); `SeatAnchor` oturan sürücünün gözüne göre (0, 0, 0.09). Gidon artık aşağıda: eller aşağı bakınca görünür.
 - Görünüm `BicycleRig`'te (teker, gidon, aynakol, pedal referansları); model değişince yalnızca o bağlanır (`08-mustafa-entegrasyon.md`).
 
 ### Başarımlar ve Esc menüsü (karar 13.11)

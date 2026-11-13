@@ -49,17 +49,26 @@ Görünmesi gereken her parça bir mesleğe ya da kişiliğe bağlıdır (§5 ma
 | **Renk:** köşe rengi, tek `M_Stilize`; ten rengi paletten türetildi (kil + çatı) | 09 §3 ve §7. Turuncu vurgu yalnızca görev veren ya da oyuncuyu çağıranda: Câbir'in kuşağı, ulağın pelerini. |
 | **Üçgen bütçesi:** karakter başına ≤ 4.000 | 09 §7 tablosuna "İnsan NPC" satırı olarak eklenir. |
 
-## 4. Sahneye yerleştirme
+## 4. Sahneye yerleştirme ve davranış
 
-Menü: **BilgiAdasi → Sanat → NPC'leri açık sahneye yerleştir** (`Assets/_Project/Art/Editor/NpcYerlestir.cs`). Harita ve atölye yerleştirildikten sonra çalıştırılır; `NPC_Sanat` kökü altına koyar, eskisini siler.
+Menü: **BilgiAdasi → Sanat → NPC'leri açık sahneye yerleştir** (`Assets/_Project/Art/Editor/NpcYerlestir.cs`). Harita ve atölye yerleştirildikten sonra çalıştırılır; bütün eski `NPC_Sanat` köklerini siler, yenisini kurar.
 
-| NPC | Yer | Bakış |
+| NPC (görünen ad) | Rota | Duraklar (ne yapar) |
 |---|---|---|
-| Câbir Usta | Atölye içi, kazanın yanı (Unity −2, 0, −1) | Kapıya |
-| Ulak | Atölye kapısının önü, bisiklet parkının yanı | Kapıdan çıkan oyuncuya |
-| Hesap Hocası | Meydan, çınarın yanı | Atölyeden inen yola |
-| Köpük Efendi | Meydan, çeşmenin yanı | Atölyeden inen yola |
-| Köylü erkek | Denkleştirme köyü girişi, pazar tezgâhının yanı (yol kenarı) | Köprüye |
-| Köylü kadın | Tepkime Türleri köyü, ilan panosunun yanı (yol kenarı) | Meydana |
+| Câbir Usta | Atölye içi, gidip gelir (0,75 m/s) | Kara tahtaya yazar (9–14 sn) ↔ tartım tezgâhında çalışır (6–10 sn) |
+| Ulak Tayfun | Yürümez | Atölye kapısının önünde, kapıdan çıkan oyuncuya bakar |
+| Hesap Hocası | Meydanda yavaş halka (0,8 m/s) | Çınarı "ölçer", meydanın güneyinde tabelaya bakar, doğuda işine bakar |
+| Köpük Efendi | Meydan, gidip gelir (0,85 m/s) | Çeşmede suyu dener (çalış), çeşme havuzunun batısından dolaşır, doğu yoluna bakar |
+| Bostancı Rıza (köylü erkek) | Denkleştirme pazarı halkası (1,05 m/s) | Manav → fırın → köy ucu → baharatçı; tezgâhlarda mal seçer (çalış) |
+| Hatice Teyze (köylü kadın) | Tepkime Türleri halkası (1,0 m/s) | Kâğıtçı tezgâhı (çalış) → ilan panosu (okur) → köy ucu |
 
-Her NPC'ye yalnızca çarpışma kapsülü eklenir (r 0,3 m, boy 1,7 m). Konuşma/etkileşim bileşenleri oyun kodudur (Mehmet): `Animator.Play("<Ad>_Konus_Dongu")` / `"<Ad>_Bekle_Dongu"`.
+**Takılmama güvencesi:** NPC fizikle yürümez. Araç, yolların ve tezgâhların koordinatlarından (`harita.py`, `harita_detay.py`, `harita_yapi.py`) rota çizer, 0,5 m aralıkla zemin yüksekliğini fırınlar ve her nokta ile her ara parçayı kapsül taramasıyla doğrular: r 0,3 m, zeminin 0,4–1,6 m üstü, basamak ≤ 0,25 m, eğim ≤ 30°. Doğrulamadan geçmeyen rota **kurulmaz**: o NPC ilk durağında yerinde kalır ve konsola hangi noktanın neye çarptığı yazılır. Çalışma anında NPC fırınlanmış yolu birebir izler (ışın ve navmesh yok). Ölçülen sapma 0,000 m.
+
+**Çalışma anı** (`Art/NPC/Davranis/NpcAgent.cs`, `NpcProfile.cs`):
+- Durumlar: yürür → durakta işini yapar → yürür. Köşelerde önce döner, sonra yürür (yan kayma yok). Yürüme klibinin hızı gerçek hıza oranlanır.
+- **Yol verme:** önünde 1,4 m içinde oyuncu ya da başka NPC varsa, ya da herhangi bir yönde 0,8 m'den yakınsa durur. Önü 0,5 sn açık kalınca devam eder; 5 sn açılmazsa geri döner (kilitlenme olmaz).
+- **Konuşma:** bakınca `[E] <Ad> ile konuş`. Interact ile durur, oyuncuya döner, `_Konus_Dongu` oynar; satırlar `DialogueDirector` ile gösterilir (oyuncu hareketi durur, E/Space ilerletir). Bitince 1,2 sn oyuncuya bakar, sonra kaldığı işe döner. Her konuşmada profildeki bir sonraki sohbet açılır.
+- Metinler `Assets/_Project/Art/NPC/Profil/<Ad>.asset` (NpcProfile). Araç yalnızca dosya yoksa oluşturur, var olan metne dokunmaz.
+- Kök objede layer `Interactable`, kapsül collider ve kinematik Rigidbody bulunur.
+
+**Animasyonlar** (`npc.py`): `_Bekle_Dongu`, `_Konus_Dongu`, `_Yuru_Dongu` (1 sn'de 2 adım, kol-bacak çapraz, kalça basışta iner), `_Calis_Dongu` (öne eğik, iki el çalışır). Hepsi döngülü; varsayılan durum `_Bekle_Dongu`.

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 856399d26d10d9e4cb58d19a6356745a, type: 3}
+  m_Name: lonca_mc_amonyak
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Desk.MultipleChoiceQ
+  id: lonca_mc_amonyak
+  prompt: "N<sub>2</sub> + 3H<sub>2</sub> \u2192 2NH<sub>3</sub> hangi t\xFCr tepkimedir?"
+  hint: "\xDCr\xFCnlere bak: ka\xE7 madde \xE7\u0131k\u0131yor?"
+  options:
+  - Sentez
+  - Analiz
+  - Yanma
+  - "N\xF6trle\u015Fme"
+  correct: 00000000
+  allowMultiple: 0
+  yesLabel: "Kan\u0131t"
+  noLabel: "De\u011Fil"

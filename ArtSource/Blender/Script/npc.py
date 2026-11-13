@@ -621,8 +621,8 @@ def build_npc(fn, col, x=0.0):
     return rig, me_ob
 
 # ------------------------------------------------------------------ animasyon
-def _key(rig, act, frames):
-    """frames: {frame: {bone: (rx, ry, rz) derece}}"""
+def _key(rig, act, frames, locs=None):
+    """frames: {frame: {bone: (rx, ry, rz) derece}}; locs: {frame: {bone: (x, y, z) m, kemik yerel}} (yalnız Kalca)."""
     rig.animation_data_create()
     rig.animation_data.action = act
     for f, poses in sorted(frames.items()):
@@ -630,6 +630,66 @@ def _key(rig, act, frames):
             r = poses.get(pb.name, (0, 0, 0))
             pb.rotation_euler = [math.radians(a) for a in r]
             pb.keyframe_insert("rotation_euler", frame=f)
+        if locs is not None:
+            pb = rig.pose.bones["Kalca"]
+            pb.location = locs.get(f, {}).get("Kalca", (0, 0, 0))
+            pb.keyframe_insert("location", frame=f)
+    for pb in rig.pose.bones:
+        pb.location = (0, 0, 0)
+
+# yürüyüş: 1 sn'de 2 adım (30 kare), ~1,1 m/s'de adım boyu ~0,55 m. Kod oynatma hızını gerçek hıza oranlar.
+WALK_FRAMES = FPS
+WALK_REF_SPEED = 1.1
+
+def _walk_pose(phase, k):
+    """phase 0..1 (0 = sol ayak önde basar). k: kişiye göre genlik (tombul/kısa → küçük adım)."""
+    s = math.sin(2 * math.pi * phase)            # +1: sol bacak önde
+    lift_l = max(0.0, math.sin(2 * math.pi * phase - math.pi / 2))   # sol bacak geri→ileri savrulurken diz bükülür
+    lift_r = max(0.0, math.sin(2 * math.pi * phase + math.pi / 2))
+    return {
+        "Bacak_Ust_Sol": (-24 * k * s, 0, 0), "Bacak_Ust_Sag": (24 * k * s, 0, 0),
+        "Bacak_Alt_Sol": (32 * k * lift_l, 0, 0), "Bacak_Alt_Sag": (32 * k * lift_r, 0, 0),
+        "Ayak_Sol": (-8 * k * lift_l, 0, 0), "Ayak_Sag": (-8 * k * lift_r, 0, 0),
+        "Kol_Ust_Sol": (16 * k * s, 0, 0), "Kol_Ust_Sag": (-16 * k * s, 0, 0),
+        "Kol_Alt_Sol": (-10 * k - 6 * k * max(0.0, -s), 0, 0), "Kol_Alt_Sag": (-10 * k - 6 * k * max(0.0, s), 0, 0),
+        "Kalca": (0, 4 * k * s, 0), "Gogus": (-1.5, -5 * k * s, 0), "Bas": (1.0, 1.5 * k * s, 0),
+    }
+
+def build_walk(rig, name):
+    k = {"HesapHocasi": 0.8, "KopukEfendi": 0.75, "Cabir": 0.85}.get(name, 1.0)
+    act = bpy.data.actions.new(f"{name}_Yuru_Dongu")
+    frames, locs = {}, {}
+    for i in range(9):                            # 8 eşit aralık + kapanış (ilk = son)
+        f = 1 + i * WALK_FRAMES // 8
+        ph = i / 8
+        frames[f] = _walk_pose(ph, k)
+        # adımda kalça iki kez iner-kalkar (basış anında en alçak)
+        locs[f] = {"Kalca": (0, -0.018 * k * abs(math.sin(2 * math.pi * ph)), 0)}   # bacaklar açıkken alçak
+    _key(rig, act, frames, locs)
+    return act
+
+def build_work(rig, name):
+    """Calis_Dongu: önündeki işe eğilmiş, iki el çalışır (yazar, tartar, karıştırır). Kişiye göre tempo."""
+    W = 2 * FPS
+    act = bpy.data.actions.new(f"{name}_Calis_Dongu")
+    base = {"Gogus": (7, 0, 0), "Omurga": (3, 0, 0), "Bas": (12, 0, 0),
+            "Kol_Ust_Sag": (-42, 0, 12), "Kol_Alt_Sag": (-48, 0, 0), "El_Sag": (-8, 0, 0),
+            "Kol_Ust_Sol": (-26, 0, -8), "Kol_Alt_Sol": (-40, 0, 0)}
+
+    def off(d):
+        out = dict(base)
+        for b, v in d.items():
+            o = out.get(b, (0, 0, 0))
+            out[b] = (o[0] + v[0], o[1] + v[1], o[2] + v[2])
+        return out
+    _key(rig, act, {
+        1:          off({}),
+        W // 4:     off({"Kol_Ust_Sag": (-8, 0, -6), "Kol_Alt_Sag": (6, 0, 0), "Bas": (2, 4, 0)}),
+        W // 2:     off({"Kol_Ust_Sag": (2, 0, -12), "Kol_Alt_Sag": (-6, 0, 0), "Kol_Alt_Sol": (-6, 0, 0), "Gogus": (1, 3, 0)}),
+        3 * W // 4: off({"Kol_Ust_Sag": (6, 0, -4), "Kol_Alt_Sag": (4, 0, 0), "Bas": (-1, -3, 0)}),
+        W + 1:      off({}),
+    })
+    return act
 
 def build_anims(rig, name):
     """Bekle_Dongu: nefes + bakınma. Konus_Dongu: sağ el anlatır, baş sallar. İkisi de döngülü (ilk = son kare)."""
@@ -658,7 +718,9 @@ def build_anims(rig, name):
         5 * T // 6: {"Kol_Ust_Sag": (-6, 0, 3), "Kol_Alt_Sag": (-18, 0, 0), "Bas": (-2, 0, 0)},
         T + 1:      {},
     })
-    for act in (idle, talk):
+    walk = build_walk(rig, name)
+    work = build_work(rig, name)
+    for act in (idle, talk, walk, work):
         act.use_fake_user = True
         try:
             for fc in act.fcurves:
@@ -671,7 +733,7 @@ def build_anims(rig, name):
                             fc.modifiers.new("CYCLES")
     rig.animation_data.action = idle
     tracks = rig.animation_data.nla_tracks
-    for act in (idle, talk):
+    for act in (idle, talk, walk, work):
         tr = tracks.new()
         tr.name = act.name
         tr.strips.new(act.name, 1, act)
@@ -705,7 +767,7 @@ def build_all_npc(spacing=1.0):
         bpy.ops.object.mode_set(mode="OBJECT")
     col = collection(COL)
     clear_collection(COL)
-    for a in [a for a in bpy.data.actions if a.name.endswith(("_Bekle_Dongu", "_Konus_Dongu"))]:
+    for a in [a for a in bpy.data.actions if a.name.endswith(("_Bekle_Dongu", "_Konus_Dongu", "_Yuru_Dongu", "_Calis_Dongu"))]:
         bpy.data.actions.remove(a)
     for arm in [a for a in bpy.data.armatures if a.users == 0]:
         bpy.data.armatures.remove(arm)

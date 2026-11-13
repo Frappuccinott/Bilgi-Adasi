@@ -29,6 +29,16 @@ namespace BilgiAdasi.UI
         void Hide();
     }
 
+    /// <summary>
+    /// Yol sohbeti altyazısı (10-gorev-pazar-npc §6): ekranın altında konuşanın adı + satır.
+    /// Oyuncuyu durdurmaz, tuş beklemez; satırları AmbientDialogueTrigger zamanlayarak verir.
+    /// </summary>
+    public interface ISubtitleView
+    {
+        void ShowSubtitle(string speaker, string text);
+        void HideSubtitle();
+    }
+
     /// <summary>View → kod: konuşmayı bir satır ilerlet.</summary>
     public interface IDialogueCommands
     {

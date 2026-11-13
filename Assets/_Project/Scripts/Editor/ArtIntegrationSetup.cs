@@ -108,6 +108,7 @@ namespace BilgiAdasi.EditorTools
                 SetArray(so.FindProperty("steeringParts"), front);
                 SetArray(so.FindProperty("crankParts"), pedalL, pedalR);
                 so.ApplyModifiedPropertiesWithoutUndo();
+                RiderArmsSetup.CreateGrips(rig, steer, root.transform); // eller gidonda (model değişince yeniden ölçülür)
 
                 PrefabUtility.SaveAsPrefabAsset(root, BicyclePrefabPath);
 

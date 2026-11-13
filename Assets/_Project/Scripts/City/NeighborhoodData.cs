@@ -20,12 +20,15 @@ namespace BilgiAdasi.City
         [SerializeField] private List<TaskData> tasks = new List<TaskData>();
         [Tooltip("Prototipte iki oynanabilir köy baştan açık (01 §3).")]
         [SerializeField] private bool lockedByDefault;
+        [Tooltip("Doluysa bu köyün görevleri ancak o köy bitince gelir (seviye sırası: Tepkime Türleri, Denkleştirme'den sonra).")]
+        [SerializeField] private NeighborhoodData requires;
 
         public string Id => id;
         public string Title => title;
         public string[] IntroLines => introLines;
         public IReadOnlyList<TaskData> Tasks => tasks;
         public bool LockedByDefault => lockedByDefault;
+        public NeighborhoodData Requires => requires;
 
         /// <summary>Görevin bu köydeki sırası; yoksa -1.</summary>
         public int IndexOf(TaskData task) => tasks.IndexOf(task);
@@ -41,5 +44,9 @@ namespace BilgiAdasi.City
             n.name = "Neighborhood_" + neighborhoodId;
             return n;
         }
+
+#if UNITY_EDITOR
+        public void SetRequires(NeighborhoodData other) => requires = other;
+#endif
     }
 }

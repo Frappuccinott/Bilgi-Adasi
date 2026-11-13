@@ -30,20 +30,17 @@ namespace BilgiAdasi.EditorTools
             // Proje geneli (project-wide) aksiyon kullanılmıyor; üretilen BilgiAdasiControls sınıfı kullanılıyor.
             EditorBuildSettings.RemoveConfigObject("com.unity.input.settings.actions");
 
-            string boot = EnsureScene(SceneFlow.BootScene, BuildBootScene);
-            string classroom = EnsureScene(SceneFlow.ClassroomScene, BuildEmptyScene);
-            string town = EnsureScene(SceneFlow.TownScene, BuildTownScene);
+            // Tek oyun sahnesi: Harita. Sistemler (GameManager, SaveSystem, SceneFlow) GameBootstrap'ta kurulur.
+            string game = EnsureScene(SceneFlow.GameScene, BuildTownScene);
 
             EditorBuildSettings.scenes = new[]
             {
-                new EditorBuildSettingsScene(boot, true),
-                new EditorBuildSettingsScene(classroom, true),
-                new EditorBuildSettingsScene(town, true),
+                new EditorBuildSettingsScene(game, true),
             };
 
             AssetDatabase.SaveAssets();
-            EditorSceneManager.OpenScene(town);
-            Debug.Log("[BilgiAdasi] Kurulum tamam: layer'lar, ürün adı, Boot/Classroom/Town sahneleri ve Build Settings.");
+            EditorSceneManager.OpenScene(game);
+            Debug.Log("[BilgiAdasi] Kurulum tamam: layer'lar, ürün adı, Harita sahnesi ve Build Settings.");
         }
 
         [MenuItem("BilgiAdasi/Kurulum/2 - Kimya verisini oluştur (05 §1)", priority = 1)]
@@ -83,17 +80,6 @@ namespace BilgiAdasi.EditorTools
             build();
             EditorSceneManager.SaveScene(scene, path);
             return path;
-        }
-
-        private static void BuildBootScene()
-        {
-            new GameObject("BootLoader", typeof(BootLoader));
-            new GameObject("Camera", typeof(Camera));
-        }
-
-        private static void BuildEmptyScene()
-        {
-            new GameObject("Camera", typeof(Camera));
         }
 
         private static void BuildTownScene()

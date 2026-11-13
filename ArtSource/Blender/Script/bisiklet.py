@@ -33,7 +33,11 @@ RAKE = math.radians(12)                        # direksiyon ekseni yatıklığı
 STEER = Vector((0.0, math.sin(RAKE), math.cos(RAKE)))
 CRANK = 0.13                                   # krank boyu
 CRANK_X = 0.105                                # krankın göbekten yana uzaklığı
-SADDLE_TOP = 0.80
+# Sele: sürücü (1,66 m öğrenci) ön tekerdeki pedala yetişsin diye öne ve omurgaya yakın (13.11, ogrenci_govde.md).
+# Önceki: merkez y 0,13 / üst 0,80 → en uzak pedal 0,95 m, bacak 0,8 m'de kalıyordu.
+SADDLE_Y = -0.08                               # sele merkezi (Blender y; + arka)
+SADDLE_TOP = 0.82
+SPINE_MID_Z = 0.48                             # omurganın sele altındaki çukuru (önceden 0,62)
 BAR_Z = 1.00
 
 # ------------------------------------------------------------------ renkler (yalnız paletten / türetilmiş)
@@ -267,7 +271,7 @@ def frame_bm():
 
     # omurga: baş borusundan sele altına iner, arka tekere doğru kalkar (bisiklet.md #4, #5)
     p0 = head_lo + STEER * 0.04 + Vector((0, 0.03, 0))
-    spine_pts = bezier(p0, p0 + Vector((0, 0.22, -0.10)), Vector((0, 0.18, 0.62)), Vector((0, 0.50, 0.58)), 10)
+    spine_pts = bezier(p0, p0 + Vector((0, 0.22, -0.10)), Vector((0, 0.18, SPINE_MID_Z)), Vector((0, 0.50, 0.58)), 10)
     radii = [0.052, 0.055, 0.056, 0.055, 0.053, 0.050, 0.047, 0.044, 0.041, 0.038, 0.035]
     sp = tube(spine_pts, radii, sides=8, sx=0.78, sy=1.0)
     grad_paint(sp, lambda t: c_wood(0.3 + 0.55 * t), seed=21)
@@ -312,7 +316,7 @@ def frame_bm():
 
     # sele yaprak yayı: omurga önünden kalkıp selenin altına uzanan demir şerit (#6)
     s0 = spine_pts[2] + Vector((0, 0, 0.035))
-    s3 = Vector((0, 0.15, SADDLE_TOP - 0.065))
+    s3 = Vector((0, SADDLE_Y + 0.02, SADDLE_TOP - 0.065))
     spring_pts = bezier(s0, s0 + Vector((0, 0.10, 0.07)), s3 + Vector((0, -0.12, 0.0)), s3, 7)
     spr = tube(spring_pts, 0.012, sides=6, sx=2.6, sy=0.55)
     paint_by(spr, lambda f, l: c_iron(0.4 + 0.45 * max(0, f.normal.z)))
@@ -338,7 +342,7 @@ def frame_bm():
     # kesiti kapalı halka sırasına sok (sağ→üst→sol→alt sol→alt sağ)
     secs = [[s[i] for i in list(range(8)) + [8, 9]] for s in secs]
     sad = bm_sweep(secs, cap=True)
-    transform_bm(sad, Matrix.Translation((0, 0.13, SADDLE_TOP - 0.05)))
+    transform_bm(sad, Matrix.Translation((0, SADDLE_Y, SADDLE_TOP - 0.05)))
     lay = sad.loops.layers.float_color.get("Col") or sad.loops.layers.float_color.new("Col")
     for f in sad.faces:
         for l in f.loops:

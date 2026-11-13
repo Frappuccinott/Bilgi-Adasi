@@ -110,6 +110,26 @@ namespace BilgiAdasi.Player
         [Tooltip("Hızlı pedalda FOV artışı (°). Hızla orantılı.")]
         [SerializeField] private float speedFovBoost = 5f;
 
+        [Header("Ayakta pedal (hızlı pedal, GTA tarzı sallanma)")]
+        [Tooltip("Hızlı pedalda sürücü ayağa kalkma geçiş hızı (1/sn).")]
+        [SerializeField] private float standSharpness = 5f;
+        [Tooltip("Ayaktayken göz kaç m yükselir.")]
+        [SerializeField] private float standRise = 0.07f;
+        [Tooltip("Ayaktayken göz kaç m öne gelir (gidona eğilme).")]
+        [SerializeField] private float standForward = 0.08f;
+        [Tooltip("Ayakta pedalda bisikletin pedal ritmiyle sağa-sola sallanması (°, yalnızca model).")]
+        [SerializeField] private float rockAngle = 6f;
+        [Tooltip("Sallanmanın en yüksek ritmi (tam salınım/sn). Pedal daha hızlı dönse de bundan hızlı sallanmaz.")]
+        [SerializeField] private float maxRockFrequency = 1.3f;
+        [Tooltip("Sallanmanın başladığı en düşük hız (m/s).")]
+        [SerializeField] private float rockMinSpeed = 1.5f;
+
+        [Header("Kamera (roll yok, yalnızca konum)")]
+        [Tooltip("Virajda baş, yatış yönüne kayar: yatış açısının sinüsü × bu (m). 0 = kapalı.")]
+        [SerializeField] private float cameraLeanShift = 0.45f;
+        [Tooltip("Ayakta sallanırken baş bunun kadar yana gider: sallanma açısının sinüsü × bu (m).")]
+        [SerializeField] private float cameraRockShift = 0.25f;
+
         [Header("Metin")]
         [SerializeField] private string mountPrompt = "Bisiklete bin";
         [SerializeField] private string dismountPrompt = "Bisikletten in";
@@ -171,6 +191,14 @@ namespace BilgiAdasi.Player
         public float RecenterDelay => recenterDelay;
         public float RecenterSpeed => recenterSpeed;
         public float SpeedFovBoost => speedFovBoost;
+        public float StandSharpness => standSharpness;
+        public float StandRise => standRise;
+        public float StandForward => standForward;
+        public float RockAngle => rockAngle;
+        public float MaxRockFrequency => maxRockFrequency;
+        public float RockMinSpeed => rockMinSpeed;
+        public float CameraLeanShift => cameraLeanShift;
+        public float CameraRockShift => cameraRockShift;
         public string MountPrompt => mountPrompt;
         public string DismountPrompt => dismountPrompt;
     }

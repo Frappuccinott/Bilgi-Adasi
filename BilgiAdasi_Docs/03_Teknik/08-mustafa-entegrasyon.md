@@ -59,6 +59,9 @@ Bicycle                     ← Bicycle + CharacterController, layer = Interacta
 - Model: **+Z ileri, +X sağ**, orijin iki teker arasında yerde. Dönen parçalar ayrı obje ve **pivotu dönme noktasında**: `FrontWheel` / `RearWheel` (göbek), `Steering` (furş borusu; çatal + gidon + ön teker bunun çocuğu), `Crank` (orta göbek; `Pedal_L` / `Pedal_R` bunun çocuğu).
 - Modeli `Visual` altına koy, `BicycleRig` alanlarına bu parçaları sürükle. Model ekseni farklıysa `BicycleRig` → Eksenler'den düzelt (ters dönüyorsa eksiyi ver). `Wheel Radius` gerçek teker yarıçapı olmalı (dönüş hızı buradan).
 - Modelde collider olmasın (çarpışma kapsülü ve InteractVolume yeter).
+- **Eller gidonda (menü Kurulum → 14):** gidonun (`Steering`) çocuğu `Tutma_Sol` / `Tutma_Sag` boş objeleri `BicycleRig` → Sürücü elleri'ne bağlı. Konum = avuç ortası (tutamak ekseninde), dönüş = elin hedef dönüşü (yeşil Y parmaklar, mavi Z elin sırtı; obje seçiliyken gizmo). Menü bunları gidon modelinin tutamak bölgesinden ölçer; **Kurulum → 11** de (model güncellenince) yeniden ölçer. Elle düzeltmek istersen bu iki objeyi oynat.
+- FPS kolları (`PlayerRig` → Main Camera → `Ogrenci_Kol_Rig`) üzerinde `RiderArmsIK`: binince eller tutma noktalarına uzanır, sürerken gidonla döner/yatar, inince bırakır. Kol iskeleti adları (`Kok`, `Kol_Ust_L/R`, `Kol_On_L/R`, `El_L/R`, `Tutma_L/R`, `Parmak_*_1..3_L/R`) değişirse Kurulum → 14'ü yeniden çalıştır.
+- **Gövde ve bacaklar (menü Kurulum → 15):** `PlayerRig` → `Player/Govde` (`Ogrenci_Govde_Rig` + `PlayerBodyView`, controller `Kontrol/Ogrenci_Govde_Oyuncu`: `Yer` karışımı Hiz×Comel, `Havada`, `Bisiklet`). Bisiklette kalça `Visual/Sele_Oturma`'ya oturur (`BicycleRig` → Seat), ayaklar `Pedal` objelerine IK ile basar; `SeatAnchor` oturan sürücünün gözüne göre kurulur. Bisiklet modeli değişince (sele yeri) Kurulum → 11, sonra 15 (sele noktası `PlayerBodySetup.SeatInModel` sabitinde, `bisiklet.py` ile aynı tutulmalı).
 
 ### Köy önce/sonra
 ```
@@ -168,7 +171,8 @@ Kod yalnızca: `animator.Play("Klip_Adi")` (ya da `CrossFade`). Her klip iskelet
 | `Ogrenci_Kol_Rig` (FPS kolları) | `Kol_Bosta` (kadraj altında, gizli), `Kol_Kaldir` (0,37 sn), `Kol_Bekle_Dongu` (3 sn), `Kol_Uzan` (0,77 sn; 0,4 sn'de dokunma anı), `Kol_Tut_Dongu` (3 sn), `Kol_Indir` (0,3 sn) | Etkileşimde Uzan; elde eşya varken Tut; istasyona girince Indir → Bosta |
 
 **FPS kolları (`Ogrenci_Kol_Rig`, 13.11):** öğrencinin okul sweatshirt'ü (kolları sıvalı) + eller; tek SkinnedMeshRenderer, 4.936 üçgen, 39 kemik, `BilgiAdasi/Stilize`. Gerekçe: `ArtSource/Referans/ogrenci_kol.md`. Yeniden üretim: `blender -b --factory-startup --python ArtSource/Blender/Script/ogrenci_kur.py -- disa`.
-- Prefab `Assets/_Project/Art/Prefablar/Ogrenci_Kol_Rig.prefab` **`Main Camera`'nın çocuğu**, yerel konum/dönüş 0, ölçek 1. Pozlar FOV 70 (16:9) için ayarlı; Unity'de ölçüldü.
+- Prefab `Assets/_Project/Art/Prefablar/Ogrenci_Kol_Rig.prefab` **`PlayerRig/Main Camera`'nın çocuğu olarak eklendi** (13.11; yerel 0, gölge düşürmez, Animator AlwaysAnimate). Pozlar FOV 70 (16:9) için ayarlı.
+- Kontrolcü akışı (içe aktarma aracı kurar): açılışta `Kol_Kaldir` → `Kol_Bekle_Dongu`; `Kol_Uzan` → Bekle; `Kol_Indir` → `Kol_Bosta`. Kod yalnızca `Play` çağırır, dönüşler kendiliğinden.
 - **Tutma noktası:** `Tutma_R` kemiği (deform yok, `El_R` çocuğu). `Kol_Tut_Dongu`'da kameraya göre tam (+0,22; −0,19; +0,42) — §7'deki eşya tutma çapasıyla aynı. Eşya `Tutma_R`'nin çocuğu yapılırsa elle birlikte nefes alır; kemiğin ekseni el yönündedir, eşyanın dönüşü yerelde düzeltilir.
 - Kamera near = 0,05 (PlayerRig'de zaten). Kollar duvara girerse §7'deki ViewModel katmanı/Overlay kamera önerisi kollar için de geçerli; gölge düşürmesin.
 
@@ -262,8 +266,20 @@ blender -b ArtSource/Blender/harita.blend --python ArtSource/Blender/Script/hari
 **Blender = Unity (karşılaştırma):** iki taraftaki bütün objeler sayısal olarak karşılaştırıldı. Unity kendi yerleştirme kodunda doğayı yeniden oturtuyor ve türe göre gömüyordu (kayalar 0,5–1,6 m fazla gömülü, köprü altındaki saz/çimen köprünün üstüne çıkıyordu). Artık:
 - Doğa yüksekliği tek kaynaktan: Blender `harita_doga.yer_z` (arazi ağının kapladığı alandaki en alçak noktası, türe göre hafif gömülü). Unity bu değeri aynen kullanır, ayrıca oturtmaz.
 - Traktör, 6 alet, Bereket Tarlası ve Ormancı Korusu kökleri Blender'daki `Konum_*` işaretlerinden (Harita.fbx içinde) yerleşir.
-- Sonuç: 253 meshin sınır kutusu Blender'la 1 cm içinde aynı; 2.034 doğa kopyasının yüksekliği en fazla 0,1 mm farklı.
+- **Doğa modelleri kaymıştı (en büyük Unity-yalnız hata):** `Harita_Doga.fbx`'te ağaç/çalı/çam/kavak/meyve modellerinin LOD parçaları (`_LOD0/_LOD1`) Blender'daki model rafının konumunu (x 200–238) taşıyordu. Unity'de 354 kopya kökünden 190–290 m uzakta çiziliyordu: köylerin üstünde uçan ağaçlar, sırtlarda havada ağaçlar, boşlukta görünmez gövde kapsülleri. Blender önizlemesi meshi doğrudan kullandığı için orada her şey doğru görünüyordu. Düzeltme: `harita_doga.doga_disa_aktar` (LOD parçalarının yerel dönüşümü sıfırlanır, sahne güncellenip yazılır; harita_detay'daki eski kopya kaldırıldı). Doğrulama: kaymış kopya 0, vadide uçan ağaç 0.
+- Sonuç: 252 meshin sınır kutusu Blender'la 1 cm içinde aynı; 2.020 doğa kopyasının yüksekliği en fazla 0,1 mm farklı ve her biri kendi kökünün üstünde çiziliyor.
+
+**7 ajanlı görsel QA (240 göz hizası Play karesi + 12 üstten görünüm, 74 bulgu) sonrası düzeltilenler:** uçan ağaçlar (yukarıdaki LOD hatası); Hesaplamalar/Tepkimeler kapısındaki sis öbekleri kapının önüne taşıp çitle iç içe "mavi kaya" gibi duruyordu → tamamen kapı arkasında; kilitli kapıların 12 m çevresinde kaya kütlesi yok; Bereket Tarlası'nın GD köşesine binen sebze tarlası doğuya; Tepkime kuyusu loncanın saçağından uzağa; güvercin kulesine giden 2 m'lik kama gibi sapak kaldırıldı (kule ana yolun kenarında); Denkleştirme'de 1. ev fırından, 3. ev giriş kemerinden, baharat tezgâhı çatılardan uzaklaştırıldı; doğu yolu taş köprü ayağının tam ucunda biter (0,7 m çim boşluk vardı); dere yatağının gri bandı daraltıldı, kıyı yamaçları çimenlendi (kıyı "su levhası" gibi görünüyordu); nadas parselleri otlu toprak renginde; gölet halkası dere ağzında şerit altına iner, renk aynı (dikiş yok); arazi ağının dış kenarında 16 m'lik sırt (batı tepesi dikey kesik gibi bitiyordu).
 
 **Çarpışma eklenenler:** mil taşları, çamaşır direkleri, tarla çitleri (`SM_Denk_Tarla_Citleri`) ve bahçe çitleri (`SM_Bahce_Citleri` — toprak/ekinden ayrı obje), köy bitince çıkan sancak/bayrak direkleri, korudaki kütük ve odun destesi. Kapsül süpürme testinde mil taşı 7/7, bahçe çiti 8/8, taş duvar 12/12 durdurur.
 
 **Mehmet için öneri:** oyuncu yine de bir yerden düşerse, belli bir yüksekliğin altına inince (ör. y < −20) doğuş noktasına geri koyan küçük bir güvenlik kodu.
+
+## 11. NPC'ler (13.11 gece)
+
+Kasabada 6 NPC dolaşıyor ve çalışıyor (ayrıntı: `ArtSource/Referans/npc.md` §4). Kurulum menüsü: **BilgiAdasi → Sanat → NPC'leri açık sahneye yerleştir**. Harita ve atölye kurulduktan sonra çalıştırılır.
+
+- Kod Mustafa'nın alanında: `Assets/_Project/Art/NPC/Davranis/NpcAgent.cs`, `NpcProfile.cs` (namespace `BilgiAdasi.City`, Assembly-CSharp). Mehmet'in dosyalarında değişiklik yok; yalnızca şunlar kullanılıyor: `WorldInteractable` (varsayılan `TriggerAction` = Interact), `DialogueDirector.Play(satırlar, bitince, interactor)`, `DialogueLine`, layer `Interactable` (6).
+- Sahnede bir `DialogueDirector` varsa onu kullanır (Town'da `NeighborhoodRunner` üzerindeki). Yoksa araç `NPC_Sanat` köküne bir tane ekler. Konuşma balonu `IDialogueView` ile gösterilir.
+- **Mehmet:** Görev akışı bir NPC'yi kullanacaksa (ör. ulağın "atölyeye gel" çağrısı), NPC'nin `NpcProfile` metinleri değiştirilmez; köy akışı kendi konuşmasını `DialogueDirector`'la oynatır. NPC o sırada konuşma durumunda değilse yürümeye devam eder. Gerekirse `NpcAgent`'a bir "dur/devam" çağrısı eklenir; Mustafa'ya yaz.
+- `Town` sahnesine henüz konmadı (Town'da harita yok). Harita Town'a geçince aynı menü bir kez çalıştırılır; rota doğrulaması geçmezse NPC yürümez, yerinde durur ve konsola nedeni yazılır.

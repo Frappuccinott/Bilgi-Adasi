@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e64e0e709ad70b44d82fbe3caef28274, type: 3}
+  m_Name: tur_3
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Desk.DeskTask
+  id: tur_3
+  giverName: "F\u0131r\u0131nc\u0131 Zehra"
+  giverPortrait: {fileID: 0}
+  giverLines:
+  - "\xC7\u0131rak, f\u0131r\u0131nda gaz yan\u0131nca neler \xE7\u0131k\u0131yor?
+    Usta bir keresinde s\xF6ylemi\u015Fti, unuttum."
+  - "Bir de: ekmek kabar\u0131p k\u0131zar\u0131yor; bu da m\u0131 kimyasal? Kan\u0131t
+    g\xF6ster."
+  deliveryLines:
+  - "Zehra'n\u0131n cevab\u0131 g\xFCvercinle geldi: \"Demek f\u0131r\u0131n\u0131m
+    her sabah k\xFC\xE7\xFCk bir kimya dersi!\""
+  hintText: "C<sub>3</sub>H<sub>8</sub> + 5O<sub>2</sub> \u2192 ? Tahtana bak."
+  realLifeText: 
+  wrapper: 2
+  paperTitle: "F\u0131r\u0131nc\u0131n\u0131n Mektubu"
+  questions:
+  - {fileID: 11400000, guid: 8bb6d4ef8a873c5478ef312b45191990, type: 2}
+  - {fileID: 11400000, guid: cbf04e2e12ac4aa4ca39e6a9e229d814, type: 2}
+  randomCount: 0

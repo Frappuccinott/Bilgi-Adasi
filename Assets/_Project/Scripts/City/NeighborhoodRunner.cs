@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BilgiAdasi.Core;
+using BilgiAdasi.Desk;
 using BilgiAdasi.Order;
 using BilgiAdasi.Player;
 using BilgiAdasi.UI;
@@ -26,6 +27,8 @@ namespace BilgiAdasi.City
         [SerializeField] private OrderController orderController;
         [Tooltip("Sahnedeki atölye kapısı.")]
         [SerializeField] private DoorStation door;
+        [Tooltip("Sahnedeki çalışma masası (masa görevleri güvercinle buraya gelir). Boşsa sahnede aranır.")]
+        [SerializeField] private DeskController desk;
 
         private DialogueDirector dialogue;
         private readonly List<DialogueLine> lineBuffer = new List<DialogueLine>();
@@ -37,6 +40,7 @@ namespace BilgiAdasi.City
         private OrderTask activeOrder;
         private NeighborhoodData activeOrderNeighborhood;
         private OrderTask orderToBegin;
+        private NeighborhoodData activeDeskNeighborhood;
 
         public IReadOnlyList<NeighborhoodData> Neighborhoods => neighborhoods;
 
@@ -45,12 +49,14 @@ namespace BilgiAdasi.City
         private void Awake()
         {
             dialogue = GetComponent<DialogueDirector>();
+            if (desk == null) desk = FindAnyObjectByType<DeskController>();
         }
 
         private void OnEnable()
         {
             if (door != null) door.Used += OnDoorUsed;
             if (orderController != null) orderController.TaskFinished += OnOrderFinished;
+            if (desk != null) desk.TaskFinished += OnDeskFinished;
             ViewLocator.Register<ICurrentTaskSource>(this);
         }
 
@@ -58,6 +64,7 @@ namespace BilgiAdasi.City
         {
             if (door != null) door.Used -= OnDoorUsed;
             if (orderController != null) orderController.TaskFinished -= OnOrderFinished;
+            if (desk != null) desk.TaskFinished -= OnDeskFinished;
             ViewLocator.Unregister<ICurrentTaskSource>(this);
         }
 
@@ -66,6 +73,7 @@ namespace BilgiAdasi.City
             for (int i = 0; i < neighborhoods.Count; i++)
                 if (neighborhoods[i] != null) PublishProgress(neighborhoods[i]);
             RestoreReadyOrder();
+            OfferDeskTask(true);
         }
 
         /// <summary>Kayıtta teslim bekleyen sipariş varsa geri kurar (ürün envanterde duruyor).</summary>
@@ -101,7 +109,7 @@ namespace BilgiAdasi.City
         public CurrentTaskInfo GetCurrentTask()
         {
             var order = activeOrder;
-            if (order == null) return null;
+            if (order == null) return GetCurrentDeskTask();
             var n = activeOrderNeighborhood != null ? activeOrderNeighborhood : FindOwner(order);
             var session = orderController != null ? orderController.Session : null;
             bool ready = orderController != null && orderController.IsReadyToDeliver;
@@ -126,6 +134,25 @@ namespace BilgiAdasi.City
                     : Amounts(step.TargetProducts, true);
                 info.Steps.Add(new CurrentTaskInfo.Step(text, done));
             }
+            return info;
+        }
+
+        /// <summary>Masadaki mektup (güvercin gelmişse) için kart verisi; yoksa null.</summary>
+        private CurrentTaskInfo GetCurrentDeskTask()
+        {
+            if (desk == null || !desk.HasLetter || desk.ActiveTask == null) return null;
+            var task = desk.ActiveTask;
+            var n = activeDeskNeighborhood != null ? activeDeskNeighborhood : FindOwner(task);
+            var info = new CurrentTaskInfo
+            {
+                Title = task.GiverName,
+                Quote = task.GiverLines != null && task.GiverLines.Length > 0 ? task.GiverLines[0] : null,
+                WantedRich = task.PaperTitle,
+                Place = n != null ? n.Title : null,
+                Done = n != null ? CompletedCount(n) : 0,
+                Total = n != null ? n.Tasks.Count : 0
+            };
+            info.Steps.Add(new CurrentTaskInfo.Step(desk.Texts != null ? desk.Texts.CurrentTaskStep : task.PaperTitle, false));
             return info;
         }
 
@@ -167,7 +194,7 @@ namespace BilgiAdasi.City
             for (int i = 0; i < neighborhoods.Count; i++)
             {
                 var n = neighborhoods[i];
-                if (n == null || n.LockedByDefault) continue;
+                if (n == null || n.LockedByDefault || !RequirementMet(n)) continue;
                 int next = CompletedCount(n);
                 if (next < n.Tasks.Count && n.Tasks[next] is T typed)
                 {
@@ -181,6 +208,13 @@ namespace BilgiAdasi.City
             return false;
         }
 
+        /// <summary>Köyün önkoşulu (requires) bitti mi? Seviye sırası: Denkleştirme (1–5) → Tepkime Türleri (6–10).</summary>
+        private bool RequirementMet(NeighborhoodData n)
+        {
+            var req = n.Requires;
+            return req == null || req == n || CompletedCount(req) >= req.Tasks.Count;
+        }
+
         private NeighborhoodData FindOwner(TaskData task)
         {
             for (int i = 0; i < neighborhoods.Count; i++)
@@ -192,6 +226,7 @@ namespace BilgiAdasi.City
 
         private void OnDoorUsed(PlayerInteractor interactor)
         {
+            if (dialogue.IsPlaying) return;
             lineBuffer.Clear();
             var inv = interactor != null ? interactor.Inventory : null;
 
@@ -231,10 +266,9 @@ namespace BilgiAdasi.City
             dialogue.Play(lineBuffer, OnDoorDialogueFinished, interactor);
         }
 
-        /// <summary>Kapı konuşması bitti: kanat kapanır, alınan sipariş (varsa) başlar.</summary>
+        /// <summary>Kapı konuşması bitti: alınan sipariş (varsa) başlar. Kanat açık kalır; oyuncu F ile kapatır.</summary>
         private void OnDoorDialogueFinished()
         {
-            if (door != null) door.CloseDoor();
             BeginPendingOrder();
         }
 
@@ -307,10 +341,39 @@ namespace BilgiAdasi.City
         private void AfterProgress(NeighborhoodData n)
         {
             PublishProgress(n);
-            if (CompletedCount(n) < n.Tasks.Count) return;
-            var data = Data;
-            if (data != null && data.IsNeighborhoodCompleted(n.Id)) return;
-            GameEvents.RaiseNeighborhoodCompleted(n.Id);
+            if (CompletedCount(n) >= n.Tasks.Count)
+            {
+                var data = Data;
+                if (data == null || !data.IsNeighborhoodCompleted(n.Id)) GameEvents.RaiseNeighborhoodCompleted(n.Id);
+            }
+            // Bir köyün bitmesi başka köyün önkoşulunu açabilir; sıradaki masa görevi güvercinle gelir.
+            OfferDeskTask(false);
+        }
+
+        // ---------- Masa ----------
+
+        /// <summary>
+        /// Masa boşsa ve sıradaki görevi masa görevi olan bir köy varsa görevi masaya verir (güvercin gelir).
+        /// immediate: güvercin beklenmez (açılış / geliştirici atlaması).
+        /// </summary>
+        private void OfferDeskTask(bool immediate)
+        {
+            if (desk == null || desk.Current != DeskController.State.Idle) return;
+            if (!TryGetNext<DeskTask>(out var n, out var task)) return;
+            bool first = CompletedCount(n) == 0 && !introShown.Contains(n.Id);
+            introShown.Add(n.Id);
+            activeDeskNeighborhood = n;
+            desk.Assign(task, first ? n.IntroLines : null, immediate);
+        }
+
+        private void OnDeskFinished(DeskTask task)
+        {
+            var n = activeDeskNeighborhood != null && activeDeskNeighborhood.IndexOf(task) >= 0
+                ? activeDeskNeighborhood
+                : FindOwner(task);
+            activeDeskNeighborhood = null;
+            if (Data == null) localCompleted.Add(task.Id);
+            if (n != null) AfterProgress(n);
         }
 
         // ---------- Geliştirici kısayolları ----------
@@ -321,6 +384,7 @@ namespace BilgiAdasi.City
         public NeighborhoodData FocusedNeighborhood()
         {
             if (activeOrderNeighborhood != null) return activeOrderNeighborhood;
+            if (activeDeskNeighborhood != null && desk != null && desk.HasLetter) return activeDeskNeighborhood;
             for (int i = 0; i < neighborhoods.Count; i++)
                 if (neighborhoods[i] != null && CompletedCount(neighborhoods[i]) < neighborhoods[i].Tasks.Count) return neighborhoods[i];
             return neighborhoods.Count > 0 ? neighborhoods[0] : null;
@@ -368,10 +432,15 @@ namespace BilgiAdasi.City
             activeOrder = null;
             activeOrderNeighborhood = null;
             if (orderController != null) orderController.ClearTask();
+            if (desk != null) desk.ClearTask();
+            activeDeskNeighborhood = null;
 
             if (index < n.Tasks.Count && n.Tasks[index] is OrderTask order) StartOrder(n, order, true);
 
-            AfterProgress(n);
+            PublishProgress(n);
+            if (index >= n.Tasks.Count && (data == null || !data.IsNeighborhoodCompleted(n.Id)))
+                GameEvents.RaiseNeighborhoodCompleted(n.Id);
+            OfferDeskTask(true);
             SaveSystem.Instance?.Save();
             Debug.Log($"[Dev] {n.Id}: görev {index + 1}/{n.Tasks.Count}");
         }

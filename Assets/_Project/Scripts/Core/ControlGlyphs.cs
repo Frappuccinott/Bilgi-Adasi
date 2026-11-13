@@ -4,6 +4,8 @@ namespace BilgiAdasi.Core
     public enum PromptAction
     {
         Interact,
+        /// <summary>Kapı aç, bisiklete bin/in (Player map Use): F / X.</summary>
+        Use,
         Jump,
         Crouch,
         Sprint,
@@ -51,6 +53,7 @@ namespace BilgiAdasi.Core
             switch (action)
             {
                 case PromptAction.Interact: return "E";
+                case PromptAction.Use: return "F";
                 case PromptAction.Jump: return "Space";
                 case PromptAction.Crouch: return "C";
                 case PromptAction.Sprint: return "Shift";
@@ -77,6 +80,7 @@ namespace BilgiAdasi.Core
             switch (action)
             {
                 case PromptAction.Interact: return Pad.West;
+                case PromptAction.Use: return Pad.West;
                 case PromptAction.Jump: return Pad.South;
                 case PromptAction.Crouch: return Pad.East;
                 case PromptAction.Sprint: return Pad.LeftStickPress;

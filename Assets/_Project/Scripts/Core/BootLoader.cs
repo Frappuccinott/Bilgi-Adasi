@@ -5,8 +5,8 @@ namespace BilgiAdasi.Core
     /// <summary>Boot sahnesinde durur; sistemler kurulduktan sonra ilk oyun sahnesine geçer.</summary>
     public sealed class BootLoader : MonoBehaviour
     {
-        [Tooltip("Sınıf ara sahnesi hazır olana kadar doğrudan Town.")]
-        [SerializeField] private string firstScene = SceneFlow.TownScene;
+        [Tooltip("Yüklenecek ilk oyun sahnesi.")]
+        [SerializeField] private string firstScene = SceneFlow.GameScene;
 
         private void Start()
         {

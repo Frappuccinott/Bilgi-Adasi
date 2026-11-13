@@ -28,11 +28,11 @@
 
 ## P1 — İkinci görev tipi ve çerçeve
 
-- [ ] `[KOD]` Masa: kamera geçişi, güvercin/zarf, `PaperView`
-- [ ] `[KOD]` Soru render'ları: `MultipleChoice`, `TrueFalse`, `Classify`, `FillBlank`
-- [ ] `[KOD]` `BalanceEquationQ` (ReactionData'dan otomatik)
-- [ ] `[KOD]` Lonca Sınavı: rastgele çekme + yanlışta soru değişimi
-- [ ] `[İÇERİK]` Tepkime Türleri köyünün 5 görevi SO olarak girildi
+- [x] `[KOD]` Masa: kamera geçişi, güvercin/zarf, `PaperView` — 13.11, Mustafa dalı (Kurulum 16)
+- [x] `[KOD]` Soru render'ları: `MultipleChoice`, `TrueFalse`, `Classify`, `FillBlank` — 13.11, Mustafa dalı (Kurulum 16)
+- [x] `[KOD]` `BalanceEquationQ` (ReactionData'dan otomatik) — 13.11, Mustafa dalı (Kurulum 16)
+- [x] `[KOD]` Lonca Sınavı: rastgele çekme + yanlışta soru değişimi — 13.11, Mustafa dalı (Kurulum 16)
+- [x] `[İÇERİK]` Tepkime Türleri köyünün 5 görevi SO olarak girildi — `DeskDataBuilder`
 - [ ] `[KOD]` Harita: şehir/ilçe/köy düğümleri, kilit durumları, 5 nokta göstergesi
 - [ ] `[KOD]` İpucu defteri (iki tip için ortak)
 - [ ] `[KOD]` Boy uzama (`PlayerGrowth`, `CLAUDE.md` §7)

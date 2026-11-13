@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fc84bfaa21e24d4284ed3e8d99845f5, type: 3}
+  m_Name: tur_2_etiket
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Desk.ClassifyQ
+  id: tur_2_etiket
+  prompt: "\u015Ei\u015Felerin etiketleri kar\u0131\u015Fm\u0131\u015F. Her \u015Fi\u015Feyi
+    do\u011Fru kutuya koy."
+  hint: "Girenlere bak: tek madde mi var, oksijen var m\u0131, \xFCr\xFCn tek mi?"
+  boxes:
+  - Sentez
+  - Analiz
+  - Yanma
+  cards:
+  - reaction: {fileID: 11400000, guid: c13f205f73f395b4bb900b9104bb8e2e, type: 2}
+    text: 
+    box: 0
+  - reaction: {fileID: 11400000, guid: 7ee399826d0213b4dbaa0460ac2b386b, type: 2}
+    text: 
+    box: 1
+  - reaction: {fileID: 11400000, guid: c6344e5117e8d4242a7a2848e05a00de, type: 2}
+    text: 
+    box: 2
+  - reaction: {fileID: 11400000, guid: b8c83d4cb37a7ed4395830abbca42c4b, type: 2}
+    text: 
+    box: 1
+  - reaction: {fileID: 11400000, guid: e720008e0ba2fe844b431ad346b2e904, type: 2}
+    text: 
+    box: 0
+  - reaction: {fileID: 11400000, guid: 3b6bacd9362da154c88341ae5345afa6, type: 2}
+    text: 
+    box: 2
+  - reaction: {fileID: 0}
+    text: "Kire\xE7 ta\u015F\u0131 \u0131s\u0131t\u0131l\u0131nca gaz \xE7\u0131kt\u0131,
+      beyaz toz kald\u0131."
+    box: 1
+  - reaction: {fileID: 0}
+    text: "Fenerin alevi \u0131s\u0131tt\u0131, cam bu\u011Fuland\u0131."
+    box: 2
+  - reaction: {fileID: 0}
+    text: "\u0130ki gaz kazanda birle\u015Fti, damla damla su oldu."
+    box: 0

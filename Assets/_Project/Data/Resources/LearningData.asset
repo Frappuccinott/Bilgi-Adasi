@@ -114,3 +114,91 @@ MonoBehaviour:
     discoveryId: K-5
     discoveryText: "Tepkime girenleri katsay\u0131lar\u0131 oran\u0131nda harcar.
       Biri biterse tepkime durur; fazla olan artar."
+  - taskId: tur_1
+    reasoning:
+      question: 
+      options:
+      - 
+      - 
+      - 
+      correctIndex: 0
+      replies:
+      - 
+      - 
+      - 
+    discoveryId: K-6
+    discoveryText: "Sentez: birden \xE7ok madde \u2192 tek \xFCr\xFCn. Analiz: tek
+      madde \u2192 daha basit maddeler. Yanma: madde + O<sub>2</sub> \u2192 \u0131s\u0131
+      ve \u0131\u015F\u0131k. (Kan\u0131tlar\u0131m: \xE7e\u015Fme, kire\xE7 ta\u015F\u0131,
+      fener.)"
+  - taskId: tur_2
+    reasoning:
+      question: 
+      options:
+      - 
+      - 
+      - 
+      correctIndex: 0
+      replies:
+      - 
+      - 
+      - 
+    discoveryId: K-7
+    discoveryText: "T\xFCr\xFC anlamak i\xE7in: tek giren varsa analiz, tek \xFCr\xFCn
+      varsa sentez, girenlerde O<sub>2</sub> var ve \u0131s\u0131-\u0131\u015F\u0131k
+      \xE7\u0131k\u0131yorsa yanma."
+  - taskId: tur_3
+    reasoning:
+      question: "Kazandan \xE7\u0131kan su buhar\u0131 neden kimyasal de\u011Fi\u015Fimin
+        kan\u0131t\u0131 de\u011Fil?"
+      options:
+      - "Su h\xE2l\xE2 su; yeni madde olu\u015Fmad\u0131, yaln\u0131zca h\xE2li de\u011Fi\u015Fti."
+      - "\xC7\xFCnk\xFC buhar g\xF6r\xFCnmez."
+      - "\xC7\xFCnk\xFC \u0131s\u0131 yok."
+      correctIndex: 0
+      replies:
+      - "Aynen \xF6yle. H\xE2l de\u011Fi\u015Fimi fizikseldir; kazandan yeni bir
+        madde \xE7\u0131kmad\u0131."
+      - "G\xF6r\xFCnmek \xF6l\xE7\xFCt de\u011Fil, \xE7\u0131rak. Buhar da sudur;
+        yeni madde olu\u015Fmad\u0131."
+      - "Buharla\u015Fma \u0131s\u0131 ister asl\u0131nda. \xD6l\xE7\xFCt \u0131s\u0131
+        de\u011Fil, yeni madde olu\u015Fup olu\u015Fmad\u0131\u011F\u0131."
+    discoveryId: K-8
+    discoveryText: "Kimyasal de\u011Fi\u015Fimin kan\u0131tlar\u0131: yeni madde,
+      gaz \xE7\u0131k\u0131\u015F\u0131, renk de\u011Fi\u015Fimi, \u0131s\u0131-\u0131\u015F\u0131k,
+      koku. Yaln\u0131z \u015Fekil ya da h\xE2l de\u011Fi\u015Fimi fizikseldir."
+  - taskId: tur_4
+    reasoning:
+      question: 
+      options:
+      - 
+      - 
+      - 
+      correctIndex: 0
+      replies:
+      - 
+      - 
+      - 
+    discoveryId: K-9
+    discoveryText: "Bir iddiay\u0131 \xE7\xFCr\xFCtmek i\xE7in tek kar\u015F\u0131
+      \xF6rnek yeter; d\xFCzeltirken kan\u0131t g\xF6ster."
+  - taskId: tur_5
+    reasoning:
+      question: "Fotosentezle solunum aras\u0131nda nas\u0131l bir ili\u015Fki g\xF6rd\xFCn?"
+      options:
+      - "Biri di\u011Ferinin tersi gibi: biri CO<sub>2</sub> ve suyu glikoza ba\u011Flar,
+        \xF6teki glikozu CO<sub>2</sub> ve suya geri \xE7evirir."
+      - "\u0130kisi ayn\u0131 tepkimedir."
+      - "Fotosentez yaln\u0131z gece olur."
+      correctIndex: 0
+      replies:
+      - "Aynen \xF6yle. Ayn\u0131 atomlar bir y\xF6nde ba\u011Flan\u0131yor, \xF6b\xFCr
+        y\xF6nde \xE7\xF6z\xFCl\xFCyor."
+      - "Girenleri ve \xFCr\xFCnleri kar\u015F\u0131la\u015Ft\u0131r: biri \xF6tekinin
+        tersi, ayn\u0131s\u0131 de\u011Fil."
+      - "Fotosentez \u0131\u015F\u0131k ister, g\xFCnd\xFCz olur. Solunum ise gece
+        g\xFCnd\xFCz s\xFCrer."
+    discoveryId: K-10
+    discoveryText: "T\xFCr, atomlar\u0131n nas\u0131l yeniden dizildi\u011Fini anlat\u0131r.
+      Ayn\u0131 atomlar (C, H, O) do\u011Fada d\xF6ng\xFC h\xE2linde dola\u015F\u0131r:
+      yak\u0131tta, havada, bitkide, bizde."

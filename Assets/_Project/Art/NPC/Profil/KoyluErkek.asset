@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8b7b0556d2c5864182957a5734cc9db, type: 3}
+  m_Name: KoyluErkek
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.NpcProfile
+  displayName: "Bostanc\u0131 R\u0131za"
+  portrait: {fileID: 0}
+  promptFormat: "{0} ile konu\u015F"
+  conversations:
+  - lines:
+    - "Pazarda bug\xFCn domatesler pek taze."
+    - "At\xF6lyedeki usta herkesin derdine derman olur derler."
+  - lines:
+    - "K\xF6pr\xFC y\u0131k\u0131lal\u0131 beri dereyi tahta k\xF6pr\xFCden ge\xE7iyoruz.
+      Bir onar\u0131lsa..."

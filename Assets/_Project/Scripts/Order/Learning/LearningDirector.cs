@@ -108,7 +108,16 @@ namespace BilgiAdasi.Order
 
         private void OnReadyToDeliver(OrderTask task)
         {
-            var entry = data != null && task != null ? data.Find(task.Id) : null;
+            if (task != null) Play(task.Id);
+        }
+
+        /// <summary>
+        /// Görevin sorgusu + defter kaydı (varsa). Sipariş için ürün hazır olunca, masa görevi için mühürden sonra
+        /// (DeskController, istasyondan çıkıldıktan sonra) çağrılır.
+        /// </summary>
+        public void Play(string taskId)
+        {
+            var entry = data != null ? data.Find(taskId) : null;
             if (entry == null) return;
             if (routine != null) StopCoroutine(routine);
             routine = StartCoroutine(Run(entry));
@@ -203,7 +212,8 @@ namespace BilgiAdasi.Order
         {
             if (!IsBusy) return;
             IsBusy = false;
-            if (blockedUser != null) blockedUser.SetControlEnabled(true);
+            // Masa/istasyon açıkken oyuncu kilitli kalmalı (istasyondan çıkınca StationBase açar).
+            if (blockedUser != null && StationBase.Active == null) blockedUser.SetControlEnabled(true);
             GameInput.SetCursorFree(GameInput.Mode != InputMode.Player);
         }
 

@@ -20,7 +20,7 @@ namespace BilgiAdasi.EditorTools
         private const string NeighborhoodsFolder = "Assets/_Project/Data/Neighborhoods";
         private const string TasksFolder = "Assets/_Project/Data/Tasks/Denklestirme";
         private const string CauldronPrefabPath = "Assets/_Project/Prefabs/Stations/Station_Cauldron.prefab";
-        private const string TownScenePath = "Assets/_Project/Scenes/Town.unity";
+        private const string TownScenePath = BilgiAdasi.Core.SceneFlow.GameScenePath;
         private const string RunnerObjectName = "NeighborhoodRunner";
 
         // 05-icerik-prototip.md §2 — içerik değişirse önce 05 güncellenir.

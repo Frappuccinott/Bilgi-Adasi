@@ -19,7 +19,7 @@ namespace BilgiAdasi.EditorTools
     {
         private const string Folder = "Assets/_Project/Data/Achievements";
         private const string OldTreePath = Folder + "/AchievementTree.asset"; // ilk sürüm (tek ağaç)
-        private const string TownScenePath = "Assets/_Project/Scenes/Town.unity";
+        private const string TownScenePath = BilgiAdasi.Core.SceneFlow.GameScenePath;
         private const string ObjectName = "Achievements";
 
         private sealed class TabSeed

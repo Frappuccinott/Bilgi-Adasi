@@ -766,10 +766,10 @@ def bulut_bm(seed, n=14):
     return merge(parts)
 
 # ================================================================== YERLEŞİM
-TEZGAHLAR = [(46.4, -2.3, 0.0, "manav"), (54.6, -2.2, 0.05, "ekmek"), (46.0, -10.9, math.pi, "baharat"), (-39.4, -6.6, math.pi, "kagit")]
+TEZGAHLAR = [(46.4, -2.3, 0.0, "manav"), (54.6, -2.2, 0.05, "ekmek"), (46.0, -10.4, math.pi, "baharat"), (-39.4, -6.6, math.pi, "kagit")]
 # Denetim 13.11 (harita_denetim.py) sonrası: duvarlar meydan döşemesinin (R 11) dışında başlar, yola 1 m'den
 # yaklaşmaz; araba ve odun yığınları ev duvarlarının dışında; 2. bahçe/çamaşır taşınan evle birlikte.
-BAHCELER = [(42.5, 6.6, 0.06, 5.0, 3.6), (59.4, 7.5, 0.12, 4.5, 3.0), (50.5, -19.6, -0.06, 4.5, 3.4),
+BAHCELER = [(41.9, 6.6, 0.06, 5.0, 3.6), (59.4, 7.5, 0.12, 4.5, 3.0), (50.5, -19.6, -0.06, 4.5, 3.4),
             (-37.5, 8.9, 0.05, 4.8, 3.4), (-57.6, -14.5, 0.1, 4.6, 3.2)]
 DUVARLAR = [[(12.2, -12.6), (16.0, -12.8), (24.0, -12.0)], [(-12.3, -11.1), (-15.8, -10.6)], [(-26.0, -8.4), (-31.0, -7.6)],
             [(65.5, -3.4), (70.0, 2.4)], [(44.0, -24.0), (57.0, -24.0)]]
@@ -874,7 +874,7 @@ def scatter_detay():
             return False
         if (p - MEYDAN).length < MEYDAN_R + 0.4:
             return False
-        if poly_dist(p, STREAM) < STREAM_HALF - 0.6:
+        if poly_dist(p, STREAM) < STREAM_HALF - 1.6:          # kıyı yamacı da çimenlenir (çıplak gri bant "su levhası" gibiydi)
             return False
         if road_info(p)[0] < road_min:
             return False
@@ -966,6 +966,8 @@ def scatter_detay():
             # boğaz duvarlarında ve dik yamaçta kaya kütlesi bir yanı havada kalıyordu (Play 13.11)
             if egim(q.x, q.y) > 0.85 or any(poly_dist(q, pp) < ww / 2 + 12.0 for (nn, pp, ww) in ROADS if nn in GECIT_YOLLARI):
                 continue
+            if any((q - kp).length < 12.0 for (_, kp, _) in KAPILAR):          # kilitli kapının dibinde kaya kütlesi
+                continue
             if all((q - t).length > 2.5 for t in trees):
                 yer("Kaya_Kitle_%d" % rnd.randint(1, 2), q, s=(0.8, 1.3))
     print("Detay yerleşimi:", cnt)
@@ -978,15 +980,6 @@ def export_harita_tum():
         if bpy.data.collections.get(cn):
             base += list(bpy.data.collections[cn].all_objects)
     out = [_fbx(os.path.join(EXPORT_DIR, "Harita.fbx"), base)]
-    models = list(bpy.data.collections[DOGA_COL].objects)
-    roots = [o for o in models if o.parent is None]
-    keep = {o.name: tuple(o.location) for o in roots}
-    for o in roots:
-        o.location = (0, 0, 0)
-    try:
-        out.append(_fbx(os.path.join(EXPORT_DIR, "Harita_Doga.fbx"), models))
-    finally:
-        for o in roots:
-            o.location = keep[o.name]
+    out.append(doga_disa_aktar())        # harita_doga.py: LOD parçaları kök üstünde (eski kopya onları kaydırıyordu)
     out.append(_fbx(os.path.join(EXPORT_DIR, "Harita_Yerler.fbx"), list(bpy.data.collections[YER_COL].objects)))
     return out

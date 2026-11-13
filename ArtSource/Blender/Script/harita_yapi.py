@@ -978,23 +978,26 @@ def pus_bm(seed, n=7, spread=11.0, depth=9.0):
     rnd = random.Random(seed)
     parts = []
     for i in range(n):
-        c = Vector((rnd.uniform(-spread, spread), rnd.uniform(2.0, depth), rnd.uniform(0.5, 2.5)))
-        b = _blob(c, rnd.uniform(3.0, 4.8), sub=2, squash=0.55, seed=seed + i, jit=0.08)
+        # öbek tamamen kapı çizgisinin arkasında (yerel +Y): eskiden merkez 2 m'de, yarıçap 4.8 m'ye kadardı → sis
+        # kapının önüne, oyuncu tarafına taşıyor, çitle iç içe "mavi kaya" gibi görünüyordu (Play QA 13.11)
+        r = rnd.uniform(3.0, 4.8)
+        c = Vector((rnd.uniform(-spread, spread), rnd.uniform(r + 1.0, r + depth), rnd.uniform(0.5, 2.5)))
+        b = _blob(c, r, sub=2, squash=0.55, seed=seed + i, jit=0.08)
         paint_by(b, lambda f, l: mix(pal("gok", 0), pal("su", 0), 0.3 + 0.3 * smooth01(l.vert.co.z / 4)))
         parts.append(b)
     return merge(parts)
 
 # ================================================================== KURULUM
 DENK_EVLER = [  # (x, y, yaw, W, D, H, seed) — aralarında 3-5 m bahçe/geçit
-    (42.5, 1.4, 0.06, 5.6, 4.6, 3.0, 1001),
+    (41.9, 1.4, 0.06, 5.6, 4.6, 3.0, 1001),        # saçağı fırının çatısına giriyordu (Play QA 13.11)
     (59.4, 2.9, 0.12, 5.0, 4.4, 2.9, 1003),        # denetim 13.11: tarla yolunun ve tarlanın üstündeydi
-    (41.5, -14.0, math.pi + 0.05, 6.0, 4.8, 3.2, 1004),
+    (41.5, -14.8, math.pi + 0.05, 6.0, 4.8, 3.2, 1004),   # giriş kemerinin güney ayağı saçağa değiyordu
     (50.5, -14.3, math.pi - 0.06, 5.2, 4.4, 2.8, 1005),
     (59.0, -16.5, math.pi + 0.18, 5.4, 4.6, 3.1, 1006),
 ]
 FIRIN = (50.0, 1.8, -0.04)
 FENERLER = [(37.3, -5.3), (44.0, -9.6), (48.5, -3.6), (53.0, -9.0), (57.2, -2.6)]   # ilki köprü patikasından çekildi
-TARLALAR = [(75.5, 6.0, 0.35, 8.5, 7.0, "bugday", 2001), (76.5, 16.0, 0.2, 8.0, 6.5, "sebze", 2002),
+TARLALAR = [(75.5, 6.0, 0.35, 8.5, 7.0, "bugday", 2001), (78.6, 14.8, 0.2, 8.0, 6.5, "sebze", 2002),   # 2.: Bereket köşesine biniyordu
             (69.4, -7.6, -0.85, 6.0, 5.0, "bugday", 2003)]    # üçüncüsü Bereket Tarlası kapısının önündeydi
 CESME = (6.6, -2.8, math.radians(-52))
 CINAR = (-5.5, -4.2)

@@ -35,7 +35,7 @@ namespace BilgiAdasi.EditorTools
         private const string DoorPath = PrefabsFolder + "/Stations/Station_Door.prefab";
         private const string BoardPath = PrefabsFolder + "/Stations/Station_Chalkboard.prefab";
         private const string RigPath = PrefabsFolder + "/PlayerRig.prefab";
-        private const string TownPath = "Assets/_Project/Scenes/Town.unity";
+        private const string TownPath = BilgiAdasi.Core.SceneFlow.GameScenePath;
 
         // 05 §2'ye taslak: pazar fiyatları ve sipariş ödemeleri (oynanarak ayarlanacak, 06 açık işler).
         private static readonly Dictionary<string, int> Prices = new Dictionary<string, int>

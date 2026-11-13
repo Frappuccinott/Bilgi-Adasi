@@ -121,6 +121,12 @@ namespace BilgiAdasi.Core
         [SerializeField] private List<string> boardEquations = new List<string>();
         [SerializeField] private List<string> unlockedAchievements = new List<string>();
 
+        [Tooltip("Bir kez çalan yol sohbetlerinden duyulanlar (S-01 …).")]
+        [SerializeField] private List<string> heardAmbient = new List<string>();
+
+        public bool IsAmbientHeard(string id) => heardAmbient != null && heardAmbient.Contains(id);
+        public void MarkAmbientHeard(string id) => AddUnique(heardAmbient ??= new List<string>(), id);
+
         public bool IsAchievementUnlocked(string id) => unlockedAchievements != null && unlockedAchievements.Contains(id);
         public void MarkAchievementUnlocked(string id) => AddUnique(unlockedAchievements ??= new List<string>(), id);
 

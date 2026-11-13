@@ -7,9 +7,9 @@ namespace BilgiAdasi.Core
     /// <summary>Sahne geçişi (kısa kararma ile). Singleton.</summary>
     public sealed class SceneFlow : MonoBehaviour
     {
-        public const string BootScene = "Boot";
-        public const string ClassroomScene = "Classroom";
-        public const string TownScene = "Town";
+        // Tek oyun sahnesi: Harita (atölye + şehir). Boot/Classroom/Town kaldırıldı; sistemler GameBootstrap'ta kurulur.
+        public const string GameScene = "Harita";
+        public const string GameScenePath = "Assets/_Project/Scenes/Harita.unity";
 
         [SerializeField] private float fadeDuration = 0.3f;
 

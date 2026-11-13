@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8b7b0556d2c5864182957a5734cc9db, type: 3}
+  m_Name: Ulak
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.NpcProfile
+  displayName: Ulak Tayfun
+  portrait: {fileID: 0}
+  promptFormat: "{0} ile konu\u015F"
+  conversations:
+  - lines:
+    - "Seni ar\u0131yordum! K\xF6yde herkes ustan\u0131n yeni \xE7\u0131ra\u011F\u0131n\u0131
+      konu\u015Fuyor."
+    - "Bir i\u015Fin olursa at\xF6lyenin kap\u0131s\u0131na bak; sipari\u015Fler
+      oraya gelir."
+  - lines:
+    - "Bu heybede neler var bir bilsen... Ama ba\u015Fkas\u0131n\u0131n mektubunu
+      okumak olmaz!"

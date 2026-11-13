@@ -25,6 +25,14 @@ namespace BilgiAdasi.Player
         [Tooltip("Virajda yatan kök. Pivotu yerde olmalı (genelde Visual).")]
         [SerializeField] private Transform leanRoot;
 
+        [Header("Sürücü elleri (gidonun çocuğu olmalı)")]
+        [Tooltip("Sol elin tutma noktası. Konum = avuç ortası (tutamak ekseni), dönüş = elin hedef dönüşü (Y parmaklar, Z elin sırtı).")]
+        [SerializeField] private Transform gripLeft;
+        [Tooltip("Sağ elin tutma noktası. Konum = avuç ortası (tutamak ekseni), dönüş = elin hedef dönüşü (Y parmaklar, Z elin sırtı).")]
+        [SerializeField] private Transform gripRight;
+        [Tooltip("Sürücünün kalçası (Visual'ın çocuğu, bisikletle yatar). Gövde buraya oturur, ayaklar pedallara uzanır.")]
+        [SerializeField] private Transform seat;
+
         [Header("Model hiyerarşisi (çalışırken yeniden bağlanır; model prefab'ı bozulmaz)")]
         [Tooltip("Gidonla birlikte dönmesi gereken ama modelde gidonun çocuğu olmayan parçalar (ör. ön teker).")]
         [SerializeField] private Transform[] steeringParts;
@@ -60,6 +68,12 @@ namespace BilgiAdasi.Player
         private float crankRate;
 
         public float WheelRadius => wheelRadius;
+        public Transform GripLeft => gripLeft;
+        public Transform GripRight => gripRight;
+        public bool HasGrips => gripLeft != null && gripRight != null;
+        public Transform Seat => seat;
+        public Transform PedalLeft => pedalLeft;
+        public Transform PedalRight => pedalRight;
 
         private void Awake()
         {
@@ -139,5 +153,25 @@ namespace BilgiAdasi.Player
         }
 
         private static Quaternion Rest(Transform t) => t != null ? t.localRotation : Quaternion.identity;
+
+#if UNITY_EDITOR
+        // Tutma noktalarını sahnede göster: küre = avuç ortası, yeşil = parmak yönü (Y), mavi = elin sırtı (Z).
+        private void OnDrawGizmosSelected()
+        {
+            DrawGrip(gripLeft);
+            DrawGrip(gripRight);
+        }
+
+        private static void DrawGrip(Transform g)
+        {
+            if (g == null) return;
+            Gizmos.color = new Color(1f, 0.8f, 0.2f);
+            Gizmos.DrawWireSphere(g.position, 0.03f);
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(g.position, g.position + g.up * 0.08f);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(g.position, g.position + g.forward * 0.06f);
+        }
+#endif
     }
 }

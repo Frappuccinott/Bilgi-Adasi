@@ -17,7 +17,7 @@ namespace BilgiAdasi.EditorTools
     /// </summary>
     public static class FigmaUiSetup
     {
-        private const string TownScenePath = "Assets/_Project/Scenes/Town.unity";
+        private const string TownScenePath = BilgiAdasi.Core.SceneFlow.GameScenePath;
         private const string ThemePath = "Assets/_Project/Resources/UiTheme.asset";
         private const string SealPath = "Assets/_Project/Art/UI/UI_Muhur.png";
         private const string WaxPath = "Assets/_Project/Art/UI/UI_MuhurMum.png";

@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1870495055aa16d4e9a950984c9d1185, type: 3}
+  m_Name: tur_4_dedikodu
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Desk.TrueFalseQ
+  id: tur_4_dedikodu
+  prompt: "Her ifadeye D ya da Y m\xFChr\xFC bas. Y dediklerinin do\u011Frusunu da
+    se\xE7."
+  hint: "Ustan\u0131n tek kural\u0131n\u0131 hat\u0131rla: kazana ne girerse o \xE7\u0131kar."
+  statements:
+  - text: "Analiz tepkimesinde tek bir giren birden fazla \xFCr\xFCne ayr\u0131\u015F\u0131r."
+    isTrue: 1
+    corrections: []
+    correctionIndex: 0
+  - text: "Yanma tepkimelerinde oksijen girenler aras\u0131ndad\u0131r."
+    isTrue: 1
+    corrections: []
+    correctionIndex: 0
+  - text: "Sentez tepkimesinde \xFCr\xFCnlerin say\u0131s\u0131 girenlerden fazlad\u0131r."
+    isTrue: 0
+    corrections:
+    - "Sentezde birden \xE7ok giren tek \xFCr\xFCn olu\u015Fturur."
+    - "Sentezde hi\xE7 \xFCr\xFCn olu\u015Fmaz."
+    - "Sentezde tek giren ikiye ayr\u0131l\u0131r."
+    correctionIndex: 0
+  - text: Bir tepkimede atomlar kaybolabilir.
+    isTrue: 0
+    corrections:
+    - "Atomlar kaybolmaz; yaln\u0131zca yeniden dizilir."
+    - "Atomlar yaln\u0131zca yanmada kaybolur."
+    - "Atomlar kaybolur ama k\xFCtle de\u011Fi\u015Fmez."
+    correctionIndex: 0
+  trueLabel: D
+  falseLabel: Y
+  correctionLabel: "Do\u011Frusu:"

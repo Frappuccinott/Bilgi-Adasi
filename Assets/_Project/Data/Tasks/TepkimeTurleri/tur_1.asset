@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e64e0e709ad70b44d82fbe3caef28274, type: 3}
+  m_Name: tur_1
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Desk.DeskTask
+  id: tur_1
+  giverName: "C\xE2bir Usta"
+  giverPortrait: {fileID: 0}
+  giverLines:
+  - "\xC7\u0131rak, defterime su s\u0131\xE7ram\u0131\u015F; \xFC\xE7 sat\u0131r\u0131n
+    kelimeleri silinmi\u015F."
+  - "\xD6nce masadaki g\xF6zlem kartlar\u0131na bak: kazanda kendi g\xF6rd\xFCklerin.
+    Sonra sat\u0131rlar\u0131 tamamla."
+  deliveryLines:
+  - "Usta defteri kald\u0131rd\u0131: \"Sat\u0131rlar yerine oturdu. G\xF6rd\xFC\u011F\xFCn\xFC
+    adland\u0131rmay\u0131 \xF6\u011Frendin.\""
+  hintText: "Kelimelere bak: birle\u015Fmek, ayr\u0131\u015Fmak, yanmak."
+  realLifeText: 
+  wrapper: 0
+  paperTitle: "Ustan\u0131n Defteri"
+  questions:
+  - {fileID: 11400000, guid: eb38e50c9a0b5d841a4fc17ba3f65429, type: 2}
+  - {fileID: 11400000, guid: 9e98c9cfed9ad2e418339af4c245c145, type: 2}
+  randomCount: 0

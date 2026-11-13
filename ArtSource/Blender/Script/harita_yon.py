@@ -813,7 +813,7 @@ def build_yon():
         transform_bm(b, M(sx_, sy_, height(sx_, sy_), rnd.uniform(0, 6)))
         sm.append(b)
     made.append(put_yon(merge(sm), "SM_Saman_Yiginlari", 0.0, 0.0, 0.0, z=0.0))
-    kx, ky = -53.0, -5.4
+    kx, ky = -55.5, -5.2            # (-53, -5.4)'te çatısı loncanın kuzey saçağına giriyordu (Play QA 13.11)
     made.append(put_yon(kuyu_bm(), "SM_Tepk_Kuyu", kx, ky, 0.3, z=ground_min(kx, ky, 1.0, 1.0, 0)))
     bk = []
     for i, ang in enumerate((200, 255, 305)):

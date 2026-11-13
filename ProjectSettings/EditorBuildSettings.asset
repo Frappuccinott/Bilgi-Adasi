@@ -6,12 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_Project/Scenes/Boot.unity
-    guid: f9184c6bb3eb54e4da54e10b80e3427c
-  - enabled: 1
-    path: Assets/_Project/Scenes/Classroom.unity
-    guid: 27977ec4bdc92e043b6cb876668687fe
-  - enabled: 1
-    path: Assets/_Project/Scenes/Town.unity
-    guid: 15d1ddfad5ab83541a574862ea7bf717
+    path: Assets/_Project/Scenes/Harita.unity
+    guid: cbe180d6150380b48b47932c318a43a3
   m_configObjects: {}

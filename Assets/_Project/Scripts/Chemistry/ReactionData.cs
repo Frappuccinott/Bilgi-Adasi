@@ -8,7 +8,8 @@ namespace BilgiAdasi.Chemistry
     {
         Synthesis,   // Sentez (oluşum)
         Analysis,    // Analiz (ayrışma)
-        Combustion   // Yanma
+        Combustion,  // Yanma
+        Other        // Üç kutuya tam uymayan (fotosentez, solunum)
     }
 
     /// <summary>Bir tür + adet. Hem tepkime katsayısı hem kazandaki kavanoz sayısı için kullanılır.</summary>

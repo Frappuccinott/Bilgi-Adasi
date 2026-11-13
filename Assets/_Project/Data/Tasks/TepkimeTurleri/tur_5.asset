@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e64e0e709ad70b44d82fbe3caef28274, type: 3}
+  m_Name: tur_5
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Desk.DeskTask
+  id: tur_5
+  giverName: "K\xE2tip Nevin"
+  giverPortrait: {fileID: 0}
+  giverLines:
+  - "Simyac\u0131lar Loncas\u0131 seni Tepkime T\xFCrleri s\u0131nav\u0131na \xE7a\u011F\u0131r\u0131r."
+  - "D\xF6rt soru. Yanl\u0131\u015F yaz\u0131lan soru \xE7ekilir, yerine ba\u015Fkas\u0131
+    gelir. M\xFCh\xFCr ancak hepsi do\u011Fruysa bas\u0131l\u0131r."
+  deliveryLines:
+  - "K\xE2tip Nevin s\u0131nav k\xE2\u011F\u0131d\u0131n\u0131 m\xFCh\xFCrledi: \"Lonca
+    seni kayda ge\xE7irdi, \xE7\u0131rak.\""
+  hintText: "Her soruda \xF6nce t\xFCr\xFC d\xFC\u015F\xFCn: birle\u015Fme mi, ayr\u0131\u015Fma
+    m\u0131, oksijenle yanma m\u0131?"
+  realLifeText: "Sindirim, paslanma, ekme\u011Fin kabarmas\u0131... \xC7evrendeki
+    bir\xE7ok de\u011Fi\u015Fim bu tepkime t\xFCrlerinden biridir."
+  wrapper: 3
+  paperTitle: "Lonca S\u0131nav\u0131"
+  questions:
+  - {fileID: 11400000, guid: 9e98c9cfed9ad2e418339af4c245c145, type: 2}
+  - {fileID: 11400000, guid: d7c17b4ec9e81fd48a491af9e2cd1d2b, type: 2}
+  - {fileID: 11400000, guid: 8bb6d4ef8a873c5478ef312b45191990, type: 2}
+  - {fileID: 11400000, guid: b18845bd047a21d4bbd4633f3e93a859, type: 2}
+  - {fileID: 11400000, guid: 1a5fd14575b9d864cbaaefa7c3e46c7a, type: 2}
+  - {fileID: 11400000, guid: 08e72543023ea2442b1fd3739168cb89, type: 2}
+  - {fileID: 11400000, guid: b72619841d889b1428d6e3c96538f698, type: 2}
+  - {fileID: 11400000, guid: 4fae6a405b34ce24081a09d7a28e0d14, type: 2}
+  - {fileID: 11400000, guid: 43fb542721d26854b910b251341fdc37, type: 2}
+  - {fileID: 11400000, guid: c2fc0c761fefffe45b1cbb0c55befb01, type: 2}
+  - {fileID: 11400000, guid: ec145423abbc8b94a9daf7d86f819d48, type: 2}
+  - {fileID: 11400000, guid: 8ca800c7fa3f714438690c9e51c2181f, type: 2}
+  - {fileID: 11400000, guid: f3f7e5613d9028d4785fe9b01cd97376, type: 2}
+  - {fileID: 11400000, guid: dbbfe8c2071602b479f436053ac97c1c, type: 2}
+  randomCount: 4

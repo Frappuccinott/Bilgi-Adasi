@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e64e0e709ad70b44d82fbe3caef28274, type: 3}
+  m_Name: tur_4
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Desk.DeskTask
+  id: tur_4
+  giverName: Muhtar Yusuf
+  giverPortrait: {fileID: 0}
+  giverLines:
+  - "Kasabada dedikodu \xE7ok. Hangisi do\u011Fru, hangisi yanl\u0131\u015F, i\u015Faretleyip
+    g\xF6nder."
+  - "Yanl\u0131\u015F olanlar\u0131n do\u011Frusunu da yaz ki meydanda okuyay\u0131m."
+  deliveryLines:
+  - "Muhtar panoya ast\u0131: \"Dedikoduya kar\u015F\u0131 en iyi ila\xE7: kan\u0131t.\""
+  hintText: "Ustan\u0131n tek kural\u0131n\u0131 hat\u0131rla: kazana ne girerse
+    o \xE7\u0131kar."
+  realLifeText: 
+  wrapper: 2
+  paperTitle: "Muhtar\u0131n Mektubu"
+  questions:
+  - {fileID: 11400000, guid: b18845bd047a21d4bbd4633f3e93a859, type: 2}
+  randomCount: 0

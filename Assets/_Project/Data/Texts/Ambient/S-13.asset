@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1da41bafda85774ca60ce994f284016, type: 3}
+  m_Name: S-13
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.AmbientDialogueData
+  id: S-13
+  lines:
+  - speaker: Attar Saadet
+    text: "\xC7\u0131rak benim kar\u0131\u015F\u0131k \u015Fi\u015Feleri de ay\u0131rsa
+      ya. Birle\u015Fen bir yana, ayr\u0131\u015Fan bir yana\u2026"
+  - speaker: "Lonca K\xE2tibi Nevin"
+    text: "Yanan\u0131 da \xFC\xE7\xFCnc\xFC yana. Saadet, sen de lonca s\u0131nav\u0131na
+      gir bari."
+  requireAll:
+  - tur_2
+  requireAny: []
+  blockedBy: []
+  playOnce: 1

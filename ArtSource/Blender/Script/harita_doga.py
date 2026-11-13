@@ -324,6 +324,13 @@ def export_harita():
     if bpy.data.collections.get("Harita_Yon"):
         base += list(bpy.data.collections["Harita_Yon"].all_objects)          # tabela, kemer, mil taşı, harita masası
     out.append(_fbx(os.path.join(EXPORT_DIR, "Harita.fbx"), base))
+    out.append(doga_disa_aktar())
+    out.append(_fbx(os.path.join(EXPORT_DIR, "Harita_Yerler.fbx"), list(bpy.data.collections[YER_COL].objects)))
+    return out
+
+def doga_disa_aktar():
+    """Harita_Doga.fbx: türler orijinde. export_harita ve export_harita_tum ortak kullanır (eskiden iki kopya vardı;
+    düzeltme yalnız birine girince Unity'deki hata sürmüştü)."""
     models = list(bpy.data.collections[DOGA_COL].objects)
     roots = [o for o in models if o.parent is None]
     # LOD parçaları (_LOD0/_LOD1) kökün tam üstünde olmalı (meshleri kök merkezine göre kurulu). Dosyada yerel
@@ -342,10 +349,9 @@ def export_harita():
     # köyün üstünde uçan ağaç dahil (Play QA 13.11). Taşıdıktan sonra sahne güncellenir.
     bpy.context.view_layer.update()
     try:
-        out.append(_fbx(os.path.join(EXPORT_DIR, "Harita_Doga.fbx"), models))
+        yol = _fbx(os.path.join(EXPORT_DIR, "Harita_Doga.fbx"), models)
     finally:
         for o in roots:
             o.location = keep[o.name]
         bpy.context.view_layer.update()
-    out.append(_fbx(os.path.join(EXPORT_DIR, "Harita_Yerler.fbx"), list(bpy.data.collections[YER_COL].objects)))
-    return out
+    return yol

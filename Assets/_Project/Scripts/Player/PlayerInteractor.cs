@@ -45,6 +45,7 @@ namespace BilgiAdasi.Player
         private void OnEnable()
         {
             GameInput.Controls.Player.Interact.performed += OnInteractPerformed;
+            GameInput.Controls.Player.Use.performed += OnUsePerformed;
             GameInput.SchemeChanged += OnSchemeChanged;
             ViewLocator.Changed += OnViewsChanged;
             promptView = ViewLocator.Get<IInteractPromptView>();
@@ -52,7 +53,11 @@ namespace BilgiAdasi.Player
 
         private void OnDisable()
         {
-            if (GameInput.TryGetControls(out var c)) c.Player.Interact.performed -= OnInteractPerformed;
+            if (GameInput.TryGetControls(out var c))
+            {
+                c.Player.Interact.performed -= OnInteractPerformed;
+                c.Player.Use.performed -= OnUsePerformed;
+            }
             GameInput.SchemeChanged -= OnSchemeChanged;
             ViewLocator.Changed -= OnViewsChanged;
             SetCurrent(null);
@@ -96,7 +101,7 @@ namespace BilgiAdasi.Player
             string text = current.GetPrompt(this);
             if (!force && ReferenceEquals(text, shownPrompt)) return;
             shownPrompt = text;
-            promptView?.ShowPrompt(text, ControlGlyphs.For(PromptAction.Interact));
+            promptView?.ShowPrompt(text, ControlGlyphs.For(current.TriggerAction));
         }
 
         private void SetCurrent(IInteractable target)
@@ -119,9 +124,15 @@ namespace BilgiAdasi.Player
             }
         }
 
-        private void OnInteractPerformed(InputAction.CallbackContext ctx)
+        private void OnInteractPerformed(InputAction.CallbackContext ctx) => TryUse(PromptAction.Interact);
+
+        /// <summary>F / X: kapı ve bisiklet. Gamepad'de iki aksiyon aynı tuşta; hedef yalnızca kendi aksiyonuna cevap verir.</summary>
+        private void OnUsePerformed(InputAction.CallbackContext ctx) => TryUse(PromptAction.Use);
+
+        private void TryUse(PromptAction action)
         {
             if (!controlEnabled || riding || current == null || !current.CanInteract) return;
+            if (current.TriggerAction != action) return;
             // Hedef seçili kalır: aynı kazana art arda dökülebilsin. İpucu bir sonraki karede tazelenir.
             current.Interact(this);
         }

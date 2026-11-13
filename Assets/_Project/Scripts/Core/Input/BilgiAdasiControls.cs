@@ -131,6 +131,15 @@ namespace BilgiAdasi.Core
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Use"",
+                    ""type"": ""Button"",
+                    ""id"": ""e3f1a2b4-5c6d-4e7f-8a9b-0c1d2e3f4a51"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Jump"",
                     ""type"": ""Button"",
                     ""id"": ""7c9d0023-d89f-44e2-9b7d-b4c96a1e572e"",
@@ -342,6 +351,28 @@ namespace BilgiAdasi.Core
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f4a2b3c5-6d7e-4f80-9bac-1d2e3f4a5b62"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Use"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a5b3c4d6-7e8f-4091-acbd-2e3f4a5b6c73"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Use"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1421,6 +1452,7 @@ namespace BilgiAdasi.Core
             m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
             m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
             m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+            m_Player_Use = m_Player.FindAction("Use", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
             m_Player_CrouchToggle = m_Player.FindAction("CrouchToggle", throwIfNotFound: true);
@@ -1539,6 +1571,7 @@ namespace BilgiAdasi.Core
         private readonly InputAction m_Player_Look;
         private readonly InputAction m_Player_Sprint;
         private readonly InputAction m_Player_Interact;
+        private readonly InputAction m_Player_Use;
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_Crouch;
         private readonly InputAction m_Player_CrouchToggle;
@@ -1575,6 +1608,10 @@ namespace BilgiAdasi.Core
             /// Provides access to the underlying input action "Player/Interact".
             /// </summary>
             public InputAction @Interact => m_Wrapper.m_Player_Interact;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Use".
+            /// </summary>
+            public InputAction @Use => m_Wrapper.m_Player_Use;
             /// <summary>
             /// Provides access to the underlying input action "Player/Jump".
             /// </summary>
@@ -1649,6 +1686,9 @@ namespace BilgiAdasi.Core
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
+                @Use.started += instance.OnUse;
+                @Use.performed += instance.OnUse;
+                @Use.canceled += instance.OnUse;
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
@@ -1699,6 +1739,9 @@ namespace BilgiAdasi.Core
                 @Interact.started -= instance.OnInteract;
                 @Interact.performed -= instance.OnInteract;
                 @Interact.canceled -= instance.OnInteract;
+                @Use.started -= instance.OnUse;
+                @Use.performed -= instance.OnUse;
+                @Use.canceled -= instance.OnUse;
                 @Jump.started -= instance.OnJump;
                 @Jump.performed -= instance.OnJump;
                 @Jump.canceled -= instance.OnJump;
@@ -2251,6 +2294,13 @@ namespace BilgiAdasi.Core
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnInteract(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Use" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnUse(InputAction.CallbackContext context);
             /// <summary>
             /// Method invoked when associated input action "Jump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>

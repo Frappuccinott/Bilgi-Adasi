@@ -1,3 +1,4 @@
+using BilgiAdasi.Core;
 using UnityEngine;
 
 namespace BilgiAdasi.Player
@@ -13,6 +14,7 @@ namespace BilgiAdasi.Player
         public void SetTarget(IInteractable value) => target = value;
 
         public bool CanInteract => target != null && target.CanInteract;
+        public PromptAction TriggerAction => target != null ? target.TriggerAction : PromptAction.Interact;
         public string GetPrompt(PlayerInteractor interactor) => target != null ? target.GetPrompt(interactor) : string.Empty;
         public void SetHighlighted(bool highlighted) => target?.SetHighlighted(highlighted);
         public void Interact(PlayerInteractor interactor) => target?.Interact(interactor);

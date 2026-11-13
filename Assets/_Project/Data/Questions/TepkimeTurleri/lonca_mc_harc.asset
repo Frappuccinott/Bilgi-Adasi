@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 856399d26d10d9e4cb58d19a6356745a, type: 3}
+  m_Name: lonca_mc_harc
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Desk.MultipleChoiceQ
+  id: lonca_mc_harc
+  prompt: "Ca(OH)<sub>2</sub> + CO<sub>2</sub> \u2192 CaCO<sub>3</sub> + H<sub>2</sub>O
+    (harc\u0131n sertle\u015Fmesi) \xFC\xE7 kutudan hangisine girer?"
+  hint: "Tek \xFCr\xFCn var m\u0131? Tek giren var m\u0131? Oksijen yan\u0131yor
+    mu?"
+  options:
+  - "Hi\xE7birine tam uymaz; t\xFCrler b\xFCt\xFCn tepkimeleri kapsamaz."
+  - Sentez
+  - Analiz
+  - Yanma
+  correct: 00000000
+  allowMultiple: 0
+  yesLabel: "Kan\u0131t"
+  noLabel: "De\u011Fil"

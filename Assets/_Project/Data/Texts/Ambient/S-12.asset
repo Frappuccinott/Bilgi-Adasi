@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1da41bafda85774ca60ce994f284016, type: 3}
+  m_Name: S-12
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.AmbientDialogueData
+  id: S-12
+  lines:
+  - speaker: "G\xFCvercinci Selim"
+    text: "Bu sabah \xFC\xE7 mektup geldi, \xFC\xE7\xFC de at\xF6lyeye."
+  - speaker: "Lonca K\xE2tibi Nevin"
+    text: "Kasaba soru sormaya ba\u015Flad\u0131 demek. G\xFCzel."
+  - speaker: "G\xFCvercinci Selim"
+    text: "Cevaplar\u0131 da \xE7\u0131rak m\u0131 yazacak?"
+  - speaker: "Lonca K\xE2tibi Nevin"
+    text: "Yazmayacak, i\u015Faretleyecek. M\xFCrekkep israf olmas\u0131n."
+  requireAll: []
+  requireAny: []
+  blockedBy:
+  - tur_1
+  playOnce: 1

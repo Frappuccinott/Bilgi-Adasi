@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fc84bfaa21e24d4284ed3e8d99845f5, type: 3}
+  m_Name: tur_1_gozlem
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Desk.ClassifyQ
+  id: tur_1_gozlem
+  prompt: "Usta defterini a\xE7madan \xF6nce masaya \xFC\xE7 g\xF6zlem kart\u0131
+    b\u0131rakt\u0131. Her g\xF6zlem hangi tepkime t\xFCr\xFCn\xFCn kan\u0131t\u0131?"
+  hint: "\xC7e\u015Fmeyi, k\xF6pr\xFCy\xFC ve feneri hat\u0131rla: neler birle\u015Fti,
+    ne ayr\u0131ld\u0131, ne yand\u0131?"
+  boxes:
+  - Sentez
+  - Analiz
+  - Yanma
+  cards:
+  - reaction: {fileID: 0}
+    text: "\xC7e\u015Fme: iki gaz kazanda birle\u015Fti, tek \xFCr\xFCn oldu."
+    box: 0
+  - reaction: {fileID: 0}
+    text: "K\xF6pr\xFC: kire\xE7 ta\u015F\u0131 \u0131s\u0131t\u0131ld\u0131, iki
+      maddeye ayr\u0131ld\u0131."
+    box: 1
+  - reaction: {fileID: 0}
+    text: "Fener: yak\u0131t oksijenle birle\u015Fti, \u0131s\u0131 ve \u0131\u015F\u0131k
+      \xE7\u0131kt\u0131."
+    box: 2

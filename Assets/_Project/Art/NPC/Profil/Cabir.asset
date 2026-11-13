@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8b7b0556d2c5864182957a5734cc9db, type: 3}
+  m_Name: Cabir
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.NpcProfile
+  displayName: "C\xE2bir Usta"
+  portrait: {fileID: 0}
+  promptFormat: "{0} ile konu\u015F"
+  conversations:
+  - lines:
+    - "\xC7\u0131ra\u011F\u0131m! Kazan\u0131n ba\u015F\u0131nda seni bekleyen i\u015Fler
+      var."
+    - 'Unutma: tepkimede atomlar ne kaybolur ne de yoktan var olur.'
+  - lines:
+    - "Tahtaya yazd\u0131klar\u0131ma bir g\xF6z at istersen."
+    - "Denkle\u015Ftirmenin s\u0131rr\u0131 sab\u0131rda... bir de saymakta."
+  - lines:
+    - "Tak\u0131ld\u0131\u011F\u0131n yerde defterime bak. Ay\u0131p de\u011Fil;
+      usta da bir zamanlar \xE7\u0131rakt\u0131."

@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 namespace BilgiAdasi.Player
 {
     /// <summary>
-    /// Şehirde duran bisiklet. Bakıp Interact (E / X) → binilir, yine Interact → inilir (hızlıysa önce frenler).
+    /// Şehirde duran bisiklet. Bakıp Use (F / X) → binilir, yine Use → inilir (hızlıysa önce frenler).
     /// Sürüş kinematik (CharacterController): W/S veya sol çubuk pedal/fren (dururken geri itme), A/D gidon,
     /// Shift / L3 hızlı pedal. Bakış serbest (gidona göre ±yawLimit), bırakınca gidiyorken öne döner.
     /// Kamera birinci şahısta kalır; yatış yalnızca modelde (BicycleRig). Konum indikten sonra kaydedilir.
@@ -61,6 +61,9 @@ namespace BilgiAdasi.Player
         private float steer;
         private float steerAngle;
         private float lean;
+        private float stand;     // 0 oturuyor, 1 ayakta (hızlı pedal)
+        private float rockPhase; // ayakta sallanma ritmi (radyan)
+        private float rock;      // ayakta sallanma açısı (°, sağ pozitif; yalnızca model)
         private float verticalVelocity;
         private bool pedaling;
         private bool gamepadFastToggled;
@@ -74,6 +77,8 @@ namespace BilgiAdasi.Player
 
         private IInteractPromptView promptView;
         private bool promptShown;
+        private IRiderArmsView armsView;
+        private IRiderBodyView bodyView;
 
         // Sahnedeki park yeri: kayıttaki konum geçersizse ya da bisiklet dünyanın altına düşerse buraya döner.
         private Vector3 homePosition;
@@ -168,6 +173,9 @@ namespace BilgiAdasi.Player
 
         // ---------- Etkileşim ----------
 
+        /// <summary>Bisiklete F ile binilir/inilir (gamepad X).</summary>
+        public override PromptAction TriggerAction => PromptAction.Use;
+
         public override string GetPrompt(PlayerInteractor interactor) => settings.MountPrompt;
 
         public override void Interact(PlayerInteractor interactor) => Mount(interactor, false);
@@ -192,15 +200,22 @@ namespace BilgiAdasi.Player
                 settings.YawLimit, settings.RecenterDelay, settings.RecenterSpeed);
 
             var a = GameInput.Controls.Player;
-            a.Interact.performed += OnInteractPerformed;
+            a.Use.performed += OnUsePerformed;
             a.Sprint.performed += OnSprintPerformed;
             GameInput.SchemeChanged += OnSchemeChanged;
             promptView = ViewLocator.Get<IInteractPromptView>();
+            // Eller gidona uzanır (kollar varsa); sürerken gidonla birlikte döner ve yatar.
+            armsView = ViewLocator.Get<IRiderArmsView>();
+            if (rig != null && rig.HasGrips) armsView?.BeginGrip(rig.GripLeft, rig.GripRight, transform, instant);
+            // Gövde seleye oturur, ayaklar pedallara basar.
+            bodyView = ViewLocator.Get<IRiderBodyView>();
+            if (rig != null) bodyView?.BeginRide(rig, instant);
 
             SetColliderHeight(settings.RidingHeight);
             speed = 0f;
             momentum = 0f;
             riderLift = 0f;
+            stand = rock = 0f;
             wasGrounded = true;
             launchVertical = 0f;
             verticalVelocity = 0f;
@@ -219,9 +234,9 @@ namespace BilgiAdasi.Player
             RiddenChanged?.Invoke(true);
         }
 
-        private void OnInteractPerformed(InputAction.CallbackContext ctx)
+        private void OnUsePerformed(InputAction.CallbackContext ctx)
         {
-            // Binme basışı aynı karede inmeye dönmesin; konuşma sırasında Interact konuşmayı ilerletir.
+            // Binme basışı aynı karede inmeye dönmesin; konuşma sırasında inilmez.
             if (state != RideState.Riding || Time.frameCount == mountFrame || !rider.ControlEnabled) return;
             dismountRequested = true;
         }
@@ -233,7 +248,7 @@ namespace BilgiAdasi.Player
 
         private void OnSchemeChanged(ControlScheme scheme)
         {
-            if (promptShown) promptView?.ShowPrompt(settings.DismountPrompt, ControlGlyphs.For(PromptAction.Interact));
+            if (promptShown) promptView?.ShowPrompt(settings.DismountPrompt, ControlGlyphs.For(PromptAction.Use));
         }
 
         /// <summary>Oyuncu dışarıdan ışınlandı (doğma, geliştirici kısayolu): olduğu yerde bisikletten ayrılır.</summary>
@@ -271,7 +286,9 @@ namespace BilgiAdasi.Player
                     Vector2 input = canDrive ? Vector2.ClampMagnitude(a.Move.ReadValue<Vector2>(), 1f) : Vector2.zero;
                     bool keyboardFast = a.Sprint.IsPressed() && !(a.Sprint.activeControl?.device is Gamepad);
                     bool brakeAll = !canDrive; // inmek isteniyor ya da konuşma var: fren
-                    Simulate(input, (keyboardFast || gamepadFastToggled) && canDrive, dt, brakeAll);
+                    bool fast = (keyboardFast || gamepadFastToggled) && canDrive;
+                    Simulate(input, fast, dt, brakeAll);
+                    UpdateStanding(fast, dt);
                     PlaceRider(seatAnchor.position);
                     if (dismountRequested && Mathf.Abs(speed) <= settings.DismountMaxSpeed && controller.isGrounded)
                         BeginDismount();
@@ -280,6 +297,7 @@ namespace BilgiAdasi.Player
                 case RideState.Dismounting:
                     blend += dt / Mathf.Max(0.01f, settings.MountDuration);
                     Simulate(Vector2.zero, false, dt, true);
+                    UpdateStanding(false, dt);
                     PlaceRider(Vector3.Lerp(blendFrom, dismountTarget, Mathf.SmoothStep(0f, 1f, blend)));
                     if (blend >= 1f) EndRide(dismountTarget, true);
                     break;
@@ -288,7 +306,7 @@ namespace BilgiAdasi.Player
             if (state == RideState.Parked) return; // EndRide bu karede bitirdi
             riderLift = Mathf.Lerp(riderLift, 0f, 1f - Mathf.Exp(-RiderLiftSharpness * dt));
             UpdateWheelGrounding(dt);
-            if (rig != null) rig.UpdatePose(speed, pedaling, steerAngle, lean, visualPitch, visualHeight, dt);
+            if (rig != null) rig.UpdatePose(speed, pedaling, steerAngle, lean + rock, visualPitch, visualHeight, dt);
             riderLook.YawRecenter = Mathf.Abs(speed) > SlopeHoldSpeed;
             riderLook.ExtraFov = settings.SpeedFovBoost * Mathf.Clamp01(speed / Mathf.Max(0.1f, settings.FastSpeed));
             UpdatePrompt();
@@ -570,7 +588,34 @@ namespace BilgiAdasi.Player
         private void PlaceRider(Vector3 position)
         {
             // Bakış ofsetini PlayerLook bu karede güncelledi (çalışma sırası 50); roll yok.
-            riderTransform.SetPositionAndRotation(position + Vector3.up * riderLift, Quaternion.Euler(0f, yaw + riderLook.YawOffset, 0f));
+            // Baş: virajda ve ayakta sallanırken yana kayar, ayaktayken yükselip gidona eğilir (yalnızca konum).
+            Vector3 head = new Vector3(
+                Mathf.Sin(lean * Mathf.Deg2Rad) * settings.CameraLeanShift + Mathf.Sin(rock * Mathf.Deg2Rad) * settings.CameraRockShift,
+                stand * settings.StandRise,
+                stand * settings.StandForward);
+            riderTransform.SetPositionAndRotation(position + Vector3.up * riderLift + transform.TransformDirection(head),
+                Quaternion.Euler(0f, yaw + riderLook.YawOffset, 0f));
+        }
+
+        /// <summary>
+        /// Hızlı pedalda sürücü ayağa kalkar ve bisiklet pedal ritmiyle sağa-sola sallanır (GTA tarzı).
+        /// Ritim teker dönüşünden gelir ama maxRockFrequency'yi geçmez (velosipedde teker çok hızlı döner).
+        /// </summary>
+        private void UpdateStanding(bool fast, float dt)
+        {
+            bool standing = fast && pedaling && controller.isGrounded && speed > settings.RockMinSpeed;
+            stand = Mathf.Lerp(stand, standing ? 1f : 0f, 1f - Mathf.Exp(-settings.StandSharpness * dt));
+            if (stand < 0.001f)
+            {
+                stand = 0f;
+                rock = 0f;
+                rockPhase = 0f; // her kalkış aynı yönden başlasın
+                return;
+            }
+            float radius = rig != null ? rig.WheelRadius : 0.35f;
+            float frequency = Mathf.Min(settings.MaxRockFrequency, Mathf.Abs(speed) / (2f * Mathf.PI * Mathf.Max(0.05f, radius)));
+            rockPhase = Mathf.Repeat(rockPhase + frequency * 2f * Mathf.PI * dt, 2f * Mathf.PI);
+            rock = stand * settings.RockAngle * Mathf.Sin(rockPhase);
         }
 
         // ---------- İnme ----------
@@ -583,6 +628,8 @@ namespace BilgiAdasi.Player
             blendFrom = riderTransform.position;
             blend = 0f;
             state = RideState.Dismounting;
+            armsView?.EndGrip(); // eller gidonu bırakır
+            bodyView?.EndRide(); // gövde seleden kalkar
             HidePrompt();
         }
 
@@ -630,7 +677,7 @@ namespace BilgiAdasi.Player
 
             if (GameInput.TryGetControls(out var c))
             {
-                c.Player.Interact.performed -= OnInteractPerformed;
+                c.Player.Use.performed -= OnUsePerformed;
                 c.Player.Sprint.performed -= OnSprintPerformed;
             }
             GameInput.SchemeChanged -= OnSchemeChanged;
@@ -645,9 +692,15 @@ namespace BilgiAdasi.Player
                 riderTransform = null;
                 promptView = null;
                 promptShown = false;
+                armsView = null; // kollar da sahneyle birlikte gidiyor
+                bodyView = null;
                 return;
             }
             HidePrompt();
+            armsView?.EndGrip();
+            armsView = null;
+            bodyView?.EndRide();
+            bodyView = null;
 
             // Sahne kapanırken oyuncu bisikletten önce yok edilmiş olabilir.
             if (riderLook != null)
@@ -668,6 +721,7 @@ namespace BilgiAdasi.Player
             speed = 0f;
             momentum = 0f;
             lean = 0f;
+            stand = rock = rockPhase = 0f;
             pedaling = false;
             dismountRequested = false;
             SetColliderHeight(settings.ParkedHeight);
@@ -689,7 +743,7 @@ namespace BilgiAdasi.Player
                         && Mathf.Abs(speed) < settings.PromptMaxSpeed;
             if (show == promptShown) return;
             promptShown = show;
-            if (show) promptView?.ShowPrompt(settings.DismountPrompt, ControlGlyphs.For(PromptAction.Interact));
+            if (show) promptView?.ShowPrompt(settings.DismountPrompt, ControlGlyphs.For(PromptAction.Use));
             else promptView?.HidePrompt();
         }
 

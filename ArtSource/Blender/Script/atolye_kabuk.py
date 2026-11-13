@@ -29,6 +29,9 @@ DOOR_SPRING, DOOR_RISE = 2.25, 0.55
 LEAF_W, LEAF_H, LEAF_T = 1.30, 2.30, 0.08
 HINGE_X = DOOR_CX - LEAF_W / 2          # -2.05
 HINGE_Y = -IY                            # iç yüz düzlemi
+DOOR_ARCH_N = 24                         # kapı yayının bölümü (duvar oyuğu = kemer taşlarının iç yayı)
+DOOR_STONE_INSET = 0.02                  # söve/kemer taşı boşluğa bu kadar taşar: iç yüzü kapı oyuğunun yüzeyiyle
+                                         # aynı düzlemde kalıp titremesin (z-fighting)
 # Pencereler: (duvar, merkez u, genişlik, denizlik z, kemer başlangıcı, kemer yüksekliği)
 WINDOWS = [
     ("S", 2.0, 1.00, 1.00, 1.95, 0.30),   # ön, kapının sağı
@@ -102,7 +105,8 @@ def build_walls(col):
     # güney (ön): tam genişlik, kapı + pencere
     # Kapı, zemine değdiği için delik değil dış çevreye açılmış oyuktur: delik alt kenarla aynı çizgide
     # buluşunca sıfır alanlı üçgenler oluşuyordu (Unity'de atılan yüz).
-    door = pointed_arch(DOOR_CX, DOOR_W, 0.0, DOOR_SPRING, DOOR_RISE, n=6)
+    # n = DOOR_ARCH_N: kemer taşları (arch_ring) aynı yayı izlesin; farklı bölünürse taş boşluğa taşar.
+    door = pointed_arch(DOOR_CX, DOOR_W, 0.0, DOOR_SPRING, DOOR_RISE, n=DOOR_ARCH_N)
     outer = [(-OX, 0)] + door + [(OX, 0), (OX, H), (-OX, H)]
     holes = []
     for s, u, w, z0, sp, ri in WINDOWS:
@@ -250,8 +254,9 @@ def plinth_blocks():
     run(-OY + 0.2, OY - 0.2, OX - 0.08, "y")
     return parts
 
-def arch_ring(cx, w, z0, spring, rise, n_blocks, depth_out, y_face, width=0.28, protrude=0.045, jamb=True):
-    """Kemer taşları + söve taşları (ön yüze yapışık, protrude kadar dışarı)."""
+def arch_ring(cx, w, z0, spring, rise, n_blocks, depth_out, y_face, width=0.28, protrude=0.045, jamb=True, inset=0.0):
+    """Kemer taşları + söve taşları (ön yüze yapışık, protrude kadar dışarı).
+    inset: taşların iç kenarı açıklığa bu kadar taşar (oyuk yüzeyiyle çakışmasın)."""
     parts = []
     inner = pointed_arch(cx, w, z0, spring, rise, n=24)[1:-1]   # yalnız kemer + söve üst noktası
     # kemer kısmı: spring üstündeki noktalar
@@ -284,9 +289,10 @@ def arch_ring(cx, w, z0, spring, rise, n_blocks, depth_out, y_face, width=0.28, 
         steps = 3
         for j in range(steps + 1):
             p, tan = at(s0 + (s1 - s0) * j / steps)
-            pts_in.append((p, outward(p, tan)))
+            n_out = outward(p, tan)
+            pts_in.append(((p[0] - n_out[0] * inset, p[1] - n_out[1] * inset), n_out))
         wk = width * (1.12 if k == n_blocks // 2 else 1.0) * R.uniform(0.95, 1.06)
-        poly = [p for p, _ in pts_in] + [(p[0] + n[0] * wk, p[1] + n[1] * wk) for p, n in reversed(pts_in)]
+        poly = [p for p, _ in pts_in] + [(p[0] + n[0] * (wk + inset), p[1] + n[1] * (wk + inset)) for p, n in reversed(pts_in)]
         bm = bm_prism(poly, -protrude, 0.06)
         bevel_all(bm, 0.018)
         paint_part(bm, "kaya", lo=1, hi=0, noise=0.06, seed=R.randrange(9999), bias=0.3)
@@ -295,10 +301,10 @@ def arch_ring(cx, w, z0, spring, rise, n_blocks, depth_out, y_face, width=0.28, 
         for side in (-1, 1):
             z = z0 + (0.0 if z0 > 0.01 else 0.04)
             i = 0
-            x_in = cx + side * w / 2
+            x_in = cx + side * (w / 2 - inset)
             while z < spring - 0.12:
                 h = min(R.uniform(0.38, 0.52), spring - z)
-                ww = (0.34 if i % 2 == 0 else 0.24) * R.uniform(0.95, 1.08)
+                ww = (0.34 if i % 2 == 0 else 0.24) * R.uniform(0.95, 1.08) + inset
                 poly = [(x_in, z), (x_in + side * ww, z), (x_in + side * ww, z + h - 0.02), (x_in, z + h - 0.02)]
                 if side < 0:
                     poly = list(reversed(poly))
@@ -381,7 +387,8 @@ def rubble_stones():
 def build_stones(col):
     parts = quoin_blocks() + plinth_blocks() + rubble_stones()
     # kapı kemeri (ön yüz y = -OY)
-    parts += arch_ring(DOOR_CX, DOOR_W, 0.0, DOOR_SPRING, DOOR_RISE, 7, 0.0, -OY, width=0.30)
+    parts += arch_ring(DOOR_CX, DOOR_W, 0.0, DOOR_SPRING, DOOR_RISE, 7, 0.0, -OY, width=0.30,
+                       inset=DOOR_STONE_INSET)
     # pencere kemerleri + denizlik
     for s, u, w, z0, sp, ri in WINDOWS:
         ring = arch_ring(u, w, z0, sp, ri, 5, 0.0, 0.0, width=0.22, protrude=0.035)

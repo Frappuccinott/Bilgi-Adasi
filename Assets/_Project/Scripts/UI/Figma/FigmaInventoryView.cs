@@ -184,6 +184,8 @@ namespace BilgiAdasi.UI
                 icons[i] = UiKit.Img(trays[i].transform, "Icon", Color.white);
                 UiKit.Place(icons[i].rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 2f), new Vector2(slotSize - 22f, slotSize - 22f));
                 icons[i].preserveAspect = true;
+                // Veri gelene kadar boş: sprite'sız beyaz Image düz beyaz kare çizer.
+                icons[i].gameObject.SetActive(false);
 
                 numbers[i] = UiKit.Text(trays[i].transform, "Number", th.BodyFont, 18f, th.Paper, TextAlignmentOptions.TopLeft, FontStyles.Bold);
                 UiKit.Fill(numbers[i].rectTransform, 6, 2, 0, 0);
@@ -194,6 +196,7 @@ namespace BilgiAdasi.UI
                 var cs = counts[i].gameObject.AddComponent<Shadow>();
                 cs.effectColor = UiKit.WithAlpha(th.InkDeep, 0.9f);
                 cs.effectDistance = new Vector2(1f, -1f);
+                counts[i].gameObject.SetActive(false);
             }
 
             // ---- Kese (sağ üst) ----
