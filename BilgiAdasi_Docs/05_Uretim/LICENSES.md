@@ -11,6 +11,7 @@ Kayıtsız hiçbir hazır dosya projeye girmez. Bu tablo oyun içi **Emeği Geç
 | Universal Render Pipeline | Paket | Unity | — | Unity paketi | — | — |
 | Input System | Paket | Unity | — | Unity paketi | — | — |
 | Cinemachine 3 | Paket | Unity | — | Unity paketi | — | Mehmet |
+| Liberation Sans (TMP Essentials) | Font | Red Hat / Unity TMP | — | SIL OFL 1.1 | — | Mehmet |
 | | | | | | | |
 
 **Kurallar**
