@@ -104,10 +104,11 @@ namespace BilgiAdasi.Player
             writtenRot = new Quaternion[n];
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
             if (ready) SyncAnimatedPose(); // kapanırken kollar animasyon pozunda kalsın
             hasWritten = false;
+            base.OnDisable(); // ViewLocator kaydını siler (yoksa kapalı görünüm kayıtlı kalıyordu)
         }
 
         /// <summary>Animator bu karede yazmadıysa animasyon pozunu geri yükler, yazdıysa yenisini saklar.</summary>

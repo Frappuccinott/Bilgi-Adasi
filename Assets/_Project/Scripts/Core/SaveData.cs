@@ -35,12 +35,20 @@ namespace BilgiAdasi.Core
         [SerializeField] private List<StackEntry> shelves = new List<StackEntry>();
         [Tooltip("Tepkimesi bitmiş, teslim bekleyen sipariş (yeniden açılışta kaybolmasın).")]
         [SerializeField] private string readyTaskId = "";
+        [Tooltip("Kazanda kalan: dökülmüş malzeme, süren tepkimenin ürünü, envanter doluyken bekleyen ürün. " +
+                 "Yüklemede kazanda bekleyen olarak geri gelir (akçe kaybolmaz). key boş.")]
+        [SerializeField] private List<StackEntry> cauldronReturns = new List<StackEntry>();
+        [Tooltip("Peşin parası (OrderTask.budget) verilmiş siparişler; yeniden alınınca bir daha verilmez.")]
+        [SerializeField] private List<string> advancePaid = new List<string>();
 
         /// <summary>İlk açılışta false: başlangıç kesesi verilir.</summary>
         public bool EconomyStarted { get => economyStarted; set => economyStarted = value; }
         public int Money { get => money; set => money = value; }
         public List<StackEntry> Inventory => inventory;
         public string ReadyTaskId { get => readyTaskId; set => readyTaskId = value ?? ""; }
+        public List<StackEntry> CauldronReturns => cauldronReturns ??= new List<StackEntry>();
+        public bool IsAdvancePaid(string taskId) => advancePaid != null && advancePaid.Contains(taskId);
+        public void MarkAdvancePaid(string taskId) => AddUnique(advancePaid ??= new List<string>(), taskId);
 
         public bool TryGetShelf(string key, out StackEntry entry)
         {

@@ -34,6 +34,8 @@ namespace BilgiAdasi.Order
         [SerializeField] private string emptyShelfPrompt = "Boş raf";
         [SerializeField] private string marketPrompt = "Pazar";
         [SerializeField] private string toolNotPourable = "Alet kazana dökülmez.";
+        [Tooltip("Karatahtada, sipariş kartı girenleri saklıyorsa denklemin sol tarafının yerine yazılır.")]
+        [SerializeField] private string boardUnknownSide = "?";
 
         public string SealNote => sealNote;
         public string NotEnoughMoney => notEnoughMoney;
@@ -57,5 +59,6 @@ namespace BilgiAdasi.Order
         public string EmptyShelfPrompt => emptyShelfPrompt;
         public string MarketPrompt => marketPrompt;
         public string ToolNotPourable => toolNotPourable;
+        public string BoardUnknownSide => boardUnknownSide;
     }
 }

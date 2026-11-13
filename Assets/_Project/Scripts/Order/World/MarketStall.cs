@@ -14,7 +14,7 @@ namespace BilgiAdasi.Order
     /// Şehirdeki pazar tezgâhı (sahne bağlantı noktası; modeli Mustafa'da). E → pazar ekranı açılır (UI modu).
     /// Ne satılacağı tezgâhın kendi kataloğundan (MarketCatalog) gelir ve kurallardan (MarketRuleSet) geçer:
     /// görevle aç/kapat, siparişin ürününü satma, stok. Pazar açıkken sipariş alınır/biterse liste kendiliğinden yenilenir.
-    /// Para en ucuz kavanoza yetmezse Usta keseye borç koyar (oyun kilitlenmez). Esc/B ile kapanır.
+    /// Para aktif siparişin en ucuz malzemesine yetmezse Usta keseye borç koyar (oyun kilitlenmez). Esc/B ile kapanır.
     /// </summary>
     public sealed class MarketStall : WorldInteractable, IMarketCommands, IMarketState, IMarketInfo
     {
@@ -34,6 +34,7 @@ namespace BilgiAdasi.Order
         private readonly List<MarketOffer> offers = new List<MarketOffer>();
         private readonly List<MarketItem> items = new List<MarketItem>();
         private readonly HashSet<string> orderProducts = new HashSet<string>();
+        private readonly HashSet<string> orderReactants = new HashSet<string>();
         // Kayıt sistemi yokken (test sahnesi) satış adetleri burada tutulur.
         private readonly Dictionary<string, int> localSold = new Dictionary<string, int>();
 
@@ -107,7 +108,9 @@ namespace BilgiAdasi.Order
             if (!user.TrySpend(offer.Price))
             {
                 Notice(texts != null ? texts.NotEnoughMoney : null);
-                GiveLoanIfBroke();
+                // Siparişin malzemesi alınamıyorsa (ör. 3 akçeyle 5 akçelik propan) Usta yine borç verir.
+                if (orderReactants.Contains(offer.Key)) GiveLoan();
+                else GiveLoanIfBroke();
                 Show(ViewLocator.Get<IMarketView>());
                 return;
             }
@@ -208,6 +211,7 @@ namespace BilgiAdasi.Order
         private void CacheOrderProducts(TaskData task)
         {
             orderProducts.Clear();
+            orderReactants.Clear();
             if (!(task is OrderTask order)) return;
             var steps = order.Steps;
             for (int i = 0; i < steps.Count; i++)
@@ -215,6 +219,10 @@ namespace BilgiAdasi.Order
                 var products = steps[i].TargetProducts;
                 for (int j = 0; j < products.Count; j++)
                     if (products[j].Species != null) orderProducts.Add(products[j].Species.Formula);
+                var reaction = steps[i].Reaction;
+                if (reaction == null) continue;
+                for (int j = 0; j < reaction.Reactants.Count; j++)
+                    if (reaction.Reactants[j].Species != null) orderReactants.Add(reaction.Reactants[j].Species.Formula);
             }
         }
 
@@ -225,14 +233,22 @@ namespace BilgiAdasi.Order
             else localSold[key] = (localSold.TryGetValue(key, out int n) ? n : 0) + 1;
         }
 
-        /// <summary>Kese, satışta olan en ucuz kavanoza yetmiyorsa Usta borç verir.</summary>
+        /// <summary>
+        /// Usta yalnızca işi yürütmek için borç verir: aktif siparişin bu tezgâhta satılan bir malzemesine kese
+        /// yetmiyorsa. Sipariş yoksa ya da tezgâh sipariş malzemesi satmıyorsa (alet pazarı) borç yok.
+        /// </summary>
         private void GiveLoanIfBroke()
         {
-            if (offers.Count == 0) return;
+            if (offers.Count == 0 || orderReactants.Count == 0) return;
             int cheapest = int.MaxValue;
             for (int i = 0; i < offers.Count; i++)
-                if (offers[i].Price < cheapest) cheapest = offers[i].Price;
-            if (user.Money >= cheapest) return;
+                if (orderReactants.Contains(offers[i].Key) && offers[i].Price < cheapest) cheapest = offers[i].Price;
+            if (cheapest == int.MaxValue || user.Money >= cheapest) return;
+            GiveLoan();
+        }
+
+        private void GiveLoan()
+        {
             user.AddMoney(economy.LoanAmount);
             if (texts != null) Notice(string.Format(texts.LoanGiven, string.Empty, economy.LoanAmount));
         }

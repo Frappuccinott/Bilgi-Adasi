@@ -18,6 +18,7 @@ namespace BilgiAdasi.EditorTools
         private const string CatalogPath = "Assets/_Project/Data/Market/Pazar_Aletler.asset";
         private const string IconFolder = "Assets/_Project/UI/Ikonlar";
         private const string ThemePath = "Assets/_Project/Resources/UiTheme.asset";
+        private const string EconomyPath = "Assets/_Project/Data/Economy.asset";
 
         // formül (kısa ad, kartta büyük yazı) · görünen ad · model/simge adı · fiyat (akçe)
         private static readonly (string formula, string name, string asset, int price)[] Tools =
@@ -74,6 +75,25 @@ namespace BilgiAdasi.EditorTools
             }
             foreach (var s in tools) catalog.AddIfMissing(s);
             EditorUtility.SetDirty(catalog);
+
+            // Ekonomi kataloğu: kayıttan geri yükleme formülle buradan bulur; aletler yoksa yüklemede silinir.
+            var economy = AssetDatabase.LoadAssetAtPath<EconomyData>(EconomyPath);
+            if (economy != null)
+            {
+                var eso = new SerializedObject(economy);
+                var list = eso.FindProperty("catalog");
+                foreach (var s in tools)
+                {
+                    bool has = false;
+                    for (int i = 0; i < list.arraySize; i++)
+                        if (list.GetArrayElementAtIndex(i).objectReferenceValue == s) has = true;
+                    if (has) continue;
+                    list.InsertArrayElementAtIndex(list.arraySize);
+                    list.GetArrayElementAtIndex(list.arraySize - 1).objectReferenceValue = s;
+                }
+                eso.ApplyModifiedPropertiesWithoutUndo();
+            }
+            else Debug.LogWarning("[Alet pazarı] Economy bulunamadı: " + EconomyPath);
 
             // Simgeler temaya
             var theme = AssetDatabase.LoadAssetAtPath<UiTheme>(ThemePath);

@@ -34,16 +34,20 @@ namespace BilgiAdasi.Order
         [SerializeField] private float reactionDuration = 1.5f;
         [Tooltip("\"Gerçek hayatta\" kartının ekranda kalma süresi (sn).")]
         [SerializeField] private float realLifeSeconds = 8f;
+        [Tooltip("Kayıttan kazan içeriğini geri yüklemek için madde kataloğu. Boşsa oyuncunun envanterindeki kullanılır.")]
+        [SerializeField] private EconomyData economy;
 
         private OrderSession session;
         private bool sealNoteShown;
         private PlayerInventory lastInventory;
         private InputAction hintAction;
         private Coroutine realLifeRoutine;
+        private bool returnsRestored;
 
         private readonly List<SpeciesAmount> pending = new List<SpeciesAmount>();
         private readonly List<SpeciesData> reactantBuffer = new List<SpeciesData>();
         private readonly List<string> localBoard = new List<string>();
+        private readonly List<string> boardLines = new List<string>(4);
 
         private IOrderCardView cardView;
         private ICauldronView cauldronView;
@@ -106,7 +110,7 @@ namespace BilgiAdasi.Order
             }
             StopAllCoroutines();
             session = new OrderSession(task);
-            pending.Clear();
+            // pending temizlenmez: kazanda bekleyen ürün/malzeme (önceki sipariş ya da kayıttan) oyuncunundur.
             Current = State.Preparing;
             hintView?.HideHint();
             hintView?.SetGlowing(false);
@@ -205,7 +209,9 @@ namespace BilgiAdasi.Order
             }
             if (!CanPour || session.IsEmpty) return;
             lastInventory = inventory;
-            StartCoroutine(session.IsSatisfied ? ReactRoutine() : FoamRoutine());
+            bool reacts = session.IsSatisfied;
+            GameEvents.RaiseStoveFired(reacts);
+            StartCoroutine(reacts ? ReactRoutine() : FoamRoutine());
         }
 
         /// <summary>Envanter doluyken kazanda bekleyen ürünü alır.</summary>
@@ -388,8 +394,66 @@ namespace BilgiAdasi.Order
                 Current == State.ReadyToDeliver));
         }
 
+        // ---------- Kayıt: kazanda kalanlar ----------
+
+        /// <summary>
+        /// Kazanda kalanları kayda yazar: bekleyen ürünler + (sipariş sürüyorsa) dökülmüş malzeme. Yüklemede bunlar
+        /// kazanda bekleyen olarak geri gelir; böylece kayıt/çıkış harcanan akçeyi ya da teslim edilecek ürünü yutmaz.
+        /// </summary>
+        private void SyncReturns()
+        {
+            EnsureReturnsRestored();
+            var data = Data;
+            if (data == null) return;
+            var list = data.CauldronReturns;
+            list.Clear();
+            for (int i = 0; i < pending.Count; i++) AddReturn(list, pending[i].Species, pending[i].Amount);
+            if (session != null && (Current == State.Preparing || Current == State.Foam || Current == State.Reacting))
+            {
+                var contents = session.Contents;
+                for (int i = 0; i < contents.Count; i++) AddReturn(list, contents[i].Species, contents[i].Amount);
+            }
+        }
+
+        private static void AddReturn(List<SaveData.StackEntry> list, SpeciesData species, int amount)
+        {
+            if (species == null || amount <= 0) return;
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i].species != species.Formula) continue;
+                var e = list[i];
+                e.count += amount;
+                list[i] = e;
+                return;
+            }
+            list.Add(new SaveData.StackEntry { key = string.Empty, species = species.Formula, count = amount });
+        }
+
+        /// <summary>İlk yazmadan önce bir kez: önceki oturumdan kazanda kalanları bekleyen listesine alır.</summary>
+        private void EnsureReturnsRestored()
+        {
+            if (returnsRestored) return;
+            var data = Data;
+            if (data == null) return;
+            returnsRestored = true;
+            var list = data.CauldronReturns;
+            if (list.Count == 0) return;
+            if (economy == null)
+            {
+                var inventory = FindAnyObjectByType<PlayerInventory>();
+                if (inventory != null) economy = inventory.Economy;
+            }
+            if (economy == null) return;
+            for (int i = 0; i < list.Count; i++)
+            {
+                var s = economy.FindSpecies(list[i].species);
+                if (s != null && list[i].count > 0) pending.Add(new SpeciesAmount(s, list[i].count));
+            }
+        }
+
         private void RefreshCauldron()
         {
+            SyncReturns();
             // Teslimden sonra (Done) yeni sipariş alınana kadar terazi ve kazan boş görünür; BeginTask yenisini çizer.
             if (session != null && Current != State.Done)
             {
@@ -404,9 +468,29 @@ namespace BilgiAdasi.Order
             StateChanged?.Invoke();
         }
 
+        /// <summary>
+        /// Karatahta aktif siparişin denklemini gösterir: biten adımlar denkleştirilmiş, üzerinde çalışılan adım
+        /// katsayısız iskelet (cevabı vermez). Sipariş yokken çözülen denklemler listesi kalır.
+        /// </summary>
         private void RefreshBoard()
         {
             if (boardView == null) return;
+            if (session != null && Current != State.Done)
+            {
+                boardLines.Clear();
+                var steps = session.Task.Steps;
+                string unknown = texts != null ? texts.BoardUnknownSide : "?";
+                for (int i = 0; i <= session.StepIndex && i < steps.Count; i++)
+                {
+                    var step = steps[i];
+                    bool solved = i < session.StepIndex || Current == State.ReadyToDeliver;
+                    boardLines.Add(solved
+                        ? FormulaFormatter.Equation(step.Reaction)
+                        : FormulaFormatter.Skeleton(step.Reaction, step.CardShowsReactants, unknown));
+                }
+                boardView.ShowEquations(boardLines);
+                return;
+            }
             var data = Data;
             boardView.ShowEquations(data != null ? data.BoardEquations : localBoard);
         }

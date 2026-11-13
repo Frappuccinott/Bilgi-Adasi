@@ -32,6 +32,10 @@ namespace BilgiAdasi.Core
         /// <summary>Duraklatma menüsü açıldı (true) / kapandı (false).</summary>
         public static event Action<bool> PauseChanged;
 
+        /// <summary>Ocak yakıldı: true = tepkime başladı, false = kazan köpürüyor. Titreşim/ses dinler.</summary>
+        public static event Action<bool> StoveFired;
+
+        public static void RaiseStoveFired(bool reacting) => StoveFired?.Invoke(reacting);
         public static void RaiseAchievementUnlocked(string achievementId) => AchievementUnlocked?.Invoke(achievementId);
         public static void RaisePauseChanged(bool paused) => PauseChanged?.Invoke(paused);
 
@@ -70,6 +74,7 @@ namespace BilgiAdasi.Core
             HasHandItem = false;
             AchievementUnlocked = null;
             PauseChanged = null;
+            StoveFired = null;
         }
     }
 }

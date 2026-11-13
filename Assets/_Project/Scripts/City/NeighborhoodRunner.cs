@@ -36,6 +36,7 @@ namespace BilgiAdasi.City
         private readonly HashSet<string> introShown = new HashSet<string>();
         // Bu oturumda kayıt yoksa (test) biten görevler burada tutulur.
         private readonly HashSet<string> localCompleted = new HashSet<string>();
+        private readonly HashSet<string> localAdvancePaid = new HashSet<string>();
 
         private OrderTask activeOrder;
         private NeighborhoodData activeOrderNeighborhood;
@@ -258,7 +259,7 @@ namespace BilgiAdasi.City
                 // Sipariş alındı ama hazır değil.
                 AddLine(activeOrder.GiverName, texts != null ? texts.OrderWaiting : null, activeOrder.GiverPortrait);
             }
-            else if (!OfferNextOrder())
+            else if (!OfferNextOrder(inv))
             {
                 AddMasterLine(texts != null ? texts.NobodyAtDoor : null);
             }
@@ -290,7 +291,7 @@ namespace BilgiAdasi.City
         }
 
         /// <summary>Sıradaki sipariş varsa (ilk görevde ustanın tanıtımıyla) satırlarını ekler ve görevi kazana verir.</summary>
-        private bool OfferNextOrder()
+        private bool OfferNextOrder(PlayerInventory inv)
         {
             if (!TryGetNext<OrderTask>(out var n, out var task)) return false;
 
@@ -299,8 +300,27 @@ namespace BilgiAdasi.City
             introShown.Add(n.Id);
 
             for (int i = 0; i < task.GiverLines.Length; i++) AddLine(task.GiverName, task.GiverLines[i], task.GiverPortrait);
+            PayAdvance(task, inv);
             StartOrder(n, task);
             return true;
+        }
+
+        /// <summary>
+        /// Peşin ödemeli sipariş (Purchase, ör. denk_5 "parasını peşin veriyorum"): budget keseye bir kez konur.
+        /// Kayda işlenir; sipariş yarıda bırakılıp yeniden alınırsa tekrar verilmez.
+        /// </summary>
+        private void PayAdvance(OrderTask task, PlayerInventory inv)
+        {
+            if (task.Budget <= 0 || inv == null) return;
+            var data = Data;
+            if (data != null)
+            {
+                if (data.IsAdvancePaid(task.Id)) return;
+                data.MarkAdvancePaid(task.Id);
+            }
+            else if (!localAdvancePaid.Add(task.Id)) return;
+            inv.AddMoney(task.Budget);
+            if (texts != null) AddLine(task.GiverName, string.Format(texts.AdvancePaid, task.Budget), task.GiverPortrait);
         }
 
         /// <summary>

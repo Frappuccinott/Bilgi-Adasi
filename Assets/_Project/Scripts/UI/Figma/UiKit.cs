@@ -1,3 +1,4 @@
+using BilgiAdasi.Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,10 +12,12 @@ namespace BilgiAdasi.UI
     /// </summary>
     public static class UiKit
     {
-        private static Sprite round8, round4, disc, ring, ringDashed, check, fadeUp, fadeLeft;
+        private static Sprite round8, round4, pill, disc, ring, ringDashed, check, fadeUp, fadeLeft;
 
         public static Sprite Round8 => round8 ? round8 : round8 = MakeRound(8);
         public static Sprite Round4 => round4 ? round4 : round4 = MakeRound(4);
+        /// <summary>Uçları tam yuvarlak hap (gamepad omuz/menü tuşu). Kenarlıklar yüksekliğe göre küçülür.</summary>
+        public static Sprite Pill => pill ? pill : pill = MakeRound(32);
         public static Sprite Disc => disc ? disc : disc = MakeRing(64, 0f, false);
         public static Sprite Ring => ring ? ring : ring = MakeRing(64, 5f, false);
         public static Sprite RingDashed => ringDashed ? ringDashed : ringDashed = MakeRing(64, 4f, true);
@@ -32,6 +35,37 @@ namespace BilgiAdasi.UI
         public static Sprite WoodGrain => grain ? grain : grain = MakeGrain(1024, 576);
         /// <summary>Kenarlara doğru koyulaşan vinyet (ortası saydam, kenarı opak). Image rengiyle boyanır.</summary>
         public static Sprite Vignette => vignette ? vignette : vignette = MakeVignette(256, 144);
+
+        /// <summary>PlayStation yüz tuşu kapakları: yuvarlak kâğıt tuş, ortasında büyük çizgi sembol (□ ▲ ○ ×).</summary>
+        public enum PadSymbol { Square, Triangle, Circle, Cross }
+
+        private static readonly Sprite[] symbolSprites = new Sprite[4];
+
+        /// <summary>Kâğıt yüz + mürekkep çerçeve + altta basılı tuş payı, renkler pişmiş (Image rengi beyaz kalır).</summary>
+        public static Sprite Symbol(PadSymbol kind)
+        {
+            int i = (int)kind;
+            if (symbolSprites[i] == null)
+            {
+                var th = UiTheme.OrDefault(null);
+                symbolSprites[i] = MakeSymbol(kind, th.Paper, th.InkDeep);
+            }
+            return symbolSprites[i];
+        }
+
+        /// <summary>ControlGlyphs'in PS etiketi (× ○ □ ▲) → şekil.</summary>
+        public static bool TryGetPadSymbol(string label, out PadSymbol kind)
+        {
+            switch (label)
+            {
+                case "□": kind = PadSymbol.Square; return true;
+                case "▲":
+                case "△": kind = PadSymbol.Triangle; return true;
+                case "○": kind = PadSymbol.Circle; return true;
+                case "×": kind = PadSymbol.Cross; return true;
+                default: kind = PadSymbol.Square; return false;
+            }
+        }
 
         // ---------- Düzen ----------
 
@@ -130,21 +164,55 @@ namespace BilgiAdasi.UI
         }
 
         /// <summary>
-        /// ControlGlyphs'in döndürdüğü metni tuş kapağına yazar. Klavye "&lt;b&gt;[E]&lt;/b&gt;" → kapakta "E";
-        /// gamepad glifi "(X)" olduğu gibi. Kapak genişliği etikete göre ayarlanır.
+        /// ControlGlyphs'in döndürdüğü simgeyi tuş kapağına çizer (son cihaza göre). Hepsi aynı marka dilinde:
+        /// kâğıt yüz, koyu mürekkep çerçeve, mürekkep etiket ve altta basılı tuş payı (Glyph/Klavye ile aynı).
+        /// Biçim tuşu anlatır: klavye → yuvarlak köşeli kare; yüz tuşu (A/B/X/Y, × ○ □ ▲) → daire;
+        /// omuz/menü/çubuk/D-pad → uçları tam yuvarlak hap. Kapak genişliği etikete göre ayarlanır.
         /// </summary>
         public static void SetKeyCap(TextMeshProUGUI label, RectTransform root, string glyph, float height)
         {
-            string text = glyph ?? string.Empty;
-            const string open = "<b>[", close = "]</b>";
-            bool keyboard = text.StartsWith(open) && text.EndsWith(close);
-            if (keyboard) text = text.Substring(open.Length, text.Length - open.Length - close.Length);
+            var th = UiTheme.OrDefault(null);
+            ControlGlyphs.Describe(glyph, out var shape, out var text, out _);
+            var frame = root.childCount > 0 ? root.GetChild(0).GetComponent<Image>() : null;
+            var face = frame != null && frame.transform.childCount > 0 ? frame.transform.GetChild(0).GetComponent<Image>() : null;
+
+            // PlayStation: yuvarlak tuş + vektör çizgi sembol (fonttaki □ ▲ ○ × çok küçük kalıyordu).
+            if (shape == GlyphShape.Face && TryGetPadSymbol(text, out var symbol))
+            {
+                Style(frame, Color.white, Symbol(symbol));
+                if (frame != null) frame.preserveAspect = true;
+                if (face != null) face.enabled = false;
+                label.text = string.Empty;
+                root.sizeDelta = new Vector2(height, height);
+                var sle = root.GetComponent<LayoutElement>();
+                if (sle != null) sle.preferredWidth = height;
+                return;
+            }
+
+            Sprite sprite = shape == GlyphShape.Face ? Disc : shape == GlyphShape.Pill ? Pill : Round8;
+            Style(frame, th.InkDeep, sprite);
+            Style(face, th.Paper, sprite);
+            if (face != null) Fill(face.rectTransform, 3, 3, 3, 5);   // alt pay: basılı tuş derinliği
+
             label.text = text;
-            foreach (var img in root.GetComponentsInChildren<Image>(true)) img.enabled = keyboard;
-            float w = Mathf.Max(height, label.GetPreferredValues(text, 1000f, height).x + 24f);
+            label.color = th.InkDeep;
+            label.fontSize = height * (shape == GlyphShape.Face ? 0.6f : shape == GlyphShape.Pill ? 0.42f : 0.5f);
+            float w = shape == GlyphShape.Face
+                ? height
+                : Mathf.Max(height, label.GetPreferredValues(text, 1000f, height).x + (shape == GlyphShape.Pill ? 30f : 24f));
             root.sizeDelta = new Vector2(w, height);
             var le = root.GetComponent<LayoutElement>();
             if (le != null) le.preferredWidth = w;
+        }
+
+        private static void Style(Image img, Color color, Sprite sprite)
+        {
+            if (img == null) return;
+            img.enabled = true;
+            img.preserveAspect = false;
+            img.sprite = sprite;
+            img.type = sprite.border != Vector4.zero ? Image.Type.Sliced : Image.Type.Simple;
+            img.color = color;
         }
 
         public static Color WithAlpha(Color c, float a)
@@ -283,6 +351,79 @@ namespace BilgiAdasi.UI
             Vector2 ab = b - a;
             float t = Mathf.Clamp01(Vector2.Dot(p - a, ab) / ab.sqrMagnitude);
             return Vector2.Distance(p, a + ab * t);
+        }
+
+        /// <summary>
+        /// PS kapağı: Glyph/Klavye diliyle yuvarlak tuş (kâğıt yüz, mürekkep çerçeve, altta basılı tuş payı) ve
+        /// ortasında kapağın ~%40'ı boyunda kalın çizgili mürekkep sembol. İşaretli uzaklık alanıyla (SDF) çizilir;
+        /// fonttaki küçük □ ▲ ○ × karakterlerinin yerine geçer.
+        /// </summary>
+        private static Sprite MakeSymbol(PadSymbol kind, Color paper, Color ink)
+        {
+            const int size = 128;
+            const float radius = 55f, border = 7f, depth = 6f;
+            var tex = NewTex(size, size);
+            var px = new Color32[size * size];
+            var center = new Vector2(size * 0.5f, size * 0.5f + depth * 0.5f);
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                var p = new Vector2(x + 0.5f, y + 0.5f) - center;
+                float d = p.magnitude - radius;
+                float dDepth = (p + new Vector2(0f, depth)).magnitude - radius;
+                float paperA = Mathf.Clamp01(0.5f - (d + border));
+                float iconA = Mathf.Clamp01(0.5f - IconDistance(kind, p));
+                var c = Color.Lerp(ink, paper, paperA);
+                c = Color.Lerp(c, ink, iconA);
+                c.a = Mathf.Max(Mathf.Clamp01(0.5f - d), Mathf.Clamp01(0.5f - dDepth));
+                px[y * size + x] = c;
+            }
+            tex.SetPixels32(px);
+            tex.Apply(false, true);
+            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        /// <summary>Sembol çizgisinin işaretli uzaklığı (piksel, çizgi içinde negatif). Merkez (0,0), y yukarı.</summary>
+        private static float IconDistance(PadSymbol kind, Vector2 p)
+        {
+            const float stroke = 4.75f; // yarı kalınlık: 128 px'te ~9.5 px → 44 px kapakta ~3.3 px
+            switch (kind)
+            {
+                case PadSymbol.Circle:
+                    return Mathf.Abs(p.magnitude - 21f) - stroke;
+                case PadSymbol.Square:
+                    return Mathf.Abs(Box(p, new Vector2(17f, 17f)) - 2.5f) - stroke;
+                case PadSymbol.Triangle:
+                {
+                    // Eşkenar üçgen: şeklin kutusu ortalanır (ağırlık merkezi değil), optik olarak biraz yukarı.
+                    var q = p + new Vector2(0f, 6f);
+                    return Mathf.Abs(Triangle(q, 24f) - 1.5f) - stroke;
+                }
+                default: // Cross: 45° dönmüş iki kalın çizgi, uçlar yuvarlak
+                {
+                    const float c = 0.70710678f;
+                    var q = new Vector2((p.x + p.y) * c, (p.y - p.x) * c);
+                    return Mathf.Min(Box(q, new Vector2(24f, 0f)), Box(q, new Vector2(0f, 24f))) - stroke;
+                }
+            }
+        }
+
+        private static float Box(Vector2 p, Vector2 half)
+        {
+            float qx = Mathf.Abs(p.x) - half.x, qy = Mathf.Abs(p.y) - half.y;
+            float outside = new Vector2(Mathf.Max(qx, 0f), Mathf.Max(qy, 0f)).magnitude;
+            return outside + Mathf.Min(Mathf.Max(qx, qy), 0f);
+        }
+
+        /// <summary>Yukarı bakan eşkenar üçgen (yarı kenar r); Inigo Quilez SDF formülü (genel bilinen matematik).</summary>
+        private static float Triangle(Vector2 p, float r)
+        {
+            const float k = 1.7320508f;
+            p.x = Mathf.Abs(p.x) - r;
+            p.y = p.y + r / k;
+            if (p.x + k * p.y > 0f) p = new Vector2(p.x - k * p.y, -k * p.x - p.y) * 0.5f;
+            p.x -= Mathf.Clamp(p.x, -2f * r, 0f);
+            return -p.magnitude * Mathf.Sign(p.y);
         }
 
         private static Texture2D NewTex(int w, int h)

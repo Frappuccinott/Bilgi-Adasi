@@ -57,7 +57,7 @@ Yeni paket eklemeden önce **sor**.
 - Kodda tek giriş noktası: `GameInput.Controls` (tek örnek), map değişimi yalnızca `GameInput.SetMode(InputMode.Player|Station|UI)`. Son cihaz: `GameInput.LastDevice` / `DeviceChanged`.
 - Control scheme'ler: `KeyboardMouse`, `Gamepad`.
 - Action map'ler aynı anda yalnızca biri açık olacak şekilde yönetilir: `Player`, `Station`, `UI`.
-- Ekrandaki tuş ipuçları **son kullanılan cihazın düzenine göre** değişir: klavye `[E]`, Xbox `(X)`, PlayStation `(□)`, Switch `(Y)`. Algılama `GameInput.LastScheme` / `SchemeChanged` (DualShock/DualSense → PS, Switch Pro → Switch, diğer gamepad'ler → Xbox). Simgeler tek yerde: `ControlGlyphs.For(PromptAction.X)`; kodda tuş adı yazılmaz. Bağlama değişirse `ControlGlyphs` tablosu da güncellenir.
+- Ekrandaki tuş ipuçları **son kullanılan cihazın düzenine göre** değişir: klavye `[E]`, Xbox `(X)`, PlayStation `(□)`, Switch `(Y)`. Algılama `GameInput.LastScheme` / `SchemeChanged` (DualShock/DualSense → PS, Switch Pro → Switch, diğer gamepad'ler → Xbox). Simgeler tek yerde: `ControlGlyphs.For(PromptAction.X)`; kodda tuş adı yazılmaz. Tuş kapağı çizimi `UiKit.SetKeyCap` (`ControlGlyphs.Describe` ile): hepsi marka dilinde (kâğıt yüz, mürekkep çerçeve/etiket, basılı tuş payı); biçim tuşu anlatır: klavye yuvarlak köşeli kare, yüz tuşları daire (PlayStation'da daire içinde fonttan değil vektörle çizilen büyük □ ▲ ○ ×, `UiKit.Symbol`), omuz/menü/çubuk/D-pad hap. Bağlama değişirse `ControlGlyphs` tablosu da güncellenir.
 - Gamepad'de istasyon modunda **imleç yok** (karar 13.11, sanal imleç rahat değildi): ↑↓ ile odak/seçim, A onay, RB/LB artır-azalt. İstasyondayken UI'ın kendi yön gezinmesi kapalıdır (`GameInput.SetMode`). Ekranda tuş ipuçları cihaza göre değişir.
 - Ölü bölge (deadzone): çubuklar için 0.15 (Stick Deadzone processor).
 
@@ -148,7 +148,7 @@ Tüm değerler `PlayerMovementSettings` ScriptableObject'inde; play mode'da canl
 ## 5. Atölye (kazan, raf, pazar, kapı) ve istasyon modu
 
 **Karar 13.11: kazan ve kapı istasyon değil; kamera hep birinci şahısta kalır.** Her şey crosshair'le bakıp Interact (E / X) ile yapılır (`WorldInteractable`):
-- **Pazar tezgâhı** (şehirde, `MarketStall`): E → pazar ekranı (UI modu); alınan kavanoz envantere girer, akçe düşer. Para en ucuz kavanoza yetmezse Usta borç verir.
+- **Pazar tezgâhı** (şehirde, `MarketStall`): E → pazar ekranı (UI modu); alınan kavanoz envantere girer, akçe düşer. Usta yalnızca aktif siparişin malzemesine para yetmezse borç verir (alet pazarı borç vermez). Peşin ödemeli sipariş (`budget`) alınınca para bir kez keseye konur. Kazandaki malzeme ve bekleyen ürün kayda yazılır (`SaveData.CauldronReturns`), yüklemede kazanda bekler. Kayıtta geri yüklenecek her madde/alet `Economy` kataloğunda olmalı.
 - **Envanter** (`PlayerInventory`, oyuncuda): ekranın altında 6 slot; slot = tek maddenin yığını. Seçili slot "eldeki" maddedir. Yeni madde aynı yığına, yoksa soldan ilk boş slota.
 - **Raf** (`Shelf` / `ShelfSlot`): dolu yerden yığının tamamı envantere, boş yere eldeki yığının tamamı. Kayıtlı.
 - **Kazan** (`CauldronStation` + `OrderController`): E → eldeki maddeden 1 kavanoz dökülür. **Dökülen geri alınmaz.** Boşaltma kolu (`CauldronDrain`) kazanı boşaltır, malzeme gider.

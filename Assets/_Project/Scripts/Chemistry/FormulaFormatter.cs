@@ -49,7 +49,21 @@ namespace BilgiAdasi.Chemistry
             return Builder.ToString();
         }
 
-        private static void AppendSide(IReadOnlyList<SpeciesAmount> side)
+        /// <summary>
+        /// Katsayısız iskelet denklem (denkleştirilecek hali): "H<sub>2</sub> + O<sub>2</sub> → H<sub>2</sub>O".
+        /// showReactants false ise sol tarafın yerine unknownSide yazılır (sipariş kartı girenleri saklıyorsa).
+        /// </summary>
+        public static string Skeleton(ReactionData reaction, bool showReactants, string unknownSide)
+        {
+            Builder.Clear();
+            if (showReactants) AppendSide(reaction.Reactants, false);
+            else Builder.Append(unknownSide);
+            Builder.Append(Arrow);
+            AppendSide(reaction.Products, false);
+            return Builder.ToString();
+        }
+
+        private static void AppendSide(IReadOnlyList<SpeciesAmount> side, bool coefficients = true)
         {
             bool first = true;
             for (int i = 0; i < side.Count; i++)
@@ -57,7 +71,7 @@ namespace BilgiAdasi.Chemistry
                 var term = side[i];
                 if (term.Species == null || term.Amount <= 0) continue;
                 if (!first) Builder.Append(Plus);
-                if (term.Amount != 1) Builder.Append(term.Amount);
+                if (coefficients && term.Amount != 1) Builder.Append(term.Amount);
                 Builder.Append(term.Species.FormulaRich);
                 first = false;
             }

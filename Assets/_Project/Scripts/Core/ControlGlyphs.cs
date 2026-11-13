@@ -1,5 +1,15 @@
+using UnityEngine;
+
 namespace BilgiAdasi.Core
 {
+    /// <summary>Tuş simgesinin çizim biçimi (UiKit.SetKeyCap): klavye kapağı, renkli yüz tuşu dairesi, hap (omuz/menü/D-pad).</summary>
+    public enum GlyphShape
+    {
+        Key,
+        Face,
+        Pill
+    }
+
     /// <summary>Ekranda ipucu gösterilen aksiyonlar (BilgiAdasiControls'taki aksiyonlarla eşleşir).</summary>
     public enum PromptAction
     {
@@ -102,6 +112,46 @@ namespace BilgiAdasi.Core
             }
         }
 
+        /// <summary>
+        /// For()'un döndürdüğü simgeyi çizim için çözer: biçim, etiket (zengin metinsiz) ve renk.
+        /// Klavye "&lt;b&gt;[E]&lt;/b&gt;", yüz tuşu "&lt;b&gt;&lt;color=#..&gt;(A)&lt;/color&gt;&lt;/b&gt;", diğerleri "&lt;b&gt;(LB)&lt;/b&gt;".
+        /// Tanınmayan metin olduğu gibi klavye kapağına yazılır.
+        /// </summary>
+        public static void Describe(string glyph, out GlyphShape shape, out string label, out Color color)
+        {
+            label = glyph ?? string.Empty;
+            shape = GlyphShape.Key;
+            color = Color.white;
+
+            const string keyOpen = "<b>[", keyClose = "]</b>";
+            const string faceOpen = "<b><color=", faceClose = ")</color></b>";
+            const string pillOpen = "<b>(", pillClose = ")</b>";
+
+            if (label.StartsWith(keyOpen) && label.EndsWith(keyClose))
+            {
+                label = label.Substring(keyOpen.Length, label.Length - keyOpen.Length - keyClose.Length);
+            }
+            else if (label.StartsWith(faceOpen) && label.EndsWith(faceClose))
+            {
+                int end = label.IndexOf(">(", faceOpen.Length, System.StringComparison.Ordinal);
+                if (end < 0) return;
+                ColorUtility.TryParseHtmlString(label.Substring(faceOpen.Length, end - faceOpen.Length), out color);
+                int start = end + 2;
+                label = label.Substring(start, label.Length - faceClose.Length - start);
+                shape = GlyphShape.Face;
+            }
+            else if (label.StartsWith(pillOpen) && label.EndsWith(pillClose))
+            {
+                label = label.Substring(pillOpen.Length, label.Length - pillOpen.Length - pillClose.Length);
+                shape = GlyphShape.Pill;
+            }
+        }
+
+        // Xbox yüz tuşu renkleri: Figma "Glyph/Gamepad" bileşeni.
+        private const string XboxA = "#6CBE3A", XboxB = "#E9622C", XboxX = "#4FC6E6", XboxY = "#F7CB45";
+        // Switch yüz tuşları renksizdir: kâğıt tonunda halka + harf.
+        private const string SwitchFace = "#E9E1D0";
+
         private static string Key(string label) => "<b>[" + label + "]</b>";
 
         private static string Face(string symbol, string color) => "<b><color=" + color + ">(" + symbol + ")</color></b>";
@@ -134,10 +184,10 @@ namespace BilgiAdasi.Core
                     // Switch'te yüz tuşlarının harfleri Xbox'a göre yer değiştirir (güney = B).
                     switch (button)
                     {
-                        case Pad.South: return Text("B");
-                        case Pad.East: return Text("A");
-                        case Pad.West: return Text("Y");
-                        case Pad.North: return Text("X");
+                        case Pad.South: return Face("B", SwitchFace);
+                        case Pad.East: return Face("A", SwitchFace);
+                        case Pad.West: return Face("Y", SwitchFace);
+                        case Pad.North: return Face("X", SwitchFace);
                         case Pad.LeftShoulder: return Text("L");
                         case Pad.RightShoulder: return Text("R");
                         case Pad.Start: return Text("+");
@@ -152,10 +202,10 @@ namespace BilgiAdasi.Core
                 default: // Xbox ve tanınmayan gamepad'ler
                     switch (button)
                     {
-                        case Pad.South: return Face("A", "#6CC24A");
-                        case Pad.East: return Face("B", "#E8483A");
-                        case Pad.West: return Face("X", "#3D8FE0");
-                        case Pad.North: return Face("Y", "#F2C230");
+                        case Pad.South: return Face("A", XboxA);
+                        case Pad.East: return Face("B", XboxB);
+                        case Pad.West: return Face("X", XboxX);
+                        case Pad.North: return Face("Y", XboxY);
                         case Pad.LeftShoulder: return Text("LB");
                         case Pad.RightShoulder: return Text("RB");
                         case Pad.Start: return Text("Menu");
