@@ -115,18 +115,24 @@ namespace BilgiAdasi.Player
         public float CrouchHeight => crouchHeight;
         public float CrouchTransitionSpeed => crouchTransitionSpeed;
 
-        public float MouseSensitivity { get => mouseSensitivity; set => mouseSensitivity = Mathf.Max(0.001f, value); }
-        public float GamepadYawSpeed => gamepadYawSpeed;
-        public float GamepadPitchSpeed => gamepadPitchSpeed;
+        // Oyuncu ayarı (GameSettings) varsa o, yoksa asset değeri. Asset Ayarlar ekranından değişmez.
+        public float DefaultMouseSensitivity => mouseSensitivity;
+        public float DefaultGamepadLookSpeed => gamepadYawSpeed;
+        public float DefaultFieldOfView => fieldOfView;
+        public bool DefaultHeadBob => headBobEnabled;
+        public float MouseSensitivity { get => Core.GameSettings.MouseSensitivity ?? mouseSensitivity; set => mouseSensitivity = Mathf.Max(0.001f, value); }
+        public float GamepadYawSpeed => Core.GameSettings.GamepadLookSpeed ?? gamepadYawSpeed;
+        public float GamepadPitchSpeed => Core.GameSettings.GamepadLookSpeed.HasValue && gamepadYawSpeed > 0f
+            ? gamepadPitchSpeed * Core.GameSettings.GamepadLookSpeed.Value / gamepadYawSpeed : gamepadPitchSpeed;
         public AnimationCurve GamepadResponse => gamepadResponse;
         public float GamepadRampTime => gamepadRampTime;
         public float PitchLimit => pitchLimit;
-        public float FieldOfView { get => fieldOfView; set => fieldOfView = Mathf.Clamp(value, 60f, 90f); }
+        public float FieldOfView { get => Core.GameSettings.FieldOfView ?? fieldOfView; set => fieldOfView = Mathf.Clamp(value, 60f, 90f); }
         public float SprintFovBoost => sprintFovBoost;
         public float FovSharpness => fovSharpness;
 
         public float StrideLength => strideLength;
-        public bool HeadBobEnabled { get => headBobEnabled; set => headBobEnabled = value; }
+        public bool HeadBobEnabled { get => Core.GameSettings.HeadBob ?? headBobEnabled; set => headBobEnabled = value; }
         public float HeadBobAmplitude => headBobAmplitude;
         public float HeadBobPitch => headBobPitch;
         public float LandingDipMax => landingDipMax;

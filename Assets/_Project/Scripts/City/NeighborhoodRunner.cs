@@ -17,7 +17,7 @@ namespace BilgiAdasi.City
     /// İlerleme kayıttaki completedTasks'tan hesaplanır (ayrıca saklanmaz).
     /// </summary>
     [RequireComponent(typeof(DialogueDirector))]
-    public sealed class NeighborhoodRunner : MonoBehaviour
+    public sealed class NeighborhoodRunner : MonoBehaviour, ICurrentTaskSource
     {
         [Tooltip("Oynanabilir köyler. Kapıya birden fazla köyün siparişi hazırsa listedeki sıra önce gelir (demo: Denkleştirme).")]
         [SerializeField] private List<NeighborhoodData> neighborhoods = new List<NeighborhoodData>();
@@ -51,12 +51,14 @@ namespace BilgiAdasi.City
         {
             if (door != null) door.Used += OnDoorUsed;
             if (orderController != null) orderController.TaskFinished += OnOrderFinished;
+            ViewLocator.Register<ICurrentTaskSource>(this);
         }
 
         private void OnDisable()
         {
             if (door != null) door.Used -= OnDoorUsed;
             if (orderController != null) orderController.TaskFinished -= OnOrderFinished;
+            ViewLocator.Unregister<ICurrentTaskSource>(this);
         }
 
         private void Start()
@@ -89,6 +91,55 @@ namespace BilgiAdasi.City
         }
 
         // ---------- İlerleme ----------
+
+        // ---------- Duraklatma: şu anki görev ----------
+
+        /// <summary>
+        /// Alınmış sipariş (kapıda konuşulmuş) için kart verisi; yoksa null. Adımlarda yalnızca girenler yazılır,
+        /// ürün "?" kalır (katsayı ve cevap verilmez); biten adımda ürünler katsayısız açılır.
+        /// </summary>
+        public CurrentTaskInfo GetCurrentTask()
+        {
+            var order = activeOrder;
+            if (order == null) return null;
+            var n = activeOrderNeighborhood != null ? activeOrderNeighborhood : FindOwner(order);
+            var session = orderController != null ? orderController.Session : null;
+            bool ready = orderController != null && orderController.IsReadyToDeliver;
+            int stepIndex = ready ? order.Steps.Count : session != null && session.Task == order ? session.StepIndex : 0;
+
+            var info = new CurrentTaskInfo
+            {
+                Title = order.GiverName,
+                Quote = order.GiverLines != null && order.GiverLines.Length > 0 ? order.GiverLines[0] : null,
+                WantedRich = Amounts(order.DeliveryProducts, true),
+                ReadyToDeliver = ready,
+                Place = n != null ? n.Title : null,
+                Done = n != null ? CompletedCount(n) : 0,
+                Total = n != null ? n.Tasks.Count : 0
+            };
+            for (int i = 0; i < order.Steps.Count; i++)
+            {
+                var step = order.Steps[i];
+                bool done = i < stepIndex;
+                string text = step.Reaction != null
+                    ? Amounts(step.Reaction.Reactants, false) + " → " + (done ? Amounts(step.Reaction.Products, false) : "?")
+                    : Amounts(step.TargetProducts, true);
+                info.Steps.Add(new CurrentTaskInfo.Step(text, done));
+            }
+            return info;
+        }
+
+        private static string Amounts(IReadOnlyList<Chemistry.SpeciesAmount> list, bool withCoefficients)
+        {
+            var sb = new System.Text.StringBuilder();
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (i > 0) sb.Append(" + ");
+                if (withCoefficients && list[i].Amount != 1) sb.Append(list[i].Amount).Append(' ');
+                sb.Append(list[i].Species.FormulaRich);
+            }
+            return sb.ToString();
+        }
 
         public bool IsTaskDone(TaskData task)
         {

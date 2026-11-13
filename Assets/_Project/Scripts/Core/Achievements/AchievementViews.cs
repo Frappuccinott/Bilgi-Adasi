@@ -103,6 +103,8 @@ namespace BilgiAdasi.Core
         /// <summary>Menü açılır; başarım verisi her açılışta tazedir.</summary>
         void Open(AchievementMenuInfo achievements);
         void Close();
+        /// <summary>Şu anki görev kartı (Open'dan hemen sonra çağrılır). null = görev yok, kart gizli.</summary>
+        void ShowCurrentTask(CurrentTaskInfo task);
         /// <summary>Alt sayfadaysa (başarım ağacı) ana sayfaya döner ve true; zaten ana sayfadaysa false (menü kapanır).</summary>
         bool TryGoBack();
     }

@@ -126,6 +126,7 @@ namespace BilgiAdasi.Player
 
             if (yawAnchored) UpdateAnchoredYaw(yawDelta);
             else transform.Rotate(0f, yawDelta, 0f, Space.Self);
+            if (GameSettings.InvertY) pitchDelta = -pitchDelta;
             pitch = Mathf.Clamp(pitch - pitchDelta, -settings.PitchLimit, settings.PitchLimit);
             cameraPivot.localRotation = Quaternion.Euler(pitch, 0f, 0f);
         }
