@@ -36,7 +36,7 @@
 - [ ] `[KOD]` Harita: şehir/ilçe/mahalle düğümleri, kilit durumları, 5 nokta göstergesi
 - [ ] `[KOD]` İpucu defteri (iki tip için ortak)
 - [ ] `[KOD]` Boy uzama (`PlayerGrowth`, `CLAUDE.md` §7)
-- [ ] `[KOD]` Gamepad sanal imleç (istasyon modu)
+- [x] `[KOD]` Gamepad istasyon kontrolü (odak tabanlı, imleçsiz)
 - [ ] `[KOD]` "Gerçek hayatta" kartı
 - [ ] `[KOD]` Emeği Geçenler ekranı (`05_Uretim/LICENSES.md`'den elle aktarılır) — **lisans kuralı için zorunlu**
 

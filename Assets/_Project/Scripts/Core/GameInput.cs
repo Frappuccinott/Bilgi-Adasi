@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace BilgiAdasi.Core
@@ -72,6 +73,15 @@ namespace BilgiAdasi.Core
             bool locked = mode == InputMode.Player;
             Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
             Cursor.visible = !locked;
+
+            // UI'ın kendi yön gezinmesi (çubukla düğmeden düğmeye atlama) yalnızca UI modunda açık.
+            // İstasyonda gamepad seçimi denetleyicinin SelectPrevious/Next aksiyonlarıyla yapılır.
+            var eventSystem = EventSystem.current;
+            if (eventSystem != null)
+            {
+                eventSystem.sendNavigationEvents = mode == InputMode.UI;
+                if (mode != InputMode.UI) eventSystem.SetSelectedGameObject(null);
+            }
 
             if (Mode == mode) return;
             Mode = mode;

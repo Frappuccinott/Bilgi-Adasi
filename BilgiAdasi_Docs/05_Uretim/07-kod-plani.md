@@ -95,7 +95,7 @@ Her faz sonunda: Play mode testi + commit. Süre daralırsa §2'deki sırayla ke
 - İpucu defteri (`IHintBookView`), "Gerçek hayatta" kartı (`IRealLifeCardView`)
 - `PlayerGrowth` (§7)
 - Harita mantığı (`IMapView`): mahalle durumu + 5 nokta
-- Gamepad sanal imleç (`VirtualMouseInput`)
+- ~~Gamepad sanal imleç~~ → yerine odak tabanlı gamepad kontrolü yapıldı (13.11)
 - **Emeği Geçenler** (lisans kuralı için zorunlu)
 
 ### Faz 7 — Cila · P2
@@ -110,7 +110,7 @@ Her faz sonunda: Play mode testi + commit. Süre daralırsa §2'deki sırayla ke
 2. Mahalle canlanma → tek nesne aç/kapa
 3. Güvercin animasyonu → zarf masada belirir
 4. Lonca Sınavı rastgeleliği → sabit 4 soru
-5. Sanal imleç → gamepad'de istasyon içinde D-pad ile odak (UI Navigation)
+5. ~~Sanal imleç~~ (kaldırıldı; gamepad odak tabanlı)
 6. **Kesilmez:** sipariş mekaniği, mühür, tahta, iki mahalle uçtan uca, Emeği Geçenler
 
 ---

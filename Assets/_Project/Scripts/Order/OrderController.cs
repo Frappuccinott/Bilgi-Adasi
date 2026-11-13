@@ -128,6 +128,12 @@ namespace BilgiAdasi.Order
             a.Decrease.performed += OnDecreaseAction;
             a.FireStove.performed += OnFireAction;
             a.OpenHint.performed += OnHintAction;
+            a.Confirm.performed += OnConfirmAction;
+            a.SelectPrevious.performed += OnSelectPreviousAction;
+            a.SelectNext.performed += OnSelectNextAction;
+
+            // Gamepad'de imleç yok: girişte bir kavanoz seçili olsun ki vurgu hemen görünsün.
+            if (selected == null) selected = CurrentSelection();
 
             stationView?.SetOpen(true);
             RefreshAll();
@@ -149,6 +155,9 @@ namespace BilgiAdasi.Order
                 a.Decrease.performed -= OnDecreaseAction;
                 a.FireStove.performed -= OnFireAction;
                 a.OpenHint.performed -= OnHintAction;
+                a.Confirm.performed -= OnConfirmAction;
+                a.SelectPrevious.performed -= OnSelectPreviousAction;
+                a.SelectNext.performed -= OnSelectNextAction;
             }
             hintView?.HideHint();
             stationView?.SetOpen(false);
@@ -158,6 +167,37 @@ namespace BilgiAdasi.Order
         private void OnDecreaseAction(InputAction.CallbackContext _) => Decrease(CurrentSelection());
         private void OnFireAction(InputAction.CallbackContext _) => FireStove();
         private void OnHintAction(InputAction.CallbackContext _) => ToggleHint();
+        private void OnSelectPreviousAction(InputAction.CallbackContext _) => StepSelection(-1);
+        private void OnSelectNextAction(InputAction.CallbackContext _) => StepSelection(1);
+
+        /// <summary>A / Enter: kart açıksa kapatır, defter açıksa kapatır, yoksa seçili kavanozu ekler.</summary>
+        private void OnConfirmAction(InputAction.CallbackContext _)
+        {
+            if (Current == State.RealLife)
+            {
+                CloseRealLifeCard();
+                return;
+            }
+            if (hintView != null && hintView.IsHintOpen)
+            {
+                hintView.HideHint();
+                return;
+            }
+            AddToCauldron(CurrentSelection());
+        }
+
+        /// <summary>↑/↓: raftaki kavanozlar arasında döner.</summary>
+        private void StepSelection(int direction)
+        {
+            if (session == null || session.ShelfItems.Count == 0) return;
+            var items = session.ShelfItems;
+            var current = CurrentSelection();
+            int index = -1;
+            for (int i = 0; i < items.Count; i++)
+                if (items[i] == current) index = i;
+            index = index < 0 ? 0 : (index + direction + items.Count) % items.Count;
+            Select(items[index]);
+        }
 
         private SpeciesData CurrentSelection()
         {

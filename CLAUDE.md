@@ -56,7 +56,7 @@ Yeni paket eklemeden önce **sor**.
 - Control scheme'ler: `KeyboardMouse`, `Gamepad`.
 - Action map'ler aynı anda yalnızca biri açık olacak şekilde yönetilir: `Player`, `Station`, `UI`.
 - Ekrandaki tuş ipuçları **son kullanılan cihaza göre** değişir (`E` ↔ `Ⓧ`). `GameInput.DeviceChanged` ile.
-- Gamepad'de istasyon modunda imleç: **sanal imleç** (`VirtualMouseInput`), sol çubukla hareket, A ile tıkla/sürükle.
+- Gamepad'de istasyon modunda **imleç yok** (karar 13.11, sanal imleç rahat değildi): ↑↓ ile odak/seçim, A onay, RB/LB artır-azalt. İstasyondayken UI'ın kendi yön gezinmesi kapalıdır (`GameInput.SetMode`). Ekranda tuş ipuçları cihaza göre değişir.
 - Ölü bölge (deadzone): çubuklar için 0.15 (Stick Deadzone processor).
 
 | Aksiyon | Map | Klavye / Fare | Gamepad |
@@ -71,8 +71,10 @@ Yeni paket eklemeden önce **sor**.
 | OpenMap | Player | M / Tab | Select (View) |
 | Pause | Player | Esc | Start (Menu) |
 | Pause | Station | P (Esc istasyondan çıkar) | Start (Menu) |
-| Point | Station | Fare pozisyonu | Sanal imleç (sol çubuk) |
-| Click / Drag | Station | Sol tık | A |
+| Point | Station | Fare pozisyonu | — (imleç yok) |
+| Click / Drag | Station | Sol tık | — (Confirm kullanılır) |
+| Confirm | Station | Enter / Space | A (South) |
+| SelectPrevious / SelectNext | Station | W S / ↑ ↓ | D-pad ↑↓ / sol çubuk ↑↓ |
 | Increase / Decrease | Station | Fare tekeri / + − | RB / LB |
 | FireStove | Station | F | Y (North) |
 | OpenHint | Station | H | X (West) |
