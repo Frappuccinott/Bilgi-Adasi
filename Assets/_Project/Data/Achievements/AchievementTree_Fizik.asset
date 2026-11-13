@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e68bf6a62fbce544bbf3df07aa6515c, type: 3}
+  m_Name: AchievementTree_Fizik
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Core.AchievementTree
+  treeTitle: Fizik
+  tabIcon: {fileID: 0}
+  comingSoon: 1
+  comingSoonLabel: "Yak\u0131nda"
+  tabOrder: 2
+  accentColor: {r: 0.43137255, g: 0.5019608, b: 0.5647059, a: 1}
+  learned:
+    header: "\xD6\u011Frenildi!"
+    color: {r: 0.3, g: 0.55, b: 0.3, a: 1}
+    defaultIcon: {fileID: 0}
+  milestone:
+    header: "Ba\u015Far\u0131m kazan\u0131ld\u0131!"
+    color: {r: 0.97, g: 0.66, b: 0, a: 1}
+    defaultIcon: {fileID: 0}
+  challenge:
+    header: "Meydan okuma tamamland\u0131!"
+    color: {r: 0.62, g: 0.25, b: 0.55, a: 1}
+    defaultIcon: {fileID: 0}
+  secretTitle: ???
+  lockedLabel: "Hen\xFCz a\xE7\u0131lmad\u0131"
+  entries:
+  - id: ach_tarla_2
+    parentId: 
+    kind: 0
+    trigger: 1
+    target: tarla_2
+    title: "\u0130lk Saban"
+    description: "K-12 \xB7 Bereket Tarlas\u0131. Sabit h\u0131zda al\u0131nan yol
+      = h\u0131z \xD7 zaman."
+    icon: {fileID: 0}
+    secret: 0
+    manualPosition: 0
+    position: {x: 0, y: 0}
+  - id: ach_tarla_6
+    parentId: ach_tarla_2
+    kind: 0
+    trigger: 1
+    target: tarla_6
+    title: Kuyudan Tarlaya
+    description: "K-16 \xB7 Bereket Tarlas\u0131. \u0130\u015F = kuvvet \xD7 yol;
+      g\xFC\xE7 = i\u015F / zaman."
+    icon: {fileID: 0}
+    secret: 0
+    manualPosition: 0
+    position: {x: 0, y: 0}
+  - id: ach_tarla_10
+    parentId: ach_tarla_6
+    kind: 0
+    trigger: 1
+    target: tarla_10
+    title: "De\u011Firmenden F\u0131r\u0131na"
+    description: "K-20 \xB7 Bereket Tarlas\u0131. R\xFCzg\xE2r\u0131n hareket enerjisi
+      \xE7arkla una, unun enerjisi ekmekle bize ge\xE7er."
+    icon: {fileID: 0}
+    secret: 0
+    manualPosition: 0
+    position: {x: 0, y: 0}
+  - id: ach_orman_3
+    parentId: ach_tarla_2
+    kind: 0
+    trigger: 1
+    target: orman_3
+    title: "A\u011Fa\xE7 D\xFC\u015F\xFCyor!"
+    description: "K-23 \xB7 Ormanc\u0131 Korusu. Y\xFCkseklikteki enerji d\xFC\u015Ferken
+      hareket enerjisine d\xF6n\xFC\u015F\xFCr; toplam korunur."
+    icon: {fileID: 0}
+    secret: 0
+    manualPosition: 0
+    position: {x: 0, y: 0}
+  - id: ach_orman_4
+    parentId: ach_orman_3
+    kind: 0
+    trigger: 1
+    target: orman_4
+    title: "K\u0131zakla Ta\u015F\u0131"
+    description: "K-24 \xB7 Ormanc\u0131 Korusu. Kuvvet\u2013yol grafi\u011Finin
+      alt\u0131ndaki alan yap\u0131lan i\u015Fi verir."
+    icon: {fileID: 0}
+    secret: 0
+    manualPosition: 0
+    position: {x: 0, y: 0}
+  - id: ach_orman_6
+    parentId: ach_orman_4
+    kind: 0
+    trigger: 1
+    target: orman_6
+    title: "Odun Ate\u015Fe"
+    description: "K-26 \xB7 Ormanc\u0131 Korusu. Yenilenebilirlik, kayna\u011F\u0131n
+      yerine konup konmad\u0131\u011F\u0131na ba\u011Fl\u0131d\u0131r."
+    icon: {fileID: 0}
+    secret: 0
+    manualPosition: 0
+    position: {x: 0, y: 0}
+  - id: ach_fizik
+    parentId: ach_tarla_10
+    kind: 1
+    trigger: 5
+    target: ach_tarla_2, ach_tarla_6, ach_tarla_10, ach_orman_3, ach_orman_4, ach_orman_6
+    title: "Makine Ustas\u0131'n\u0131n M\xFChr\xFC"
+    description: "Fizik g\xF6revlerinin hepsini bitirdin. Makine Ustas\u0131 \xE7ark\u0131n\u0131
+      sana emanet etti."
+    icon: {fileID: 0}
+    secret: 0
+    manualPosition: 0
+    position: {x: 0, y: 0}

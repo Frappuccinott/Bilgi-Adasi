@@ -32,6 +32,10 @@ namespace BilgiAdasi.Chemistry
         [SerializeField] private string displayName = "Su";
         [SerializeField] private List<ElementCount> composition = new List<ElementCount>();
         [SerializeField] private Color jarColor = new Color(0.6f, 0.8f, 1f);
+        [Tooltip("Raftaki 3D kavanoz modeli (kökünde JarProp olan prefab). Boşsa kazanın varsayılan kavanozu kullanılır, jarColor ile boyanır.")]
+        [SerializeField] private GameObject jarPrefab;
+        [Tooltip("Pazarda bir kavanozun akçe fiyatı.")]
+        [Min(0)] [SerializeField] private int price = 1;
 
         [NonSerialized] private string formulaRichCache;
 
@@ -41,6 +45,8 @@ namespace BilgiAdasi.Chemistry
         public string DisplayName => displayName;
         public IReadOnlyList<ElementCount> Composition => composition;
         public Color JarColor => jarColor;
+        public GameObject JarPrefab => jarPrefab;
+        public int Price => price;
 
         private void OnValidate() => formulaRichCache = null;
 

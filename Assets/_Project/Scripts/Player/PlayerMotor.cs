@@ -47,6 +47,8 @@ namespace BilgiAdasi.Player
         public event Action Jumped;
         /// <summary>Her adımda bir kez (ayak yere bastığında). Adım sesi için.</summary>
         public event Action Footstep;
+        /// <summary>Teleport çağrıldı (bisiklet bunu dinler: ışınlanan oyuncu bisikletten ayrılır).</summary>
+        public event Action Teleported;
 
         /// <summary>Atılan adım sayısı (kesirli). Kafa sallanması fazı buradan gelir: tam sayılar = ayak yere basar.</summary>
         public float StepCycle => stepCycle;
@@ -85,10 +87,13 @@ namespace BilgiAdasi.Player
 
         private void OnDisable()
         {
-            var a = GameInput.Controls.Player;
-            a.Sprint.performed -= OnSprintPerformed;
-            a.Jump.performed -= OnJumpPerformed;
-            a.CrouchToggle.performed -= OnCrouchTogglePerformed;
+            if (GameInput.TryGetControls(out var c))
+            {
+                var a = c.Player;
+                a.Sprint.performed -= OnSprintPerformed;
+                a.Jump.performed -= OnJumpPerformed;
+                a.CrouchToggle.performed -= OnCrouchTogglePerformed;
+            }
             // İstasyona geçerken kaymasın.
             horizontalVelocity = Vector3.zero;
             verticalVelocity = 0f;
@@ -281,6 +286,7 @@ namespace BilgiAdasi.Player
             controller.enabled = true;
             horizontalVelocity = Vector3.zero;
             verticalVelocity = 0f;
+            Teleported?.Invoke();
         }
     }
 }

@@ -57,8 +57,8 @@ Yeni paket eklemeden önce **sor**.
 - Kodda tek giriş noktası: `GameInput.Controls` (tek örnek), map değişimi yalnızca `GameInput.SetMode(InputMode.Player|Station|UI)`. Son cihaz: `GameInput.LastDevice` / `DeviceChanged`.
 - Control scheme'ler: `KeyboardMouse`, `Gamepad`.
 - Action map'ler aynı anda yalnızca biri açık olacak şekilde yönetilir: `Player`, `Station`, `UI`.
-- Ekrandaki tuş ipuçları **son kullanılan cihaza göre** değişir (`E` ↔ `Ⓧ`). `GameInput.DeviceChanged` ile.
-- Gamepad'de istasyon modunda imleç: **sanal imleç** (`VirtualMouseInput`), sol çubukla hareket, A ile tıkla/sürükle.
+- Ekrandaki tuş ipuçları **son kullanılan cihazın düzenine göre** değişir: klavye `[E]`, Xbox `(X)`, PlayStation `(□)`, Switch `(Y)`. Algılama `GameInput.LastScheme` / `SchemeChanged` (DualShock/DualSense → PS, Switch Pro → Switch, diğer gamepad'ler → Xbox). Simgeler tek yerde: `ControlGlyphs.For(PromptAction.X)`; kodda tuş adı yazılmaz. Bağlama değişirse `ControlGlyphs` tablosu da güncellenir.
+- Gamepad'de istasyon modunda **imleç yok** (karar 13.11, sanal imleç rahat değildi): ↑↓ ile odak/seçim, A onay, RB/LB artır-azalt. İstasyondayken UI'ın kendi yön gezinmesi kapalıdır (`GameInput.SetMode`). Ekranda tuş ipuçları cihaza göre değişir.
 - Ölü bölge (deadzone): çubuklar için 0.15 (Stick Deadzone processor).
 
 | Aksiyon | Map | Klavye / Fare | Gamepad |
@@ -72,15 +72,23 @@ Yeni paket eklemeden önce **sor**.
 | CrouchToggle (aç/kapa) | Player | C | B (East) |
 | OpenMap | Player | M / Tab | Select (View) |
 | Pause | Player | Esc | Start (Menu) |
+| OpenHint (ustanın defteri, atölye) | Player | H | Y (North) |
+| NextSlot / PrevSlot (envanter) | Player | Fare tekeri ↓ / ↑ | RB / LB |
+| SelectSlot (envanter) | Player | 1–6 | — (RB/LB ile aynı iş) |
 | Pause | Station | P (Esc istasyondan çıkar) | Start (Menu) |
-| Point | Station | Fare pozisyonu | Sanal imleç (sol çubuk) |
-| Click / Drag | Station | Sol tık | A |
+| Point | Station | Fare pozisyonu | — (imleç yok) |
+| Click / Drag | Station | Sol tık | — (Confirm kullanılır) |
+| Confirm | Station | Enter / Space | A (South) |
+| SelectPrevious / SelectNext | Station | W S / ↑ ↓ | D-pad ↑↓ / sol çubuk ↑↓ |
 | Increase / Decrease | Station | Fare tekeri / + − | RB / LB |
 | FireStove | Station | F | Y (North) |
 | OpenHint | Station | H | X (West) |
-| Navigate (hedef seç) | Station | Ok tuşları | Sol çubuk / D-pad |
 | ExitStation | Station | Esc / sağ tık | B (East) |
 | Navigate / Submit / Cancel | UI | Ok tuşları, Enter, Esc | D-pad / sol çubuk, A, B |
+| DevJumpTask (yalnızca geliştirici) | Dev | F1–F5 (o göreve atla) | LT+RT+D-pad → (sıradaki görevi bitmiş say) |
+| DevResetSave (yalnızca geliştirici) | Dev | Ctrl+R | LT+RT+D-pad ← |
+
+`Dev` map'i oyun modundan bağımsız hep açıktır ama yalnızca editörde, Development Build'de ya da `BILGIADASI_DEMO` tanımlıyken (`DevShortcuts`).
 
 Yeni aksiyon eklenirse bu tablo güncellenir.
 
@@ -136,15 +144,24 @@ Tüm değerler `PlayerMovementSettings` ScriptableObject'inde; play mode'da canl
 
 ---
 
-## 5. İstasyon modu (kazan, masa, kapı, harita)
+## 5. Atölye (kazan, raf, pazar, kapı) ve istasyon modu
 
-Oyuncu bir istasyona yaklaşıp Interact yapınca:
+**Karar 13.11: kazan ve kapı istasyon değil; kamera hep birinci şahısta kalır.** Her şey crosshair'le bakıp Interact (E / X) ile yapılır (`WorldInteractable`):
+- **Pazar tezgâhı** (şehirde, `MarketStall`): E → pazar ekranı (UI modu); alınan kavanoz envantere girer, akçe düşer. Para en ucuz kavanoza yetmezse Usta borç verir.
+- **Envanter** (`PlayerInventory`, oyuncuda): ekranın altında 6 slot; slot = tek maddenin yığını. Seçili slot "eldeki" maddedir. Yeni madde aynı yığına, yoksa soldan ilk boş slota.
+- **Raf** (`Shelf` / `ShelfSlot`): dolu yerden yığının tamamı envantere, boş yere eldeki yığının tamamı. Kayıtlı.
+- **Kazan** (`CauldronStation` + `OrderController`): E → eldeki maddeden 1 kavanoz dökülür. **Dökülen geri alınmaz.** Boşaltma kolu (`CauldronDrain`) kazanı boşaltır, malzeme gider.
+- **3D terazi** (`ScaleModel`): sol kefe kazan, sağ kefe sipariş; UI değil.
+- **Ocak** (`CauldronStove`): dengedeyse tepkime → ürün envantere (doluysa kazanda bekler); değilse ya da tepkimeye girmeyen madde varsa köpürür, malzeme gider, hata sayılır.
+- **Kapı** (`DoorStation`): konuşmada hareket durur, E/Space ilerletir. Sipariş burada alınır; teslim elle: seçili slotta istenen ürün olmalı ("Ben bunu istemedim"). Teslimde ödeme alınır ve oyun kaydedilir.
+
+İstasyon modu yalnızca masa ve tahtada kalır (Faz 5). Oyuncu bir istasyona yaklaşıp Interact yapınca:
 1. `Player` map kapanır, `Station` map açılır; hareket ve bakış durur.
 2. Cinemachine istasyonun sabit kamerasına **0.5 sn blend** ile geçer (istasyon kamerası oyuncunun boyundan bağımsızdır; okunurluk her zaman aynı).
 3. İmleç açılır (fare) ya da sanal imleç belirir (gamepad).
 4. ExitStation ile tersine döner; oyuncu bıraktığı noktaya ve bakış açısına geri gelir.
 
-İstasyonlar: `CauldronStation` (sipariş), `DeskStation` (masa), `DoorStation` (sakinle konuşma), `ChalkboardStation` (okuma). Hepsi `StationBase`'ten türer.
+İstasyonlar: `DeskStation` (masa), `ChalkboardStation` (okuma); `StationBase`'ten türer.
 
 ---
 
@@ -158,6 +175,20 @@ Oyuncu köyler arasında **yürüyerek** gider (karar: 13.11). Bu, dokümanlarda
 - Şehir greybox'ı ve modelleri **Mustafa** yapar; kod `08-mustafa-entegrasyon.md`'deki bağlantı noktalarına dayanır. Tek oyun sahnesi: `Town` (atölye + şehir).
 - Harita ekranı (`OpenMap`) kalır: bilgi + ilerleme ekranı (köy durumu, 5 nokta). Hızlı seyahat: P2, zaman kalırsa.
 - Görev akışı: köydeki sakin/ulak oyuncuyu **atölyeye** çağırır; görevler atölyedeki istasyonlarda çözülür. Köyde yalnızca "önce/sonra" değişimi görülür.
+
+### Bisiklet (karar 13.11, P2)
+- Şehirde duran bisiklet (`Bicycle`, `WorldInteractable`): Interact ile binilir/inilir; hızlıysa önce frenler, yanda/arkada boş yer bulunca indirir. Konum indikten sonra kaydedilir (`SaveData.TryGetPose/SetPose`).
+- Kinematik sürüş (CharacterController, devrilme yok). **Yeni aksiyon yok**, Player map'i kullanılır: Move ileri pedal / geri fren (dururken geri itme), Move yan gidon, Sprint hızlı pedal, Look serbest bakış (gidona göre ±110°, giderken öne döner), Interact in.
+- Hızlanma eğriyle (kalkış ağır, sonra güçlü, hedefe yaklaşınca yumuşak); kesintisiz pedalda seyir hızı 5 → 7.5 m/s'ye yavaşça çıkar (momentum), fren/bırakınca söner.
+- Kaldırım: `maxCurbHeight` (0.3 m) altı basamaklara çıkar; kamera ve model yumuşak geçer, tekerler zemine oturur (öne/arkaya eğim).
+- Kamera birinci şahıs, roll yok; yatış yalnızca modelde (`BicycleRig`). Değerler `BicycleSettings` SO'sunda.
+- Görünüm `BicycleRig`'te (teker, gidon, aynakol, pedal referansları); model değişince yalnızca o bağlanır (`08-mustafa-entegrasyon.md`).
+
+### Başarımlar ve Esc menüsü (karar 13.11)
+- Görev/köy bitince sağ alttan bildirim (`IAchievementToastView`): "Öğrenildi!" (görev), "Başarım kazanıldı!" (köy, kök), "Meydan okuma…" (hatasız / defter açmadan).
+- Esc (Station'da P, gamepad Start) → `PauseMenuController`: zaman durur, UI modu; menüde dallanan başarım ağacı (`IPauseMenuView`). Yeni aksiyon yok.
+- Görev ↔ başarım listesi (Mustafa'nın görev planından, kimliklerle): `BilgiAdasi_Docs/04_Icerik/11-gorev-ve-basarim-listesi.md`. Görev verisi yazılırken oradaki `taskId`'ler kullanılır (`denk_n`, `tur_n`, `tarla_n`, `orman_n`, `carsi_n`).
+- Veri: **ders bazlı** — her ders bir sekme = bir `AchievementTree` asset'i (`Data/Achievements/AchievementTree_<Ders>.asset`: Kimya, Matematik, Fizik, Biyoloji); görev, defter kaydının dersine girer. Yeni asset Achievements objesine kendiliğinden bağlanır (`Tab Order`, `Accent Color`). Koşul: GameStart / TaskCompleted / NeighborhoodCompleted / TaskFlawless / TaskWithoutHint / AllOf; ebeveyn listede önce. Tasarım asset'te: sekme adı/simgesi, "Yakında", tür başlığı/rengi/varsayılan simgesi, düğümü elle konumlama. Inspector doğrular ve önizler. Kayıt: `SaveData.unlockedAchievements`. Kurulum: **Kurulum → 13** (sahne + eksik sekmeler), **13b** (listeyi yeniden yazar).
 
 ---
 

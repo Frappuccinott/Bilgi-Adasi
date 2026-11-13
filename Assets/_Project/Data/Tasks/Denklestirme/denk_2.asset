@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73273f6b8ec5a444b845f1b63ceacfae, type: 3}
+  m_Name: denk_2
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.OrderTask
+  id: denk_2
+  giverName: Fenerci Demir
+  giverPortrait: {fileID: 0}
+  giverLines:
+  - "Fenerler is yap\u0131yor. Ak\u015Fam \xE7ar\u015F\u0131da kimse kimseyi g\xF6rm\xFCyor.
+    Gaz bende, hava sende. Ne kadar laz\u0131msa o kadar ver."
+  deliveryLines:
+  - "Hah. \u015Eimdi oldu. Sa\u011F ol \xE7\u0131rak."
+  hintText: "Sa\u011F terazideki oksijenleri say: karbondioksitte ka\xE7, suda ka\xE7?"
+  realLifeText: "Yak\u0131t yeterli havayla yanmazsa is ve zehirli karbon monoksit
+    \xE7\u0131kar; soba ve \u015Fofben olan odalar bu y\xFCzden havaland\u0131r\u0131l\u0131r."
+  mode: 0
+  steps:
+  - reaction: {fileID: 11400000, guid: c6344e5117e8d4242a7a2848e05a00de, type: 2}
+    targetProducts:
+    - species: {fileID: 11400000, guid: 50ddecd6f6537fd48aa42ccc142f47e6, type: 2}
+      amount: 1
+    - species: {fileID: 11400000, guid: 4d7d1e9c4ee5640419e910786ab51966, type: 2}
+      amount: 2
+    cardShowsReactants: 1
+  reward: 12
+  shelf:
+  - {fileID: 11400000, guid: ba4254c41fdabb04ca1ac3351b4d6ec6, type: 2}
+  - {fileID: 11400000, guid: c3372ae1a20c7b040be0a7644035caaf, type: 2}
+  budget: 0
+  prices: []

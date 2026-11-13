@@ -10,64 +10,85 @@ namespace BilgiAdasi.Order
     {
         /// <summary>Tüm elementlerde giren == çıkan (Görev 1–4).</summary>
         Exact,
-        /// <summary>Her giren için kazandaki ≥ gereken; fazlası artan madde (Görev 5).</summary>
+        /// <summary>Malzeme akçeyle alınır; her girenden en az gereken kadar. Fazlası "artan" (Görev 5).</summary>
         Purchase
     }
 
-    /// <summary>Zincir görevin bir adımı (02 §3.3). Hedef = tepkimenin ürünleri × çarpan.</summary>
+    /// <summary>Bir denge döngüsü. Zincir görevde birden fazla adım olur (Görev 4).</summary>
     [Serializable]
     public sealed class OrderStep
     {
         [SerializeField] private ReactionData reaction;
-        [Tooltip("Hedef ürünler = tepkime ürünleri × bu sayı (D-5: 4 NH₃ için 2).")]
-        [Min(1)] [SerializeField] private int multiplier = 1;
-        [Tooltip("Adım bitince rafa düşen ürünler (D-4: CaO). Boşsa hiçbiri.")]
-        [SerializeField] private List<SpeciesData> dropToShelf = new List<SpeciesData>();
+        [Tooltip("Sağ teraziye konan hedef ürünler ve adetleri (ör. 2 H2O).")]
+        [SerializeField] private List<SpeciesAmount> targetProducts = new List<SpeciesAmount>();
+        [Tooltip("Sipariş kartında girenler de yazsın mı? (Görev 1–2: evet)")]
+        [SerializeField] private bool cardShowsReactants;
 
         public ReactionData Reaction => reaction;
-        public int Multiplier => Mathf.Max(1, multiplier);
-        public IReadOnlyList<SpeciesData> DropToShelf => dropToShelf;
+        public IReadOnlyList<SpeciesAmount> TargetProducts => targetProducts;
+        public bool CardShowsReactants => cardShowsReactants;
+
+        public OrderStep() { }
+
+        public OrderStep(ReactionData reaction, IEnumerable<SpeciesAmount> targets, bool cardShowsReactants)
+        {
+            this.reaction = reaction;
+            targetProducts = new List<SpeciesAmount>(targets);
+            this.cardShowsReactants = cardShowsReactants;
+        }
     }
 
-    /// <summary>Purchase modunda sandıktaki tür ve fiyatı (akçe).</summary>
     [Serializable]
     public struct SpeciesPrice
     {
         [SerializeField] private SpeciesData species;
-        [Min(0)] [SerializeField] private int price;
+        [SerializeField] private int price;
 
         public SpeciesData Species => species;
         public int Price => price;
+
+        public SpeciesPrice(SpeciesData species, int price)
+        {
+            this.species = species;
+            this.price = price;
+        }
     }
 
-    /// <summary>Sipariş görevi (kazan + teraziler). 02-siparis-mekanigi.md, 05-icerik-prototip.md §2.</summary>
-    [CreateAssetMenu(menuName = "Bilgi Adası/Görev/Sipariş", fileName = "Order_D-")]
+    /// <summary>Sipariş görevi (02-siparis-mekanigi.md, 04 §3).</summary>
+    [CreateAssetMenu(menuName = "Bilgi Adası/Görev/Sipariş", fileName = "Order_")]
     public sealed class OrderTask : TaskData
     {
-        [Header("Sipariş")]
         [SerializeField] private OrderMode mode = OrderMode.Exact;
         [SerializeField] private List<OrderStep> steps = new List<OrderStep>();
-        [Tooltip("Exact modunda raftaki kavanozlar.")]
+        [Tooltip("Teslimde keseye giren akçe.")]
+        [Min(0)] [SerializeField] private int reward = 10;
+        [Header("Eski (13.11 öncesi; malzeme artık pazardan alınır, kullanılmıyor)")]
         [SerializeField] private List<SpeciesData> shelf = new List<SpeciesData>();
-        [Tooltip("Sipariş kartı girenleri de yazsın mı? (Görev 1–2)")]
-        [SerializeField] private bool showReactantsOnCard = true;
-
-        [Header("Purchase")]
-        [SerializeField] private int budget = 20;
+        [SerializeField] private int budget;
         [SerializeField] private List<SpeciesPrice> prices = new List<SpeciesPrice>();
 
         public OrderMode Mode => mode;
         public IReadOnlyList<OrderStep> Steps => steps;
+        public int Reward => reward;
+        /// <summary>Teslim edilecek ürünler: son adımın hedef ürünleri.</summary>
+        public IReadOnlyList<SpeciesAmount> DeliveryProducts => steps[steps.Count - 1].TargetProducts;
         public IReadOnlyList<SpeciesData> Shelf => shelf;
-        public bool ShowReactantsOnCard => showReactantsOnCard;
         public int Budget => budget;
         public IReadOnlyList<SpeciesPrice> Prices => prices;
 
-        public int PriceOf(SpeciesData species)
+        public static OrderTask Create(string id, string giver, string[] lines, string[] delivery, string hint, string realLife,
+            OrderMode mode, IEnumerable<OrderStep> steps, IEnumerable<SpeciesData> shelf, int budget = 0,
+            IEnumerable<SpeciesPrice> prices = null)
         {
-            for (int i = 0; i < prices.Count; i++)
-                if (prices[i].Species == species) return prices[i].Price;
-            return 0;
+            var t = CreateInstance<OrderTask>();
+            t.SetCommon(id, giver, lines, delivery, hint, realLife);
+            t.mode = mode;
+            t.steps = new List<OrderStep>(steps);
+            t.shelf = new List<SpeciesData>(shelf);
+            t.budget = budget;
+            t.prices = prices != null ? new List<SpeciesPrice>(prices) : new List<SpeciesPrice>();
+            t.name = id;
+            return t;
         }
     }
 }

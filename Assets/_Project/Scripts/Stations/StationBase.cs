@@ -33,6 +33,7 @@ namespace BilgiAdasi.Player
 
         public virtual bool CanInteract => Active == null && isActiveAndEnabled;
         public string PromptText => promptText;
+        public string GetPrompt(PlayerInteractor interactor) => promptText;
         public bool IsActive => Active == this;
         protected PlayerInteractor User => user;
 
@@ -77,7 +78,7 @@ namespace BilgiAdasi.Player
         {
             if (Active != this) return;
 
-            GameInput.Controls.Station.ExitStation.performed -= OnExitPerformed;
+            if (GameInput.TryGetControls(out var c)) c.Station.ExitStation.performed -= OnExitPerformed;
             OnExit();
 
             if (stationCamera != null) stationCamera.enabled = false;

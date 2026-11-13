@@ -1,0 +1,324 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1642364744476204044
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8934379844058653131}
+  m_Layer: 0
+  m_Name: SeatAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8934379844058653131
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642364744476204044}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.16, z: -0.25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2413613787166526740}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3803553816409578592
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4742528697205460060}
+  - component: {fileID: 7871429303515787620}
+  m_Layer: 0
+  m_Name: Visual
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4742528697205460060
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3803553816409578592}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.03, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3495298724923994226}
+  m_Father: {fileID: 2413613787166526740}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7871429303515787620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3803553816409578592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ade00c8e4d1a9b4dacdb8a740f3907b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Player.BicycleRig
+  frontWheel: {fileID: 7752117647452382126}
+  rearWheel: {fileID: 2750752462034487433}
+  steering: {fileID: 7327545507338445575}
+  crank: {fileID: 0}
+  pedalLeft: {fileID: 7519048662330139495}
+  pedalRight: {fileID: 3116544693561778118}
+  leanRoot: {fileID: 4742528697205460060}
+  steeringParts:
+  - {fileID: 7752117647452382126}
+  crankParts:
+  - {fileID: 7519048662330139495}
+  - {fileID: 3116544693561778118}
+  crankOnFrontWheel: 1
+  wheelAxis: {x: 1, y: 0, z: 0}
+  steerAxis: {x: 0, y: 1, z: 0}
+  crankAxis: {x: 1, y: 0, z: 0}
+  pedalAxis: {x: 1, y: 0, z: 0}
+  leanAxis: {x: 0, y: 0, z: 1}
+  pitchAxis: {x: 1, y: 0, z: 0}
+  wheelRadius: 0.39
+  rearWheelRadius: 0.3
+  gearRatio: 2.6
+  crankStopRate: 720
+--- !u!1 &6354125822510367714
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2413613787166526740}
+  - component: {fileID: 3607565525682315528}
+  - component: {fileID: 617674040034096175}
+  m_Layer: 6
+  m_Name: Bicycle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2413613787166526740
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6354125822510367714}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6228404175697624439}
+  - {fileID: 4742528697205460060}
+  - {fileID: 8934379844058653131}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!143 &3607565525682315528
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6354125822510367714}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 1.1
+  m_Radius: 0.3
+  m_SlopeLimit: 40
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.03
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.55, z: 0}
+--- !u!114 &617674040034096175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6354125822510367714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 335e63872236a184a8710612fbb8caed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Player.Bicycle
+  highlight: {fileID: 0}
+  settings: {fileID: 11400000, guid: 3a8fd7d5c0c693443965d791d336facc, type: 2}
+  rig: {fileID: 7871429303515787620}
+  seatAnchor: {fileID: 8934379844058653131}
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 4294967167
+  saveId: bicycle
+  rollingSource: {fileID: 0}
+  rollingMaxVolume: 0.6
+--- !u!1 &8663866921239455265
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6228404175697624439}
+  - component: {fileID: 3695671326252997659}
+  m_Layer: 6
+  m_Name: InteractVolume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6228404175697624439
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8663866921239455265}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2413613787166526740}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3695671326252997659
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8663866921239455265}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.3, y: 1, z: 1.75}
+  m_Center: {x: 0, y: 0.55, z: 0.05}
+--- !u!1001 &3966390162900195225
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4742528697205460060}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 34e28b6a44c2262488cb3c3aad8aef7d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 34e28b6a44c2262488cb3c3aad8aef7d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 34e28b6a44c2262488cb3c3aad8aef7d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 34e28b6a44c2262488cb3c3aad8aef7d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 34e28b6a44c2262488cb3c3aad8aef7d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 34e28b6a44c2262488cb3c3aad8aef7d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 34e28b6a44c2262488cb3c3aad8aef7d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 34e28b6a44c2262488cb3c3aad8aef7d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 34e28b6a44c2262488cb3c3aad8aef7d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 34e28b6a44c2262488cb3c3aad8aef7d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 34e28b6a44c2262488cb3c3aad8aef7d, type: 3}
+      propertyPath: m_Name
+      value: Model_Bisiklet
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 34e28b6a44c2262488cb3c3aad8aef7d, type: 3}
+--- !u!4 &2750752462034487433 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -7987186591802204400, guid: 34e28b6a44c2262488cb3c3aad8aef7d, type: 3}
+  m_PrefabInstance: {fileID: 3966390162900195225}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3116544693561778118 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -7184575987720009633, guid: 34e28b6a44c2262488cb3c3aad8aef7d, type: 3}
+  m_PrefabInstance: {fileID: 3966390162900195225}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3495298724923994226 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 34e28b6a44c2262488cb3c3aad8aef7d, type: 3}
+  m_PrefabInstance: {fileID: 3966390162900195225}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7327545507338445575 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5961597153631532190, guid: 34e28b6a44c2262488cb3c3aad8aef7d, type: 3}
+  m_PrefabInstance: {fileID: 3966390162900195225}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7519048662330139495 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -2354691849092500226, guid: 34e28b6a44c2262488cb3c3aad8aef7d, type: 3}
+  m_PrefabInstance: {fileID: 3966390162900195225}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7752117647452382126 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -2549460447310203849, guid: 34e28b6a44c2262488cb3c3aad8aef7d, type: 3}
+  m_PrefabInstance: {fileID: 3966390162900195225}
+  m_PrefabAsset: {fileID: 0}

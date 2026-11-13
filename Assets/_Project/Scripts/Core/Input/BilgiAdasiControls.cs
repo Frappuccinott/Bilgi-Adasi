@@ -174,6 +174,42 @@ namespace BilgiAdasi.Core
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenHint"",
+                    ""type"": ""Button"",
+                    ""id"": ""6a1e2b3c-4d5e-4f60-8a71-b2c3d4e5f601"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextSlot"",
+                    ""type"": ""Button"",
+                    ""id"": ""7b2f3c4d-5e6f-4071-9b82-c3d4e5f60712"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PrevSlot"",
+                    ""type"": ""Button"",
+                    ""id"": ""8c304d5e-6f70-4182-ac93-d4e5f6071823"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectSlot"",
+                    ""type"": ""Button"",
+                    ""id"": ""9d415e6f-7081-4293-bda4-e5f607182934"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -418,6 +454,138 @@ namespace BilgiAdasi.Core
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ae526f70-8192-43a4-8eb5-f60718293a45"",
+                    ""path"": ""<Keyboard>/h"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""OpenHint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bf637081-92a3-44b5-9fc6-071829304b56"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""OpenHint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c0748192-a3b4-45c6-80d7-18293a415c67"",
+                    ""path"": ""<Mouse>/scroll/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""NextSlot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d18592a3-b4c5-46d7-91e8-293a4b526d78"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""NextSlot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e296a3b4-c5d6-47e8-a2f9-3a4b5c637e89"",
+                    ""path"": ""<Mouse>/scroll/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""PrevSlot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f3a7b4c5-d6e7-48f9-b30a-4b5c6d748f9a"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""PrevSlot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""04b8c5d6-e7f8-490a-841b-5c6d7e8590ab"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""SelectSlot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""15c9d6e7-f809-4a1b-952c-6d7e8f96a1bc"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""SelectSlot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""26dae7f8-091a-4b2c-a63d-7e8f90a7b2cd"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""SelectSlot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""37ebf809-1a2b-4c3d-b74e-8f90a1b8c3de"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""SelectSlot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""48fc091a-2b3c-4d4e-885f-90a1b2c9d4ef"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""SelectSlot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""590d1a2b-3c4d-4e5f-9960-a1b2c3dae5f0"",
+                    ""path"": ""<Keyboard>/6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""SelectSlot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -498,13 +666,31 @@ namespace BilgiAdasi.Core
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Navigate"",
-                    ""type"": ""Value"",
-                    ""id"": ""ee0d8eb0-3dcd-4edc-8ffb-b27733c5de19"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""name"": ""Confirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""d2798ae2-94dd-4f0a-bfb4-863de9f90573"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectPrevious"",
+                    ""type"": ""Button"",
+                    ""id"": ""79cf10f3-84d2-43cc-bce2-f40a0d1604a3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectNext"",
+                    ""type"": ""Button"",
+                    ""id"": ""7a9485af-2612-4758-8f91-4a40ff7ddc1e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -537,7 +723,7 @@ namespace BilgiAdasi.Core
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Click"",
+                    ""action"": ""Confirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -708,6 +894,116 @@ namespace BilgiAdasi.Core
                 },
                 {
                     ""name"": """",
+                    ""id"": ""acda209b-bdaa-4555-8bf7-078c756e3d8d"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bf69d8a2-b277-415e-aecc-5ac2a5f5a77c"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d5af167f-5a85-4587-b0ef-4a103024948d"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""SelectPrevious"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""68a06ddb-036d-4cfe-822b-5d71259f184e"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""SelectPrevious"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ee5ad066-175a-4ebe-8565-14c332f43c4c"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SelectPrevious"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1afafc74-ab84-4be1-825f-2d89f368e638"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SelectPrevious"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""07cbc4fa-781a-4fe8-ac85-f2fb1880e3f4"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""SelectNext"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0b57ba4f-a0a7-47e1-b66f-1e630fd54924"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""SelectNext"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6c35ac8a-c02a-4878-979b-3a50f53886d1"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SelectNext"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""495a26ed-ab07-453f-9670-6b84078763f3"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SelectNext"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""59da9294-e07f-4d79-94ec-a2f02eb63689"",
                     ""path"": ""<Keyboard>/p"",
                     ""interactions"": """",
@@ -725,83 +1021,6 @@ namespace BilgiAdasi.Core
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Pause"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""Arrows"",
-                    ""id"": ""daf4c43b-47b4-4e5b-baf3-811df388c7a3"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Navigate"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""f85c4553-cef2-46f1-9ea7-8b66883a4f22"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Navigate"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""6cc466fc-b379-42d2-b3f9-09ad2530ed35"",
-                    ""path"": ""<Keyboard>/downArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Navigate"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""b37eef3c-f883-4b74-8ef5-47c484a53e7f"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Navigate"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""5c67e55f-6279-476e-b8cc-281508b69ded"",
-                    ""path"": ""<Keyboard>/rightArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Navigate"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d1710e71-237e-482d-a20c-4d5bbba4de4d"",
-                    ""path"": ""<Gamepad>/leftStick"",
-                    ""interactions"": """",
-                    ""processors"": ""StickDeadzone(min=0.15)"",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Navigate"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""14cd9aa6-eab5-462e-9c01-570b079decbc"",
-                    ""path"": ""<Gamepad>/dpad"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -962,6 +1181,208 @@ namespace BilgiAdasi.Core
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Dev"",
+            ""id"": ""d3b1f0a2-6c4e-4f7a-9b21-5e8c7a1d0f31"",
+            ""actions"": [
+                {
+                    ""name"": ""DevJumpTask"",
+                    ""type"": ""Button"",
+                    ""id"": ""a1c7e5d3-2b4f-4e6a-8c19-7d3f5b2e9a41"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DevResetSave"",
+                    ""type"": ""Button"",
+                    ""id"": ""b2d8f6e4-3c5a-4f7b-9d2a-8e4a6c3f0b52"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""c3e9a7f5-4d6b-4a8c-8e3b-9f5b7d4a1c63"",
+                    ""path"": ""<Keyboard>/f1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""DevJumpTask"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d4fab8a6-5e7c-4b9d-9f4c-af6c8e5b2d74"",
+                    ""path"": ""<Keyboard>/f2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""DevJumpTask"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e5abc9b7-6f8d-4cae-8a5d-ba7d9f6c3e85"",
+                    ""path"": ""<Keyboard>/f3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""DevJumpTask"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f6bcdac8-7a9e-4dbf-9b6e-cb8eaa7d4f96"",
+                    ""path"": ""<Keyboard>/f4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""DevJumpTask"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a7cdebd9-8baf-4ec0-8c7f-dc9fbb8e5a07"",
+                    ""path"": ""<Keyboard>/f5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""DevJumpTask"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""LT+RT+DpadRight"",
+                    ""id"": ""b8defcea-9cb0-4fd1-9d80-ed0acc9f6b18"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DevJumpTask"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""c9ef0dfb-adc1-4ae2-8e91-fe1bdda07c29"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""DevJumpTask"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""daf01e0c-bed2-4bf3-9fa2-0f2ceeb18d3a"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""DevJumpTask"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""eb012f1d-cfe3-4c04-8ab3-1a3dffc29e4b"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""DevJumpTask"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Ctrl+R"",
+                    ""id"": ""fc12302e-d0f4-4d15-9b4c-2b4e0ad3af5c"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DevResetSave"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""0d23413f-e105-4e26-8c5d-3c5f1be4b06d"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""DevResetSave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""1e345240-f216-4f37-9d6e-4d6a2cf5c17e"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""DevResetSave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""LT+RT+DpadLeft"",
+                    ""id"": ""2f456351-a327-4048-8e7f-5e7b3d06d28f"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DevResetSave"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""30567462-b438-4159-9f80-6f8c4e17e390"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""DevResetSave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""41678573-c549-426a-8091-709d5f28f4a1"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""DevResetSave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""52789684-d65a-437b-91a2-81ae6039a5b2"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""DevResetSave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1005,6 +1426,10 @@ namespace BilgiAdasi.Core
             m_Player_CrouchToggle = m_Player.FindAction("CrouchToggle", throwIfNotFound: true);
             m_Player_OpenMap = m_Player.FindAction("OpenMap", throwIfNotFound: true);
             m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
+            m_Player_OpenHint = m_Player.FindAction("OpenHint", throwIfNotFound: true);
+            m_Player_NextSlot = m_Player.FindAction("NextSlot", throwIfNotFound: true);
+            m_Player_PrevSlot = m_Player.FindAction("PrevSlot", throwIfNotFound: true);
+            m_Player_SelectSlot = m_Player.FindAction("SelectSlot", throwIfNotFound: true);
             // Station
             m_Station = asset.FindActionMap("Station", throwIfNotFound: true);
             m_Station_Point = m_Station.FindAction("Point", throwIfNotFound: true);
@@ -1015,12 +1440,18 @@ namespace BilgiAdasi.Core
             m_Station_OpenHint = m_Station.FindAction("OpenHint", throwIfNotFound: true);
             m_Station_ExitStation = m_Station.FindAction("ExitStation", throwIfNotFound: true);
             m_Station_Pause = m_Station.FindAction("Pause", throwIfNotFound: true);
-            m_Station_Navigate = m_Station.FindAction("Navigate", throwIfNotFound: true);
+            m_Station_Confirm = m_Station.FindAction("Confirm", throwIfNotFound: true);
+            m_Station_SelectPrevious = m_Station.FindAction("SelectPrevious", throwIfNotFound: true);
+            m_Station_SelectNext = m_Station.FindAction("SelectNext", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
             m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
             m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
+            // Dev
+            m_Dev = asset.FindActionMap("Dev", throwIfNotFound: true);
+            m_Dev_DevJumpTask = m_Dev.FindAction("DevJumpTask", throwIfNotFound: true);
+            m_Dev_DevResetSave = m_Dev.FindAction("DevResetSave", throwIfNotFound: true);
         }
 
         ~@BilgiAdasiControls()
@@ -1028,6 +1459,7 @@ namespace BilgiAdasi.Core
             UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, BilgiAdasiControls.Player.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_Station.enabled, "This will cause a leak and performance issues, BilgiAdasiControls.Station.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, BilgiAdasiControls.UI.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_Dev.enabled, "This will cause a leak and performance issues, BilgiAdasiControls.Dev.Disable() has not been called.");
         }
 
         /// <summary>
@@ -1112,6 +1544,10 @@ namespace BilgiAdasi.Core
         private readonly InputAction m_Player_CrouchToggle;
         private readonly InputAction m_Player_OpenMap;
         private readonly InputAction m_Player_Pause;
+        private readonly InputAction m_Player_OpenHint;
+        private readonly InputAction m_Player_NextSlot;
+        private readonly InputAction m_Player_PrevSlot;
+        private readonly InputAction m_Player_SelectSlot;
         /// <summary>
         /// Provides access to input actions defined in input action map "Player".
         /// </summary>
@@ -1159,6 +1595,22 @@ namespace BilgiAdasi.Core
             /// Provides access to the underlying input action "Player/Pause".
             /// </summary>
             public InputAction @Pause => m_Wrapper.m_Player_Pause;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/OpenHint".
+            /// </summary>
+            public InputAction @OpenHint => m_Wrapper.m_Player_OpenHint;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/NextSlot".
+            /// </summary>
+            public InputAction @NextSlot => m_Wrapper.m_Player_NextSlot;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/PrevSlot".
+            /// </summary>
+            public InputAction @PrevSlot => m_Wrapper.m_Player_PrevSlot;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/SelectSlot".
+            /// </summary>
+            public InputAction @SelectSlot => m_Wrapper.m_Player_SelectSlot;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -1212,6 +1664,18 @@ namespace BilgiAdasi.Core
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @OpenHint.started += instance.OnOpenHint;
+                @OpenHint.performed += instance.OnOpenHint;
+                @OpenHint.canceled += instance.OnOpenHint;
+                @NextSlot.started += instance.OnNextSlot;
+                @NextSlot.performed += instance.OnNextSlot;
+                @NextSlot.canceled += instance.OnNextSlot;
+                @PrevSlot.started += instance.OnPrevSlot;
+                @PrevSlot.performed += instance.OnPrevSlot;
+                @PrevSlot.canceled += instance.OnPrevSlot;
+                @SelectSlot.started += instance.OnSelectSlot;
+                @SelectSlot.performed += instance.OnSelectSlot;
+                @SelectSlot.canceled += instance.OnSelectSlot;
             }
 
             /// <summary>
@@ -1250,6 +1714,18 @@ namespace BilgiAdasi.Core
                 @Pause.started -= instance.OnPause;
                 @Pause.performed -= instance.OnPause;
                 @Pause.canceled -= instance.OnPause;
+                @OpenHint.started -= instance.OnOpenHint;
+                @OpenHint.performed -= instance.OnOpenHint;
+                @OpenHint.canceled -= instance.OnOpenHint;
+                @NextSlot.started -= instance.OnNextSlot;
+                @NextSlot.performed -= instance.OnNextSlot;
+                @NextSlot.canceled -= instance.OnNextSlot;
+                @PrevSlot.started -= instance.OnPrevSlot;
+                @PrevSlot.performed -= instance.OnPrevSlot;
+                @PrevSlot.canceled -= instance.OnPrevSlot;
+                @SelectSlot.started -= instance.OnSelectSlot;
+                @SelectSlot.performed -= instance.OnSelectSlot;
+                @SelectSlot.canceled -= instance.OnSelectSlot;
             }
 
             /// <summary>
@@ -1295,7 +1771,9 @@ namespace BilgiAdasi.Core
         private readonly InputAction m_Station_OpenHint;
         private readonly InputAction m_Station_ExitStation;
         private readonly InputAction m_Station_Pause;
-        private readonly InputAction m_Station_Navigate;
+        private readonly InputAction m_Station_Confirm;
+        private readonly InputAction m_Station_SelectPrevious;
+        private readonly InputAction m_Station_SelectNext;
         /// <summary>
         /// Provides access to input actions defined in input action map "Station".
         /// </summary>
@@ -1340,9 +1818,17 @@ namespace BilgiAdasi.Core
             /// </summary>
             public InputAction @Pause => m_Wrapper.m_Station_Pause;
             /// <summary>
-            /// Provides access to the underlying input action "Station/Navigate".
+            /// Provides access to the underlying input action "Station/Confirm".
             /// </summary>
-            public InputAction @Navigate => m_Wrapper.m_Station_Navigate;
+            public InputAction @Confirm => m_Wrapper.m_Station_Confirm;
+            /// <summary>
+            /// Provides access to the underlying input action "Station/SelectPrevious".
+            /// </summary>
+            public InputAction @SelectPrevious => m_Wrapper.m_Station_SelectPrevious;
+            /// <summary>
+            /// Provides access to the underlying input action "Station/SelectNext".
+            /// </summary>
+            public InputAction @SelectNext => m_Wrapper.m_Station_SelectNext;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -1393,9 +1879,15 @@ namespace BilgiAdasi.Core
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
-                @Navigate.started += instance.OnNavigate;
-                @Navigate.performed += instance.OnNavigate;
-                @Navigate.canceled += instance.OnNavigate;
+                @Confirm.started += instance.OnConfirm;
+                @Confirm.performed += instance.OnConfirm;
+                @Confirm.canceled += instance.OnConfirm;
+                @SelectPrevious.started += instance.OnSelectPrevious;
+                @SelectPrevious.performed += instance.OnSelectPrevious;
+                @SelectPrevious.canceled += instance.OnSelectPrevious;
+                @SelectNext.started += instance.OnSelectNext;
+                @SelectNext.performed += instance.OnSelectNext;
+                @SelectNext.canceled += instance.OnSelectNext;
             }
 
             /// <summary>
@@ -1431,9 +1923,15 @@ namespace BilgiAdasi.Core
                 @Pause.started -= instance.OnPause;
                 @Pause.performed -= instance.OnPause;
                 @Pause.canceled -= instance.OnPause;
-                @Navigate.started -= instance.OnNavigate;
-                @Navigate.performed -= instance.OnNavigate;
-                @Navigate.canceled -= instance.OnNavigate;
+                @Confirm.started -= instance.OnConfirm;
+                @Confirm.performed -= instance.OnConfirm;
+                @Confirm.canceled -= instance.OnConfirm;
+                @SelectPrevious.started -= instance.OnSelectPrevious;
+                @SelectPrevious.performed -= instance.OnSelectPrevious;
+                @SelectPrevious.canceled -= instance.OnSelectPrevious;
+                @SelectNext.started -= instance.OnSelectNext;
+                @SelectNext.performed -= instance.OnSelectNext;
+                @SelectNext.canceled -= instance.OnSelectNext;
             }
 
             /// <summary>
@@ -1585,6 +2083,113 @@ namespace BilgiAdasi.Core
         /// Provides a new <see cref="UIActions" /> instance referencing this action map.
         /// </summary>
         public UIActions @UI => new UIActions(this);
+
+        // Dev
+        private readonly InputActionMap m_Dev;
+        private List<IDevActions> m_DevActionsCallbackInterfaces = new List<IDevActions>();
+        private readonly InputAction m_Dev_DevJumpTask;
+        private readonly InputAction m_Dev_DevResetSave;
+        /// <summary>
+        /// Provides access to input actions defined in input action map "Dev".
+        /// </summary>
+        public struct DevActions
+        {
+            private @BilgiAdasiControls m_Wrapper;
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
+            public DevActions(@BilgiAdasiControls wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "Dev/DevJumpTask".
+            /// </summary>
+            public InputAction @DevJumpTask => m_Wrapper.m_Dev_DevJumpTask;
+            /// <summary>
+            /// Provides access to the underlying input action "Dev/DevResetSave".
+            /// </summary>
+            public InputAction @DevResetSave => m_Wrapper.m_Dev_DevResetSave;
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
+            public InputActionMap Get() { return m_Wrapper.m_Dev; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            public void Enable() { Get().Enable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+            public bool enabled => Get().enabled;
+            /// <summary>
+            /// Implicitly converts an <see ref="DevActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
+            public static implicit operator InputActionMap(DevActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="DevActions" />
+            public void AddCallbacks(IDevActions instance)
+            {
+                if (instance == null || m_Wrapper.m_DevActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_DevActionsCallbackInterfaces.Add(instance);
+                @DevJumpTask.started += instance.OnDevJumpTask;
+                @DevJumpTask.performed += instance.OnDevJumpTask;
+                @DevJumpTask.canceled += instance.OnDevJumpTask;
+                @DevResetSave.started += instance.OnDevResetSave;
+                @DevResetSave.performed += instance.OnDevResetSave;
+                @DevResetSave.canceled += instance.OnDevResetSave;
+            }
+
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="DevActions" />
+            private void UnregisterCallbacks(IDevActions instance)
+            {
+                @DevJumpTask.started -= instance.OnDevJumpTask;
+                @DevJumpTask.performed -= instance.OnDevJumpTask;
+                @DevJumpTask.canceled -= instance.OnDevJumpTask;
+                @DevResetSave.started -= instance.OnDevResetSave;
+                @DevResetSave.performed -= instance.OnDevResetSave;
+                @DevResetSave.canceled -= instance.OnDevResetSave;
+            }
+
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="DevActions.UnregisterCallbacks(IDevActions)" />.
+            /// </summary>
+            /// <seealso cref="DevActions.UnregisterCallbacks(IDevActions)" />
+            public void RemoveCallbacks(IDevActions instance)
+            {
+                if (m_Wrapper.m_DevActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="DevActions.AddCallbacks(IDevActions)" />
+            /// <seealso cref="DevActions.RemoveCallbacks(IDevActions)" />
+            /// <seealso cref="DevActions.UnregisterCallbacks(IDevActions)" />
+            public void SetCallbacks(IDevActions instance)
+            {
+                foreach (var item in m_Wrapper.m_DevActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_DevActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        /// <summary>
+        /// Provides a new <see cref="DevActions" /> instance referencing this action map.
+        /// </summary>
+        public DevActions @Dev => new DevActions(this);
         private int m_KeyboardMouseSchemeIndex = -1;
         /// <summary>
         /// Provides access to the input control scheme.
@@ -1681,6 +2286,34 @@ namespace BilgiAdasi.Core
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnPause(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "OpenHint" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnOpenHint(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "NextSlot" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnNextSlot(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "PrevSlot" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnPrevSlot(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "SelectSlot" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSelectSlot(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Station" which allows adding and removing callbacks.
@@ -1746,12 +2379,26 @@ namespace BilgiAdasi.Core
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnPause(InputAction.CallbackContext context);
             /// <summary>
-            /// Method invoked when associated input action "Navigate" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// Method invoked when associated input action "Confirm" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnNavigate(InputAction.CallbackContext context);
+            void OnConfirm(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "SelectPrevious" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSelectPrevious(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "SelectNext" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSelectNext(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
@@ -1781,6 +2428,28 @@ namespace BilgiAdasi.Core
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnCancel(InputAction.CallbackContext context);
+        }
+        /// <summary>
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Dev" which allows adding and removing callbacks.
+        /// </summary>
+        /// <seealso cref="DevActions.AddCallbacks(IDevActions)" />
+        /// <seealso cref="DevActions.RemoveCallbacks(IDevActions)" />
+        public interface IDevActions
+        {
+            /// <summary>
+            /// Method invoked when associated input action "DevJumpTask" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnDevJumpTask(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "DevResetSave" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnDevResetSave(InputAction.CallbackContext context);
         }
     }
 }

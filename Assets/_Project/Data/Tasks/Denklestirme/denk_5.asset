@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73273f6b8ec5a444b845f1b63ceacfae, type: 3}
+  m_Name: denk_5
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.OrderTask
+  id: denk_5
+  giverName: "\xC7ift\xE7i Elif"
+  giverPortrait: {fileID: 0}
+  giverLines:
+  - "D\xF6rt kavanoz g\xFCbre ruhu istiyorum, ne eksik ne fazla. Paras\u0131n\u0131
+    pe\u015Fin veriyorum. Artan\u0131n hesab\u0131 senin cebinden."
+  deliveryLines:
+  - "D\xF6rt kavanoz, tastamam. Hesab\u0131n\u0131 bilen simyac\u0131!"
+  hintText: "\xD6nce bir kavanozluk denklemi kur, sonra ikiye katla."
+  realLifeText: "Amonyak en \xE7ok \xFCretilen g\xFCbre hammaddelerindendir; keskin
+    kokulu, zararl\u0131 bir gazd\u0131r ve kapal\u0131 fabrikalarda \xFCretilir."
+  mode: 1
+  steps:
+  - reaction: {fileID: 11400000, guid: e720008e0ba2fe844b431ad346b2e904, type: 2}
+    targetProducts:
+    - species: {fileID: 11400000, guid: 22efa628d4955a043956e0eedbb0503e, type: 2}
+      amount: 4
+    cardShowsReactants: 0
+  reward: 25
+  shelf: []
+  budget: 20
+  prices:
+  - species: {fileID: 11400000, guid: 7365f7085cd6aad49b7f944cb76c871f, type: 2}
+    price: 3
+  - species: {fileID: 11400000, guid: e9fe8dc75e00bcb4a86f169ee7fbbcc2, type: 2}
+    price: 2

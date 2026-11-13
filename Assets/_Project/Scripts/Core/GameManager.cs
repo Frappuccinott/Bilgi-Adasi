@@ -27,8 +27,6 @@ namespace BilgiAdasi.Core
             GameEvents.NeighborhoodCompleted += HandleNeighborhoodCompleted;
             GameEvents.HintOpened += HandleHintOpened;
             GameEvents.Failed += HandleFailed;
-            GameEvents.TaskAccepted += HandleTaskAccepted;
-            GameEvents.DiscoveryAdded += HandleDiscoveryAdded;
         }
 
         private void OnDisable()
@@ -37,8 +35,6 @@ namespace BilgiAdasi.Core
             GameEvents.NeighborhoodCompleted -= HandleNeighborhoodCompleted;
             GameEvents.HintOpened -= HandleHintOpened;
             GameEvents.Failed -= HandleFailed;
-            GameEvents.TaskAccepted -= HandleTaskAccepted;
-            GameEvents.DiscoveryAdded -= HandleDiscoveryAdded;
         }
 
         private void OnDestroy()
@@ -63,18 +59,6 @@ namespace BilgiAdasi.Core
         private static void HandleHintOpened(string taskId) => Data?.MarkHintOpened(taskId);
 
         private static void HandleFailed(string taskId) => Data?.IncrementFailCount(taskId);
-
-        private static void HandleTaskAccepted(string taskId)
-        {
-            Data?.MarkTaskAccepted(taskId);
-            SaveSystem.Instance?.Save();
-        }
-
-        private static void HandleDiscoveryAdded(string taskId)
-        {
-            Data?.AddDiscovery(taskId);
-            SaveSystem.Instance?.Save();
-        }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStatics() => Instance = null;

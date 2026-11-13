@@ -107,10 +107,11 @@ artan[giren]   = kazandaki[giren] − gereken[giren]   (≥ 0 ise)
 
 **OrderController**
 ```
-Arrive → Briefing → Preparing ⇄ (Foam) → Reacting → Board → RealLife → Deliver → Done
+(kapıda alınır) → Preparing ⇄ (Foam: malzeme gider) → Reacting → Board → ürün envantere → ReadyToDeliver → (kapıda elle) Deliver → Done
+Preparing'de: Pour (eldeki maddeden 1, geri alınmaz) · Drain (kol, malzeme gider) · Fire (ocak)
                          └─ step tamam & sonraki step var → Preparing (yeni step)
 ```
-- `Preparing` içinde her kazan değişiminde `RecalculateScales()`; dengedeyse otomatik `Reacting`.
+- `Preparing` içinde her kazan değişiminde `RecalculateScales()`; `Reacting` yalnızca FireStove ile (otomatik değil).
 - `Foam` 1,2 sn sürer, `Preparing`'e döner, `failCount++`.
 
 **DeskController**
@@ -119,7 +120,7 @@ PigeonArrive → EnvelopeOpen → Answering ⇄ (Wrong) → Stamp → RealLife? 
 ```
 - `Answering` her soruyu sırayla gösterir; `GuildExam` için soruları `randomCount` kadar rastgele çeker.
 
-**NeighborhoodRunner**: köy görev listesini sırayla tipine göre `OrderController` ya da `DeskController`'a verir; görev bitince `GameEvents.TaskCompleted(taskId)`.
+**NeighborhoodRunner**: köy görev listesini sırayla tipine göre `OrderController` ya da `DeskController`'a verir; görev bitince `GameEvents.TaskCompleted(taskId)`. Köyler birbirinden bağımsız ilerler (sıra serbest). Sipariş kapıda alınır (ilk görevde ustanın tanıtımı + sakinin derdi), kazanda çözülür, teslim repliği konuşma balonunda söylenir. İlerleme kayıttaki `completedTasks`'tan hesaplanır; `NeighborhoodProgress` olayıyla `NeighborhoodView`'a gider.
 
 ## 6. Olaylar
 
@@ -130,6 +131,7 @@ public static class GameEvents
     public static event Action<string> NeighborhoodCompleted;  // neighborhoodId
     public static event Action<string> HintOpened;             // taskId
     public static event Action<string> Failed;                 // taskId (köpürme / yanlış)
+    public static event Action<string, int, int> NeighborhoodProgress; // neighborhoodId, biten, toplam
 }
 ```
 Köy canlanma görselleri, tahta, istatistik bu olayları dinler; denetleyiciler görselleri bilmez.
@@ -138,7 +140,7 @@ Köy canlanma görselleri, tahta, istatistik bu olayları dinler; denetleyiciler
 
 - `SaveData { int grade; List<string> completedNeighborhoods; HashSet<string> completedTasks; Dictionary<string,int> failCounts; HashSet<string> hintsOpened; List<string> boardEquations; }`
 - JSON → `PlayerPrefs` (tek anahtar). Prototip için yeterli.
-- **Geliştirici kısayolları** (yalnızca `DEVELOPMENT_BUILD` ya da `#if UNITY_EDITOR` + sunum bayrağı): `1–5` görevi atla, `R` kaydı sıfırla, `M` haritaya dön. Demo için hayati.
+- **Geliştirici kısayolları** (`DevShortcuts`; yalnızca editör, `DEVELOPMENT_BUILD` ya da `BILGIADASI_DEMO` sunum bayrağı): `1–5` odaktaki köyün o görevine atla (gamepad: LT+RT+→ sıradaki görev), `Ctrl+R` kaydı sıfırla (gamepad: LT+RT+←; yanlışlıkla basılmasın diye tek tuş değil). "Haritaya dön" harita ekranı (Faz 6) gelince eklenir. Demo için hayati.
 
 ## 8. Kurallar
 

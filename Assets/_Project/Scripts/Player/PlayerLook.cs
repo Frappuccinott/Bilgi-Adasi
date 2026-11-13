@@ -22,7 +22,43 @@ namespace BilgiAdasi.Player
         private float gamepadRamp;
         private float currentFov;
 
+        // Bisiklet: yatay bakış gövdeyi döndürmez, bisikletin yönüne göre ofset olarak tutulur.
+        private bool yawAnchored;
+        private float yawOffset;
+        private float yawLimit;
+        private float recenterDelay;
+        private float recenterSpeed;
+        private float lastYawInputTime;
+
         public float Pitch => pitch;
+        /// <summary>Bağlı moddaki yatay bakış ofseti (°). Gövdeyi bağlayan (bisiklet) dönüşü kendisi yazar.</summary>
+        public float YawOffset => yawOffset;
+        /// <summary>Bağlı modda: bakış girdisi yokken ofset öne dönsün mü (bisiklet giderken true).</summary>
+        public bool YawRecenter { get; set; }
+        /// <summary>Temel FOV'a eklenen ek açı (bisiklet hızı). Yumuşak geçişle uygulanır.</summary>
+        public float ExtraFov { get; set; }
+
+        /// <summary>
+        /// Yatay bakışı bir taşıta bağlar: Update gövdeyi döndürmez, yalnızca ofseti (±limit) tutar.
+        /// initialOffset limit dışındaysa yumuşakça sınıra çekilir (binerken ani dönüş olmasın).
+        /// </summary>
+        public void BeginAnchoredYaw(float initialOffset, float limit, float recenterDelaySeconds, float recenterDegreesPerSecond)
+        {
+            yawAnchored = true;
+            yawOffset = initialOffset;
+            yawLimit = limit;
+            recenterDelay = recenterDelaySeconds;
+            recenterSpeed = recenterDegreesPerSecond;
+            lastYawInputTime = Time.time;
+            YawRecenter = false;
+        }
+
+        public void EndAnchoredYaw()
+        {
+            yawAnchored = false;
+            yawOffset = 0f;
+            YawRecenter = false;
+        }
 
         private void Awake()
         {
@@ -40,7 +76,7 @@ namespace BilgiAdasi.Player
             if (settings == null || playerCamera == null) return;
             bool sprinting = motor != null && motor.isActiveAndEnabled && motor.IsSprinting
                              && motor.HorizontalSpeed > settings.WalkSpeed + 0.1f;
-            float target = settings.FieldOfView + (sprinting ? settings.SprintFovBoost : 0f);
+            float target = settings.FieldOfView + (sprinting ? settings.SprintFovBoost : 0f) + ExtraFov;
             currentFov = Mathf.Lerp(currentFov, target, 1f - Mathf.Exp(-settings.FovSharpness * Time.deltaTime));
             playerCamera.Lens.FieldOfView = currentFov;
         }
@@ -88,9 +124,28 @@ namespace BilgiAdasi.Player
                 pitchDelta = value.y * settings.MouseSensitivity;
             }
 
-            transform.Rotate(0f, yawDelta, 0f, Space.Self);
+            if (yawAnchored) UpdateAnchoredYaw(yawDelta);
+            else transform.Rotate(0f, yawDelta, 0f, Space.Self);
             pitch = Mathf.Clamp(pitch - pitchDelta, -settings.PitchLimit, settings.PitchLimit);
             cameraPivot.localRotation = Quaternion.Euler(pitch, 0f, 0f);
+        }
+
+        private void UpdateAnchoredYaw(float yawDelta)
+        {
+            float dt = Time.deltaTime;
+            if (Mathf.Abs(yawDelta) > 0.001f) lastYawInputTime = Time.time;
+
+            float next = yawOffset + yawDelta;
+            if (Mathf.Abs(next) > yawLimit)
+            {
+                // Zaten sınır dışındaysa (binerken) yumuşakça sınıra gel; değilse sınırda dur.
+                next = Mathf.Abs(yawOffset) > yawLimit
+                    ? Mathf.MoveTowards(yawOffset, Mathf.Sign(yawOffset) * yawLimit, recenterSpeed * dt)
+                    : Mathf.Sign(next) * yawLimit;
+            }
+            if (YawRecenter && Time.time - lastYawInputTime > recenterDelay)
+                next = Mathf.MoveTowards(next, 0f, recenterSpeed * dt);
+            yawOffset = next;
         }
 
         /// <summary>Ayarlar ekranından FOV değişince çağrılır.</summary>

@@ -192,7 +192,7 @@ namespace BilgiAdasi.EditorTools
             return SavePrefab(go, PlayerSpawnPath);
         }
 
-        private static GameObject EnsureStation<T>(string name, string prompt) where T : StationBase
+        private static GameObject EnsureStation<T>(string name, string prompt) where T : MonoBehaviour
         {
             string path = $"{StationsFolder}/{name}.prefab";
             var existing = AssetDatabase.LoadAssetAtPath<GameObject>(path);
@@ -221,8 +221,9 @@ namespace BilgiAdasi.EditorTools
             stationCam.Lens.NearClipPlane = 0.05f;
             stationCam.enabled = false;
 
-            SetString(station, "promptText", prompt);
-            Set(station, "stationCamera", stationCam);
+            // Kazan ve kapı 13.11'den beri istasyon değil (kamera değişmez); yalnızca StationBase'ler kamera alır.
+            if (new SerializedObject(station).FindProperty("promptText") != null) SetString(station, "promptText", prompt);
+            if (station is StationBase) Set(station, "stationCamera", stationCam);
 
             return SavePrefab(root, path);
         }

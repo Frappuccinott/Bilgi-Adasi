@@ -1,13 +1,13 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1102 &-7539473522909769226
+--- !u!1102 &-8031839159962442883
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: El_Birak
+  m_Name: El_Dok
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -20,7 +20,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -1717158761565199464, guid: 98cc553cd5203424db6f39c16a848081, type: 3}
+  m_Motion: {fileID: 8941344189455429073, guid: 98cc553cd5203424db6f39c16a848081, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -59,16 +59,16 @@ AnimatorStateMachine:
   m_Name: Base Layer
   m_ChildStates:
   - serializedVersion: 1
-    m_State: {fileID: 5493341162961439423}
+    m_State: {fileID: 4952838135553152243}
     m_Position: {x: 200, y: 0, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: -7539473522909769226}
+    m_State: {fileID: 4655184983099381348}
     m_Position: {x: 235, y: 65, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: 5340470313956057568}
+    m_State: {fileID: 6291035306344176719}
     m_Position: {x: 270, y: 130, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: 2088018134070546848}
+    m_State: {fileID: -8031839159962442883}
     m_Position: {x: 305, y: 195, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
@@ -79,15 +79,15 @@ AnimatorStateMachine:
   m_EntryPosition: {x: 50, y: 120, z: 0}
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
-  m_DefaultState: {fileID: 5340470313956057568}
---- !u!1102 &2088018134070546848
+  m_DefaultState: {fileID: 4952838135553152243}
+--- !u!1102 &4655184983099381348
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: El_Dok
+  m_Name: El_Al
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -100,13 +100,13 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 8941344189455429073, guid: 98cc553cd5203424db6f39c16a848081, type: 3}
+  m_Motion: {fileID: 8391554769454948357, guid: 98cc553cd5203424db6f39c16a848081, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &5340470313956057568
+--- !u!1102 &4952838135553152243
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
@@ -132,14 +132,14 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &5493341162961439423
+--- !u!1102 &6291035306344176719
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: El_Al
+  m_Name: El_Birak
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -152,7 +152,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 8391554769454948357, guid: 98cc553cd5203424db6f39c16a848081, type: 3}
+  m_Motion: {fileID: -1717158761565199464, guid: 98cc553cd5203424db6f39c16a848081, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

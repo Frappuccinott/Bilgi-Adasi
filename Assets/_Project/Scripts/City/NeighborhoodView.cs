@@ -32,20 +32,34 @@ namespace BilgiAdasi.City
                     for (int i = 0; i < root.childCount; i++) parts[i] = root.GetChild(i).gameObject;
                 }
             }
-        }
 
-        private void OnEnable() => GameEvents.NeighborhoodCompleted += OnNeighborhoodCompleted;
-        private void OnDisable() => GameEvents.NeighborhoodCompleted -= OnNeighborhoodCompleted;
-
-        private void Start()
-        {
+            // Başlangıç hali Awake'te: NeighborhoodRunner Start'ta gerçek ilerlemeyi yayınlar ve bunu ezmemeli.
             var data = SaveSystem.Instance != null ? SaveSystem.Instance.Data : null;
             bool done = data != null && data.IsNeighborhoodCompleted(neighborhoodId);
             SetCompleted(done);
             if (!done) SetProgress(0);
         }
 
-        /// <summary>İlk completedTasks kadar parçayı açar (NeighborhoodRunner çağırır).</summary>
+        private void OnEnable()
+        {
+            GameEvents.NeighborhoodCompleted += OnNeighborhoodCompleted;
+            GameEvents.NeighborhoodProgress += OnNeighborhoodProgress;
+        }
+
+        private void OnDisable()
+        {
+            GameEvents.NeighborhoodCompleted -= OnNeighborhoodCompleted;
+            GameEvents.NeighborhoodProgress -= OnNeighborhoodProgress;
+        }
+
+        private void OnNeighborhoodProgress(string id, int completed, int total)
+        {
+            if (id != neighborhoodId) return;
+            SetCompleted(completed >= total);
+            if (completed < total) SetProgress(completed);
+        }
+
+        /// <summary>İlk completedTasks kadar parçayı açar (GameEvents.NeighborhoodProgress ile).</summary>
         public void SetProgress(int completedTasks)
         {
             if (parts == null) return;
