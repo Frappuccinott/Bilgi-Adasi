@@ -52,6 +52,10 @@ Değerler referanstan gözle alınmış başlangıç değerleridir; ilk sahne ku
 
 | Kil (pişmiş toprak: athanor, küp, kroze) — türetilmiş | `#CBB595` | `#987D6A` | `#62524B` |
 
+| Ten (öğrencinin eli) — türetilmiş | `#EBB58F` | `#BE8769` | `#834C38` |
+
+*Ten satırı türetilmedir:* aydınlık = sıva aydınlık %60 + çatı aydınlık %40; orta = kil orta %50 + çatı orta %30 + sıva aydınlık %20; gölge = kil gölge %60 + çatı gölge %40. Yalnız FPS kollarında; orta, belirli bir kimliğe işaret etmeyen sıcak ton (13.11).
+
 *Kil satırı türetilmedir:* aydınlık = sıva aydınlık %60 + ahşap aydınlık %40; orta = sıva orta %50 + ahşap orta %50; gölge = sıva gölge %50 + ahşap gölge %50 (13.11).
 
 *Bakır satırı türetilmedir:* aydınlık = çatı aydınlık %50 + ahşap aydınlık %50; orta = çatı gölge %50 + ahşap orta %50; gölge = çatı gölge %30 + ahşap gölge %70 (13.11).
@@ -139,6 +143,7 @@ Sayılar üçgen (tri) cinsindendir ve başlangıç değeridir; sahne ağırlaş
 | **Taşınabilir eşya** (envantere girer, elde 3B görünür: malzeme kapları, el aletleri; yakın plan, 16+ kenar) | 1.200 |
 | Orta eşya (tabure, fıçı, sandık) | 600 |
 | Büyük eşya (tezgâh, kazan, terazi) | 1.500 |
+| FPS kolları (iki kol, iskeletli, kameraya en yakın model) | 5.000 |
 | Araç (bisiklet; oyuncu biner, gidon/sepet FPS'te yakın plan) | 4.800 |
 | Kaya | 600 |
 | Ağaç | 1.300 |
