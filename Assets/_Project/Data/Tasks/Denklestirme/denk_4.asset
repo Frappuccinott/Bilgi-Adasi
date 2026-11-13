@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73273f6b8ec5a444b845f1b63ceacfae, type: 3}
+  m_Name: denk_4
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.OrderTask
+  id: denk_4
+  giverName: "Duvarc\u0131 Halil"
+  giverLines:
+  - "Har\xE7 i\xE7in s\xF6nm\xFC\u015F kire\xE7 laz\u0131m. Kire\xE7 ta\u015F\u0131
+    var ama. Ustan ta\u015Ftan kire\xE7 \xE7\u0131kar\u0131rd\u0131, iki ad\u0131mda.
+    Acele etme."
+  deliveryLines:
+  - "Tam k\u0131vam\u0131nda. \xC7\u0131ra\u011F\u0131 ustas\u0131n\u0131 aratm\u0131yor."
+  hintText: "Her denklem katsay\u0131 istemez. Saymadan kavanoz ekleme."
+  realLifeText: "Kire\xE7 s\xF6nd\xFCr\xFCl\xFCrken \xE7ok \u0131s\u0131 \xE7\u0131kar
+    ve kire\xE7 cilde, g\xF6ze zarar verir; ustalar eldiven ve g\xF6zl\xFCk takar."
+  mode: 0
+  steps:
+  - reaction: {fileID: 11400000, guid: 7ee399826d0213b4dbaa0460ac2b386b, type: 2}
+    targetProducts:
+    - species: {fileID: 11400000, guid: 09de350f5713fc441bf45c8c039b8186, type: 2}
+      amount: 1
+    - species: {fileID: 11400000, guid: 50ddecd6f6537fd48aa42ccc142f47e6, type: 2}
+      amount: 1
+    cardShowsReactants: 0
+  - reaction: {fileID: 11400000, guid: f3865c187fbd81a448125e636db4cd60, type: 2}
+    targetProducts:
+    - species: {fileID: 11400000, guid: ebee964df288a574aac6253b59b4893d, type: 2}
+      amount: 1
+    cardShowsReactants: 0
+  shelf:
+  - {fileID: 11400000, guid: 1f1b54aa2a08c644996bdfb5693632dd, type: 2}
+  - {fileID: 11400000, guid: 4d7d1e9c4ee5640419e910786ab51966, type: 2}
+  budget: 0
+  prices: []

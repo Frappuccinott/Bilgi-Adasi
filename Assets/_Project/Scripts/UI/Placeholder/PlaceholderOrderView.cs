@@ -24,7 +24,6 @@ namespace BilgiAdasi.UI
         [SerializeField] private string hintLabel = "Defter [H / X]";
         [SerializeField] private string closeLabel = "Kapat";
         [SerializeField] private string addLabel = "Kazana";
-        [SerializeField] private string labelLabel = "Etiket";
 
         private static readonly Color PanelColor = new Color(0f, 0f, 0f, 0.55f);
         private static readonly Color ButtonColor = new Color(0.25f, 0.25f, 0.3f, 0.95f);
@@ -107,12 +106,13 @@ namespace BilgiAdasi.UI
             {
                 var item = items[i];
                 var row = Row(shelfList);
-                string price = item.Price > 0 ? $"  ({item.Price})" : "";
-                string owned = item.Owned >= 0 ? $"  elde {item.Owned}" : "";
-                MakeLabel(row, item.Species.FormulaRich + price + owned, 26, 260);
                 var s = item.Species;
-                MakeButton(row, addLabel, () => Commands?.AddToCauldron(s), item.Species == selected);
-                MakeButton(row, labelLabel, () => Commands?.TouchLabel(s), false);
+                // Kavanoz etiketi = formülün kendisi. Tıklanınca mühür titrer (formül değiştirilemez).
+                MakeButton(row, s.FormulaRich, () => Commands?.TouchLabel(s), false, 150);
+                MakeButton(row, addLabel, () => Commands?.AddToCauldron(s), s == selected, 120);
+                string price = item.Price > 0 ? $"{item.Price}" : "";
+                string owned = item.Owned >= 0 ? $"  elde {item.Owned}" : "";
+                MakeLabel(row, price + owned, 22, 0);
             }
         }
 

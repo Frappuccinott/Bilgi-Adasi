@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: 4985496509699745305}
   - component: {fileID: 3536246847780562416}
   - component: {fileID: 8443708455132204552}
+  - component: {fileID: 4224282228741939555}
   m_Layer: 6
   m_Name: Station_Cauldron
   m_TagString: Untagged
@@ -161,6 +162,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.2, y: 1.2, z: 1.2}
   m_Center: {x: 0, y: 0.6, z: 0}
+--- !u!114 &4224282228741939555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4262792514283213549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cdd3aaefcefcef45a35609474fe93f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.OrderController
+  texts: {fileID: 11400000, guid: 695cea044bcf01a48adbcb2649f65bc7, type: 2}
+  testTask: {fileID: 11400000, guid: 3badd807bc6567342899ac7841ee6f76, type: 2}
+  foamDuration: 1.2
+  reactionDuration: 1.5
 --- !u!1 &4938288538730418055
 GameObject:
   m_ObjectHideFlags: 0

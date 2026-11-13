@@ -47,7 +47,9 @@ Kazan değiştikçe sol terazi ve sayaçlar **anında** güncellenir.
 Oyuncu kavanoz etiketine tıklayınca etiket düzenlenmez; mühür titrer ve not çıkar:
 > "Kavanozun içindekini değiştiremezsin. Kaç kavanoz koyacağını değiştirirsin."
 
-İlk denemede bir kez gösterilir, sonra yalnızca titreme.
+Not iki yoldan bir kez gösterilir (hangisi önce gelirse), sonra yalnızca titreme:
+- Oyuncu kavanozun etiketine (formül yazısına) tıklar.
+- **İlk köpürmede kendiliğinden** — öğrenci formülü değiştirmeyi en çok ilk dengesizlikte düşünür; böylece etikete hiç tıklamayan da notu görür.
 
 ### 3.5 Köpürme (zorlama)
 Dengesizken "Ateşi yak":

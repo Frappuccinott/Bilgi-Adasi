@@ -245,6 +245,14 @@ namespace BilgiAdasi.Order
 
             cauldronView?.PlayFoam(foamDuration);
             scaleView?.ShowFoamDifference(session.Rows);
+
+            // Mühür kuralı (02 §3.4): öğrenci ilk dengesizlikte formülü değiştirmeyi düşünür.
+            // Not ilk köpürmede kendiliğinden bir kez gösterilir; etikete tıklayan da aynı notu alır.
+            if (!sealNoteShown && texts != null)
+            {
+                sealNoteShown = true;
+                shelfView?.PlaySealShake(CurrentSelection(), texts.SealNote);
+            }
             yield return new WaitForSeconds(foamDuration);
             scaleView?.ClearFoamDifference();
 
