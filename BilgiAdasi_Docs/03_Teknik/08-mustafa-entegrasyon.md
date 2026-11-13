@@ -83,6 +83,57 @@ UI ayarları: Canvas Scaler → *Scale With Screen Size*, 1920×1080. Yazı en a
 - `_Project/Scripts/` ve `_Project/Data/` içinde değişiklik yapma; ihtiyacın olursa söyle.
 - Hazır model/doku/font eklediysen `05_Uretim/LICENSES.md`'ye satır yaz (yoksa projeye girmez).
 
+## 7. Taşınabilir eşya sözleşmesi (raf → 6 gözlü envanter → elde 3B → yere at → kazana koy)
+
+> Model tarafı hazır (39 eşya, `ArtSource/Blender/Script/esya_tasinir.py`). Envanter/elde tutma/bırakma kodu Mehmet'in alanı; aşağıdakiler modelin kodla buluştuğu noktalardır. Araştırma ve gerekçeler: `ArtSource/Referans/esya.md`.
+
+**Adlar:** `Malzeme_<Formül>` (oyun türleri: `Malzeme_H2`, `_O2`, `_N2`, `_CO2`, `_CO`, `_CH4`, `_C3H8`, `_H2O`, `_NH3`, `_CaCO3`, `_CaO`, `_CaOH2`), `Madde_<Ad>` (dönem maddeleri), `Kulce_<Metal>`, `Alet_<Ad>`. Ca(OH)₂ dosya adında `CaOH2`.
+
+**Her eşyanın yapısı (tek kademe):**
+```
+Malzeme_H2                 ← boş üst obje; pivot = TABAN ORTASI (rafta/yerde dik durur)
+├── Malzeme_H2_Model       ← tek mesh, M_Stilize (köşe rengi); dünya, el ve ikon için AYNI mesh
+├── Malzeme_H2_Tutma_Noktasi   ← elde: bu nokta kameradaki tutma çapasına hizalanır
+├── Malzeme_H2_Etiket_Yuzu     ← formül etiketi (TMP, dünya-uzayı); ok yönü = etiketin baktığı yön
+└── Malzeme_H2_Agiz_Noktasi    ← kazana dökme/parçacık noktası (aletlerde olmayabilir)
+```
+- Etiket ve mühür kabın **ön yüzünde**: Blender'da −Y, **Unity'de eşyanın +Z yüzü** (13.11'de Unity'de ölçüldü). Elde tutulurken etiketin kameraya bakması için eşya kameraya göre **Y ekseninde 180°** döndürülür.
+- Prefab yapısı: dönüşü sıfır sarmalayıcı kök (`<Ad>`) + altında model (Animator modelde). `Instantiate(prefab, konum, Quaternion.identity)` güvenlidir; eşya prefabları kendi tabanında (0,0,0) durur.
+- Mühürdeki kabartmalar formülü gösterir: atom başına bir nokta, renk + şekil (H küre · O halka · C küp · N piramit · Ca altıgen).
+- Bütçe: eşya başına ≤ 1.200 üçgen (O₂, CO₂, CaO, Ca(OH)₂, kükürt %10'a kadar aşıyor). LOD gerekmez.
+
+**İkonlar:** `Assets/_Project/UI/Ikonlar/<Ad>.png` — 256×256, şeffaf, aynı kamera/ölçek (eşyalar birbirine göre doğru boyda). UI'da 64-96 px gösterilir. Yeniden üretim: `ikon_render.py`.
+
+**Kod için öneriler (araştırma, karar Mehmet'in):**
+- Elde: ayrı `ViewModel` katmanı + URP Render Objects (ayrı FOV 50-60°, duvara girmez) ya da Overlay kamera. Konum ~(+0,20; −0,15; +0,50) m, içe −15°. Gölge kapalı.
+- Dünyada: Rigidbody + düz tabanlı Box/Convex collider (dik dursun), `centerOfMass` yükseklik × 0,25, Angular Damping 0,5-1,0, Continuous Speculative.
+- Girdi (her aksiyon klavye + gamepad, `CLAUDE.md` §3): Al = Interact (E / X); **Bırak = G / D-pad aşağı** (B zaten CrouchToggle ve ExitStation); göz seçimi = 1-6 + fare tekeri / LB-RB (LB/RB istasyonda Increase/Decrease, Player map'te boş).
+- **Doküman uyarısı:** `02-siparis-mekanigi.md` hâlâ "raftan kazana sürükleme" (istasyon modu) anlatıyor; envanter sistemine geçilecekse 02 ve `CLAUDE.md` güncellenmeli.
+
+## 8. Animasyon sözleşmesi (bütün animasyonlar Blender'da; Unity'de yalnız `Animator.Play`)
+
+**Unity'de elle iş yok:** `Assets/_Project/Art/Editor/SanatIceAktarma.cs` FBX içeri girince Generic rig kurar, `_Dongu` kliplerini döngüye alır, her FBX için `Kontrol/<Ad>.controller` (varsayılan durum `*_Bosta`) ve `Prefablar/<Ad>.prefab` üretir. Menü: **BilgiAdasi → Sanat → Atölyeyi açık sahneye yerleştir** (hareketsiz atölye + bütün düzenekler, dünya konumlarında, kök `Atolye_Sanat`). 13.11'de Unity 6000.4.6'da derlendi ve `Deneme_Mustafa.unity` sahnesinde denendi: shader hatasız, 47 kontrolcü boşta durumunda açılıyor, döngü klipleri döngüde.
+
+Kod yalnızca: `animator.Play("Klip_Adi")` (ya da `CrossFade`). Her klip iskeletin **bütün** kemiklerine anahtar verir; bir klip oynarken diğer klibin efektleri görünmez (köpük, damla vb. gizli kalır). Aynı anda gereken hareketler ayrı iskelette (ör. ocak ateşi ≠ kazan; damlatma ≠ kâbile dolumu) → katman gerekmez. 30 kare/sn.
+
+| Prefab (FBX) | Klipler | Ne zaman |
+|---|---|---|
+| `Kapi_Rig` | `Kapi_Bosta` (kapalı), `Kapi_Ac` (0,7 sn, 95° içeri), `Kapi_Kapat` (0,63 sn) | Kapı etkileşimi. Kanadın collider'ı `Kapi_Kanat` objesine (kemik çocuğu) konur. |
+| `Kazan_Rig` | `Kazan_Bosta`, `Kazan_Karistir_Dongu` (2 sn), `Kazan_Kaynama_Dongu` (1,6 sn), `Kazan_Kopurme` (2,2 sn), `Kazan_Basari` (1,9 sn) | Kavanoz eklenince Karıştır; teraziler dengedeyken Kaynama; dengesiz ateşte Köpürme → Boşta; tepkimede Başarı → Boşta |
+| `Ocak_Ates_Rig` | `Ates_Bosta` (sönük), `Ates_Yan` → `Ates_Titre_Dongu`, `Ates_Son` | Ocak dengeyle kendiliğinden yanar (02 §2) |
+| `Damitma_Rig` (imbik) | `Damitma_Bosta`, `Damitma_Basla` (0,8 sn) → `Damitma_Dongu` (3 sn, 3 damla), `Damitma_Dur` | Damıtma görevi |
+| `Kabile_Rig` | `Kabile_Bosta` (az), `Kabile_Dolum` (10 sn), `Kabile_Dolu` | Damıtma süresince Dolum; bitince Dolu |
+| `SuBanyosu_Rig` | `SuBanyosu_Bosta`, `SuBanyosu_Basla` → `SuBanyosu_Dongu` (buhar), `SuBanyosu_Dur` | Yumuşak ısıtma görevi |
+| `Havan_Rig` | `Havan_Bosta` (havaneli yaslı), `Havan_Dov_Dongu` (0,8 sn), `Havan_Ez_Dongu` (1,6 sn) | Ezme/toz etme görevi |
+| `Koruk_Rig` | `Koruk_Bosta` (kapalı), `Koruk_Pompala_Dongu` (1 sn) | Ateşi harlatma |
+| `Esya/<Ad>` (39 eşya) | `El_Bosta`, `El_Al` (0,33 sn), `El_Birak` (0,27 sn); oyun malzemelerinde (12) ayrıca `El_Dok` (2,2 sn) | Al/bırak/kazana dök (elde, viewmodel) |
+
+**`El_Dok` zamanlaması** (kazana sayımı buna bağlayın): 0-0,4 sn kaldır, 0,7 sn'de tam eğim; **akış/efekt 0,73 sn'de başlar, 1,63 sn'de biter**; 2,2 sn'de el eski hâline döner. Gazlar 62° eğilir ve buhar bırakır; sıvılar (H₂O, NH₃) 115° akıtır; tozlar (CaO, Ca(OH)₂) 125°; kireç taşı 130° taş döker.
+
+**Eşya iskeleti:** `<Ad>_Rig` → kemik `Kok` (tutma noktasında; model, `_Tutma_Noktasi`, `_Etiket_Yuzu`, `_Agiz_Noktasi` buna bağlı) + `Efekt` (ağız noktasında; dökme efekti). Elde: prefab tutma çapasına konur, `Kok` kemiği klipte tutma noktası etrafında döner.
+
+**Görev önerisi (karar ekipte):** dönem aletleri ders kitabındaki yöntemlere karşılık gelir — **damıtma** (imbik, Câbir), **eritme/kireçleştirme** (kroze + mangal, Râzî), **ezme** (havan), **yumuşak ısıtma** (su banyosu). Örn. Görev 4'ün ilk adımı (CaCO₃ → CaO, "taştan kireç") kroze + mangal ile ısıtma olarak oynanabilir.
+
 ## 6. Repo ve haberleşme kuralları
 
 > Simya reposundaki `md/02`'den bu projeyle çelişmeyen kurallar alındı. Görsel ve model kuralları: `01_Tasarim/09-tema-ve-model-kurallari.md`.
