@@ -1,0 +1,20 @@
+{
+    "name": "BilgiAdasi.Editor",
+    "rootNamespace": "BilgiAdasi.EditorTools",
+    "references": [
+        "BilgiAdasi",
+        "BilgiAdasi.Chemistry",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

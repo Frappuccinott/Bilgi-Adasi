@@ -8,6 +8,9 @@ Kayıtsız hiçbir hazır dosya projeye girmez. Bu tablo oyun içi **Emeği Geç
 |---|---|---|---|---|---|---|
 | Unity | Motor | Unity Technologies | — | Unity Personal | — | — |
 | TextMeshPro | Paket | Unity | — | Unity paketi | — | — |
+| Universal Render Pipeline | Paket | Unity | — | Unity paketi | — | — |
+| Input System | Paket | Unity | — | Unity paketi | — | — |
+| Cinemachine 3 | Paket | Unity | — | Unity paketi | — | Mehmet |
 | | | | | | | |
 
 **Kurallar**
@@ -21,6 +24,7 @@ Kayıtsız hiçbir hazır dosya projeye girmez. Bu tablo oyun içi **Emeği Geç
 | Araç | Ne için | Çıktı nerede | Kontrol eden |
 |---|---|---|---|
 | Claude | Senaryo güncellemesi, geliştirme dokümanları, kod yardımı | `Docs/`, ilgili scriptler | |
+| Claude | Çekirdek sistemler (GameEvents, SaveSystem, SceneFlow, GameManager), kimya hesabı (AtomMath, FormulaFormatter) + birim testleri, girdi asset'i, editör kurulum aracı | `Assets/_Project/Scripts/Core`, `Chemistry`, `Editor`, `Tests` | Mehmet |
 | ChatGPT | Harita konsept görseli | Referans | |
 | | | | |
 

@@ -1,0 +1,80 @@
+# 08 — Mustafa Entegrasyon Kuralları
+
+> Kısa kural: **Sen görünümü yaparsın, kod bağlantı noktalarına ve arayüzlere bakar.** Bir objenin adı ya da yeri değişebilir; aşağıdaki **bileşen** üzerinde kalmalı.
+> `_Placeholder` adlı her şey benim test yer tutucumdur. Kendi versiyonun hazır olunca sil.
+
+## 1. Sahne
+
+- Tek oyun sahnesi: `Assets/_Project/Scenes/Town.unity` (atölye + şehir). `Boot` ve `Classroom` sahnelerine dokunma.
+- Kendi düzenini ayrı bir sahnede kurup sonra `Town`'a taşıyabilirsin; aynı sahnede aynı anda ikimiz çalışmayalım (merge çakışır). Sahneyi açmadan önce haber ver.
+- Ölçek: 1 birim = 1 m. Göz yüksekliği 1.56 → 1.68 m (oyuncu büyür). Kapı ≥ 2.1 m, tezgâh ~0.9 m, raf üstü ≤ 1.8 m.
+- Uçtan uca yürüyüş ≤ 40 sn (yürüme hızı 3.8 m/s → yol ~150 m'yi geçmesin).
+- Yürünecek her yüzeyde **collider** olmalı. Kaldırım/eşik ≤ 0.3 m, rampa ≤ 45°.
+
+## 2. Sahnede olması gerekenler
+
+| Obje (önerilen ad) | Adet | Bileşen / ayar | Ne yapar |
+|---|---|---|---|
+| `PlayerSpawn` | 1 | `PlayerSpawn` | Oyuncu burada başlar. Mavi ok = bakış yönü. Zeminin hemen üstüne koy. |
+| `Station_Cauldron` | 1 | Benim prefab'ım (`_Project/Prefabs/Stations/`) | Kazan istasyonu |
+| `Station_Desk` | 1 | Benim prefab'ım | Çalışma masası |
+| `Station_Door` | 1 | Benim prefab'ım | Kapı (sakinler burada konuşur) |
+| `Station_Chalkboard` | 1 | Benim prefab'ım | Tahta (okuma) |
+| `Neighborhood_Denklestirme` | 1 | `NeighborhoodView` (`neighborhoodId = denklestirme`) | Mahallenin önce/sonra hali |
+| `Neighborhood_TepkimeTurleri` | 1 | `NeighborhoodView` (`neighborhoodId = tepkime_turleri`) | 〃 |
+| Kilitli bölge bariyerleri | gerektiği kadar | `LockedZone` + collider (trigger **değil**) | Kilitli mahalle/ilçeye girişi keser |
+
+### İstasyon prefab'ları
+```
+Station_Cauldron            ← kök: StationBase türevi + BoxCollider, layer = Interactable
+├── Visual                  ← modelini buraya koy (eski küpü sil)
+└── CameraPoint             ← istasyon kamerasının yeri ve bakışı; okunurluk için ayarla
+```
+- Prefab'ı istediğin yere taşı/döndür; kök bileşenine ve `CameraPoint` adına dokunma.
+- BoxCollider'ı modele göre boyutlandır (oyuncu baktığında yakalanacak alan).
+- Kamera `CameraPoint`'in **ileri (mavi) eksenine** bakar. Game view'da kontrol et: kazan + iki terazi tek kadrajda.
+
+### Mahalle önce/sonra
+```
+Neighborhood_Denklestirme   ← NeighborhoodView
+├── Before                  ← mahalle bitmeden görünen (kuru çeşme, sönük fener…)
+├── After                   ← mahalle bitince açılan
+└── Parts                   ← (isteğe bağlı) Part_1 … Part_5: her görev bitince biri açılır
+```
+Kod yalnızca bu objeleri aç/kapa yapar; içine istediğini koy.
+
+## 3. Layer'lar
+
+| Layer | Kim kullanır |
+|---|---|
+| `Interactable` | İstasyon kökleri. Başka objeye verme (raycast bunu arar). |
+| `Player` | Yalnızca oyuncu prefab'ı. |
+
+Layer'ları menü **BilgiAdasi → Kurulum** ekler; elle ekleme.
+
+## 4. UI: arayüz (interface) kuralı
+
+Kod hiçbir Canvas'a ya da objeye bağlı değildir. Her UI parçası için bir **arayüz** var. Senin prefab'ına, o arayüzü uygulayan küçük bir view script'i takılır (script'i ben yazarım ya da birlikte yazarız; sen yalnızca alanları sürükleyip bırakırsın).
+
+| Arayüz | Gösterdiği | Faz |
+|---|---|---|
+| `IInteractPromptView` | `[E] Kazana geç` / `Ⓐ Kazana geç` + crosshair | 2 |
+| `IScreenFader` | Sahne geçişi kararması | 1 |
+| `IScaleView` | Bir terazi: element başına `H 4 / 4`, dengede mi | 3 |
+| `IOrderCardView` | Sipariş kartı: ürün, miktar, (varsa) girenler | 3 |
+| `IChalkboardView` | Tahtadaki denklemler | 3 |
+| `IDialogueView` | Konuşma balonu + portre | 4 |
+| `IPaperView` | Masa kâğıdı ve sorular | 5 |
+| `IHintBookView` | Ustanın defteri (parlama + ipucu metni) | 6 |
+| `IRealLifeCardView` | "Gerçek hayatta" kartı | 6 |
+| `IMapView` | Harita: mahalle durumu + 5 nokta | 6 |
+
+Her arayüzün ham bir `Placeholder…View` versiyonu `_Placeholder` altında durur; seninki hazır olunca onu sil, seninkini aynı alana sürükle. Arayüzün tam metotları kod geldikçe bu tabloya eklenecek.
+
+UI ayarları: Canvas Scaler → *Scale With Screen Size*, 1920×1080. Yazı en az 28 px. Formüller TMP'de `H<sub>2</sub>O`. Fontta ğ ş ı İ ve `→` olmalı.
+
+## 5. Yapma
+
+- Benim prefab'larımın kökündeki bileşenleri silme ya da adlarını değiştirme (`Visual` içi serbest).
+- `_Project/Scripts/` ve `_Project/Data/` içinde değişiklik yapma; ihtiyacın olursa söyle.
+- Hazır model/doku/font eklediysen `05_Uretim/LICENSES.md`'ye satır yaz (yoksa projeye girmez).

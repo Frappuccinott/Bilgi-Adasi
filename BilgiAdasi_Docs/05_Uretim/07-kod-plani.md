@@ -1,101 +1,110 @@
 # 07 — Kod Planı (Mehmet)
 
 > Kaynak: `CLAUDE.md` + `01`–`06`. Çelişkide `CLAUDE.md` geçerlidir.
-> Başlangıç: Cuma 13.11, öğlen · Kod dondurma: **Cmt 08.00** · Teslim: **Cmt 11.00**
-> Projenin şu anki durumu: Boş URP şablonu. `Assets/_Project/` yok, Cinemachine ve ProBuilder kurulu değil, Input System (New) açık.
+> Plan **sıra ve önceliğe** göre yürür; saat yok. Sabit tarihler yalnızca: Build 1 (P0 bitince), **Cmt 08.00 kod dondurma**, **Cmt 11.00 teslim**.
+> Haritalar ve UI görselleri Mustafa Akbaş'ta. Bu plan yalnızca mekanik/kod içindir; sahne tarafı `03_Teknik/08-mustafa-entegrasyon.md`.
 
 ---
 
-## 0. Başlamadan önce kararlar (Mehmet onaylar)
+## 0. Kararlar
 
-| # | Karar | Öneri |
+| # | Karar | Durum |
 |---|---|---|
-| K1 | Proje git'te değil. 24 saatlik çalışmada geri dönüş noktası lazım. | `git init` + Unity `.gitignore`, her faz sonunda commit |
-| K2 | **Cinemachine 3** kurulu değil (`CLAUDE.md` §2 bunu şart koşuyor). | `com.unity.cinemachine` 3.x kurulsun. Unity paketi, LICENSES'a satır eklenir |
-| K3 | Greybox için ProBuilder kurulu değil. | Kurmadan **primitive** (Cube/Plane) ile greybox yapılsın; paket sayısı az kalır |
-| K4 | Sahne yapısı: dokümandaki ayrı `Map` + `Workshop` sahneleri, yürünen şehir kararıyla (§6) uyuşmuyor. | `Boot` → `Classroom` → **`Town`** (atölye + şehir aynı sahnede). Harita = `Town` içinde UI katmanı |
-| K5 | Örnek dosyalar: `SampleScene`, `TutorialInfo/`, `Readme.asset`, `InputSystem_Actions.inputactions` | Silinsin; yerine `BilgiAdasiControls.inputactions` gelsin |
-| K6 | Product Name şu an `Bilgi-Adasi` | `Bilgi Adası` yapılsın (`04` §2) |
+| K1 | Git: `github.com/Frappuccinott/Bilgi-Adasi`, Unity `.gitignore`, her faz sonu commit | ✅ |
+| K2 | Cinemachine 3 (`com.unity.cinemachine` 3.1.7) | ✅ |
+| K3 | ProBuilder kurulmaz; test yer tutucuları primitive | ✅ |
+| K4 | Tek oyun sahnesi `Town` (atölye + şehir); harita = UI katmanı | ✅ onaylandı |
+| K5 | Şablon örnekleri silinir, yerine `BilgiAdasiControls.inputactions` | ✅ |
+| K6 | Product Name `Bilgi Adası` | ✅ |
+
+## 0.1 Mimari ilke: mantık ↔ görünüm
+
+- Denetleyiciler (`OrderController`, `DeskController`, …) **hiçbir Canvas'ı, objeyi, prefab'ı tanımaz.** Veriyi arayüz ya da `GameEvents` ile yayınlar.
+- Her görsel parça bir arayüzdür: `IScaleView`, `IOrderCardView`, `IPaperView`, `IInteractPromptView`, `IHintBookView`, `IRealLifeCardView`, `IChalkboardView`, `IDialogueView`, `IMapView`.
+- Mustafa'nın prefab'ı bu arayüzü uygulayan küçük bir view script'iyle bağlanır. Ben her arayüz için **ham TMP + düğmeli** bir `Placeholder…View` yazarım; `_Placeholder` altında durur.
+- Inspector'da arayüz referansı için `MonoBehaviour` alanı + `OnValidate` kontrolü kullanılır (Unity arayüzü doğrudan serileştirmez).
 
 ---
 
-## 1. Fazlar ve zaman
+## 1. Fazlar (sıra = öncelik)
 
-Süre daralırsa **aşağıdan** kesilir. Her faz sonunda: Play mode testi + commit.
+Her faz sonunda: Play mode testi + commit. Süre daralırsa §2'deki sırayla kesilir.
 
-### Faz 0 — Kurulum · 12.00–12.45 · P0
-- K1–K6 uygulanır.
-- `Assets/_Project/` klasör ağacı (`04` §2 + `Player/`, `City/`, `Stations/`).
-- `BilgiAdasiControls.inputactions`: `Player`, `Station`, `UI` map'leri, `CLAUDE.md` §3 tablosundaki **tüm** aksiyonlar, iki şema (KeyboardMouse + Gamepad), stick deadzone 0.15. *Generate C# Class* açık.
-- Sahneler: `Boot`, `Classroom` (boş), `Town`. Build Settings sırası.
+### Faz 0 — Kurulum · P0
+- K1–K6.
+- `Assets/_Project/` klasör ağacı (`04` §2) + `_Placeholder/`.
+- `BilgiAdasiControls.inputactions`: `Player`, `Station`, `UI` map'leri, `CLAUDE.md` §3 tablosundaki **tüm** aksiyonlar, iki şema (KeyboardMouse + Gamepad), stick deadzone 0.15. C# sınıfı üretilir.
+- Sahneler (`Boot`, `Classroom`, `Town`) ve Build Settings: editör menüsü **BilgiAdasi → Kurulum**.
 
-### Faz 1 — Çekirdek + kimya · 12.45–14.30 · P0
+### Faz 1 — Çekirdek + kimya · P0
 | Script | Namespace | Not |
 |---|---|---|
-| `GameEvents` | Core | `TaskCompleted`, `NeighborhoodCompleted`, `HintOpened`, `Failed` + `InputDeviceChanged` |
+| `GameEvents` | Core | `TaskCompleted`, `NeighborhoodCompleted`, `HintOpened`, `Failed` |
 | `GameManager` | Core | Singleton, DontDestroyOnLoad |
-| `SceneFlow` | Core | Singleton, 0.3 sn kararma |
-| `SaveSystem` + `SaveData` | Core | JSON → PlayerPrefs. `grade`, `completedNeighborhoods`, `completedTasks`, `failCounts`, `hintsOpened`, `boardEquations` (HashSet/Dictionary JsonUtility ile serileşmez → List'e çevrilir) |
+| `SceneFlow` | Core | Singleton, kararma (görünüm arayüzle: `IScreenFader`) |
+| `SaveSystem` + `SaveData` | Core | JSON → PlayerPrefs. HashSet/Dictionary JsonUtility ile serileşmez → List |
 | `ElementData`, `SpeciesData`, `ReactionData` | Chemistry | SO |
-| `AtomMath` | Chemistry | **Saf C#** (`Mathf` değil `System.Math`), `Count`, `Equal`, `Gcd`, `IsMinimal`, `RequiredForPurchase` |
-| `AtomMathTests` | Tests (EditMode) | Tüm 8 tepkime dengede mi, `IsMinimal(4,2,4) == false` |
-| Formül biçimleyici | Chemistry | Denklemi `<sub>` ile yazar, 1 katsayısını gizler (tahta + kâğıt ortak) |
+| `AtomMath` | Chemistry | **Saf C#** (`System.Math`), `Count`, `Equal`, `Gcd`, `IsMinimal`, `IsBalanced`, `RequiredForPurchase` |
+| `FormulaFormatter` | Chemistry | Denklem metni: `<sub>`, 1 katsayısı gizli (tahta + kâğıt ortak) |
+| `AtomMathTests` | Tests (EditMode) | 8 tepkime dengede, `IsMinimal(4,2,4) == false`, biçimleyici |
 
-### Faz 2 — Oyuncu + istasyon modu · 14.30–17.00 · P0
+### Faz 2 — Oyuncu + istasyon modu + test sahnesi · P0
 | Script | Not |
 |---|---|
 | `PlayerMovementSettings` (SO) | `CLAUDE.md` §4.2 değerleri |
 | `PlayerMotor` | CharacterController, vektörel hızlanma/yavaşlama, %30 havada kontrol, −20 yerçekimi, `allowJump=false` |
-| `PlayerLook` | Fare ham, gamepad eğri + ivme, ±80°, roll yok, FOV ayarı |
+| `PlayerLook` | Fare ham, gamepad eğri + ivme, ±80°, roll yok, FOV |
 | `HeadBob` | ≤0.025 m, kapatılabilir |
-| `PlayerInteractor` + `IInteractable` | Kamera merkezinden 2.2 m raycast, kontur, `[E]`/`Ⓐ` ipucu |
-| `InputDeviceTracker` + `PromptIcon` | Son kullanılan cihaza göre ipucu ikonu |
-| `InputMapSwitcher` | Aynı anda tek map açık |
-| `StationBase` | Interact → Station map, Cinemachine 0.5 sn blend, imleç aç; Exit → geri dön |
-| `Crosshair` | Ekran ortasında nokta |
+| `PlayerInteractor` + `IInteractable` | 2.2 m raycast; ipucu `IInteractPromptView`'e gider |
+| `InputDeviceTracker` | Son cihaz → ipucu ikonu (`E` ↔ `Ⓐ`) |
+| `InputMapSwitcher` | Aynı anda tek map |
+| `StationBase` | Interact → Station map, Cinemachine 0.5 sn blend, imleç; Exit → geri |
 
-Sahne: `Town` greybox: atölye odası (kazan, masa, kapı, tahta yerleri) + tek sokak + iki mahalle alanı + sis/bariyer. Uçtan uca yürüyüş ≤ 40 sn.
+**Test sahnesi + sahne bağlantı noktaları** (greybox şehir Mustafa'da):
+- `Town` içinde `_Placeholder` kökü: düz zemin + birkaç küp (kazan, masa, kapı yerleri), ham TMP crosshair/ipucu.
+- Bağlantı noktası bileşenleri: `PlayerSpawn`, `StationAnchor`, `NeighborhoodView` (önce/sonra kökleri), `LockedZone`. Kurallar `08-mustafa-entegrasyon.md`.
 
-### Faz 3 — Sipariş mekaniği · 17.00–21.30 · P0 (en kritik)
+### Faz 3 — Sipariş mekaniği · P0 (en kritik)
 | Script | Not |
 |---|---|
 | `TaskData`, `OrderTask`, `OrderStep` (SO) | `04` §3 |
 | `CauldronStation : StationBase` | |
-| `OrderController` | Durum makinesi `04` §5 |
-| `Shelf`, `JarView` | Sürükle-bırak (fare + sanal imleç için ortak `Point`/`Click`), mühür notu + titreme |
-| `Cauldron` | Tür başına `−/+`, 0'da rafa dönüş, `Increase/Decrease` aksiyonları |
-| `Scale` + `AtomCounterView` | Element başına sıra, `H 4 / 4`, yeşil/kırmızı + harf |
+| `OrderController` | Durum makinesi `04` §5; görünüme yalnızca arayüzle konuşur |
+| `Shelf`, `JarView` | Sürükle-bırak (fare + sanal imleç ortak `Point`/`Click`), mühür notu + titreme |
+| `Cauldron` | Tür başına `−/+`, 0'da rafa dönüş |
+| `IScaleView` | Element başına sayaç, `H 4 / 4`, denge durumu |
+| `IOrderCardView` | Sipariş kartı |
 | `Stove` | Dengede otomatik yanar; `FireStove` |
-| Köpürme | Partikül + fark atomları yanıp söner, `failCount`, 2'de defter parlar |
-| `Chalkboard` | Formül biçimleyiciyi kullanır |
+| Köpürme | Fark atomları + `failCount`, 2'de defter parlar |
+| `IChalkboardView` | `FormulaFormatter` çıktısı |
 
-### Faz 4 — Mahalle akışı + veri · 21.30–00.00 · P0
-- `NeighborhoodData`, `NeighborhoodRunner` (5 görevi sırayla), `DoorStation` (sakin + diyalog balonu)
-- Görev 4 zinciri (adım ürünü rafa düşer), Görev 5 `Purchase` + `SupplyChest` + bütçe
-- Denkleştirme verisi: 5 element, 12 tür, 8 tepkime, 5 sipariş SO (`05` §1–2). İçerikçi girerse Mehmet yalnızca kontrol eder.
-- **Geliştirici kısayolları** (P2'den buraya çekildi, demo ve test süresini kısaltır): görev atla, kayıt sıfırla.
-- **🔨 Build 1 — gece yarısı.** Denkleştirme uçtan uca oynanıyor olmalı.
+### Faz 4 — Mahalle akışı + veri · P0
+- `NeighborhoodData`, `NeighborhoodRunner`, `DoorStation` (`IDialogueView`)
+- Görev 4 zinciri, Görev 5 `Purchase` + `SupplyChest` + bütçe
+- Denkleştirme verisi (`05` §1–2)
+- **Geliştirici kısayolları** (demo + test için öne çekildi)
+- **🔨 Build 1** — Denkleştirme uçtan uca oynanıyor
 
-### Faz 5 — Masa mekaniği · 00.00–04.00 · P1
-- `DeskStation`, `DeskController`, güvercin/zarf (basit), `PaperView`
-- `QuestionData` alt tipleri (ayrı SO) + renderer'lar: `MultipleChoice`, `TrueFalse`, `Classify`, `FillBlank`, `BalanceEquation`
+### Faz 5 — Masa mekaniği · P1
+- `DeskStation`, `DeskController`, zarf, `IPaperView`
+- `QuestionData` alt tipleri (ayrı SO) + soru mantıkları: `MultipleChoice`, `TrueFalse`, `Classify`, `FillBlank`, `BalanceEquation`
 - Lonca Sınavı: rastgele 4, yanlış soru değişir
 - Tepkime Türleri verisi (`05` §3)
 
-### Faz 6 — Çerçeve · 04.00–06.30 · P1
-- `HintBook` (iki tip ortak), `RealLifeCard`
-- `PlayerGrowth` (§7): 1.66 → 1.68, tavan kontrolü, 2 sn geçiş. Ucuz ve sunumda vurgulanacak.
-- Harita UI katmanı (`OpenMap`): mahalle durumu + 5 nokta
-- **Gamepad sanal imleç** (`VirtualMouseInput`). Klavye/fare bağlamaları zaten var; bu yalnızca istasyonda gamepad ile tıklama.
+### Faz 6 — Çerçeve · P1
+- İpucu defteri (`IHintBookView`), "Gerçek hayatta" kartı (`IRealLifeCardView`)
+- `PlayerGrowth` (§7)
+- Harita mantığı (`IMapView`): mahalle durumu + 5 nokta
+- Gamepad sanal imleç (`VirtualMouseInput`)
 - **Emeği Geçenler** (lisans kuralı için zorunlu)
 
-### Faz 7 — Cila · 06.30–08.00 · P2
-- Sınıf açılış/kapanış (2D, basit), mahalle canlanma parçaları, ses (CC0), hata düzeltme
-- **08.00 kod dondurma.** Ardından son build, demo provası, yedek ekran kaydı.
+### Faz 7 — Cila · P2
+- Sınıf açılış/kapanış, mahalle canlanma, ses (CC0), hata düzeltme
+- **Cmt 08.00 kod dondurma** → son build, demo provası, yedek ekran kaydı
 
 ---
 
-## 2. Kesme sırası (geride kalırsak)
+## 2. Kesme sırası (geride kalırsak, önce bu gider)
 
 1. Sınıf ara sahnesi → tek metin ekranı
 2. Mahalle canlanma → tek nesne aç/kapa
@@ -106,17 +115,17 @@ Sahne: `Town` greybox: atölye odası (kazan, masa, kapı, tahta yerleri) + tek 
 
 ---
 
-## 3. Dokümanlarda düzeltilecek çelişkiler
+## 3. Dokümanlarda düzeltilen çelişkiler
 
-| Doküman | Şu an | `CLAUDE.md` kararı |
-|---|---|---|
-| `01` §3, §5 | Harita tıklamalı, oyuncu yürümez | Oyuncu yürür; harita bilgi ekranı |
-| `04` §1 | `Map` + `Workshop` ayrı sahne | Öneri K4: tek `Town` sahnesi |
-| `04` §2 | Namespace listesinde `Player`, `City` yok, `Map` var | `CLAUDE.md` §2 listesi |
-| `04` §4 | `AtomMath` içinde `Mathf.Abs` | Saf C# kuralı → `Math.Abs` |
-| `04` §7 | `SaveData` içinde `grade`, `completedNeighborhoods` yok | Büyüme için eklenir |
-| `06` | FPS oyuncu, istasyon modu, büyüme yok | Faz 2 ve 6'daki gibi eklenir |
-| `LICENSES.md` | Input System, URP, Cinemachine yok | Satırları eklenir |
+| Doküman | Önce | Şimdi | Durum |
+|---|---|---|---|
+| `01` §3, §5 | Harita tıklamalı, oyuncu yürümez | Oyuncu yürür; harita bilgi ekranı | ✅ |
+| `04` §1 | `Map` + `Workshop` ayrı sahne | Tek `Town` sahnesi | ✅ |
+| `04` §2 | Namespace'te `Player`, `City` yok | `CLAUDE.md` §2 listesi | ✅ |
+| `04` §4 | `Mathf.Abs` | `System.Math.Abs` | ✅ |
+| `04` §7 | `grade`, `completedNeighborhoods` yok | Eklendi | ✅ |
+| `06` | FPS, istasyon, büyüme, roller yok | Eklendi | ✅ |
+| `LICENSES.md` | URP, Input System, Cinemachine yok | Eklendi | ✅ |
 
 ---
 
@@ -125,6 +134,7 @@ Sahne: `Town` greybox: atölye odası (kazan, masa, kapı, tahta yerleri) + tek 
 - [ ] Konsolda kırmızı hata yok
 - [ ] Yeni aksiyonların klavye **ve** gamepad bağlaması var, `CLAUDE.md` §3 tablosu güncel
 - [ ] `Update` içinde `Find`/`GetComponent`/LINQ/`new` yok
+- [ ] Denetleyici hiçbir Canvas/objeye doğrudan bağlı değil
 - [ ] Oyuncuya görünen metin SO'da
 - [ ] Claude'un yazdığı önemli sistem LICENSES.md beyanına eklendi
 - [ ] Commit atıldı

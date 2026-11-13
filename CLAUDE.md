@@ -11,7 +11,16 @@ Bu dosya, bu Unity projesinde çalışan Claude için kalıcı bağlamdır. Her 
 - **İki görev tipi:** *Sipariş* (kazan + iki terazi, uygulama konuları) ve *Masa* (kâğıt üzerinde sözel sorular). Kurallar: `BilgiAdasi_Docs/02_Mekanik/`.
 - **Prototip kapsamı:** Kimya şehri, Etkileşim ilçesi, iki oynanabilir mahalle: *Denkleştirme* (5 sipariş) ve *Tepkime Türleri* (5 masa görevi).
 - **Yarışma teslimi:** Cumartesi 14 Kasım 2026, 11.00 — çalışan build + sunum. **Kod dondurma: 08.00.**
-- **Benim rolüm (Mehmet):** mekanik ve kodlama. Modelleme, UI görselleri ve içerik başka ekip üyelerinde.
+
+### Roller
+| Kişi | Kapsam |
+|---|---|
+| **Mehmet** (Claude ile çalışan) | Mekanik ve kod: oyuncu, istasyonlar, denetleyiciler, veri (SO) yapısı, kayıt, build |
+| **Mustafa Akbaş** | Haritalar (şehir/mahalle sahnesi, greybox dahil) ve UI (HUD, sayaçlar, kâğıt, kartlar, harita ekranı, menüler) |
+
+- Claude **level ve UI görseli yapmaz.** Test için yalnızca en basit yer tutucuları kurar (düz zemin + birkaç küp, ham TMP metni ve düğmeler) ve bunları `_Placeholder` adlı klasör/objede tutar; Mustafa'nınkiyle değiştirilir.
+- UI kodunda **mantık ile görünüm ayrıdır:** denetleyiciler veriyi event ya da arayüzle yayınlar (`IScaleView`, `IOrderCardView`, `IPaperView` …). Mustafa'nın prefab'ı bu arayüzü uygulayan küçük bir view script'iyle bağlanır. Denetleyici hiçbir zaman belirli bir Canvas ya da objeye bağımlı olmaz.
+- Sahne bağlantı noktaları (Mustafa'nın sahnesinde olması gerekenler): `BilgiAdasi_Docs/03_Teknik/08-mustafa-entegrasyon.md`.
 
 ### Yarışma kuralları (her işte geçerli)
 - **0'dan üret:** Kod yarışma süresince yazılır. Eski projelerden kod, paket ya da model kopyalanmaz (kendi paketlerimiz dahil).
@@ -56,7 +65,8 @@ Yeni paket eklemeden önce **sor**.
 | Sprint (hızlı yürü) | Player | Sol Shift (basılı) | Sol çubuk bas (L3, aç/kapa) |
 | Interact | Player | E | A (South) |
 | OpenMap | Player | M / Tab | Select (View) |
-| Pause | Player, Station | Esc | Start (Menu) |
+| Pause | Player | Esc | Start (Menu) |
+| Pause | Station | P (Esc istasyondan çıkar) | Start (Menu) |
 | Point | Station | Fare pozisyonu | Sanal imleç (sol çubuk) |
 | Click / Drag | Station | Sol tık | A |
 | Increase / Decrease | Station | Fare tekeri / + − | RB / LB |
@@ -129,7 +139,7 @@ Oyuncu mahalleler arasında **yürüyerek** gider (karar: 13.11). Bu, dokümanla
 **24 saat kapsamı için sınırlar:**
 - Prototipteki şehir **küçük ve kompakt**: atölye + iki mahalle alanı + aradaki tek sokak/meydan. Uçtan uca yürüyüş ≤ 40 sn.
 - Kilitli mahalle/ilçeler: sis + kapalı kapı/bariyer ile kesilir, içleri modellenmez.
-- Önce **greybox** (ProBuilder/primitive) ile yürünebilir yapılır, modeller sonra yerine oturur.
+- Şehir greybox'ı ve modelleri **Mustafa** yapar; kod `08-mustafa-entegrasyon.md`'deki bağlantı noktalarına dayanır. Tek oyun sahnesi: `Town` (atölye + şehir).
 - Harita ekranı (`OpenMap`) kalır: bilgi + ilerleme ekranı (mahalle durumu, 5 nokta). Hızlı seyahat: P2, zaman kalırsa.
 - Görev akışı: mahalledeki sakin/ulak oyuncuyu **atölyeye** çağırır; görevler atölyedeki istasyonlarda çözülür. Mahallede yalnızca "önce/sonra" değişimi görülür.
 

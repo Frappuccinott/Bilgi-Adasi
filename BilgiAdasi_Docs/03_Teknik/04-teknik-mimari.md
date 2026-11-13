@@ -8,8 +8,7 @@ Hedef: 24 saatte bitecek kadar sade, ama yeni mahalle eklemenin **yalnızca veri
 |---|---|---|
 | `Boot` | Yönetici nesneler (DontDestroyOnLoad), kayıt yükleme | Tek kare, hemen `Classroom`'a geçer |
 | `Classroom` | Açılış/kapanış ara sahnesi (2D UI + basit animasyon) | `CutsceneMode.Intro / Outro` |
-| `Map` | Şehir → ilçe → mahalle seçimi | UI ağırlıklı; 3D diorama varsa arkada |
-| `Workshop` | Atölye: kazan, teraziler, raf, tahta, kapı **ve** çalışma masası | Masa ayrı sahne değil; kamera noktası |
+| `Town` | Atölye (kazan, teraziler, raf, tahta, kapı, çalışma masası) **ve** yürünen şehir | Tek oyun sahnesi; masa ve kazan birer istasyon kamerası. Harita = bu sahnede UI katmanı. Bağlantı noktaları: `08-mustafa-entegrasyon.md` |
 
 Sahne geçişi: kısa kararma (0,3 sn). `SceneFlow.Load(string)`.
 
@@ -21,7 +20,9 @@ Assets/_Project/
     Core/        GameManager, SceneFlow, SaveSystem, GameEvents
     Data/        ScriptableObject tanımları
     Chemistry/   ElementData, SpeciesData, ReactionData, AtomMath
-    Map/         MapController, NeighborhoodNode
+    Player/      PlayerMotor, PlayerLook, PlayerInteractor, PlayerGrowth
+    Stations/    StationBase, CauldronStation, DeskStation, DoorStation
+    City/        NeighborhoodRunner, NeighborhoodView, MapController
     Order/       OrderController, Cauldron, Scale, Shelf, JarView, Stove, SupplyChest
     Desk/        DeskController, PaperView, Question renderers
     UI/          DialogueBubble, HintBook, Chalkboard, RealLifeCard, Credits
@@ -32,7 +33,7 @@ Assets/_Project/
 Docs/  (bu klasör: BilgiAdasi_Docs)
 ```
 
-Namespace: `BilgiAdasi.Core`, `BilgiAdasi.Chemistry`, `BilgiAdasi.Order`, `BilgiAdasi.Desk`, `BilgiAdasi.Map`, `BilgiAdasi.UI`.
+Namespace: `BilgiAdasi.Core`, `.Player`, `.Chemistry`, `.Order`, `.Desk`, `.City`, `.UI`.
 
 Proje / ürün adı: **Bilgi Adası** (Player Settings → Product Name). Klasör: `Assets/_Project/` (adı nötr kalır).
 
@@ -83,7 +84,7 @@ namespace BilgiAdasi.Chemistry
             return true;
         }
 
-        public static int Gcd(int a, int b) { while (b != 0) (a, b) = (b, a % b); return Mathf.Abs(a); }
+        public static int Gcd(int a, int b) { while (b != 0) (a, b) = (b, a % b); return System.Math.Abs(a); }
 
         // BalanceEquationQ için: katsayılar en küçük tam sayılar mı?
         public static bool IsMinimal(IEnumerable<int> coefs)
@@ -135,7 +136,7 @@ Mahalle canlanma görselleri, tahta, istatistik bu olayları dinler; denetleyici
 
 ## 7. Kayıt
 
-- `SaveData { HashSet<string> completedTasks; Dictionary<string,int> failCounts; HashSet<string> hintsOpened; List<string> boardEquations; }`
+- `SaveData { int grade; List<string> completedNeighborhoods; HashSet<string> completedTasks; Dictionary<string,int> failCounts; HashSet<string> hintsOpened; List<string> boardEquations; }`
 - JSON → `PlayerPrefs` (tek anahtar). Prototip için yeterli.
 - **Geliştirici kısayolları** (yalnızca `DEVELOPMENT_BUILD` ya da `#if UNITY_EDITOR` + sunum bayrağı): `1–5` görevi atla, `R` kaydı sıfırla, `M` haritaya dön. Demo için hayati.
 

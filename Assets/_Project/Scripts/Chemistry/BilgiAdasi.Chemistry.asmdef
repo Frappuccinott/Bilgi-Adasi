@@ -1,0 +1,14 @@
+{
+    "name": "BilgiAdasi.Chemistry",
+    "rootNamespace": "BilgiAdasi.Chemistry",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

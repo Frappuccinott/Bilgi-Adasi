@@ -37,7 +37,7 @@ Bilgi Adası (dünya)
 
 - Kilit kuralı (prototip): İki oynanabilir mahalle baştan açık, sıra serbest. Demo sırası: önce Denkleştirme.
 - Mahalle durumu: `Kilitli` → `Açık` → `Devam ediyor (n/5)` → `Tamamlandı`.
-- Harita, mahalle seçimi ekranıdır (level select). Oyuncu yürümez; tıklar.
+- Oyuncu mahalleler arasında **yürür** (birinci şahıs). Harita (`OpenMap`) bilgi + ilerleme ekranıdır; hızlı seyahat yalnızca P2.
 - Her mahallenin altında 5 nokta görünür (dolu = bitti).
 
 ## 4. İki görev tipi
@@ -55,11 +55,11 @@ Bir mahalle tek tipten de olabilir, karışık da. Prototipte: Denkleştirme = 5
 
 ## 5. Mahalle akışı
 
-1. **Harita** → mahalleye tıkla.
-2. **Atölye** açılır. Usta mahallenin konusunu 2–3 cümleyle tanıtır (yalnızca ilk girişte).
+1. Mahalledeki sakin/ulak oyuncuyu **atölyeye** çağırır; oyuncu yürüyerek gelir.
+2. **Atölyede** Usta mahallenin konusunu 2–3 cümleyle tanıtır (yalnızca ilk girişte).
 3. **Görev 1–4**: sırayla gelir (kapı ya da güvercin).
 4. **Görev 5**: mahallenin "sınavı" — sipariş mahallesinde en zor sipariş, masa mahallesinde **Lonca Sınavı** (havuzdan rastgele sorular).
-5. **Mahalle canlanır** → haritaya dönülür, tamamlandı işareti.
+5. **Mahalle canlanır** ("önce/sonra" değişimi mahallede görülür), haritada tamamlandı işareti.
 
 ## 6. Ton ve ipucu
 

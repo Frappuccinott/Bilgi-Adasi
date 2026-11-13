@@ -7,14 +7,16 @@
 | Rol | Sorumlu | Kapsam |
 |---|---|---|
 | Mekanik / kod | Mehmet | Bu listedeki `[KOD]` işleri, build |
-| Modelleme / sahne | … | Atölye, kazan, teraziler, kavanoz, harita dioraması, sakinler |
-| UI / görsel | … | Kâğıt, kart, sayaç, tahta, harita UI, fontlar |
+| Harita / sahne + UI | Mustafa Akbaş | Şehir/mahalle sahnesi (greybox dahil), atölye yerleşimi; HUD, kâğıt, kart, sayaç, tahta, harita ekranı, menüler, fontlar |
+| Modelleme | … | Kazan, teraziler, kavanoz, sakinler |
 | İçerik / sunum | … | `05` metinlerinin kontrolü, ders kitabı doğrulaması, sunum, `05_Uretim/LICENSES.md` |
 
 ## P0 — Çekirdek (Cuma akşamına kadar)
 
 - [ ] `[KOD]` Proje iskeleti: klasörler, sahneler, `SceneFlow`, `GameEvents`, `SaveSystem`
 - [ ] `[KOD]` Kimya verisi: `ElementData`, `SpeciesData`, `ReactionData` + `AtomMath` + **birim testleri** (R_propane dengede mi, IsMinimal)
+- [ ] `[KOD]` FPS oyuncu (CharacterController, bakış, etkileşim) + istasyon modu (Cinemachine geçişi)
+- [ ] `[KOD]` Test sahnesi (`_Placeholder`) + sahne bağlantı noktaları (`08-mustafa-entegrasyon.md`)
 - [ ] `[KOD]` Sipariş: raf → kazan sürükleme, `−/+`, iki terazi + sayaçlar, otomatik denge → ocak
 - [ ] `[KOD]` Köpürme + yanıp sönen atomlar + `failCount`
 - [ ] `[KOD]` Mühür notu
@@ -33,6 +35,8 @@
 - [ ] `[İÇERİK]` Tepkime Türleri mahallesinin 5 görevi SO olarak girildi
 - [ ] `[KOD]` Harita: şehir/ilçe/mahalle düğümleri, kilit durumları, 5 nokta göstergesi
 - [ ] `[KOD]` İpucu defteri (iki tip için ortak)
+- [ ] `[KOD]` Boy uzama (`PlayerGrowth`, `CLAUDE.md` §7)
+- [ ] `[KOD]` Gamepad sanal imleç (istasyon modu)
 - [ ] `[KOD]` "Gerçek hayatta" kartı
 - [ ] `[KOD]` Emeği Geçenler ekranı (`05_Uretim/LICENSES.md`'den elle aktarılır) — **lisans kuralı için zorunlu**
 

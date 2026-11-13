@@ -27,6 +27,8 @@ BilgiAdasi_Docs/
 | `03_Teknik/04-teknik-mimari.md` | Sahneler, veri modeli (ScriptableObject), sınıflar, durum makineleri, kayıt | Kod |
 | `04_Icerik/05-icerik-prototip.md` | Prototipteki iki mahallenin içeriği: 5 sipariş + 5 masa görevi, soru havuzu | İçerik, kod (veri girişi) |
 | `05_Uretim/06-yapilacaklar.md` | Öncelikli görev listesi, roller, zaman planı, "bitti" tanımı | Herkes |
+| `03_Teknik/08-mustafa-entegrasyon.md` | Sahne bağlantı noktaları ve UI arayüzleri (harita/UI ↔ kod) | Mustafa, kod |
+| `05_Uretim/07-kod-plani.md` | Kod fazları, öncelik ve kesme sırası | Kod |
 | `05_Uretim/LICENSES.md` | Hazır varlık lisansları + yapay zekâ beyanı | İçerik/sunum |
 
 ## Tek cümlede oyun
