@@ -1,6 +1,6 @@
 # 04 — Teknik Mimari
 
-Hedef: 24 saatte bitecek kadar sade, ama yeni mahalle eklemenin **yalnızca veri girişi** olduğu bir yapı.
+Hedef: 24 saatte bitecek kadar sade, ama yeni köy eklemenin **yalnızca veri girişi** olduğu bir yapı.
 
 ## 1. Sahneler
 
@@ -42,7 +42,7 @@ Proje / ürün adı: **Bilgi Adası** (Player Settings → Product Name). Klasö
 ```
 SubjectData (Şehir)        id, title, isPlayable, List<ThemeData>
 ThemeData (İlçe)           id, title, isUnlocked, List<NeighborhoodData>
-NeighborhoodData (Mahalle) id, title, introLines[], List<TaskData> (5), lockedByDefault
+NeighborhoodData (Köy) id, title, introLines[], List<TaskData> (5), lockedByDefault
 TaskData (abstract)        id, giverName, giverLines[], deliveryLines[], realLifeText, hintText
  ├─ OrderTask              mode (Exact|Purchase), List<OrderStep>, shelf[], budget, prices
  │    OrderStep            ReactionData reaction, targetProductAmounts[], cardShowsReactants
@@ -119,7 +119,7 @@ PigeonArrive → EnvelopeOpen → Answering ⇄ (Wrong) → Stamp → RealLife? 
 ```
 - `Answering` her soruyu sırayla gösterir; `GuildExam` için soruları `randomCount` kadar rastgele çeker.
 
-**NeighborhoodRunner**: mahalle görev listesini sırayla tipine göre `OrderController` ya da `DeskController`'a verir; görev bitince `GameEvents.TaskCompleted(taskId)`.
+**NeighborhoodRunner**: köy görev listesini sırayla tipine göre `OrderController` ya da `DeskController`'a verir; görev bitince `GameEvents.TaskCompleted(taskId)`.
 
 ## 6. Olaylar
 
@@ -132,7 +132,7 @@ public static class GameEvents
     public static event Action<string> Failed;                 // taskId (köpürme / yanlış)
 }
 ```
-Mahalle canlanma görselleri, tahta, istatistik bu olayları dinler; denetleyiciler görselleri bilmez.
+Köy canlanma görselleri, tahta, istatistik bu olayları dinler; denetleyiciler görselleri bilmez.
 
 ## 7. Kayıt
 

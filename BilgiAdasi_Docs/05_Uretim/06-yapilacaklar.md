@@ -7,7 +7,7 @@
 | Rol | Sorumlu | Kapsam |
 |---|---|---|
 | Mekanik / kod | Mehmet | Bu listedeki `[KOD]` işleri, build |
-| Harita / sahne + UI | Mustafa Akbaş | Şehir/mahalle sahnesi (greybox dahil), atölye yerleşimi; HUD, kâğıt, kart, sayaç, tahta, harita ekranı, menüler, fontlar |
+| Harita / sahne + UI | Mustafa Akbaş | Şehir/köy sahnesi (greybox dahil), atölye yerleşimi; HUD, kâğıt, kart, sayaç, tahta, harita ekranı, menüler, fontlar |
 | Modelleme | … | Kazan, teraziler, kavanoz, sakinler |
 | İçerik / sunum | … | `05` metinlerinin kontrolü, ders kitabı doğrulaması, sunum, `05_Uretim/LICENSES.md` |
 
@@ -22,7 +22,7 @@
 - [ ] `[KOD]` Mühür notu
 - [ ] `[KOD]` Tahta: denklem metni üretimi (alt indis, 1 katsayısı gizli)
 - [ ] `[KOD]` `NeighborhoodRunner`: 5 görevi sırayla çalıştır
-- [ ] `[İÇERİK]` Denkleştirme mahallesinin 5 siparişi SO olarak girildi
+- [ ] `[İÇERİK]` Denkleştirme köyünün 5 siparişi SO olarak girildi
 - [ ] `[KOD]` Görev 4 zinciri + Görev 5 `Purchase` modu
 - [ ] **Gece yarısı ilk build**
 
@@ -32,8 +32,8 @@
 - [ ] `[KOD]` Soru render'ları: `MultipleChoice`, `TrueFalse`, `Classify`, `FillBlank`
 - [ ] `[KOD]` `BalanceEquationQ` (ReactionData'dan otomatik)
 - [ ] `[KOD]` Lonca Sınavı: rastgele çekme + yanlışta soru değişimi
-- [ ] `[İÇERİK]` Tepkime Türleri mahallesinin 5 görevi SO olarak girildi
-- [ ] `[KOD]` Harita: şehir/ilçe/mahalle düğümleri, kilit durumları, 5 nokta göstergesi
+- [ ] `[İÇERİK]` Tepkime Türleri köyünün 5 görevi SO olarak girildi
+- [ ] `[KOD]` Harita: şehir/ilçe/köy düğümleri, kilit durumları, 5 nokta göstergesi
 - [ ] `[KOD]` İpucu defteri (iki tip için ortak)
 - [ ] `[KOD]` Boy uzama (`PlayerGrowth`, `CLAUDE.md` §7)
 - [x] `[KOD]` Gamepad istasyon kontrolü (odak tabanlı, imleçsiz)
@@ -43,7 +43,7 @@
 ## P2 — Cila
 
 - [ ] `[KOD]` Sınıf açılış/kapanış ara sahnesi
-- [ ] `[KOD]` Mahalle canlanma görselleri (aç/kapa parçalar)
+- [ ] `[KOD]` Köy canlanma görselleri (aç/kapa parçalar)
 - [ ] `[KOD]` Geliştirici kısayolları (görev atla, kayıt sıfırla) — **demo için**
 - [ ] `[KOD]` Sakin figürleri / 2D kartlar kapıda
 - [ ] Ses: köpürme, ocak, mühür, kâğıt (CC0)
@@ -67,7 +67,7 @@
 
 ## "Bitti" tanımı
 
-- Build Windows'ta açılır, iki mahalle uçtan uca hatasız oynanır.
+- Build Windows'ta açılır, iki köy uçtan uca hatasız oynanır.
 - `02` ve `03`'teki kabul kriterleri işaretli.
 - `05_Uretim/LICENSES.md` dolu; oyunda Emeği Geçenler var.
 - Projektörde yazılar okunuyor.

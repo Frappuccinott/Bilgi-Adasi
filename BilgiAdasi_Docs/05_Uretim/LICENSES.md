@@ -29,6 +29,7 @@ Kayıtsız hiçbir hazır dosya projeye girmez. Bu tablo oyun içi **Emeği Geç
 | Claude | Oyuncu (PlayerMotor, PlayerLook, HeadBob, PlayerInteractor, PlayerFootsteps), istasyon modu (StationBase), GameInput, ViewLocator, sahne bağlantı noktaları, Faz 2 editör kurulum aracı | `Assets/_Project/Scripts/Player`, `Stations`, `City`, `Core` | Mehmet |
 | Claude | Sipariş mekaniği (OrderSession, OrderController, görünüm arayüzleri), Denkleştirme veri üreticisi, ham sipariş paneli, testler | `Assets/_Project/Scripts/Order`, `UI`, `Tests` | Mehmet |
 | ChatGPT | Harita konsept görseli | Referans | |
+| Claude | Tema ve model kuralları dokümanının uyarlanması (ekibin kendi Simya notlarından), repo kuralları | `BilgiAdasi_Docs/01_Tasarim/09-…`, `03_Teknik/08-…` §6 | Mustafa |
 | | | | |
 
 Kimya içeriği AI çıktısı olsa bile ders kitabıyla ekipçe kontrol edilir.
