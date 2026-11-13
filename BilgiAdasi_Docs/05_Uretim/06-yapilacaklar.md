@@ -17,7 +17,7 @@
 - [ ] `[KOD]` Kimya verisi: `ElementData`, `SpeciesData`, `ReactionData` + `AtomMath` + **birim testleri** (R_propane dengede mi, IsMinimal)
 - [ ] `[KOD]` FPS oyuncu (CharacterController, bakış, etkileşim) + istasyon modu (Cinemachine geçişi)
 - [ ] `[KOD]` Test sahnesi (`_Placeholder`) + sahne bağlantı noktaları (`08-mustafa-entegrasyon.md`)
-- [ ] `[KOD]` Sipariş: raf → kazan sürükleme, `−/+`, iki terazi + sayaçlar, otomatik denge → ocak
+- [ ] `[KOD]` Sipariş: raf → kazan sürükleme, `−/+`, iki terazi + sayaçlar, ateşi yak → tepkime ya da köpürme
 - [ ] `[KOD]` Köpürme + yanıp sönen atomlar + `failCount`
 - [ ] `[KOD]` Mühür notu
 - [ ] `[KOD]` Tahta: denklem metni üretimi (alt indis, 1 katsayısı gizli)

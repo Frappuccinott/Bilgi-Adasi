@@ -110,7 +110,7 @@ artan[giren]   = kazandaki[giren] − gereken[giren]   (≥ 0 ise)
 Arrive → Briefing → Preparing ⇄ (Foam) → Reacting → Board → RealLife → Deliver → Done
                          └─ step tamam & sonraki step var → Preparing (yeni step)
 ```
-- `Preparing` içinde her kazan değişiminde `RecalculateScales()`; dengedeyse otomatik `Reacting`.
+- `Preparing` içinde her kazan değişiminde `RecalculateScales()`; `Reacting` yalnızca FireStove ile (otomatik değil).
 - `Foam` 1,2 sn sürer, `Preparing`'e döner, `failCount++`.
 
 **DeskController**

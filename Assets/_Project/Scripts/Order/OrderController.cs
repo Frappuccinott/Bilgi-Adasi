@@ -83,6 +83,15 @@ namespace BilgiAdasi.Order
             StationBase.Exited -= OnStationExited;
             ViewLocator.Changed -= OnViewsChanged;
             if (stationOpen) CloseStation();
+
+            // Devre dışı kalınca coroutine'ler durur; köpürme/tepkime ortasında kalırsa görev kilitlenmesin.
+            if (Current == State.Foam || Current == State.Reacting)
+            {
+                StopAllCoroutines();
+                Current = State.Preparing;
+                scaleView?.ClearFoamDifference();
+                cauldronView?.SetStoveLit(false);
+            }
         }
 
         // ---------- Görev ----------
@@ -133,11 +142,14 @@ namespace BilgiAdasi.Order
         {
             stationOpen = false;
             ViewLocator.Unregister<IOrderCommands>(this);
-            var a = GameInput.Controls.Station;
-            a.Increase.performed -= OnIncreaseAction;
-            a.Decrease.performed -= OnDecreaseAction;
-            a.FireStove.performed -= OnFireAction;
-            a.OpenHint.performed -= OnHintAction;
+            if (GameInput.TryGetControls(out var c))
+            {
+                var a = c.Station;
+                a.Increase.performed -= OnIncreaseAction;
+                a.Decrease.performed -= OnDecreaseAction;
+                a.FireStove.performed -= OnFireAction;
+                a.OpenHint.performed -= OnHintAction;
+            }
             hintView?.HideHint();
             stationView?.SetOpen(false);
         }
@@ -230,12 +242,8 @@ namespace BilgiAdasi.Order
 
         // ---------- Akış ----------
 
-        private void AfterCauldronChanged()
-        {
-            RefreshCauldron();
-            // Denge sağlanınca ocak kendiliğinden yanar (02 §2).
-            if (session.IsSatisfied && Current == State.Preparing) StartCoroutine(ReactRoutine());
-        }
+        // Ocak kendiliğinden yanmaz (karar 13.11): oyuncu dengeyi görüp ateşi kendisi yakar.
+        private void AfterCauldronChanged() => RefreshCauldron();
 
         private IEnumerator FoamRoutine()
         {

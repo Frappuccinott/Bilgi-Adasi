@@ -35,6 +35,18 @@ namespace BilgiAdasi.Core
             }
         }
 
+        private static bool isQuitting;
+
+        /// <summary>
+        /// OnDisable/OnDestroy'da abonelik kaldırırken kullanın: kapanış sırasında yeni örnek yaratmaz.
+        /// (Controls getter'ı çıkışta çağrılırsa dispose edilmemiş yeni bir örnek oluşurdu.)
+        /// </summary>
+        public static bool TryGetControls(out BilgiAdasiControls result)
+        {
+            result = controls;
+            return result != null;
+        }
+
         public static InputMode Mode { get; private set; } = InputMode.None;
         public static InputDeviceKind LastDevice { get; private set; } = InputDeviceKind.KeyboardMouse;
 
@@ -43,6 +55,7 @@ namespace BilgiAdasi.Core
 
         public static void SetMode(InputMode mode)
         {
+            if (isQuitting) return;
             var c = Controls;
             c.Player.Disable();
             c.Station.Disable();
@@ -69,7 +82,13 @@ namespace BilgiAdasi.Core
         {
             controls = new BilgiAdasiControls();
             InputSystem.onActionChange += OnActionChange;
-            Application.quitting += Shutdown;
+            Application.quitting += OnQuitting;
+        }
+
+        private static void OnQuitting()
+        {
+            isQuitting = true;
+            Shutdown();
         }
 
         private static void OnActionChange(object obj, InputActionChange change)
@@ -89,7 +108,7 @@ namespace BilgiAdasi.Core
         private static void Shutdown()
         {
             InputSystem.onActionChange -= OnActionChange;
-            Application.quitting -= Shutdown;
+            Application.quitting -= OnQuitting;
             controls?.Dispose();
             controls = null;
         }
@@ -99,6 +118,7 @@ namespace BilgiAdasi.Core
         private static void ResetStatics()
         {
             Shutdown();
+            isQuitting = false;
             Mode = InputMode.None;
             LastDevice = InputDeviceKind.KeyboardMouse;
             ModeChanged = null;

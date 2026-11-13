@@ -15,7 +15,7 @@ Kavanozlar **mühürlüdür**: içindeki madde (formül) değiştirilemez. Oyunc
 | Giren terazisi (sol) | Kazandaki maddelerin atomlarını gösterir. |
 | Çıkan terazisi (sağ) | Siparişin hedef ürünlerinin atomlarını gösterir (sabit). |
 | Atom sayaçları | Her terazinin altında element başına: `H 4 / 4`. Eşitse yeşil, değilse kırmızı. |
-| Ocak | Teraziler dengedeyse kendiliğinden yanar. |
+| Ocak | Kendiliğinden yanmaz (karar 13.11). Oyuncu "Ateşi yak" ile yakar; teraziler dengedeyse tepkime olur. |
 | "Ateşi yak" düğmesi | Her zaman basılabilir. Dengesizken basılırsa → köpürme. |
 | Sipariş kartı | İstenen ürün ve miktar. Görev 1–2'de girenler de yazar. |
 | Ustanın defteri | 2 köpürmeden sonra parlar; ipucu metni. |
@@ -38,7 +38,7 @@ Kazan değiştikçe sol terazi ve sayaçlar **anında** güncellenir.
 | `Exact` | Tüm elementlerde sol == sağ | Görev 1–4 |
 | `Purchase` | Her giren için `kazandaki ≥ gereken`; fazlası **artan madde** olarak terazide ayrı durur ve parası geri gelmez | Görev 5 |
 
-`Purchase` modunda raf fiyatlı kavanozları gösterir; kazana eklemek elde yoksa satın almaktır (akçe düşer). `−` kavanozu kazandan çıkarır ama **akçe geri gelmez**; kavanoz elde kalır, tekrar eklemek bedavadır. Gereken karşılanınca ocak kendiliğinden yanar; fazlası terazide "artan" görünür. "Gereken" = tepkimenin katsayıları × (hedef ürün / ürün katsayısı). Eksik varsa ocak yanmaz; oyuncu sandıktan eksiğini alabilir. Para biterse ve eksik varsa: sakin bir kez "Bir dahakine dikkat" der ve eksiği verir (oyun kilitlenmez).
+`Purchase` modunda raf fiyatlı kavanozları gösterir; kazana eklemek elde yoksa satın almaktır (akçe düşer). `−` kavanozu kazandan çıkarır ama **akçe geri gelmez**; kavanoz elde kalır, tekrar eklemek bedavadır. Gereken karşılanınca ateş yakılabilir; fazlası terazide "artan" görünür. "Gereken" = tepkimenin katsayıları × (hedef ürün / ürün katsayısı). Eksik varsa ocak yanmaz; oyuncu sandıktan eksiğini alabilir. Para biterse ve eksik varsa: sakin bir kez "Bir dahakine dikkat" der ve eksiği verir (oyun kilitlenmez).
 
 ### 3.3 Zincir görev
 `OrderTask.steps` birden fazla adım içerebilir (Görev 4: CaCO₃ → CaO + CO₂, ardından CaO + H₂O → Ca(OH)₂). Her adım ayrı bir denge döngüsüdür. Adım ürünü rafa düşer ve sonraki adımda malzeme olur.
@@ -79,7 +79,7 @@ Hata anında ekrana açıklama metni çıkmaz; açıklama yalnızca defter açı
 
 - [ ] Kavanoz raftan kazana sürüklenir, `−/+` çalışır, 0'da rafa döner.
 - [ ] Sol terazi ve sayaçlar her değişimde doğru güncellenir.
-- [ ] Denge sağlanınca ocak kendiliğinden yanar; sağlanmazsa yanmaz.
+- [ ] Ocak kendiliğinden yanmaz; dengedeyken "Ateşi yak" → tepkime, dengesizken → köpürme.
 - [ ] Dengesizken "Ateşi yak" → köpürme + doğru atomlar yanıp söner.
 - [ ] 2 köpürmeden sonra defter parlar, açılınca görevin ipucu metni görünür.
 - [ ] Etikete tıklayınca mühür notu çıkar; formül değişmez.

@@ -77,7 +77,7 @@ namespace BilgiAdasi.Player
         {
             if (Active != this) return;
 
-            GameInput.Controls.Station.ExitStation.performed -= OnExitPerformed;
+            if (GameInput.TryGetControls(out var c)) c.Station.ExitStation.performed -= OnExitPerformed;
             OnExit();
 
             if (stationCamera != null) stationCamera.enabled = false;

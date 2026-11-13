@@ -40,7 +40,7 @@ namespace BilgiAdasi.Player
 
         private void OnDisable()
         {
-            GameInput.Controls.Player.Interact.performed -= OnInteractPerformed;
+            if (GameInput.TryGetControls(out var c)) c.Player.Interact.performed -= OnInteractPerformed;
             GameInput.DeviceChanged -= OnDeviceChanged;
             ViewLocator.Changed -= OnViewsChanged;
             SetCurrent(null);

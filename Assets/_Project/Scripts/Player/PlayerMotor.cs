@@ -85,10 +85,13 @@ namespace BilgiAdasi.Player
 
         private void OnDisable()
         {
-            var a = GameInput.Controls.Player;
-            a.Sprint.performed -= OnSprintPerformed;
-            a.Jump.performed -= OnJumpPerformed;
-            a.CrouchToggle.performed -= OnCrouchTogglePerformed;
+            if (GameInput.TryGetControls(out var c))
+            {
+                var a = c.Player;
+                a.Sprint.performed -= OnSprintPerformed;
+                a.Jump.performed -= OnJumpPerformed;
+                a.CrouchToggle.performed -= OnCrouchTogglePerformed;
+            }
             // İstasyona geçerken kaymasın.
             horizontalVelocity = Vector3.zero;
             verticalVelocity = 0f;
