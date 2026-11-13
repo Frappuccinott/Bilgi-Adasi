@@ -46,6 +46,21 @@ Değerler referanstan gözle alınmış başlangıç değerleridir; ilk sahne ku
 | Kaya | `#D5DEE6` | `#A3B1BE` | `#6E8090` |
 | Çatı (vurgu) | `#FF7A3D` | `#E8602A` | `#B5431C` |
 | Ahşap | `#B07A4E` | `#8A5A3A` | `#5C3A26` |
+| Sıva (iç duvar, dolgu) — türetilmiş | `#DDDCC5` | `#A7A09B` | `#686B70` |
+
+| Bakır (kazan, imbik, su banyosu) — türetilmiş | `#D77A45` | `#9F4E2B` | `#773D23` |
+
+| Kil (pişmiş toprak: athanor, küp, kroze) — türetilmiş | `#CBB595` | `#987D6A` | `#62524B` |
+
+| Ten (öğrencinin eli) — türetilmiş | `#EBB58F` | `#BE8769` | `#834C38` |
+
+*Ten satırı türetilmedir:* aydınlık = sıva aydınlık %60 + çatı aydınlık %40; orta = kil orta %50 + çatı orta %30 + sıva aydınlık %20; gölge = kil gölge %60 + çatı gölge %40. Yalnız FPS kollarında; orta, belirli bir kimliğe işaret etmeyen sıcak ton (13.11).
+
+*Kil satırı türetilmedir:* aydınlık = sıva aydınlık %60 + ahşap aydınlık %40; orta = sıva orta %50 + ahşap orta %50; gölge = sıva gölge %50 + ahşap gölge %50 (13.11).
+
+*Bakır satırı türetilmedir:* aydınlık = çatı aydınlık %50 + ahşap aydınlık %50; orta = çatı gölge %50 + ahşap orta %50; gölge = çatı gölge %30 + ahşap gölge %70 (13.11).
+
+*Sıva satırı türetilmedir:* aydınlık = kaya aydınlık %80 + altın aydınlık %20; orta = kaya orta %70 + ahşap aydınlık %30; gölge = kaya gölge %70 + ahşap gölge %30. İç mekânın sıcak kalması için eklendi (13.11).
 
 Oranlar: sahnenin yaklaşık **%60'ı yeşil**, **%25'i mavi**, **%15'i sarı-turuncu vurgu**. Vurgu rengi her yere yayılmaz; oyuncunun bakmasını istediğimiz yerde toplanır (aktif istasyon, görev veren sakin, sıradaki köy).
 
@@ -124,9 +139,12 @@ Sayılar üçgen (tri) cinsindendir ve başlangıç değeridir; sahne ağırlaş
 
 | Tür | Üst sınır |
 |---|---|
-| Küçük eşya (şişe, mum, kitap, kavanoz) | 150 |
+| Küçük eşya (şişe, mum, kitap, kavanoz) — yalnız dekor | 150 |
+| **Taşınabilir eşya** (envantere girer, elde 3B görünür: malzeme kapları, el aletleri; yakın plan, 16+ kenar) | 1.200 |
 | Orta eşya (tabure, fıçı, sandık) | 600 |
 | Büyük eşya (tezgâh, kazan, terazi) | 1.500 |
+| FPS kolları (iki kol, iskeletli, kameraya en yakın model) | 5.000 |
+| Araç (bisiklet; oyuncu biner, gidon/sepet FPS'te yakın plan) | 4.800 |
 | Kaya | 600 |
 | Ağaç | 1.300 |
 | Çimen öbeği / çiçek | 80 / 120 |
@@ -172,6 +190,7 @@ Sayılar üçgen (tri) cinsindendir ve başlangıç değeridir; sahne ağırlaş
 
 - Her şey **tek malzeme** kullanır: Blender'da `M_Stilize`, Unity'de köşe rengini okuyan URP shader (`BilgiAdasi/Stilize`, bu projede yeniden yazılacak). Renk köşe renginden gelir; doku yoktur.
 - Ayrı malzeme yalnızca şunlar için açılır: su (`M_Su`), kendi ışığı olanlar (`M_Fener`, `M_Kopuk`, `M_Duman`, `M_Bulut`; aynı shader, ışıma değeriyle).
+- **`M_Cam` (saydam cam) yalnız damıtma düzeneğinin toplama şişesinde (kâbile)** kullanılır: damıtılan sıvının birikmesi görülmezse damıtma öğretilemez (13.11). Diğer bütün camlar opak pastel kalır.
 - Malzeme adları Blender ile Unity arasında birebir aynıdır.
 
 ### Dışa aktarma (Blender → Unity)

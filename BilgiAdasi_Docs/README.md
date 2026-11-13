@@ -13,7 +13,7 @@ BilgiAdasi_Docs/
 ├── 01_Tasarim/   01-oyun-tasarimi.md · 09-tema-ve-model-kurallari.md · referans/
 ├── 02_Mekanik/   02-siparis-mekanigi.md · 03-masa-mekanigi.md
 ├── 03_Teknik/    04-teknik-mimari.md · 08-mustafa-entegrasyon.md
-├── 04_Icerik/    05-icerik-prototip.md
+├── 04_Icerik/    05-icerik-prototip.md · 10-gorev-pazar-npc.md
 └── 05_Uretim/    06-yapilacaklar.md · 07-kod-plani.md · LICENSES.md
 ```
 
@@ -27,6 +27,7 @@ BilgiAdasi_Docs/
 | `02_Mekanik/03-masa-mekanigi.md` | Çalışma masası (sözel görevler): soru tipleri, hikâye sarmalayıcıları | Kod, UI, içerik |
 | `03_Teknik/04-teknik-mimari.md` | Sahneler, veri modeli (ScriptableObject), sınıflar, durum makineleri, kayıt | Kod |
 | `04_Icerik/05-icerik-prototip.md` | Prototipteki iki köyün içeriği: 5 sipariş + 5 masa görevi, soru havuzu | İçerik, kod (veri girişi) |
+| `04_Icerik/10-gorev-pazar-npc.md` | Görev listesi özeti, element/malzeme tablosu, pazar tezgâhları ve fiyatlar, yan müşteriler, sahne NPC'leri, yol sohbetleri | İçerik, harita, kod |
 | `05_Uretim/06-yapilacaklar.md` | Öncelikli görev listesi, roller, zaman planı, "bitti" tanımı | Herkes |
 | `03_Teknik/08-mustafa-entegrasyon.md` | Sahne bağlantı noktaları ve UI arayüzleri (harita/UI ↔ kod) | Mustafa, kod |
 | `05_Uretim/07-kod-plani.md` | Kod fazları, öncelik ve kesme sırası | Kod |

@@ -3,6 +3,8 @@
 Kimya şehri → Etkileşim ilçesi → iki oynanabilir köy. Bu dosyadaki her satır bir ScriptableObject'e girilir.
 
 > Kimya içeriği ders kitabıyla kontrol edilecek (`06` → açık işler). Tür adları: **Sentez (oluşum)**, **Analiz (ayrışma)**, **Yanma**.
+>
+> Bu dosyadaki satırlar değişmez. Her göreve eklenen eğitsel katmanlar (Keşif Defteri, Hata Dedektifi, Ustanın Sorgusu, Atom Görüşü, tahmin adımı) ve Matematik/Biyoloji/Fizik saha notları seviye seviye `02_Mekanik/04-gorev-plani.md` §4'te.
 
 ## 1. Temel veriler
 

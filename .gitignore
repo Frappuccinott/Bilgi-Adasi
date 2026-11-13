@@ -39,3 +39,7 @@ sysinfo.txt
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Blender otomatik yedekleri
+*.blend1
+*.blend2
