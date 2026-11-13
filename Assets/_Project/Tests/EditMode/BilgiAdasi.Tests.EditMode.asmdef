@@ -2,6 +2,7 @@
     "name": "BilgiAdasi.Tests.EditMode",
     "rootNamespace": "BilgiAdasi.Tests",
     "references": [
+        "BilgiAdasi",
         "BilgiAdasi.Chemistry",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"

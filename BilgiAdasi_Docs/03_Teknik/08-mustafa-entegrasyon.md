@@ -62,18 +62,23 @@ Kod hiçbir Canvas'a ya da objeye bağlı değildir. Her UI parçası için bir 
 |---|---|---|
 | `IInteractPromptView` | `[E] Kazana geç` / `Ⓧ Kazana geç` + crosshair | 2 |
 | `IScreenFader` | Sahne geçişi kararması | 1 |
-| `IScaleView` | Bir terazi: element başına `H 4 / 4`, dengede mi | 3 |
-| `IOrderCardView` | Sipariş kartı: ürün, miktar, (varsa) girenler | 3 |
-| `IChalkboardView` | Tahtadaki denklemler | 3 |
+| `IOrderStationView` | Kazan paneli açık/kapalı (`SetOpen`) | 3 |
+| `IOrderCardView` | Sipariş kartı: veren, istenen ürünler, (Görev 1–2) girenlerin adı, kese; kısa mesaj | 3 |
+| `IShelfView` | Raf: kavanozlar (kazanda kaç, elde kaç, fiyat); etiket tıklanınca mühür titremesi + ilk seferde not | 3 |
+| `ICauldronView` | Kazandaki türler (adet), ocak yanık/sönük, köpürme ve tepkime animasyonu | 3 |
+| `IScaleView` | **İki terazi birlikte**: element başına sol / sağ / artan; dengede mi; köpürmede fazla (kırmızı) / eksik (kesikli) | 3 |
+| `IChalkboardView` | Tahtadaki denklemler (alt indisli TMP) | 3 |
+| `IHintBookView` | Ustanın defteri: 2 hatadan sonra parlar, açılınca ipucu | 3 |
+| `IRealLifeCardView` | "Gerçek hayatta" kartı (kapat düğmesi) | 3 |
 | `IDialogueView` | Konuşma balonu + portre | 4 |
 | `IPaperView` | Masa kâğıdı ve sorular | 5 |
-| `IHintBookView` | Ustanın defteri (parlama + ipucu metni) | 6 |
-| `IRealLifeCardView` | "Gerçek hayatta" kartı | 6 |
 | `IMapView` | Harita: mahalle durumu + 5 nokta | 6 |
+
+**Tıklamalar → kod:** Düğmeler, sürükle-bırak ve etiket tıklaması `ViewLocator.Get<IOrderCommands>()` üzerinden çağrılır: `AddToCauldron`, `Increase`, `Decrease`, `Select`, `TouchLabel`, `FireStove`, `ToggleHint`, `CloseRealLifeCard`. Tam imzalar: `Scripts/Order/OrderViews.cs`, `Scripts/UI/SharedViews.cs`. Bir view birden fazla arayüzü uygulayabilir (örnek: `PlaceholderOrderView`).
 
 View script'i `RegisteredView<IArayüz>`'den türer ve açılınca kendini kaydeder; bu yüzden **sahnede bir yere sürükleyip bağlaman gerekmez**, objenin açık olması yeterli. Örnek: `Scripts/UI/Placeholder/PlaceholderInteractPromptView.cs`.
 
-Her arayüzün ham bir `Placeholder…View` versiyonu sahnede `_Placeholder` altında durur; seninki hazır olunca onu sil, seninkini aynı alana sürükle. Arayüzün tam metotları kod geldikçe bu tabloya eklenecek.
+Her arayüzün ham bir `Placeholder…View` versiyonu sahnede `_Placeholder` altında durur; seninki hazır olunca onu sil. Aynı arayüzü iki view birden uygulamasın (son açılan kazanır).
 
 UI ayarları: Canvas Scaler → *Scale With Screen Size*, 1920×1080. Yazı en az 28 px. Formüller TMP'de `H<sub>2</sub>O`. Fontta ğ ş ı İ ve `→` olmalı.
 

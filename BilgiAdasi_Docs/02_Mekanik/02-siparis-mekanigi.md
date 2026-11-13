@@ -38,7 +38,7 @@ Kazan değiştikçe sol terazi ve sayaçlar **anında** güncellenir.
 | `Exact` | Tüm elementlerde sol == sağ | Görev 1–4 |
 | `Purchase` | Her giren için `kazandaki ≥ gereken`; fazlası **artan madde** olarak terazide ayrı durur ve parası geri gelmez | Görev 5 |
 
-`Purchase` modunda "gereken" = tepkimenin katsayıları × (hedef ürün / ürün katsayısı). Eksik varsa ocak yanmaz; oyuncu sandıktan eksiğini alabilir. Para biterse ve eksik varsa: sakin bir kez "Bir dahakine dikkat" der ve eksiği verir (oyun kilitlenmez).
+`Purchase` modunda raf fiyatlı kavanozları gösterir; kazana eklemek elde yoksa satın almaktır (akçe düşer). `−` kavanozu kazandan çıkarır ama **akçe geri gelmez**; kavanoz elde kalır, tekrar eklemek bedavadır. Gereken karşılanınca ocak kendiliğinden yanar; fazlası terazide "artan" görünür. "Gereken" = tepkimenin katsayıları × (hedef ürün / ürün katsayısı). Eksik varsa ocak yanmaz; oyuncu sandıktan eksiğini alabilir. Para biterse ve eksik varsa: sakin bir kez "Bir dahakine dikkat" der ve eksiği verir (oyun kilitlenmez).
 
 ### 3.3 Zincir görev
 `OrderTask.steps` birden fazla adım içerebilir (Görev 4: CaCO₃ → CaO + CO₂, ardından CaO + H₂O → Ca(OH)₂). Her adım ayrı bir denge döngüsüdür. Adım ürünü rafa düşer ve sonraki adımda malzeme olur.

@@ -27,6 +27,7 @@ Kayıtsız hiçbir hazır dosya projeye girmez. Bu tablo oyun içi **Emeği Geç
 | Claude | Senaryo güncellemesi, geliştirme dokümanları, kod yardımı | `Docs/`, ilgili scriptler | |
 | Claude | Çekirdek sistemler (GameEvents, SaveSystem, SceneFlow, GameManager), kimya hesabı (AtomMath, FormulaFormatter) + birim testleri, girdi asset'i, editör kurulum aracı | `Assets/_Project/Scripts/Core`, `Chemistry`, `Editor`, `Tests` | Mehmet |
 | Claude | Oyuncu (PlayerMotor, PlayerLook, HeadBob, PlayerInteractor, PlayerFootsteps), istasyon modu (StationBase), GameInput, ViewLocator, sahne bağlantı noktaları, Faz 2 editör kurulum aracı | `Assets/_Project/Scripts/Player`, `Stations`, `City`, `Core` | Mehmet |
+| Claude | Sipariş mekaniği (OrderSession, OrderController, görünüm arayüzleri), Denkleştirme veri üreticisi, ham sipariş paneli, testler | `Assets/_Project/Scripts/Order`, `UI`, `Tests` | Mehmet |
 | ChatGPT | Harita konsept görseli | Referans | |
 | | | | |
 
