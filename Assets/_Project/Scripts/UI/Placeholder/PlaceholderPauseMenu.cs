@@ -89,6 +89,8 @@ namespace BilgiAdasi.UI
             ShowMain(resumeButton);
         }
 
+        public void ShowCurrentTask(CurrentTaskInfo task) { } // yer tutucuda görev kartı yok
+
         public void Close()
         {
             overlay.SetActive(false);

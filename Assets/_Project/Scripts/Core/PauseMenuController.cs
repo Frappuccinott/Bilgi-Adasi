@@ -79,6 +79,7 @@ namespace BilgiAdasi.Core
             ViewLocator.Register<IPauseMenuCommands>(this);
 
             view.Open(achievements != null ? achievements.BuildMenuInfo() : new AchievementMenuInfo());
+            view.ShowCurrentTask(ViewLocator.Get<ICurrentTaskSource>()?.GetCurrentTask());
             GameEvents.RaisePauseChanged(true);
         }
 

@@ -14,6 +14,10 @@ Kayıtsız hiçbir hazır dosya projeye girmez. Bu tablo oyun içi **Emeği Geç
 | Liberation Sans (TMP Essentials) | Font | Red Hat / Unity TMP | — | SIL OFL 1.1 | — | Mehmet |
 | Alegreya, Alegreya Sans | Font (başlık, gövde) | Huerta Tipográfica (Juan Pablo del Peral) | https://fonts.google.com/specimen/Alegreya | SIL OFL 1.1 | — (henüz Unity'ye alınmadı) | Mustafa |
 | MCP for Unity v10.3.0 (`com.coplaydev.unity-mcp`) | Editör aracı (oyuna girmez) | CoplayDev / Aura | https://github.com/CoplayDev/unity-mcp | MIT | — | Mustafa |
+| Alegreya Bold (Alegreya-Bold.ttf) | Font | Juan Pablo del Peral, Huerta Tipográfica | https://fonts.google.com/specimen/Alegreya | SIL OFL 1.1 | TMP SDF asset üretildi | Mehmet |
+| Alegreya Sans Medium (AlegreyaSans-Medium.ttf) | Font | Juan Pablo del Peral, Huerta Tipográfica | https://fonts.google.com/specimen/Alegreya+Sans | SIL OFL 1.1 (`Assets/_Project/Fonts/OFL.txt`) | TMP SDF asset üretildi | Mehmet |
+| UI/Mühür (UI_Muhur.png, UI_MuhurMum.png) | UI görseli | Ekip (Mustafa) — Figma "Bilgi Adası — Marka Kimliği" | — | Ekibin kendi çizimi | Figma MCP ile PNG dışa aktarıldı, arka planı saydamlaştırıldı | Mehmet |
+| UI/Akçe (UI_Akce.png) | UI simgesi | Claude ile Figma'da çizildi (marka paleti) | — | Proje çıktısı | Figma MCP ile PNG dışa aktarıldı, arka planı saydamlaştırıldı | Mehmet |
 | | | | | | | |
 
 **Kurallar**
@@ -50,6 +54,7 @@ Kayıtsız hiçbir hazır dosya projeye girmez. Bu tablo oyun içi **Emeği Geç
 | Claude | Ustanın Sorgusu + Keşif Defteri (LearningDirector, LearningData, IReasoningView/IDiscoveryBookView, ham yer tutucu görünümler, Esc menüsünde defter düğmesi, Seviye 1–5 veri üreticisi) | `Assets/_Project/Scripts/Order/Learning/`, `Scripts/UI/LearningViews.cs`, `Scripts/UI/Placeholder/PlaceholderReasoningView.cs`, `PlaceholderDiscoveryBookView.cs`, `Scripts/Editor/LearningDataBuilder.cs` | Mustafa (Mehmet'in yetkisiyle) |
 | Claude | Harita sahnesinde mekanik entegrasyonu: istasyonların atölye sanatına hizalanması, sanat terazisinin ScaleModel'e bağlanması + element başına atom şekli, pazar tezgâhı görseli, sanat kazanı/ocak görünümü (ArtCauldronView) | `Assets/_Project/Scenes/Deneme_Mustafa_Harita.unity`, `Scripts/Order/Props/ArtCauldronView.cs`, `Scripts/Order/Props/ScaleModel.cs` (ekleme) | Mustafa (Mehmet'in yetkisiyle) |
 | Claude | Tema ve model kuralları dokümanının uyarlanması (ekibin kendi Simya notlarından), repo kuralları | `BilgiAdasi_Docs/01_Tasarim/09-…`, `03_Teknik/08-…` §6 | Mustafa |
+| Claude | Figma arayüzünün Unity bağlantısı: tema (UiTheme), prosedürel UI kiti, HUD/ipucu/not/sipariş kartı/"Gerçek hayatta"/diyalog/envanter + kese/pazar tezgâhı/Esc (opak ahşap zemin, şu anki görev kartı) + başarı ağacı + Ayarlar/başarım bildirimi view'ları, oyuncu ayarları (GameSettings), şu anki görev verisi (CurrentTaskInfo), Kurulum 14; Figma'da "UI/Başarım bildirimi" bileşeni (3 tür), HUD içi örnek kare ve UI/Akçe simgesi (Figma MCP, marka paleti ve Alegreya ile) | `Assets/_Project/Scripts/UI/Figma`, `Editor/FigmaUiSetup.cs`, Figma: Keşif Defteri ve Başarılar sayfası | Mehmet |
 | | | | |
 
 Kimya içeriği AI çıktısı olsa bile ders kitabıyla ekipçe kontrol edilir.

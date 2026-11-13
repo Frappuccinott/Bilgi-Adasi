@@ -26,6 +26,8 @@ namespace BilgiAdasi.UI
         [SerializeField] private string readyWord = "Hazır — kapıya götür";
         [SerializeField] private string rewardWord = "Ödeme";
         [SerializeField] private float noticeSeconds = 4f;
+        [Tooltip("Kapalı: ham envanter + kese çizilmez (Figma envanteri sahnedeyse).")]
+        [SerializeField] private bool showInventory = true;
 
         private static readonly Color Parchment = new Color(0.91f, 0.85f, 0.71f, 0.96f);
         private static readonly Color Ink = new Color(0.23f, 0.16f, 0.10f, 1f);
@@ -247,6 +249,7 @@ namespace BilgiAdasi.UI
             money.pivot = new Vector2(1f, 0.5f);
             money.anchoredPosition = Vector2.zero;
             moneyText = Text(money, "", 28, Ink, TextAlignmentOptions.Center);
+            bar.gameObject.SetActive(showInventory);
             Fill(moneyText.rectTransform, 0, 0, 0, 0);
 
             // Sipariş kartı: sol üst

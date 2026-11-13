@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2e4bcb1964a44243914195d5487513f, type: 3}
+  m_Name: UiTheme
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.UI.UiTheme
+  paper: {r: 0.8862745, g: 0.85882354, b: 0.69411767, a: 1}
+  paperMid: {r: 0.8392157, g: 0.8, b: 0.69803923, a: 1}
+  paperShade: {r: 0.61960787, g: 0.54509807, b: 0.49411765, a: 1}
+  ink: {r: 0.3529412, g: 0.26666668, b: 0.21568628, a: 1}
+  inkDark: {r: 0.2901961, g: 0.20392157, b: 0.15294118, a: 1}
+  inkDeep: {r: 0.24313726, g: 0.15686275, b: 0.105882354, a: 1}
+  wood: {r: 0.5411765, g: 0.3529412, b: 0.22745098, a: 1}
+  woodDark: {r: 0.36078432, g: 0.22745098, b: 0.14901961, a: 1}
+  wax: {r: 0.76862746, g: 0.3254902, b: 0.16470589, a: 1}
+  waxMid: {r: 0.63529414, g: 0.25490198, b: 0.11764706, a: 1}
+  waxDark: {r: 0.47843137, g: 0.18431373, b: 0.08235294, a: 1}
+  goldLight: {r: 1, g: 0.8235294, b: 0.24705882, a: 1}
+  gold: {r: 0.96862745, g: 0.65882355, b: 0, a: 1}
+  goldDark: {r: 0.8156863, g: 0.47843137, b: 0, a: 1}
+  water: {r: 0.20784314, g: 0.7411765, b: 0.92156863, a: 1}
+  waterDark: {r: 0.11764706, g: 0.5254902, b: 0.76862746, a: 1}
+  scrim: {r: 0.243, g: 0.157, b: 0.106, a: 0.62}
+  headingFont: {fileID: 11400000, guid: 7227027f02a05c14dbcf0804f3245f47, type: 2}
+  bodyFont: {fileID: 11400000, guid: 33368820dea61504bb7b7d3569ab2e33, type: 2}
+  seal: {fileID: 21300000, guid: dd6267044d3f09d4b9c97d37626af307, type: 3}
+  sealWax: {fileID: 21300000, guid: 0d1b9b9d06b476a49afb755c600313b1, type: 3}
+  coin: {fileID: 21300000, guid: 8f76c460223e36a4a93ee32e45e63e7f, type: 3}
+  speciesIcons:
+  - {fileID: 21300000, guid: 39e4105124e89054dbd63aad930ad160, type: 3}
+  - {fileID: 21300000, guid: 9b16672c52fdbe140a3480981bcc07fc, type: 3}
+  - {fileID: 21300000, guid: 00265fac4a78a694186c5befcee06c3b, type: 3}
+  - {fileID: 21300000, guid: 5b358b31b00b98b41b082e556ec35e8a, type: 3}
+  - {fileID: 21300000, guid: 32271b60ddf36964393af34db8b8465b, type: 3}
+  - {fileID: 21300000, guid: a491b73a7a998d94eb30ff34f29d53e9, type: 3}
+  - {fileID: 21300000, guid: 31defc3d54c3ec04c9e439b1e2e4b574, type: 3}
+  - {fileID: 21300000, guid: c90186a99aa6541468ece05f86559e35, type: 3}
+  - {fileID: 21300000, guid: 9a1601ec6d6df0740904d7e20ffd4a0d, type: 3}
+  - {fileID: 21300000, guid: 354247a091f7f80498aa3e11416ec6ea, type: 3}
+  - {fileID: 21300000, guid: 416b474dc44869844ae54c8f84959424, type: 3}
+  - {fileID: 21300000, guid: 88210a0ec5cceea45948da5b0e71ce94, type: 3}
