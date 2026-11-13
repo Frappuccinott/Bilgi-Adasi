@@ -78,7 +78,7 @@ Her faz sonunda: Play mode testi + commit. Süre daralırsa §2'deki sırayla ke
 | Köpürme | Fark atomları + `failCount`, 2'de defter parlar |
 | `IChalkboardView` | `FormulaFormatter` çıktısı |
 
-### Faz 4 — Mahalle akışı + veri · P0
+### Faz 4 — Köy akışı + veri · P0
 - `NeighborhoodData`, `NeighborhoodRunner`, `DoorStation` (`IDialogueView`)
 - Görev 4 zinciri, Görev 5 `Purchase` + `SupplyChest` + bütçe
 - Denkleştirme verisi (`05` §1–2)
@@ -94,12 +94,12 @@ Her faz sonunda: Play mode testi + commit. Süre daralırsa §2'deki sırayla ke
 ### Faz 6 — Çerçeve · P1
 - İpucu defteri (`IHintBookView`), "Gerçek hayatta" kartı (`IRealLifeCardView`)
 - `PlayerGrowth` (§7)
-- Harita mantığı (`IMapView`): mahalle durumu + 5 nokta
+- Harita mantığı (`IMapView`): köy durumu + 5 nokta
 - Gamepad sanal imleç (`VirtualMouseInput`)
 - **Emeği Geçenler** (lisans kuralı için zorunlu)
 
 ### Faz 7 — Cila · P2
-- Sınıf açılış/kapanış, mahalle canlanma, ses (CC0), hata düzeltme
+- Sınıf açılış/kapanış, köy canlanma, ses (CC0), hata düzeltme
 - **Cmt 08.00 kod dondurma** → son build, demo provası, yedek ekran kaydı
 
 ---
@@ -107,11 +107,11 @@ Her faz sonunda: Play mode testi + commit. Süre daralırsa §2'deki sırayla ke
 ## 2. Kesme sırası (geride kalırsak, önce bu gider)
 
 1. Sınıf ara sahnesi → tek metin ekranı
-2. Mahalle canlanma → tek nesne aç/kapa
+2. Köy canlanma → tek nesne aç/kapa
 3. Güvercin animasyonu → zarf masada belirir
 4. Lonca Sınavı rastgeleliği → sabit 4 soru
 5. Sanal imleç → gamepad'de istasyon içinde D-pad ile odak (UI Navigation)
-6. **Kesilmez:** sipariş mekaniği, mühür, tahta, iki mahalle uçtan uca, Emeği Geçenler
+6. **Kesilmez:** sipariş mekaniği, mühür, tahta, iki köy uçtan uca, Emeği Geçenler
 
 ---
 

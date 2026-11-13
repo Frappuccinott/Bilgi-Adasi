@@ -1,6 +1,6 @@
 # 03 — Masa Mekaniği (Sözel Görevler)
 
-Kavram, tanım ve sınıflandırma konularının görev tipi. Prototipte Tepkime Türleri mahallesinin 5 görevi.
+Kavram, tanım ve sınıflandırma konularının görev tipi. Prototipte Tepkime Türleri köyünün 5 görevi.
 
 ## 1. Temel fikir
 
@@ -21,7 +21,7 @@ Her masa görevi bir sarmalayıcı + bir ya da birkaç soru tipinden oluşur.
 | **Ustanın Defteri** | Defterin bazı kelimeleri silinmiş/ıslanmış; oyuncu tamamlar | Boşluk doldurma (kelime bankası) |
 | **Etiket Masası** | Raftaki tepkime şişelerinin etiketleri karışmış; doğru kutuya koy | Sınıflandırma (sürükle-bırak) |
 | **Mektup** | Bir kasabalı merak ettiğini yazmış; cevap kâğıdına işaretle | Çoktan seçmeli, doğru/yanlış |
-| **Lonca Sınavı** | Mahallenin son görevi; simyacılar loncasının mühürlü sınav kâğıdı | Havuzdan karışık (rastgele 4 soru) |
+| **Lonca Sınavı** | Köyün son görevi; simyacılar loncasının mühürlü sınav kâğıdı | Havuzdan karışık (rastgele 4 soru) |
 
 ## 4. Soru tipleri
 
@@ -39,7 +39,7 @@ Her masa görevi bir sarmalayıcı + bir ya da birkaç soru tipinden oluşur.
 
 - **Hata:** Yanlış cevap mürekkep lekesine döner, kâğıt sallanır; tekrar denenir. Ceza yok.
 - **İpucu:** Aynı görevde 2 hata → defter parlar → ilgili tanım cümlesi gösterilir (`QuestionData.hint`).
-- **Geçme:** Görevdeki bütün sorular doğru → kâğıda ustanın mührü basılır → defterde bir sayfa dolar → mahalle parçası canlanır.
+- **Geçme:** Görevdeki bütün sorular doğru → kâğıda ustanın mührü basılır → defterde bir sayfa dolar → köy parçası canlanır.
 - **Lonca Sınavı:** Havuzdan rastgele 4 soru, aynı oturumda tekrar yok. Yanlış soru, havuzdan **başka bir soruyla** değiştirilir (ezberi engeller).
 - Masa görevlerinde de "Gerçek hayatta" kartı olabilir (opsiyonel alan).
 
@@ -56,4 +56,4 @@ Her masa görevi bir sarmalayıcı + bir ya da birkaç soru tipinden oluşur.
 - [ ] `BalanceEquation` tepkime havuzundan otomatik soru üretir; en küçük tam sayı kontrolü çalışır.
 - [ ] Yanlışta leke + tekrar; 2 yanlışta defter ipucu.
 - [ ] Lonca Sınavı rastgele 4 soru çeker; yanlış soru başka soruyla değişir.
-- [ ] Görev bitince mühür + defter sayfası + mahalle ilerlemesi.
+- [ ] Görev bitince mühür + defter sayfası + köy ilerlemesi.

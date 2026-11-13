@@ -22,9 +22,9 @@
 | `Station_Desk` | 1 | Benim prefab'ım | Çalışma masası |
 | `Station_Door` | 1 | Benim prefab'ım | Kapı (sakinler burada konuşur) |
 | `Station_Chalkboard` | 1 | Benim prefab'ım | Tahta (okuma) |
-| `Neighborhood_Denklestirme` | 1 | `NeighborhoodView` (`neighborhoodId = denklestirme`) | Mahallenin önce/sonra hali |
+| `Neighborhood_Denklestirme` | 1 | `NeighborhoodView` (`neighborhoodId = denklestirme`) | Köyün önce/sonra hali |
 | `Neighborhood_TepkimeTurleri` | 1 | `NeighborhoodView` (`neighborhoodId = tepkime_turleri`) | 〃 |
-| Kilitli bölge bariyerleri | gerektiği kadar | `LockedZone` + collider (trigger **değil**) | Kilitli mahalle/ilçeye girişi keser |
+| Kilitli bölge bariyerleri | gerektiği kadar | `LockedZone` + collider (trigger **değil**) | Kilitli köy/ilçeye girişi keser |
 
 ### İstasyon prefab'ları
 ```
@@ -36,11 +36,11 @@ Station_Cauldron            ← kök: StationBase türevi + BoxCollider, layer =
 - BoxCollider'ı modele göre boyutlandır (oyuncu baktığında yakalanacak alan).
 - Kamera `CameraPoint`'in **ileri (mavi) eksenine** bakar. Game view'da kontrol et: kazan + iki terazi tek kadrajda.
 
-### Mahalle önce/sonra
+### Köy önce/sonra
 ```
 Neighborhood_Denklestirme   ← NeighborhoodView
-├── Before                  ← mahalle bitmeden görünen (kuru çeşme, sönük fener…)
-├── After                   ← mahalle bitince açılan
+├── Before                  ← köy bitmeden görünen (kuru çeşme, sönük fener…)
+├── After                   ← köy bitince açılan
 └── Parts                   ← (isteğe bağlı) Part_1 … Part_5: her görev bitince biri açılır
 ```
 Kod yalnızca bu objeleri aç/kapa yapar; içine istediğini koy.
@@ -69,7 +69,7 @@ Kod hiçbir Canvas'a ya da objeye bağlı değildir. Her UI parçası için bir 
 | `IPaperView` | Masa kâğıdı ve sorular | 5 |
 | `IHintBookView` | Ustanın defteri (parlama + ipucu metni) | 6 |
 | `IRealLifeCardView` | "Gerçek hayatta" kartı | 6 |
-| `IMapView` | Harita: mahalle durumu + 5 nokta | 6 |
+| `IMapView` | Harita: köy durumu + 5 nokta | 6 |
 
 View script'i `RegisteredView<IArayüz>`'den türer ve açılınca kendini kaydeder; bu yüzden **sahnede bir yere sürükleyip bağlaman gerekmez**, objenin açık olması yeterli. Örnek: `Scripts/UI/Placeholder/PlaceholderInteractPromptView.cs`.
 
@@ -82,3 +82,19 @@ UI ayarları: Canvas Scaler → *Scale With Screen Size*, 1920×1080. Yazı en a
 - Benim prefab'larımın kökündeki bileşenleri silme ya da adlarını değiştirme (`Visual` içi serbest).
 - `_Project/Scripts/` ve `_Project/Data/` içinde değişiklik yapma; ihtiyacın olursa söyle.
 - Hazır model/doku/font eklediysen `05_Uretim/LICENSES.md`'ye satır yaz (yoksa projeye girmez).
+
+## 6. Repo ve haberleşme kuralları
+
+> Simya reposundaki `md/02`'den bu projeyle çelişmeyen kurallar alındı. Görsel ve model kuralları: `01_Tasarim/09-tema-ve-model-kurallari.md`.
+
+**Temel kural:** başkasının alanındaki dosyayı kendin düzeltmezsin. Bir şey gerekiyorsa sahibine yazarsın, o yapar. "Küçük bir şeydi" çakışmaların çoğunun sebebidir.
+
+- **Klasör sahipliği:** Mustafa → `_Project/Art/`, `_Project/Level/`, `_Project/UI/`, `ArtSource/`. Mehmet → `_Project/Scripts/`, `_Project/Data/`, `_Project/Input/`, `_Project/Tests/`. Ortak alan → `ProjectSettings/`, `Packages/`, `Assets/Settings/`, `_Project/Prefabs/`: değiştirmeden önce diğerine haber verilir, aynı anda yalnızca bir kişi dokunur.
+- **Sahne:** Bir sahneyi aynı anda tek kişi düzenler (§1). Başkasının sahnesini açıp bakabilirsin; **kaydetmezsin.** Kişisel deneme sahnesi `Deneme_<ad>.unity`; kimse başkasınınkine dokunmaz.
+- **Model ↔ mekanik:** Model `Visual` altına ya da `_Project/Art/` altında script'siz prefab olarak teslim edilir. Mekanik script'leri bu prefaba değil, istasyon kökünde ya da prefab variant'ta durur. Böylece model güncellenince mekanik bozulmaz.
+- **`.meta` dosyaları** her zaman dosyasıyla birlikte commit edilir. Dosya taşıma ve yeniden adlandırma Unity içinden yapılır, dosya gezgininden değil.
+- `Library/`, `Temp/`, `Logs/`, `UserSettings/` commit edilmez.
+- **Commit mesajı** kısa ve Türkçe, alan önekiyle: `level: atölye zemini eklendi`, `ui: sipariş kartı`, `docs: tema kuralları`.
+- Güne başlarken ve push'tan önce `main`'i çek.
+- **Çakışma olursa:** durdur, zorla birleştirme (`--force`, "theirs/ours" ile ezme) yapma. Çakışan dosya kimin alanındaysa onun sürümü geçerlidir. Sahne/prefab çakışmasında dosya elle düzeltilmez; sahibi kendi sürümünü alır, diğeri değişikliğini Unity içinde yeniden uygular. Sebebi buraya kural olarak eklenir.
+- **Mutlaka haber verilecekler:** `ProjectSettings/` ya da `Packages/` değişikliği, §2'deki bir adın değişmesi, klasör taşıma.

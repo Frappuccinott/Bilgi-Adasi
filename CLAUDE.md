@@ -7,18 +7,20 @@ Bu dosya, bu Unity projesinde çalışan Claude için kalıcı bağlamdır. Her 
 ## 1. Proje özeti
 
 - **Oyun:** Bilgi Adası — 10. sınıf (15–16 yaş) öğrencileri için eğitsel 3D oyun prototipi.
-- **Hikâye:** Kimya dersinde uyuyakalan öğrenci, ortaçağda her şehri bir ders olan bir adada uyanır. Kimya şehrinde Câbir Usta'nın çırağı olur. Şehir = ders, ilçe = tema, mahalle = konu, her mahalle = 5 görev.
+- **Hikâye:** Kimya dersinde uyuyakalan öğrenci, ortaçağda her şehri bir ders olan bir adada uyanır. Kimya şehrinde Câbir Usta'nın çırağı olur. Şehir = ders, ilçe = ünite (tema), köy = konu, her köy = 5 görev. Örnek: Kimya şehri → Kimya Bilimi ilçesi → Simya köyü.
+- **Şehirler:** Kimya (açık); Matematik, Fizik, Biyoloji, Türkçe, Sosyal (haritada sisli/kilitli).
 - **İki görev tipi:** *Sipariş* (kazan + iki terazi, uygulama konuları) ve *Masa* (kâğıt üzerinde sözel sorular). Kurallar: `BilgiAdasi_Docs/02_Mekanik/`.
-- **Prototip kapsamı:** Kimya şehri, Etkileşim ilçesi, iki oynanabilir mahalle: *Denkleştirme* (5 sipariş) ve *Tepkime Türleri* (5 masa görevi).
+- **Prototip kapsamı:** Kimya şehri, Etkileşim ilçesi, iki oynanabilir köy: *Denkleştirme* (5 sipariş) ve *Tepkime Türleri* (5 masa görevi).
 - **Yarışma teslimi:** Cumartesi 14 Kasım 2026, 11.00 — çalışan build + sunum. **Kod dondurma: 08.00.**
 
 ### Roller
 | Kişi | Kapsam |
 |---|---|
 | **Mehmet** (Claude ile çalışan) | Mekanik ve kod: oyuncu, istasyonlar, denetleyiciler, veri (SO) yapısı, kayıt, build |
-| **Mustafa Akbaş** | Haritalar (şehir/mahalle sahnesi, greybox dahil) ve UI (HUD, sayaçlar, kâğıt, kartlar, harita ekranı, menüler) |
+| **Mustafa Akbaş** | Haritalar (şehir/köy sahnesi, greybox dahil) ve UI (HUD, sayaçlar, kâğıt, kartlar, harita ekranı, menüler) |
 
-- Claude **level ve UI görseli yapmaz.** Test için yalnızca en basit yer tutucuları kurar (düz zemin + birkaç küp, ham TMP metni ve düğmeler) ve bunları `_Placeholder` adlı klasör/objede tutar; Mustafa'nınkiyle değiştirilir.
+- **Mehmet'in (kod) oturumunda** Claude level ve UI görseli yapmaz. Test için yalnızca en basit yer tutucuları kurar (düz zemin + birkaç küp, ham TMP metni ve düğmeler) ve bunları `_Placeholder` adlı klasör/objede tutar; Mustafa'nınkiyle değiştirilir.
+- **Mustafa'nın (harita/model/UI) oturumunda** Claude görsel iş yapabilir, ama yalnızca `BilgiAdasi_Docs/01_Tasarim/09-tema-ve-model-kurallari.md` kurallarıyla: yapay zekâ fontu ve rengi yok, renkler paletten, her işten önce bol referans araştırması (Blender MCP dahil), basite kaçmak yok, `generate_3d`/hazır asset nihai model olmaz.
 - UI kodunda **mantık ile görünüm ayrıdır:** denetleyiciler veriyi event ya da arayüzle yayınlar (`IScaleView`, `IOrderCardView`, `IPaperView` …). Mustafa'nın prefab'ı bu arayüzü uygulayan küçük bir view script'iyle bağlanır. Denetleyici hiçbir zaman belirli bir Canvas ya da objeye bağımlı olmaz.
 - Sahne bağlantı noktaları (Mustafa'nın sahnesinde olması gerekenler): `BilgiAdasi_Docs/03_Teknik/08-mustafa-entegrasyon.md`.
 
@@ -147,33 +149,33 @@ Oyuncu bir istasyona yaklaşıp Interact yapınca:
 
 ## 6. Şehirde yürüme
 
-Oyuncu mahalleler arasında **yürüyerek** gider (karar: 13.11). Bu, dokümanlardaki "harita tıklamalı, oyuncu yürümez" kuralının yerini alır.
+Oyuncu köyler arasında **yürüyerek** gider (karar: 13.11). Bu, dokümanlardaki "harita tıklamalı, oyuncu yürümez" kuralının yerini alır.
 
 **24 saat kapsamı için sınırlar:**
-- Prototipteki şehir **küçük ve kompakt**: atölye + iki mahalle alanı + aradaki tek sokak/meydan. Uçtan uca yürüyüş ≤ 40 sn.
-- Kilitli mahalle/ilçeler: sis + kapalı kapı/bariyer ile kesilir, içleri modellenmez.
+- Prototipteki şehir **küçük ve kompakt**: atölye + iki köy alanı + aradaki tek sokak/meydan. Uçtan uca yürüyüş ≤ 40 sn.
+- Kilitli köy/ilçeler: sis + kapalı kapı/bariyer ile kesilir, içleri modellenmez.
 - Şehir greybox'ı ve modelleri **Mustafa** yapar; kod `08-mustafa-entegrasyon.md`'deki bağlantı noktalarına dayanır. Tek oyun sahnesi: `Town` (atölye + şehir).
-- Harita ekranı (`OpenMap`) kalır: bilgi + ilerleme ekranı (mahalle durumu, 5 nokta). Hızlı seyahat: P2, zaman kalırsa.
-- Görev akışı: mahalledeki sakin/ulak oyuncuyu **atölyeye** çağırır; görevler atölyedeki istasyonlarda çözülür. Mahallede yalnızca "önce/sonra" değişimi görülür.
+- Harita ekranı (`OpenMap`) kalır: bilgi + ilerleme ekranı (köy durumu, 5 nokta). Hızlı seyahat: P2, zaman kalırsa.
+- Görev akışı: köydeki sakin/ulak oyuncuyu **atölyeye** çağırır; görevler atölyedeki istasyonlarda çözülür. Köyde yalnızca "önce/sonra" değişimi görülür.
 
 ---
 
 ## 7. Boy uzama sistemi (büyüme)
 
-Oyuncu öğrendikçe büyür: sınıf atladıkça belirgin, her mahalle bittikçe çok az.
+Oyuncu öğrendikçe büyür: sınıf atladıkça belirgin, her köy bittikçe çok az.
 
-| Sınıf | Boy | Göz yüksekliği | Mahalle başına artış |
+| Sınıf | Boy | Göz yüksekliği | Köy başına artış |
 |---|---|---|---|
 | 9 | 1.60 m | 1.50 m | +0.01 m |
 | **10 (prototip)** | 1.66 m | 1.56 m | +0.01 m |
 | 11 | 1.71 m | 1.61 m | +0.01 m |
 | 12 | 1.75 m | 1.65 m | — |
 
-- Mahalle artışı bir sonraki sınıfın boyunu **geçemez** (clamp).
+- Köy artışı bir sonraki sınıfın boyunu **geçemez** (clamp).
 - `PlayerGrowth` bileşeni: `GameEvents.NeighborhoodCompleted` dinler, hedef boyu hesaplar, **2 sn yumuşak geçişle** `CharacterController.height/center` ve kamera kök yüksekliğini günceller.
 - Büyümeden önce **tavan kontrolü** (`Physics.CapsuleCast` yukarı); doluysa açık alana çıkınca uygulanır.
 - Geri bildirim: ekranda kısa not — *"Biraz uzadın gibi…"*. Sınıf atlamada belirgin ses + not.
-- Prototipte görünen: 1.66 → 1.67 → 1.68 (iki mahalle). Sunumda vurgulanacak bir detay.
+- Prototipte görünen: 1.66 → 1.67 → 1.68 (iki köy). Sunumda vurgulanacak bir detay.
 - Seviye tasarımı uyarısı: kapı, tezgâh, raf yükseklikleri 1.50–1.65 m göz aralığında rahat görünecek şekilde yapılır.
 - Kayıt: `SaveData.grade`, `SaveData.completedNeighborhoods` → boy her yüklemede hesaplanır (ayrıca kaydedilmez).
 
@@ -192,7 +194,7 @@ Oyuncu öğrendikçe büyür: sınıf atladıkça belirgin, her mahalle bittikç
 - Kimya hesabı (`AtomMath`) saf C#; Unity'ye bağımlı değil; EditMode testleri var.
 
 ### Sözlük (Türkçe → kod)
-Şehir `Subject` · İlçe `Theme` · Mahalle `Neighborhood` · Görev `Task` · Sipariş `OrderTask` · Masa görevi `DeskTask` · Kazan `Cauldron` · Terazi `Scale` · Raf `Shelf` · Kavanoz `Jar` · Ocak `Stove` · Tahta `Chalkboard` · Usta `Master` · Sakin `Resident` · Ulak `Messenger` · Büyüme `Growth`
+Şehir `Subject` · İlçe `Theme` · Köy `Neighborhood` (kodda ad değişmez) · Görev `Task` · Sipariş `OrderTask` · Masa görevi `DeskTask` · Kazan `Cauldron` · Terazi `Scale` · Raf `Shelf` · Kavanoz `Jar` · Ocak `Stove` · Tahta `Chalkboard` · Usta `Master` · Sakin `Resident` · Ulak `Messenger` · Büyüme `Growth`
 
 ---
 

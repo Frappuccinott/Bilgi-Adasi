@@ -1,6 +1,6 @@
 # 02 — Sipariş Mekaniği (Kazan + Terazi)
 
-Uygulama gerektiren konuların görev tipi. Prototipte Denkleştirme mahallesinin 5 görevi.
+Uygulama gerektiren konuların görev tipi. Prototipte Denkleştirme köyünün 5 görevi.
 
 ## 1. Temel fikir
 
@@ -63,7 +63,7 @@ Hata anında ekrana açıklama metni çıkmaz; açıklama yalnızca defter açı
 2. Ürün kavanozu rafa eklenir.
 3. Tahtaya denklem yazılır (katsayı 1 ise yazılmaz: `CH₄ + 2O₂ → CO₂ + 2H₂O`).
 4. "Gerçek hayatta" kartı (tek cümle) açılır.
-5. Sakin teşekkür eder → görev biter → mahalle parçası canlanır.
+5. Sakin teşekkür eder → görev biter → köy parçası canlanır.
 
 ## 4. Arayüz kuralları
 

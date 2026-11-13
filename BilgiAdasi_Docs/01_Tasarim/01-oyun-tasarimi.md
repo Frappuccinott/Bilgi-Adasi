@@ -6,13 +6,13 @@
 
 **Uyanış (Atölye):** Gözünü taş ve ahşap bir atölyede açar. Kazan fokurdar, raflarda mühürlü kavanozlar. Kapıda yaşlı bir usta: **Câbir Usta**.
 
-> "Nihayet uyandın. Kapımın önünde yatıyordun, çırak arıyordum zaten. Bu şehirde her mahallenin bir derdi var; dertler de ancak ölçüyle çözülür. Gel, sana ilk kuralı göstereyim."
+> "Nihayet uyandın. Kapımın önünde yatıyordun, çırak arıyordum zaten. Bu şehirde her köyün bir derdi var; dertler de ancak ölçüyle çözülür. Gel, sana ilk kuralı göstereyim."
 
 **Ada:** Atölye, **Bilgi Adası**'nın Kimya şehrindedir. Adanın her şehri bir derstir; ilk açık şehir Kimya'dır, diğerleri sisin ardında bekler.
 
-**Gövde:** Oyuncu Kimya şehrinin mahallelerinde dolaşır, her mahallede 5 görev çözer, mahalle canlanır.
+**Gövde:** Oyuncu Kimya şehrinin köylerinde dolaşır, her köyde 5 görev çözer, köy canlanır.
 
-**Kapanış (prototip sonu):** Etkileşim ilçesinin iki mahallesi bitince usta bir mektup bırakır, ekran kararır, oyuncu sınıfta uyanır. Öğretmen tahtadaki denklemi sorar: "Bunu kim denkleştirir?" Oyuncunun eli kalkar. Son ekran: oyuncunun tahtası (çözdüğü denklemler) + "Devam edecek: Hesaplamalar Mahallesi" + Emeği Geçenler.
+**Kapanış (prototip sonu):** Etkileşim ilçesinin iki köyü bitince usta bir mektup bırakır, ekran kararır, oyuncu sınıfta uyanır. Öğretmen tahtadaki denklemi sorar: "Bunu kim denkleştirir?" Oyuncunun eli kalkar. Son ekran: oyuncunun tahtası (çözdüğü denklemler) + "Devam edecek: Hesaplamalar Köyü" + Emeği Geçenler.
 
 **Neden ortaçağ/simya:** Simya kimyanın atasıdır; Câbir bin Hayyân tarihte deneysel yöntemin öncülerindendir. Sunumda tek cümleyle söylenir.
 
@@ -22,44 +22,46 @@
 |---|---|---|---|
 | Oyuncu (Çırak) | 10. sınıf öğrencisi | Görünmez (birinci şahıs bakış) | Adı/cinsiyeti yok; düşünceleri kısa notlar |
 | Câbir Usta | Öğretmen, ipucu veren | **Model yok**: konuşma balonu + portre (2D) | Kısa, sakin, ikinci tekil; çözüm söylemez, nereye bakılacağını söyler |
-| Mahalle sakinleri | Sipariş verenler | Kapıda sabit low-poly figür ya da 2D kart | Ana renk + mesleğini gösteren tek nesne |
+| Köy sakinleri | Sipariş verenler | Kapıda sabit low-poly figür ya da 2D kart | Ana renk + mesleğini gösteren tek nesne |
 | Ulak (postacı güvercin) | Masa görevlerini getirir | Pencereye konan güvercin (basit model/sprite) | Konuşmaz; mektup bırakır |
 
 ## 3. Harita hiyerarşisi
 
 ```
 Bilgi Adası (dünya)
-└── Şehir = Ders              → Kimya (açık). Matematik, Fizik, Biyoloji (sisli, kilitli — yalnızca görsel)
-    └── İlçe = Tema           → Etkileşim (açık). Çeşitlilik, Sürdürülebilirlik (kilitli)
-        └── Mahalle = Konu    → Tepkimeler (kilitli), Tepkime Türleri (OYNANABİLİR), Denkleştirme (OYNANABİLİR), Hesaplamalar (kilitli, "devam edecek")
+└── Şehir = Ders              → Kimya (açık). Matematik, Fizik, Biyoloji, Türkçe, Sosyal (sisli, kilitli — yalnızca görsel)
+    └── İlçe = Ünite (Tema)   → Etkileşim (açık). Kimya Bilimi, Çeşitlilik, Sürdürülebilirlik (kilitli)
+        └── Köy = Konu        → Tepkimeler (kilitli), Tepkime Türleri (OYNANABİLİR), Denkleştirme (OYNANABİLİR), Hesaplamalar (kilitli, "devam edecek")
             └── 5 Görev       → Sipariş ya da Masa görevi
 ```
 
-- Kilit kuralı (prototip): İki oynanabilir mahalle baştan açık, sıra serbest. Demo sırası: önce Denkleştirme.
-- Mahalle durumu: `Kilitli` → `Açık` → `Devam ediyor (n/5)` → `Tamamlandı`.
-- Oyuncu mahalleler arasında **yürür** (birinci şahıs). Harita (`OpenMap`) bilgi + ilerleme ekranıdır; hızlı seyahat yalnızca P2.
-- Her mahallenin altında 5 nokta görünür (dolu = bitti).
+**Örnek (adlandırma kuralı):** Kimya şehri → *Kimya Bilimi* ilçesi (ünite) → *Simya* köyü (konu). Dersin ünite adı ilçenin, ünitenin konu başlığı köyün adı olur. Prototipte Kimya Bilimi ilçesi haritada kilitli görünür; oynanabilir köyler Etkileşim ilçesindedir.
+
+- Kilit kuralı (prototip): İki oynanabilir köy baştan açık, sıra serbest. Demo sırası: önce Denkleştirme.
+- Köy durumu: `Kilitli` → `Açık` → `Devam ediyor (n/5)` → `Tamamlandı`.
+- Oyuncu köyler arasında **yürür** (birinci şahıs). Harita (`OpenMap`) bilgi + ilerleme ekranıdır; hızlı seyahat yalnızca P2.
+- Her köyün altında 5 nokta görünür (dolu = bitti).
 
 ## 4. İki görev tipi
 
 | | Sipariş (uygulama) | Masa (sözel) |
 |---|---|---|
 | Ne zaman | Konu bir **işlem** gerektiriyorsa (denkleştirme, hesaplama) | Konu **kavram/sınıflandırma/tanım** ise (tepkime türleri, kanunlar) |
-| Kim getirir | Kapıya gelen mahalle sakini | Pencereye konan ulak güvercin (mektup) |
+| Kim getirir | Kapıya gelen köy sakini | Pencereye konan ulak güvercin (mektup) |
 | Nerede çözülür | Kazan + iki terazi | Çalışma masası (kâğıt, defter, etiketler) |
 | Hikâye kılıfı | Sakinin gündelik derdi | Mektup, ustanın defteri, etiket masası, lonca sınavı (bkz. `03`) |
 | Hata | Kazan köpürür, atom kırmızı yanar | Kâğıtta yanlış işaret mürekkep lekesine döner, tekrar denenir |
-| Bitince | Tahtaya denklem yazılır, ürün rafa eklenir, mahallede bir parça canlanır | Defterde sayfa dolar, mahallede bir parça canlanır |
+| Bitince | Tahtaya denklem yazılır, ürün rafa eklenir, köyde bir parça canlanır | Defterde sayfa dolar, köyde bir parça canlanır |
 
-Bir mahalle tek tipten de olabilir, karışık da. Prototipte: Denkleştirme = 5 sipariş, Tepkime Türleri = 5 masa görevi.
+Bir köy tek tipten de olabilir, karışık da. Prototipte: Denkleştirme = 5 sipariş, Tepkime Türleri = 5 masa görevi.
 
-## 5. Mahalle akışı
+## 5. Köy akışı
 
-1. Mahalledeki sakin/ulak oyuncuyu **atölyeye** çağırır; oyuncu yürüyerek gelir.
-2. **Atölyede** Usta mahallenin konusunu 2–3 cümleyle tanıtır (yalnızca ilk girişte).
+1. Köydeki sakin/ulak oyuncuyu **atölyeye** çağırır; oyuncu yürüyerek gelir.
+2. **Atölyede** Usta köyün konusunu 2–3 cümleyle tanıtır (yalnızca ilk girişte).
 3. **Görev 1–4**: sırayla gelir (kapı ya da güvercin).
-4. **Görev 5**: mahallenin "sınavı" — sipariş mahallesinde en zor sipariş, masa mahallesinde **Lonca Sınavı** (havuzdan rastgele sorular).
-5. **Mahalle canlanır** ("önce/sonra" değişimi mahallede görülür), haritada tamamlandı işareti.
+4. **Görev 5**: köyün "sınavı" — sipariş köyünde en zor sipariş, masa köyünde **Lonca Sınavı** (havuzdan rastgele sorular).
+5. **Köy canlanır** ("önce/sonra" değişimi köyde görülür), haritada tamamlandı işareti.
 
 ## 6. Ton ve ipucu
 

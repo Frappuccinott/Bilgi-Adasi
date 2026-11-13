@@ -1,6 +1,6 @@
 # 05 — Prototip İçeriği
 
-Kimya şehri → Etkileşim ilçesi → iki oynanabilir mahalle. Bu dosyadaki her satır bir ScriptableObject'e girilir.
+Kimya şehri → Etkileşim ilçesi → iki oynanabilir köy. Bu dosyadaki her satır bir ScriptableObject'e girilir.
 
 > Kimya içeriği ders kitabıyla kontrol edilecek (`06` → açık işler). Tür adları: **Sentez (oluşum)**, **Analiz (ayrışma)**, **Yanma**.
 
@@ -38,11 +38,11 @@ Kimya şehri → Etkileşim ilçesi → iki oynanabilir mahalle. Bu dosyadaki he
 | R_co | 2CO + O₂ → 2CO₂ | Yanma |
 | R_waterSplit | 2H₂O → 2H₂ + O₂ | Analiz |
 
-## 2. Mahalle: Denkleştirme (5 sipariş)
+## 2. Köy: Denkleştirme (5 sipariş)
 
-**Usta girişi:** "Bu mahallede herkesin derdi bir 'kaç tane' sorusu. Kazana ne girerse o çıkar; ne bir eksik, ne bir fazla. Kavanozlar mühürlü, içlerini değiştiremezsin. Sen yalnızca kaç tane koyacağını seçersin."
+**Usta girişi:** "Bu köyde herkesin derdi bir 'kaç tane' sorusu. Kazana ne girerse o çıkar; ne bir eksik, ne bir fazla. Kavanozlar mühürlü, içlerini değiştiremezsin. Sen yalnızca kaç tane koyacağını seçersin."
 
-| # | Sakin | Mahalle yeri | Tepkime | Mod | Raf | Hedef | Kart girenleri gösterir |
+| # | Sakin | Köy yeri | Tepkime | Mod | Raf | Hedef | Kart girenleri gösterir |
 |---|---|---|---|---|---|---|---|
 | 1 | Muhtar Yusuf | Meydan çeşmesi | R_water | Exact | H₂, O₂ | 2 H₂O | Evet |
 | 2 | Fenerci Demir | Çarşı fenerleri | R_methane | Exact | CH₄, O₂ | 1 CO₂ + 2 H₂O | Evet |
@@ -58,7 +58,7 @@ Kimya şehri → Etkileşim ilçesi → iki oynanabilir mahalle. Bu dosyadaki he
 4. **Duvarcı Halil** — "Harç için sönmüş kireç lazım. Kireç taşı var ama. Ustan taştan kireç çıkarırdı, iki adımda. Acele etme." · Teslim: "Tam kıvamında. Çırağı ustasını aratmıyor." · İpucu: "Her denklem katsayı istemez. Saymadan kavanoz ekleme." · Gerçek hayatta: "Kireç söndürülürken çok ısı çıkar ve kireç cilde, göze zarar verir; ustalar eldiven ve gözlük takar."
 5. **Çiftçi Elif** — "Dört kavanoz gübre ruhu istiyorum, ne eksik ne fazla. Parasını peşin veriyorum. Artanın hesabı senin cebinden." · Teslim: "Dört kavanoz, tastamam. Hesabını bilen simyacı!" · İpucu: "Önce bir kavanozluk denklemi kur, sonra ikiye katla." · Gerçek hayatta: "Amonyak en çok üretilen gübre hammaddelerindendir; keskin kokulu, zararlı bir gazdır ve kapalı fabrikalarda üretilir."
 
-## 3. Mahalle: Tepkime Türleri (5 masa görevi)
+## 3. Köy: Tepkime Türleri (5 masa görevi)
 
 **Usta girişi:** "Her tepkimenin bir huyu var. Kimi birleştirir, kimi ayırır, kimi yakar. Kasaba sana mektup yazacak; cevapları masada vereceksin."
 
@@ -103,10 +103,10 @@ Havuz: Görev 1–4'teki bütün sorular + aşağıdakiler. Yanlış soru havuzd
 - BalanceEquation: R_water, R_methane, R_co (otomatik)
 - Classify (mini): 2CO + O₂ → 2CO₂ → Yanma; 2H₂O → 2H₂ + O₂ → Analiz
 
-Gerçek hayatta (mahalle sonu): "Sindirim, paslanma, ekmeğin kabarması... Çevrendeki birçok değişim bu tepkime türlerinden biridir."
+Gerçek hayatta (köy sonu): "Sindirim, paslanma, ekmeğin kabarması... Çevrendeki birçok değişim bu tepkime türlerinden biridir."
 
 ## 4. Kapanış
 
-- Usta mektubu: "Çırağım, iki mahalleyi ayağa kaldırdın. Tahtana baktım: hiçbir satırda bir atom eksik değil, bir atom fazla değil. Hesaplamalar Mahallesi seni bekliyor. Ama önce... uyanman gerek."
+- Usta mektubu: "Çırağım, iki köyü ayağa kaldırdın. Tahtana baktım: hiçbir satırda bir atom eksik değil, bir atom fazla değil. Hesaplamalar Köyü seni bekliyor. Ama önce... uyanman gerek."
 - Sınıf: Öğretmen tahtaya `CH₄ + _O₂ → CO₂ + _H₂O` yazar. "Bunu kim denkleştirir?" Oyuncu (opsiyonel mini etkileşim: katsayıları seçer) → öğretmen gülümser.
 - Son ekran: oyuncunun tahtası + görev başına hata sayısı (öğretmen/jüri için, puan değil) + "Devam edecek" + Emeği Geçenler.
