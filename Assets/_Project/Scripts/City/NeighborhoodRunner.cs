@@ -177,7 +177,14 @@ namespace BilgiAdasi.City
                 AddMasterLine(texts != null ? texts.NobodyAtDoor : null);
             }
 
-            dialogue.Play(lineBuffer, BeginPendingOrder, interactor);
+            dialogue.Play(lineBuffer, OnDoorDialogueFinished, interactor);
+        }
+
+        /// <summary>Kapı konuşması bitti: kanat kapanır, alınan sipariş (varsa) başlar.</summary>
+        private void OnDoorDialogueFinished()
+        {
+            if (door != null) door.CloseDoor();
+            BeginPendingOrder();
         }
 
         /// <summary>Teslim olur mu? Olmuyorsa sakinin repliği: elde yok / istemediği ürün / eksik.</summary>

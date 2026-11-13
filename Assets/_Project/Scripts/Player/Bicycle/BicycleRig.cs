@@ -25,6 +25,14 @@ namespace BilgiAdasi.Player
         [Tooltip("Virajda yatan kök. Pivotu yerde olmalı (genelde Visual).")]
         [SerializeField] private Transform leanRoot;
 
+        [Header("Model hiyerarşisi (çalışırken yeniden bağlanır; model prefab'ı bozulmaz)")]
+        [Tooltip("Gidonla birlikte dönmesi gereken ama modelde gidonun çocuğu olmayan parçalar (ör. ön teker).")]
+        [SerializeField] private Transform[] steeringParts;
+        [Tooltip("Aynakolla birlikte dönmesi gereken ama modelde onun çocuğu olmayan parçalar (ör. pedallar).")]
+        [SerializeField] private Transform[] crankParts;
+        [Tooltip("Pedal ön tekerde (velosiped, doğrudan çekiş): aynakol = ön teker, serbest dişli yok.")]
+        [SerializeField] private bool crankOnFrontWheel;
+
         [Header("Eksenler (parçanın yerel ekseni)")]
         [SerializeField] private Vector3 wheelAxis = Vector3.right;
         [SerializeField] private Vector3 steerAxis = Vector3.up;
@@ -37,6 +45,8 @@ namespace BilgiAdasi.Player
         [Header("Ölçüler")]
         [Tooltip("Teker yarıçapı (m). Dönüş hızı buradan: açısal hız = hız / yarıçap.")]
         [SerializeField] private float wheelRadius = 0.34f;
+        [Tooltip("Arka teker yarıçapı (m). 0 = ön tekerle aynı.")]
+        [SerializeField] private float rearWheelRadius;
         [Tooltip("Vites oranı: aynakolun bir turunda teker kaç tur döner.")]
         [SerializeField] private float gearRatio = 2.6f;
         [Tooltip("Pedal bırakılınca aynakolun durma hızı (°/sn²).")]
@@ -44,13 +54,28 @@ namespace BilgiAdasi.Player
 
         private Quaternion frontRest, rearRest, steerRest, crankRest, pedalLeftRest, pedalRightRest, leanRest;
         private Vector3 leanRestPosition;
-        private float wheelAngle;
+        private float frontAngle;
+        private float rearAngle;
         private float crankAngle;
         private float crankRate;
 
         public float WheelRadius => wheelRadius;
 
-        private void Awake() => CacheRestPose();
+        private void Awake()
+        {
+            // Aynakol sürücüsü: velosipedde ön teker. Pedallar önce ona, sonra (ön teker dahil) gidona bağlanır.
+            Transform crankDriver = crankOnFrontWheel ? frontWheel : crank;
+            Reparent(crankParts, crankDriver);
+            Reparent(steeringParts, steering);
+            CacheRestPose();
+        }
+
+        private static void Reparent(Transform[] parts, Transform parent)
+        {
+            if (parts == null || parent == null) return;
+            for (int i = 0; i < parts.Length; i++)
+                if (parts[i] != null && parts[i] != parent) parts[i].SetParent(parent, true);
+        }
 
         /// <summary>Parçaların başlangıç dönüşlerini saklar. Parça referansı çalışırken değişirse yeniden çağır.</summary>
         public void CacheRestPose()
@@ -83,16 +108,24 @@ namespace BilgiAdasi.Player
         /// <param name="heightOffset">Modelin yerden yüksekliği (m), eğimle birlikte.</param>
         public void UpdatePose(float speed, bool pedaling, float steerAngle, float leanAngle, float pitchAngle, float heightOffset, float dt)
         {
-            float radius = Mathf.Max(0.05f, wheelRadius);
-            float wheelRate = speed / radius * Mathf.Rad2Deg;
-            wheelAngle = Mathf.Repeat(wheelAngle + wheelRate * dt, 360f);
+            float frontRate = speed / Mathf.Max(0.05f, wheelRadius) * Mathf.Rad2Deg;
+            float rearRate = speed / Mathf.Max(0.05f, rearWheelRadius > 0f ? rearWheelRadius : wheelRadius) * Mathf.Rad2Deg;
+            frontAngle = Mathf.Repeat(frontAngle + frontRate * dt, 360f);
+            rearAngle = Mathf.Repeat(rearAngle + rearRate * dt, 360f);
 
-            float targetCrankRate = pedaling && speed > 0f ? wheelRate / Mathf.Max(0.1f, gearRatio) : 0f;
-            crankRate = pedaling ? targetCrankRate : Mathf.MoveTowards(crankRate, 0f, crankStopRate * dt);
-            crankAngle = Mathf.Repeat(crankAngle + crankRate * dt, 360f);
+            if (crankOnFrontWheel)
+            {
+                crankAngle = frontAngle; // doğrudan çekiş: pedal tekerle birlikte döner
+            }
+            else
+            {
+                float targetCrankRate = pedaling && speed > 0f ? rearRate / Mathf.Max(0.1f, gearRatio) : 0f;
+                crankRate = pedaling ? targetCrankRate : Mathf.MoveTowards(crankRate, 0f, crankStopRate * dt);
+                crankAngle = Mathf.Repeat(crankAngle + crankRate * dt, 360f);
+            }
 
-            if (frontWheel != null) frontWheel.localRotation = frontRest * Quaternion.AngleAxis(wheelAngle, wheelAxis);
-            if (rearWheel != null) rearWheel.localRotation = rearRest * Quaternion.AngleAxis(wheelAngle, wheelAxis);
+            if (frontWheel != null) frontWheel.localRotation = frontRest * Quaternion.AngleAxis(frontAngle, wheelAxis);
+            if (rearWheel != null) rearWheel.localRotation = rearRest * Quaternion.AngleAxis(rearAngle, wheelAxis);
             if (steering != null) steering.localRotation = steerRest * Quaternion.AngleAxis(steerAngle, steerAxis);
             if (crank != null) crank.localRotation = crankRest * Quaternion.AngleAxis(crankAngle, crankAxis);
             if (pedalLeft != null) pedalLeft.localRotation = pedalLeftRest * Quaternion.AngleAxis(-crankAngle, pedalAxis);
