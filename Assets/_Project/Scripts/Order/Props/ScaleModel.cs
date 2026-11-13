@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using BilgiAdasi.Chemistry;
 using BilgiAdasi.Core;
 using TMPro;
 using UnityEngine;
@@ -23,6 +25,18 @@ namespace BilgiAdasi.Order
         [Tooltip("Atom küresi (kökünde Renderer). Element rengiyle boyanır.")]
         [SerializeField] private Renderer atomPrefab;
         [SerializeField] private TMP_Text statusLabel;
+        [Tooltip("İsteğe bağlı: element başına atom şekli (H küre, O halka, C küp, N piramit, Ca altıgen — kavanoz mühürleriyle aynı). " +
+                 "Boşsa atomPrefab'ın kendi şekli kullanılır. Renk yine elementten gelir; şekil renk körlüğü için ikinci ipucudur.")]
+        [SerializeField] private List<ElementShape> elementShapes = new List<ElementShape>();
+
+        [Serializable]
+        private struct ElementShape
+        {
+            [SerializeField] private ElementData element;
+            [SerializeField] private Mesh mesh;
+            public ElementData Element => element;
+            public Mesh Mesh => mesh;
+        }
 
         [Header("Yerleşim")]
         [SerializeField] private float atomSize = 0.045f;
@@ -148,7 +162,8 @@ namespace BilgiAdasi.Order
                 for (int i = 0; i < drawn; i++)
                 {
                     var atom = GetAtom(pan, atomIndex++);
-                    atom.transform.localPosition = new Vector3(startX + i * spacing, y, 0f);
+                    var basePos = new Vector3(startX + i * spacing, y, 0f);
+                    ApplyShape(atom, row.Element, basePos);
                     Tint(atom, c);
                 }
 
@@ -167,12 +182,45 @@ namespace BilgiAdasi.Order
             for (int i = rows.Count; i < pan.Labels.Count; i++) pan.Labels[i].gameObject.SetActive(false);
         }
 
+        /// <summary>
+        /// Elementin şekli varsa atomun mesh'ini değiştirir ve atomSize kutusuna sığdırır (mesh pivotu ne olursa olsun
+        /// merkezi basePos'a gelir). Yoksa atomPrefab'ın mesh'i, atomSize ölçeği.
+        /// </summary>
+        private void ApplyShape(Renderer atom, ElementData element, Vector3 basePos)
+        {
+            var filter = atom.GetComponent<MeshFilter>();
+            Mesh mesh = null;
+            for (int i = 0; i < elementShapes.Count; i++)
+                if (elementShapes[i].Element == element) mesh = elementShapes[i].Mesh;
+
+            if (filter == null || mesh == null)
+            {
+                if (filter != null && defaultMesh != null) filter.sharedMesh = defaultMesh;
+                atom.transform.localScale = Vector3.one * atomSize;
+                atom.transform.localPosition = basePos;
+                return;
+            }
+            filter.sharedMesh = mesh;
+            var b = mesh.bounds;
+            float size = Mathf.Max(b.size.x, Mathf.Max(b.size.y, b.size.z));
+            float k = size > 0f ? atomSize / size : 1f;
+            atom.transform.localScale = Vector3.one * k;
+            atom.transform.localPosition = basePos - atom.transform.localRotation * (b.center * k);
+        }
+
+        private Mesh defaultMesh;
+
         private Renderer GetAtom(Pan pan, int index)
         {
             while (pan.Atoms.Count <= index)
             {
                 var atom = Instantiate(atomPrefab, pan.Root);
                 atom.transform.localScale = Vector3.one * atomSize;
+                if (defaultMesh == null)
+                {
+                    var f = atom.GetComponent<MeshFilter>();
+                    if (f != null) defaultMesh = f.sharedMesh;
+                }
                 pan.Atoms.Add(atom);
             }
             var a = pan.Atoms[index];
