@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: KoyluErkek
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.NpcProfile
   displayName: "Bostanc\u0131 R\u0131za"
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 02a92025a19d72b46a1c23446050f9bb, type: 3}
   promptFormat: "{0} ile konu\u015F"
   conversations:
   - lines:

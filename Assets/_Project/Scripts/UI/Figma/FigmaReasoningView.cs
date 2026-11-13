@@ -11,14 +11,15 @@ namespace BilgiAdasi.UI
 {
     /// <summary>
     /// Ustanın Sorgusu (IReasoningView) — konuşma balonuyla aynı dil: alttan karartma, altın konuşmacı adı, kâğıt
-    /// rengi soru; altında üç seçenek kâğıt şeridi (A/B/C mum mührü), seçili olanın altın çerçevesi. Seçimden sonra
+    /// rengi soru; altında üç seçenek kâğıt şeridi (1/2/3 mum mührü), seçili olanın altın çerçevesi. Seçimden sonra
     /// ustanın cevabı ve defter notu aynı yerde, sağ altta "[E] Devam".
-    /// Fare: tıkla. Klavye/gamepad: Move ↑↓ (W/S, sol çubuk) seç, Interact/Jump (E, Space / X, A) onayla.
+    /// Fare: tıkla. Klavye/gamepad: Move ↑↓ (W/S, sol çubuk) seç, Interact/Jump (E, Space / X, A) onayla;
+    /// klavyede 1/2/3 doğrudan seçer. Açıkken envanter gezinmesi kilitli (GameInput.LockInventory).
     /// </summary>
     public sealed class FigmaReasoningView : FigmaView<IReasoningView>, IReasoningView
     {
         private const int MaxOptions = 3;
-        private static readonly string[] Letters = { "A", "B", "C" };
+        private static readonly string[] Letters = { "1", "2", "3" };
 
         [SerializeField] private float left = 160f;
         [SerializeField] private float textWidth = 1300f;
@@ -35,7 +36,7 @@ namespace BilgiAdasi.UI
         private Action onContinue;
         private int visible, selected;
         private float shownAt, nextMoveAt;
-        private InputAction move, interact, jump;
+        private InputAction move, interact, jump, slotKey;
 
         private void Awake() => Build();
 
@@ -112,8 +113,11 @@ namespace BilgiAdasi.UI
                 move = GameInput.FindAction("Player/Move");
                 interact = GameInput.FindAction("Player/Interact");
                 jump = GameInput.FindAction("Player/Jump");
+                slotKey = GameInput.FindAction("Player/SelectSlot");
                 interact.performed += OnSubmit;
                 jump.performed += OnSubmit;
+                slotKey.performed += OnNumberKey;
+                GameInput.LockInventory(true); // soru açıkken envanterde gezinilmez
             }
             else if (!on && move != null)
             {
@@ -121,9 +125,22 @@ namespace BilgiAdasi.UI
                 {
                     interact.performed -= OnSubmit;
                     jump.performed -= OnSubmit;
+                    slotKey.performed -= OnNumberKey;
                 }
-                move = interact = jump = null;
+                GameInput.LockInventory(false);
+                move = interact = jump = slotKey = null;
             }
+        }
+
+        /// <summary>Klavyede 1/2/3 doğrudan o şıkkı seçer (envanter kilitliyken aynı tuşlar).</summary>
+        private void OnNumberKey(InputAction.CallbackContext ctx)
+        {
+            if (onChosen == null || visible == 0 || Time.unscaledTime - shownAt < inputGrace) return;
+            if (!(ctx.control is UnityEngine.InputSystem.Controls.KeyControl key)) return;
+            int index = key.keyCode - Key.Digit1;
+            if (index < 0 || index >= visible) return;
+            Select(index);
+            Choose(index);
         }
 
         private void Update()

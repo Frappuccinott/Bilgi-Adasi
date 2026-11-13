@@ -40,6 +40,36 @@ namespace BilgiAdasi.Order
             }
         }
 
+        /// <summary>
+        /// JarProp'u olmayan bir modeli (Art/Prefablar'daki Malzeme_*/Alet_* gibi) bu kavanozun yerine koyar:
+        /// yer tutucu gövde gizlenir, model kökün altına (pivot tabanda) yerleşir, etiket modelin üstüne çıkar.
+        /// Model kendi rengini taşır; tintRenderers boyaması yalnızca yer tutucuya uygulanır.
+        /// </summary>
+        public void AttachModel(GameObject modelPrefab)
+        {
+            if (modelPrefab == null) return;
+
+            var labelRenderer = label != null ? label.GetComponent<Renderer>() : null;
+            foreach (var r in GetComponentsInChildren<Renderer>(true))
+                if (r != labelRenderer) r.enabled = false;
+            tintRenderers = new Renderer[0];
+
+            var model = Instantiate(modelPrefab, transform);
+            model.transform.localPosition = Vector3.zero;
+            model.transform.localRotation = Quaternion.identity;
+            // Etkileşim raf yerinde (ShelfSlot): modelin collider'ları ışını kesmesin.
+            foreach (var c in model.GetComponentsInChildren<Collider>(true)) c.isTrigger = true;
+
+            if (label == null) return;
+            var renderers = model.GetComponentsInChildren<Renderer>();
+            if (renderers.Length == 0) return;
+            var bounds = renderers[0].bounds;
+            for (int i = 1; i < renderers.Length; i++) bounds.Encapsulate(renderers[i].bounds);
+            float top = transform.InverseTransformPoint(bounds.max).y + 0.06f;
+            var lp = label.transform.localPosition;
+            if (top > lp.y) label.transform.localPosition = new Vector3(lp.x, top, lp.z);
+        }
+
         public void SetLabel(string richText)
         {
             if (label != null) label.text = richText;

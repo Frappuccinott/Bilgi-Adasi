@@ -47,7 +47,6 @@ namespace BilgiAdasi.Order
         private readonly List<SpeciesAmount> pending = new List<SpeciesAmount>();
         private readonly List<SpeciesData> reactantBuffer = new List<SpeciesData>();
         private readonly List<string> localBoard = new List<string>();
-        private readonly List<string> boardLines = new List<string>(4);
 
         private IOrderCardView cardView;
         private ICauldronView cauldronView;
@@ -56,6 +55,7 @@ namespace BilgiAdasi.Order
         private IHintBookView hintView;
         private IRealLifeCardView realLifeView;
         private INoticeView noticeView;
+        private IAtomVisionView atomView;
 
         public State Current { get; private set; } = State.Idle;
         public OrderSession Session => session;
@@ -73,6 +73,8 @@ namespace BilgiAdasi.Order
         public event Action<OrderTask> TaskFinished;
         /// <summary>Kazan içeriği ya da durum değişti (etkileşim ipuçları tazelenir).</summary>
         public event Action StateChanged;
+        /// <summary>Zincir görevde sonraki adım başladı (adım indeksi). Ara ürün sorusu dinler.</summary>
+        public event Action<OrderTask, int> StepStarted;
 
         private static SaveData Data => SaveSystem.Instance != null ? SaveSystem.Instance.Data : null;
 
@@ -277,6 +279,8 @@ namespace BilgiAdasi.Order
             StateChanged?.Invoke();
             cauldronView?.SetStoveLit(true);
             cauldronView?.PlayReaction(reactionDuration);
+            // Atom Görüşü: kazan boşalmadan önce girenler, artanlar ve ürünler (view kopyalar).
+            atomView?.Play(session.Used, session.Extra, session.Step.TargetProducts);
             yield return new WaitForSeconds(reactionDuration);
 
             var step = session.Step;
@@ -298,6 +302,7 @@ namespace BilgiAdasi.Order
                 Current = State.Preparing;
                 if (pending.Count == 0) Notice(texts != null ? texts.NextStep : null);
                 RefreshAll();
+                StepStarted?.Invoke(session.Task, session.StepIndex);
                 yield break;
             }
 
@@ -360,6 +365,7 @@ namespace BilgiAdasi.Order
             hintView = ViewLocator.Get<IHintBookView>();
             realLifeView = ViewLocator.Get<IRealLifeCardView>();
             noticeView = ViewLocator.Get<INoticeView>();
+            atomView = ViewLocator.Get<IAtomVisionView>();
         }
 
         private void RefreshAll()
@@ -468,29 +474,9 @@ namespace BilgiAdasi.Order
             StateChanged?.Invoke();
         }
 
-        /// <summary>
-        /// Karatahta aktif siparişin denklemini gösterir: biten adımlar denkleştirilmiş, üzerinde çalışılan adım
-        /// katsayısız iskelet (cevabı vermez). Sipariş yokken çözülen denklemler listesi kalır.
-        /// </summary>
         private void RefreshBoard()
         {
             if (boardView == null) return;
-            if (session != null && Current != State.Done)
-            {
-                boardLines.Clear();
-                var steps = session.Task.Steps;
-                string unknown = texts != null ? texts.BoardUnknownSide : "?";
-                for (int i = 0; i <= session.StepIndex && i < steps.Count; i++)
-                {
-                    var step = steps[i];
-                    bool solved = i < session.StepIndex || Current == State.ReadyToDeliver;
-                    boardLines.Add(solved
-                        ? FormulaFormatter.Equation(step.Reaction)
-                        : FormulaFormatter.Skeleton(step.Reaction, step.CardShowsReactants, unknown));
-                }
-                boardView.ShowEquations(boardLines);
-                return;
-            }
             var data = Data;
             boardView.ShowEquations(data != null ? data.BoardEquations : localBoard);
         }

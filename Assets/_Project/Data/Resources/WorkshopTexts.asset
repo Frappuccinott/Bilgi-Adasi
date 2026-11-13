@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2df8d8322b940f64ab1180f95f2c49d0, type: 3}
+  m_Name: WorkshopTexts
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.WorkshopTexts
+  dropPrompt: "B\u0131rak: {0} \xD7{1}"
+  pickPrompt: "Al: {0} \xD7{1}"
+  inventoryFull: "Elin dolu. \xD6nce bir yere b\u0131rak."
+  cabinetPrompt: Kilitli dolap
+  cabinetNotice: "Dolap kilitli. \u0130\xE7inde c\u0131va, kezzap ve z\u0131rn\u0131k
+    var: Usta izni olmadan dokunulmaz.\nGer\xE7ek hayatta tehlikeli maddeler yaln\u0131zca
+    \xF6\u011Fretmen g\xF6zetiminde, laboratuvarda kullan\u0131l\u0131r."
+  atomTitle: "Atom G\xF6r\xFC\u015F\xFC"
+  leftoverLabel: artan
+  atomFooter: "Atomlar kaybolmad\u0131, yaln\u0131zca yeniden dizildi."
+  huntPrompt: Tahtaya bak
+  huntNotice: "Usta tahtaya hatal\u0131 bir denklem b\u0131rakm\u0131\u015F. Tahtaya
+    bak\u0131p hatay\u0131 bul."
+  huntTitle: Hata Dedektifi
+  huntQuestion: "Hangi elementler dengesiz? \u0130\u015Faretle, sonra kontrol et."
+  huntCheck: Kontrol et
+  huntCorrect: "Do\u011Fru buldun."
+  huntWrong: "Tam de\u011Fil. Tebe\u015Firle her elementin iki taraftaki say\u0131s\u0131n\u0131
+    yazd\u0131m; yeniden bak."
+  huntContinue: Devam
+  huntDone: "Hata Dedektifi tamam. \u015Eimdi sipari\u015Fe d\xF6n."
+  huntControls: "{0} se\xE7   {1} i\u015Faretle   {2} \xE7\u0131k"
+  huntCount: '{1} / {2}'
+  roundFormat: Tur {0} / {1}

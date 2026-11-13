@@ -139,6 +139,11 @@ namespace BilgiAdasi.EditorTools
             Ensure<FigmaPauseMenu>(hud.transform, "PauseMenu", theme).transform.SetAsLastSibling();
             // Esc menüsünün üstünde açılanlar ve kararma en sonda.
             Ensure<FigmaDiscoveryBook>(hud.transform, "DiscoveryBook", theme).transform.SetAsLastSibling();
+            // Eski tek sayfalık Ders Notu (FigmaLessonNote) defterin içine taşındı: kalan objesi silinir.
+            var oldLesson = hud.transform.Find("LessonNote");
+            if (oldLesson != null) Object.DestroyImmediate(oldLesson.gameObject);
+            Ensure<FigmaNotebookSpine>(hud.transform, "NotebookSpine", theme);
+            Ensure<FigmaNotebook>(hud.transform, "Notebook", theme).transform.SetAsLastSibling();
             Ensure<FigmaScreenFader>(hud.transform, "ScreenFader", theme).transform.SetAsLastSibling();
 
             DisablePlaceholders();

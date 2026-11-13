@@ -37,7 +37,6 @@ namespace BilgiAdasi.Player
         public string GetPrompt(PlayerInteractor interactor) => promptText;
         public bool IsActive => Active == this;
         protected PlayerInteractor User => user;
-        protected CinemachineCamera StationCamera => stationCamera;
 
         protected virtual void Awake()
         {

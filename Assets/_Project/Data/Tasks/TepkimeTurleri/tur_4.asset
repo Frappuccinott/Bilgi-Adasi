@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Desk.DeskTask
   id: tur_4
   giverName: Muhtar Yusuf
-  giverPortrait: {fileID: 0}
+  giverPortrait: {fileID: 21300000, guid: 02a92025a19d72b46a1c23446050f9bb, type: 3}
   giverLines:
   - "Kasabada dedikodu \xE7ok. Hangisi do\u011Fru, hangisi yanl\u0131\u015F, i\u015Faretleyip
     g\xF6nder."

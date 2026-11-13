@@ -25,6 +25,8 @@ namespace BilgiAdasi.UI
         [SerializeField] private string resumeWord = "Devam Et";
         [SerializeField] private string achievementsWord = "Başarılar";
         [SerializeField] private string discoveryWord = "Keşif Defteri";
+        [Tooltip("Alınmış görevin ders notu (yalnızca notu olan bir sipariş alınmışken görünür).")]
+        [SerializeField] private string lessonWord = "Ders Notu";
         [SerializeField] private string quitWord = "Oyundan Çık";
         [SerializeField] private string selectWord = "Seç";
         [SerializeField] private string browseWord = "Gez";
@@ -57,7 +59,7 @@ namespace BilgiAdasi.UI
 
         private GameObject overlay, mainPage, treePage, settingsPage;
         private FigmaSettingsPanel settingsPanel;
-        private Button resumeButton, achievementsButton, settingsButton, discoveryButton;
+        private Button resumeButton, achievementsButton, settingsButton, discoveryButton, lessonButton;
         private TextMeshProUGUI achievementsCount;
         private RectTransform tabBar, viewport, content;
         private TextMeshProUGUI detailCode, detailTitle, detailHeader, detailBody;
@@ -96,6 +98,8 @@ namespace BilgiAdasi.UI
             current = achievements;
             achievementsCount.text = achievements != null ? $"{achievements.UnlockedCount}/{achievements.TotalCount}" : string.Empty;
             overlay.SetActive(true);
+            var lessons = ViewLocator.Get<ILessonCommands>();
+            lessonButton.gameObject.SetActive(lessons != null && lessons.HasCurrentLesson);
             OnScheme(GameInput.LastScheme);
             ShowMain(resumeButton);
         }
@@ -112,6 +116,12 @@ namespace BilgiAdasi.UI
             if (book != null && book.IsOpen)
             {
                 book.Close();
+                return true;
+            }
+            var lesson = ViewLocator.Get<ILessonView>();
+            if (lesson != null && lesson.IsOpen)
+            {
+                lesson.Close();
                 return true;
             }
             if (treePage.activeSelf)
@@ -136,6 +146,15 @@ namespace BilgiAdasi.UI
             if (commands == null) return;
             mainPage.SetActive(false);
             commands.OpenBook(() => ShowMain(discoveryButton));
+        }
+
+        /// <summary>Ders Notu (LearningDirector) menünün üstünde açılır; kapanınca menüye dönülür.</summary>
+        private void OpenLesson()
+        {
+            var commands = ViewLocator.Get<ILessonCommands>();
+            if (commands == null || !commands.HasCurrentLesson) return;
+            mainPage.SetActive(false);
+            commands.OpenCurrentLesson(() => ShowMain(lessonButton));
         }
 
         private void ShowSettingsPage()
@@ -502,13 +521,14 @@ namespace BilgiAdasi.UI
             UiKit.Text(head, "Where", th.BodyFont, 28f, UiKit.WithAlpha(th.Paper, 0.8f)).text = placeSubtitle;
 
             var menu = UiKit.Rect(page, "Menu");
-            UiKit.Place(menu, new Vector2(0f, 1f), new Vector2(120f, -400f), new Vector2(600f, 400f));
+            UiKit.Place(menu, new Vector2(0f, 1f), new Vector2(120f, -400f), new Vector2(600f, 480f));
             var mv = menu.gameObject.AddComponent<VerticalLayoutGroup>();
             mv.childControlWidth = mv.childControlHeight = true;
             mv.childForceExpandHeight = false;
             mv.spacing = 6f;
             resumeButton = MenuItem(menu, resumeWord, th, () => ViewLocator.Get<IPauseMenuCommands>()?.Resume(), out _);
             achievementsButton = MenuItem(menu, achievementsWord, th, ShowTreePage, out achievementsCount);
+            lessonButton = MenuItem(menu, lessonWord, th, OpenLesson, out _);
             discoveryButton = MenuItem(menu, discoveryWord, th, OpenDiscoveryBook, out _);
             settingsButton = MenuItem(menu, settingsWord, th, ShowSettingsPage, out _);
             MenuItem(menu, quitWord, th, () => ViewLocator.Get<IPauseMenuCommands>()?.QuitGame(), out _);

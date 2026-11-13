@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Desk.DeskTask
   id: tur_5
   giverName: "K\xE2tip Nevin"
-  giverPortrait: {fileID: 0}
+  giverPortrait: {fileID: 21300000, guid: 0366aa63b404f6742aec29adebb7f8d1, type: 3}
   giverLines:
   - "Simyac\u0131lar Loncas\u0131 seni Tepkime T\xFCrleri s\u0131nav\u0131na \xE7a\u011F\u0131r\u0131r."
   - "D\xF6rt soru. Yanl\u0131\u015F yaz\u0131lan soru \xE7ekilir, yerine ba\u015Fkas\u0131

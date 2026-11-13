@@ -71,6 +71,16 @@ namespace BilgiAdasi.Order
         void ClearFoamDifference();
     }
 
+    /// <summary>
+    /// Atom Görüşü (04-gorev-plani §2.4): tepkime anında kazanın üstünde girenlerin atomları ayrılır ve ürünler olarak
+    /// yeniden dizilir; altta element sayacı. Purchase'ta eşsiz kalan moleküller "artan" olarak yerinde kalır.
+    /// Listeler çağrıdan sonra değişir: view kopyalar.
+    /// </summary>
+    public interface IAtomVisionView
+    {
+        void Play(IReadOnlyList<SpeciesAmount> reactants, IReadOnlyList<SpeciesAmount> leftovers, IReadOnlyList<SpeciesAmount> products);
+    }
+
     /// <summary>Pazarda satılan bir kalem.</summary>
     public readonly struct MarketItem
     {

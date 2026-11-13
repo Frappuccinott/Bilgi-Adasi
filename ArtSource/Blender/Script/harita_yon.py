@@ -107,20 +107,19 @@ def simge_bm(kind, size=0.5, th=0.1, color=None):
 
 # ------------------------------------------------------------------ yön tabelası (fingerpost)
 def kol_bm(kim, L=1.5, h=0.36, th=0.07):
-    """Ok biçimli tabela kolu, yerel +X'e bakar (x=0 direkte). Uç bölümü hedefin renginde, ortada simge."""
+    """Ok biçimli tabela kolu, yerel +X'e bakar (x=0 direkte). Ok ucu hedefin renginde; ortası düz ahşap:
+    hedefin adı Unity'de TMP ile yazılır (Tabela_Yazi_* çapası; simge yerine isim, karar 14.11)."""
     poly = [(0.0, -h / 2), (L - 0.2, -h / 2), (L, 0.0), (L - 0.2, h / 2), (0.0, h / 2)]
     b = _plate(poly, th)
     rc = KIMLIK[kim]["renk"]
     def fn(f, l):
         u = l.vert.co.x
-        if u > L * 0.62:
+        if u > L - 0.24:
             return rc(0.45)
-        return mix(pal("ahsap", 1), pal("ahsap", 0), 0.55)
+        return mix(pal("ahsap", 1), pal("ahsap", 2), 0.35)
     b.faces.index_update()
     paint_by(b, fn)
-    em = simge_bm(KIMLIK[kim]["simge"], size=0.32, th=th + 0.025)
-    transform_bm(em, Matrix.Translation((L * 0.36, 0, 0)))
-    parts = [b, em]
+    parts = [b]
     for sx in (L * 0.08,):
         bolt = box(0.04, th + 0.03, 0.04, x=sx, z=-0.02, origin="center")
         flat(bolt, demir(0.85))

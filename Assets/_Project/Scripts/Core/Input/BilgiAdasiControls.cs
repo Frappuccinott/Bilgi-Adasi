@@ -219,6 +219,24 @@ namespace BilgiAdasi.Core
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Drop"",
+                    ""type"": ""Button"",
+                    ""id"": ""9a9dad35-53fd-496c-a0c5-b423c02b32dd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenBook"",
+                    ""type"": ""Button"",
+                    ""id"": ""7f27c6d6-c7c8-456d-a158-ebe7693f0ee3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -373,6 +391,50 @@ namespace BilgiAdasi.Core
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Use"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6a117bee-5a8e-4327-b231-e7e5263573a9"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Drop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""04d3f2ce-c999-4d7a-9edf-9af0a1d25b77"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Drop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d58be71c-38ac-430a-9c5b-8b0bfe4040cf"",
+                    ""path"": ""<Keyboard>/n"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""OpenBook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b8b8da1e-a0b7-4f0c-b3b4-43860a2e8f05"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""OpenBook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1087,6 +1149,24 @@ namespace BilgiAdasi.Core
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PrevTab"",
+                    ""type"": ""Button"",
+                    ""id"": ""37224f88-ca01-4251-ad98-a259b347b4a5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextTab"",
+                    ""type"": ""Button"",
+                    ""id"": ""1b6dccb7-2804-4a9b-93ae-39aff67bba5b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1208,6 +1288,50 @@ namespace BilgiAdasi.Core
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""29f2a716-c332-44f1-bd21-49c8e8b137c5"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""PrevTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b391f44e-fe9a-40ac-bd0b-d0cc1d7b0b93"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""PrevTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""587995e1-7370-4346-9420-59f030aadec0"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""NextTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9fda7072-950a-4f91-8376-1e9a9a4b0b04"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""NextTab"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1462,6 +1586,8 @@ namespace BilgiAdasi.Core
             m_Player_NextSlot = m_Player.FindAction("NextSlot", throwIfNotFound: true);
             m_Player_PrevSlot = m_Player.FindAction("PrevSlot", throwIfNotFound: true);
             m_Player_SelectSlot = m_Player.FindAction("SelectSlot", throwIfNotFound: true);
+            m_Player_Drop = m_Player.FindAction("Drop", throwIfNotFound: true);
+            m_Player_OpenBook = m_Player.FindAction("OpenBook", throwIfNotFound: true);
             // Station
             m_Station = asset.FindActionMap("Station", throwIfNotFound: true);
             m_Station_Point = m_Station.FindAction("Point", throwIfNotFound: true);
@@ -1480,6 +1606,8 @@ namespace BilgiAdasi.Core
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
             m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
             m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
+            m_UI_PrevTab = m_UI.FindAction("PrevTab", throwIfNotFound: true);
+            m_UI_NextTab = m_UI.FindAction("NextTab", throwIfNotFound: true);
             // Dev
             m_Dev = asset.FindActionMap("Dev", throwIfNotFound: true);
             m_Dev_DevJumpTask = m_Dev.FindAction("DevJumpTask", throwIfNotFound: true);
@@ -1581,6 +1709,8 @@ namespace BilgiAdasi.Core
         private readonly InputAction m_Player_NextSlot;
         private readonly InputAction m_Player_PrevSlot;
         private readonly InputAction m_Player_SelectSlot;
+        private readonly InputAction m_Player_Drop;
+        private readonly InputAction m_Player_OpenBook;
         /// <summary>
         /// Provides access to input actions defined in input action map "Player".
         /// </summary>
@@ -1649,6 +1779,14 @@ namespace BilgiAdasi.Core
             /// </summary>
             public InputAction @SelectSlot => m_Wrapper.m_Player_SelectSlot;
             /// <summary>
+            /// Provides access to the underlying input action "Player/Drop".
+            /// </summary>
+            public InputAction @Drop => m_Wrapper.m_Player_Drop;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/OpenBook".
+            /// </summary>
+            public InputAction @OpenBook => m_Wrapper.m_Player_OpenBook;
+            /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
             public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -1716,6 +1854,12 @@ namespace BilgiAdasi.Core
                 @SelectSlot.started += instance.OnSelectSlot;
                 @SelectSlot.performed += instance.OnSelectSlot;
                 @SelectSlot.canceled += instance.OnSelectSlot;
+                @Drop.started += instance.OnDrop;
+                @Drop.performed += instance.OnDrop;
+                @Drop.canceled += instance.OnDrop;
+                @OpenBook.started += instance.OnOpenBook;
+                @OpenBook.performed += instance.OnOpenBook;
+                @OpenBook.canceled += instance.OnOpenBook;
             }
 
             /// <summary>
@@ -1769,6 +1913,12 @@ namespace BilgiAdasi.Core
                 @SelectSlot.started -= instance.OnSelectSlot;
                 @SelectSlot.performed -= instance.OnSelectSlot;
                 @SelectSlot.canceled -= instance.OnSelectSlot;
+                @Drop.started -= instance.OnDrop;
+                @Drop.performed -= instance.OnDrop;
+                @Drop.canceled -= instance.OnDrop;
+                @OpenBook.started -= instance.OnOpenBook;
+                @OpenBook.performed -= instance.OnOpenBook;
+                @OpenBook.canceled -= instance.OnOpenBook;
             }
 
             /// <summary>
@@ -2015,6 +2165,8 @@ namespace BilgiAdasi.Core
         private readonly InputAction m_UI_Navigate;
         private readonly InputAction m_UI_Submit;
         private readonly InputAction m_UI_Cancel;
+        private readonly InputAction m_UI_PrevTab;
+        private readonly InputAction m_UI_NextTab;
         /// <summary>
         /// Provides access to input actions defined in input action map "UI".
         /// </summary>
@@ -2038,6 +2190,14 @@ namespace BilgiAdasi.Core
             /// Provides access to the underlying input action "UI/Cancel".
             /// </summary>
             public InputAction @Cancel => m_Wrapper.m_UI_Cancel;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/PrevTab".
+            /// </summary>
+            public InputAction @PrevTab => m_Wrapper.m_UI_PrevTab;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/NextTab".
+            /// </summary>
+            public InputAction @NextTab => m_Wrapper.m_UI_NextTab;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -2073,6 +2233,12 @@ namespace BilgiAdasi.Core
                 @Cancel.started += instance.OnCancel;
                 @Cancel.performed += instance.OnCancel;
                 @Cancel.canceled += instance.OnCancel;
+                @PrevTab.started += instance.OnPrevTab;
+                @PrevTab.performed += instance.OnPrevTab;
+                @PrevTab.canceled += instance.OnPrevTab;
+                @NextTab.started += instance.OnNextTab;
+                @NextTab.performed += instance.OnNextTab;
+                @NextTab.canceled += instance.OnNextTab;
             }
 
             /// <summary>
@@ -2093,6 +2259,12 @@ namespace BilgiAdasi.Core
                 @Cancel.started -= instance.OnCancel;
                 @Cancel.performed -= instance.OnCancel;
                 @Cancel.canceled -= instance.OnCancel;
+                @PrevTab.started -= instance.OnPrevTab;
+                @PrevTab.performed -= instance.OnPrevTab;
+                @PrevTab.canceled -= instance.OnPrevTab;
+                @NextTab.started -= instance.OnNextTab;
+                @NextTab.performed -= instance.OnNextTab;
+                @NextTab.canceled -= instance.OnNextTab;
             }
 
             /// <summary>
@@ -2364,6 +2536,20 @@ namespace BilgiAdasi.Core
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnSelectSlot(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Drop" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnDrop(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "OpenBook" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnOpenBook(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Station" which allows adding and removing callbacks.
@@ -2478,6 +2664,20 @@ namespace BilgiAdasi.Core
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnCancel(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "PrevTab" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnPrevTab(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "NextTab" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnNextTab(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Dev" which allows adding and removing callbacks.

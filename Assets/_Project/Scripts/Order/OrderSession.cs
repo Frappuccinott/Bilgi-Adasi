@@ -61,6 +61,10 @@ namespace BilgiAdasi.Order
         /// <summary>Kazandaki türler, eklenme sırasıyla.</summary>
         public IReadOnlyList<SpeciesAmount> Contents => contents;
         public IReadOnlyList<AtomRow> Rows => rows;
+        /// <summary>Tepkimeye girecek kısım (Exact: kazanın tamamı; Purchase: gereken kadarı).</summary>
+        public IReadOnlyList<SpeciesAmount> Used => IsPurchase ? used : contents;
+        /// <summary>Purchase: tepkimeden artan maddeler (Atom Görüşü'nde "artan").</summary>
+        public IReadOnlyList<SpeciesAmount> Extra => extra;
         public bool IsEmpty => contents.Count == 0;
         /// <summary>Kazanda bu adımın tepkimesine girmeyen bir madde var.</summary>
         public bool HasForeign { get; private set; }

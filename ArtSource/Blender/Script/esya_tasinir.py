@@ -33,6 +33,7 @@ SPECIES = {   # formül → bileşim (05 §1)
     "H2": {"H": 2}, "O2": {"O": 2}, "H2O": {"H": 2, "O": 1}, "CH4": {"C": 1, "H": 4}, "CO2": {"C": 1, "O": 2},
     "C3H8": {"C": 3, "H": 8}, "CaCO3": {"Ca": 1, "C": 1, "O": 3}, "CaO": {"Ca": 1, "O": 1},
     "CaOH2": {"Ca": 1, "O": 2, "H": 2}, "N2": {"N": 2}, "NH3": {"N": 1, "H": 3}, "CO": {"C": 1, "O": 1},
+    "C": {"C": 1}, "C6H12O6": {"C": 6, "H": 12, "O": 6},
 }
 
 def atom_glyph(e, r):
@@ -416,6 +417,117 @@ def tas_kesesi(comp, seed):
     parts.append((label_plate(0.07, 0.035, 0.084), Matrix.Translation((0, 0, 0.055))))
     return bm_merge(*parts), dict(grip=0.07, label_z=0.055, label_r=0.084, mouth=0.19)
 
+def komur_canagi(comp, seed):
+    """C (karbon): sırsız kil çanak, ağız kenarı başparmakla bastırılmış; içi tepeleme odun kömürü.
+    Kömür parçaları kırık çubuk gibi köşeli (odunun lif çatlakları), açık ağız → tek siluet, diğer kaplardan ayrışır."""
+    r = random.Random(seed)
+    h, rad = 0.095, 0.085
+    prof = [(0, 0.004), (rad * 0.62, 0.0), (rad * 0.7, 0.01), (rad * 0.94, h * 0.45), (rad, h * 0.82), (rad * 1.06, h * 0.94),
+            (rad * 1.04, h), (rad * 0.96, h * 0.99), (rad * 0.9, h * 0.85), (0, h * 0.7)]
+    bm = bm_lathe(chaikin(prof[:-1], 1) + [prof[-1]], sides=16)
+    for v in bm.verts:                       # ağız kenarında parmak izi dalgası
+        if v.co.z > h * 0.9:
+            a = math.atan2(v.co.y, v.co.x)
+            k = 1 + 0.03 * math.sin(a * 9)
+            v.co.x *= k
+            v.co.y *= k
+    jitter(bm, 0.0025, seed=seed)
+    def fn(f, l):
+        z = l.vert.co.z / h
+        c = mix(pal("kil", 2), pal("kil", 0), min(1.0, z * 1.1))
+        if z > 0.86 and f.normal.z > 0.2:
+            c = mix(c, demir(0.7), 0.35)     # kömür tozuyla kararmış ağız
+        return c
+    paint_by(bm, fn)
+    parts = [(bm, None)]
+    coal = ELEM["C"]()
+    coal_hi = mix(coal, pal("dag", 1), 0.3)   # kırık yüzeyin mavimsi parıltısı (gölge siyaha değil maviye)
+    # iç dolgu: kilin dibi görünmesin, kömür yığını bunun üstüne kubbelenir
+    fill = bm_lathe([(0, h * 0.97), (rad * 0.93, h * 0.9), (rad * 0.92, h * 0.86), (0, h * 0.86)], sides=14)
+    jitter(fill, 0.003, seed=seed + 5)
+    paint_flat(fill, mix(coal, demir(0.7), 0.3))
+    parts.append((fill, None))
+    # tepeleme kömür: ortası yüksek kubbe, dışa doğru alçalan halkalar
+    pieces = [(0.0, 0.0, 0.03), (0.012, -0.01, 0.045)] + \
+             [(math.cos(2 * math.pi * k / 5 + 0.4) * 0.032, math.sin(2 * math.pi * k / 5 + 0.4) * 0.032, 0.022) for k in range(5)] + \
+             [(math.cos(2 * math.pi * k / 9) * 0.062, math.sin(2 * math.pi * k / 9) * 0.062, 0.006) for k in range(9)]
+    for i, (px, py, pz) in enumerate(pieces):
+        w = r.uniform(0.024, 0.036)
+        d = r.uniform(0.016, 0.024)
+        hh = r.uniform(0.014, 0.022)
+        pc = bm_box(w, d, hh, bevel=0.002)
+        jitter(pc, 0.0025, seed=seed + 10 + i)
+        for v in pc.verts:                   # lif çatlağı: bir yüzde ince oluk
+            if abs(v.co.x) < w * 0.12 and v.co.z > hh * 0.8:
+                v.co.z -= 0.003
+        paint_by(pc, lambda f, l: coal_hi if f.normal.z > 0.7 else coal)
+        m = (Matrix.Translation((px, py, h * 0.93 + pz))
+             @ Matrix.Rotation(r.uniform(0, math.pi), 4, "Z")
+             @ Matrix.Rotation(r.uniform(-0.45, 0.45), 4, "X")
+             @ Matrix.Rotation(r.uniform(-0.35, 0.35), 4, "Y"))
+        parts.append((pc, m))
+    # kenara yaslanmış bir kömür çubuğu: siluete uzunluk verir
+    st = bm_box(0.075, 0.02, 0.018, bevel=0.002)
+    jitter(st, 0.002, seed=seed + 50)
+    paint_by(st, lambda f, l: coal_hi if f.normal.z > 0.7 else coal)
+    parts.append((st, Matrix.Translation((0.03, 0.03, h + 0.02)) @ Matrix.Rotation(0.5, 4, "Z") @ Matrix.Rotation(0.45, 4, "Y")))
+    # mühür: ön-sağ omuzda (etiketle çakışmasın), etiket: ön yüzün altında
+    parts.append(_medallion_on(comp, 0.022, Matrix.Rotation(0.75, 4, "Z") @ on_surface(prof[:-1], h * 0.66, gap=0.002), seed=seed))
+    parts.append((label_plate(0.07, 0.03, rad * 0.95), Matrix.Translation((0, 0, h * 0.3))))
+    return bm_merge(*parts), dict(grip=h * 0.5, label_z=h * 0.3, label_r=rad * 0.95, mouth=h + 0.05)
+
+def seker_kavanozu(comp, seed, h=0.13, r=0.068):
+    """C₆H₁₂O₆ (üzüm şekeri — Marggraf 1747, kuru üzümden): geniş ağızlı cam kavanoz, içi krem kristal;
+    kapak ipine bağlı küçük beyaz üzüm salkımı (maddenin kaynağı, siluet işareti).
+    24 atom mühre sığmaz → damgalı düz mühür; bileşim etiket yazısında (Unity TMP)."""
+    rr = random.Random(seed)
+    sugar = mix(pal("siva", 0), pal("altin", 0), 0.3)
+    prof = [(0, 0.004), (r * 0.85, 0), (r, 0.012), (r * 1.03, h * 0.5), (r * 0.98, h * 0.82), (r * 0.84, h * 0.9), (r * 0.78, h * 0.94),
+            (r * 0.85, h), (r * 0.78, h + 0.004), (0, h)]
+    parts = [(_glass_body(prof, sides=16, liquid=sugar, liquid_z=h * 0.62), None)]
+    for k in range(7):     # kristal yüzeyi: küçük basık prizmalar (iğne değil, şeker gibi tombul)
+        cr = bm_cyl(0.011, 0.004, rr.uniform(0.012, 0.02), sides=5)
+        paint_by(cr, lambda f, l: mix(sugar, pal("siva", 0), 0.5) if f.normal.z > 0.5 else sugar)
+        a = rr.uniform(0, 2 * math.pi)
+        d = rr.uniform(0, r * 0.55)
+        parts.append((cr, Matrix.Translation((math.cos(a) * d, math.sin(a) * d, h * 0.58))
+                      @ Matrix.Rotation(rr.uniform(-0.5, 0.5), 4, "X") @ Matrix.Rotation(rr.uniform(-0.5, 0.5), 4, "Y")))
+    parts.append((_parchment_cap(r * 0.85, h + 0.004, seed=seed), None))
+    parts.append((cord_wrap(r * 0.79, h * 0.93, seed=seed), None))
+    parts.append(_medallion_on(None, 0.016, Matrix.Translation((0, 0, h + 0.008)), seed=seed))   # ağız mührü kapağın ortasında
+    # üzüm salkımı: ipten yanda (+X) aşağı sarkar — ters üçgen siluet, kavanozu diğerlerinden ayırır
+    grape = mix(pal("yaprak", 0), pal("altin", 0), 0.4)
+    grape_hi = mix(grape, pal("siva", 0), 0.35)
+    grape_lo = mix(grape, pal("yaprak", 2), 0.35)
+    gx = r * 0.98 + 0.014
+    top_z = h * 0.86
+    rows = [3, 3, 2, 2, 1]
+    for ri, n in enumerate(rows):
+        for j in range(n):
+            g = bmesh.new()
+            bmesh.ops.create_icosphere(g, subdivisions=2, radius=0.0105)
+            bmesh.ops.scale(g, vec=(1.0, 1.0, 1.12), verts=g.verts)
+            paint_by(g, lambda f, l: grape_hi if f.normal.z > 0.5 else grape_lo if f.normal.z < -0.4 else grape)
+            y = (j - (n - 1) / 2) * 0.019 + (0.004 if ri % 2 else -0.004)
+            x = gx + (0.006 if (ri + j) % 2 else 0.0) + rr.uniform(-0.002, 0.002)
+            parts.append((g, Matrix.Translation((x, y, top_z - ri * 0.0175))))
+    stem = bm_cyl(0.0028, 0.002, 0.028, sides=5)          # sap: ipten salkıma
+    _wood(stem, seed + 3, lo=1, hi=0)
+    parts.append((stem, Matrix.Translation((r * 0.8, 0.0, h * 0.93)) @ Matrix.Rotation(2.2, 4, "Y")))
+    # asma yaprağı: beş uçlu, salkımın üstünde omuza yaslı
+    lp = []
+    for k in range(10):
+        a = math.pi * k / 9
+        rad_k = 0.026 if k % 2 == 0 else 0.016
+        lp.append((math.cos(a) * rad_k, math.sin(a) * rad_k * 1.1))
+    lp.append((0.0, -0.004))
+    leaf = bm_prism(lp, -0.0012, 0.0012)
+    paint_by(leaf, lambda f, l: mix(pal("yaprak", 0), pal("altin", 0), 0.2) if f.normal.y < 0 else pal("yaprak", 1))
+    parts.append((leaf, Matrix.Translation((r * 0.95 + 0.004, -0.012, h * 0.84)) @ Matrix.Rotation(-0.35, 4, "Z")
+                  @ Matrix.Rotation(-1.3, 4, "X")))
+    parts.append((label_plate(0.07, 0.036, r * 1.04), Matrix.Translation((0, 0, h * 0.4))))
+    return bm_merge(*parts), dict(grip=h * 0.5, label_z=h * 0.4, label_r=r * 1.04, mouth=h + 0.01)
+
 def finish_item(name, bm, grip_z, label_z=None, label_r=None, loc=(0, 0, 0), mouth_z=None):
     """Eşya objesi + boş noktalar. Döner: üst boş obje."""
     root = bpy.data.objects.get(name)
@@ -737,6 +849,8 @@ CATALOG = [
     ("Malzeme_CaCO3", lambda s: tas_kesesi(SPECIES["CaCO3"], s), 1),           # kireç taşı
     ("Malzeme_CaO", lambda s: albarello(SPECIES["CaO"], "kobalt", s), 1),      # diri kireç (nem çeker → kapalı küp)
     ("Malzeme_CaOH2", lambda s: albarello(SPECIES["CaOH2"], "turkuaz", s), 1), # sönmüş kireç
+    ("Malzeme_C", lambda s: komur_canagi(SPECIES["C"], s), 1),                 # odun kömürü
+    ("Malzeme_C6H12O6", lambda s: seker_kavanozu(SPECIES["C6H12O6"], s), 1),   # üzüm şekeri (Marggraf 1747)
     # dönem maddeleri
     ("Madde_Civa", civa_kabi, 2),
     ("Madde_Kukurt", lambda s: albarello(None, "bal", s, h=0.17, r=0.065), 2),

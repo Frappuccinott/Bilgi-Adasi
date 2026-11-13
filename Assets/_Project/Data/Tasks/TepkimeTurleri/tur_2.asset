@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Desk.DeskTask
   id: tur_2
   giverName: "C\xE2bir Usta"
-  giverPortrait: {fileID: 0}
+  giverPortrait: {fileID: 21300000, guid: b7e84432d0a627d43a070b2fa049fdc3, type: 3}
   giverLines:
   - "Raftaki tepkime \u015Fi\u015Felerinin etiketleri kar\u0131\u015Fm\u0131\u015F."
   - "Her \u015Fi\u015Feyi do\u011Fru kutuya koy: Sentez, Analiz, Yanma."

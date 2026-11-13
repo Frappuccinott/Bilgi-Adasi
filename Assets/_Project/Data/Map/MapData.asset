@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82ee420b75e984549a54ff6ddda9c12f, type: 3}
+  m_Name: MapData
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.MapData
+  image: {fileID: 2800000, guid: be97b41b2f3692847b8d42028c71f5d0, type: 3}
+  worldCenter: {x: -5, y: 12}
+  worldSize: 196
+  minimapSpan: 64
+  points:
+  - label: "At\xF6lye"
+    kind: 0
+    world: {x: 0.5, y: -1}
+    color: {r: 0.62352943, g: 0.30588236, b: 0.16862746, a: 1}
+    neighborhood: {fileID: 0}
+    onMinimap: 1
+  - label: "Denkle\u015Ftirme"
+    kind: 1
+    world: {x: -52, y: 18}
+    color: {r: 0.96862745, g: 0.65882355, b: 0, a: 1}
+    neighborhood: {fileID: 11400000, guid: b0b7b967ae7a04b41bc9dd7aa1460e86, type: 2}
+    onMinimap: 1
+  - label: "Tepkime T\xFCrleri"
+    kind: 1
+    world: {x: 46, y: 14}
+    color: {r: 0.16470589, g: 0.62352943, b: 0.8156863, a: 1}
+    neighborhood: {fileID: 11400000, guid: b298399f3c414a948b2f7e49524f6521, type: 2}
+    onMinimap: 1
+  - label: Pazar
+    kind: 2
+    world: {x: -46, y: 22.09014}
+    color: {r: 0.84313726, g: 0.47843137, b: 0.27058825, a: 1}
+    neighborhood: {fileID: 0}
+    onMinimap: 1
+  - label: Meydan
+    kind: 4
+    world: {x: 0, y: 12}
+    color: {r: 0.6392157, g: 0.69411767, b: 0.74509805, a: 1}
+    neighborhood: {fileID: 0}
+    onMinimap: 0
+  - label: "Matematik \u015Eehri"
+    kind: 3
+    world: {x: -21.5, y: -73.77572}
+    color: {r: 0.30980393, g: 0.49803922, b: 0.5882353, a: 1}
+    neighborhood: {fileID: 0}
+    onMinimap: 1
+  - label: "T\xFCrk\xE7e \u015Eehri"
+    kind: 3
+    world: {x: 23.640678, y: 98.05081}
+    color: {r: 0.9098039, g: 0.3764706, b: 0.16470589, a: 1}
+    neighborhood: {fileID: 0}
+    onMinimap: 1
+  - label: Hesaplamalar
+    kind: 3
+    world: {x: -76.894424, y: 45.788853}
+    color: {r: 0.43137255, g: 0.5019608, b: 0.5647059, a: 1}
+    neighborhood: {fileID: 0}
+    onMinimap: 1
+  - label: Tepkimeler
+    kind: 3
+    world: {x: 66.81228, y: -13.827623}
+    color: {r: 0.43137255, g: 0.5019608, b: 0.5647059, a: 1}
+    neighborhood: {fileID: 0}
+    onMinimap: 1
+  title: "Kimya \u015Eehri"
+  subtitle: "Etkile\u015Fim \u0130l\xE7esi"
+  legendTitle: "K\xF6yler"
+  citiesTitle: "\u015Eehirler"
+  statusOpen: "{0}/{1} g\xF6rev"
+  statusDone: "Tamamland\u0131"
+  statusLocked: Kilitli
+  statusRequires: "\xD6nce {0} bitmeli"
+  statusSoon: "Yak\u0131nda"
+  currentWord: "S\u0131radaki"
+  youAreHere: "Buradas\u0131n"
+  closeWord: Kapat
+  mapWord: Harita
+  northLetter: K

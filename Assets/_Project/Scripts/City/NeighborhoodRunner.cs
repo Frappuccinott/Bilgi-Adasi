@@ -42,6 +42,8 @@ namespace BilgiAdasi.City
         private NeighborhoodData activeOrderNeighborhood;
         private OrderTask orderToBegin;
         private NeighborhoodData activeDeskNeighborhood;
+        // Kapıdan her geçişte aynı hatırlatma (bekleniyor / kimse yok / ret) tekrar etmesin: durum değişene kadar bir kez.
+        private string lastDoorReminder;
 
         public IReadOnlyList<NeighborhoodData> Neighborhoods => neighborhoods;
 
@@ -56,6 +58,7 @@ namespace BilgiAdasi.City
         private void OnEnable()
         {
             if (door != null) door.Used += OnDoorUsed;
+            GameEvents.HandItemChanged += OnHandItemChanged;
             if (orderController != null) orderController.TaskFinished += OnOrderFinished;
             if (desk != null) desk.TaskFinished += OnDeskFinished;
             ViewLocator.Register<ICurrentTaskSource>(this);
@@ -64,6 +67,7 @@ namespace BilgiAdasi.City
         private void OnDisable()
         {
             if (door != null) door.Used -= OnDoorUsed;
+            GameEvents.HandItemChanged -= OnHandItemChanged;
             if (orderController != null) orderController.TaskFinished -= OnOrderFinished;
             if (desk != null) desk.TaskFinished -= OnDeskFinished;
             ViewLocator.Unregister<ICurrentTaskSource>(this);
@@ -213,7 +217,8 @@ namespace BilgiAdasi.City
         private bool RequirementMet(NeighborhoodData n)
         {
             var req = n.Requires;
-            return req == null || req == n || CompletedCount(req) >= req.Tasks.Count;
+            // Köyde zaten ilerleme varsa (eski kayıt, geliştirici atlaması) önkoşul aranmaz.
+            return req == null || req == n || CompletedCount(req) >= req.Tasks.Count || CompletedCount(n) > 0;
         }
 
         private NeighborhoodData FindOwner(TaskData task)
@@ -224,6 +229,18 @@ namespace BilgiAdasi.City
         }
 
         // ---------- Kapı ----------
+
+        /// <summary>Eldeki madde değişti: ret repliği (yanlış ürün vb.) yeniden söylenebilir.</summary>
+        private void OnHandItemChanged(bool _) => lastDoorReminder = null;
+
+        /// <summary>Aynı hatırlatma az önce söylendiyse true (söylenmez); değilse not alır.</summary>
+        private bool AlreadyReminded(OrderTask order, string text)
+        {
+            string key = (order != null ? order.Id : "-") + "|" + text;
+            if (key == lastDoorReminder) return true;
+            lastDoorReminder = key;
+            return false;
+        }
 
         private void OnDoorUsed(PlayerInteractor interactor)
         {
@@ -237,10 +254,12 @@ namespace BilgiAdasi.City
                 string refusal = CheckDelivery(order, inv);
                 if (refusal != null)
                 {
+                    if (AlreadyReminded(order, refusal)) return;
                     AddLine(order.GiverName, refusal, order.GiverPortrait);
                 }
                 else
                 {
+                    lastDoorReminder = null;
                     // Elle teslim: ürünler envanterden çıkar, kese dolar, sonra görev biter (TaskCompleted → kayıt).
                     var products = order.DeliveryProducts;
                     for (int i = 0; i < products.Count; i++) inv.Remove(products[i].Species, products[i].Amount);
@@ -257,19 +276,32 @@ namespace BilgiAdasi.City
             else if (activeOrder != null)
             {
                 // Sipariş alındı ama hazır değil.
-                AddLine(activeOrder.GiverName, texts != null ? texts.OrderWaiting : null, activeOrder.GiverPortrait);
+                string waiting = texts != null ? texts.OrderWaiting : null;
+                if (AlreadyReminded(activeOrder, waiting)) return;
+                AddLine(activeOrder.GiverName, waiting, activeOrder.GiverPortrait);
             }
-            else if (!OfferNextOrder(inv))
+            else if (OfferNextOrder(inv))
             {
-                AddMasterLine(texts != null ? texts.NobodyAtDoor : null);
+                lastDoorReminder = null;
+            }
+            else
+            {
+                string nobody = texts != null ? texts.NobodyAtDoor : null;
+                if (AlreadyReminded(null, nobody)) return;
+                AddMasterLine(nobody);
             }
 
             dialogue.Play(lineBuffer, OnDoorDialogueFinished, interactor);
         }
 
-        /// <summary>Kapı konuşması bitti: alınan sipariş (varsa) başlar. Kanat açık kalır; oyuncu F ile kapatır.</summary>
+        /// <summary>
+        /// Kapı konuşması bitti: alınan siparişin ders notu (varsa) açılır, kapanınca sipariş başlar (kart görünür).
+        /// Kanat açık kalır; oyuncu F ile kapatır.
+        /// </summary>
         private void OnDoorDialogueFinished()
         {
+            var lessons = LearningDirector.Instance;
+            if (orderToBegin != null && lessons != null && lessons.ShowLesson(orderToBegin.Id, BeginPendingOrder)) return;
             BeginPendingOrder();
         }
 
@@ -301,6 +333,10 @@ namespace BilgiAdasi.City
 
             for (int i = 0; i < task.GiverLines.Length; i++) AddLine(task.GiverName, task.GiverLines[i], task.GiverPortrait);
             PayAdvance(task, inv);
+            // Ders notu varsa usta konuşmayı kapatır: "kazana koşmadan önce şu notu oku".
+            var lessons = LearningDirector.Instance;
+            if (lessons != null && lessons.HasLesson(task.Id) && !string.IsNullOrWhiteSpace(lessons.LessonIntroLine))
+                AddMasterLine(lessons.LessonIntroLine);
             StartOrder(n, task);
             return true;
         }
@@ -368,6 +404,24 @@ namespace BilgiAdasi.City
             }
             // Bir köyün bitmesi başka köyün önkoşulunu açabilir; sıradaki masa görevi güvercinle gelir.
             OfferDeskTask(false);
+        }
+
+        // ---------- Kapısız görev (Seviye 0) ----------
+
+        /// <summary>
+        /// Siparişi kapıyı beklemeden kazana verir (Çıraklık: usta görevi atölyede verir). Görev bir köyün sıradaki
+        /// görevi değilse ya da başka sipariş alınmışsa false.
+        /// </summary>
+        public bool StartOrderNow(OrderTask task)
+        {
+            if (task == null || IsTaskDone(task)) return false;
+            if (activeOrder == task) return true;
+            if (activeOrder != null) return false;
+            var n = FindOwner(task);
+            if (n == null || CompletedCount(n) >= n.Tasks.Count || n.Tasks[CompletedCount(n)] != task) return false;
+            introShown.Add(n.Id);
+            StartOrder(n, task, true);
+            return true;
         }
 
         // ---------- Masa ----------

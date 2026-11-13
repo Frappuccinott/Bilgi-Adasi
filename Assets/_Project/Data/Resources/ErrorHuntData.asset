@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0464a6038bda1b42b1ebf07e6266348, type: 3}
+  m_Name: ErrorHuntData
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.ErrorHuntData
+  masterName: "C\xE2bir Usta"
+  entries:
+  - taskId: denk_3
+    rounds:
+    - reactants:
+      - species: {fileID: 11400000, guid: ba4254c41fdabb04ca1ac3351b4d6ec6, type: 2}
+        amount: 1
+      - species: {fileID: 11400000, guid: c3372ae1a20c7b040be0a7644035caaf, type: 2}
+        amount: 1
+      products:
+      - species: {fileID: 11400000, guid: 50ddecd6f6537fd48aa42ccc142f47e6, type: 2}
+        amount: 1
+      - species: {fileID: 11400000, guid: 4d7d1e9c4ee5640419e910786ab51966, type: 2}
+        amount: 1
+      why:
+        question: "Bu kopyada ne yanl\u0131\u015F gitmi\u015F?"
+        options:
+        - "Metan\u0131n form\xFCl\xFC yanl\u0131\u015F yaz\u0131lm\u0131\u015F."
+        - "Suyun ve oksijenin katsay\u0131s\u0131 unutulmu\u015F."
+        - Karbon fazla, bir karbon silinmeli.
+        correctIndex: 1
+        replies:
+        - "Form\xFCle dokunulmaz: CH\u2084 hep CH\u2084't\xFCr. De\u011Fi\u015Fen
+          yaln\u0131zca \xF6n\xFCndeki say\u0131, katsay\u0131."
+        - "Aynen \xF6yle. 2 H\u2082O ve 2 O\u2082 yaz\u0131l\u0131nca H 4/4, O 4/4
+          olur."
+        - "Karbon zaten iki tarafta birer tane. Atom silinmez; katsay\u0131yla say\u0131lar
+          e\u015Fitlenir."
+    - reactants:
+      - species: {fileID: 11400000, guid: 2bcd2662ada36e448b01974ed7f2bbe4, type: 2}
+        amount: 1
+      - species: {fileID: 11400000, guid: c3372ae1a20c7b040be0a7644035caaf, type: 2}
+        amount: 5
+      products:
+      - species: {fileID: 11400000, guid: 50ddecd6f6537fd48aa42ccc142f47e6, type: 2}
+        amount: 1
+      - species: {fileID: 11400000, guid: 4d7d1e9c4ee5640419e910786ab51966, type: 2}
+        amount: 4
+      why:
+        question: "Bu denklemi nas\u0131l d\xFCzeltirsin?"
+        options:
+        - "CO\u2082'nin \xF6n\xFCne 3 yazar\u0131m; karbonla birlikte oksijen de
+          10 olur."
+        - "C\u2083H\u2088'i CH\u2088 yapar\u0131m, karbon tek kal\u0131r."
+        - "O\u2082'nin katsay\u0131s\u0131n\u0131 art\u0131r\u0131r\u0131m."
+        correctIndex: 0
+        replies:
+        - "Do\u011Fru. 3 CO\u2082 \u2192 C 3/3; O 6 + 4 = 10, soldaki 5 O\u2082 ile
+          e\u015Fit."
+        - "Form\xFCl de\u011Fi\u015Firse madde de\u011Fi\u015Fir: o art\u0131k propan
+          olmaz. Katsay\u0131yla d\xFCzeltilir."
+        - "Solda oksijen zaten fazla (10'a 6). Eksik olan sa\u011Fda: karbonla ba\u015Fla."

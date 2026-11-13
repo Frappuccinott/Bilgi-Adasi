@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.OrderTask
   id: denk_5
   giverName: "\xC7ift\xE7i Elif"
-  giverPortrait: {fileID: 0}
+  giverPortrait: {fileID: 21300000, guid: 0366aa63b404f6742aec29adebb7f8d1, type: 3}
   giverLines:
   - "D\xF6rt kavanoz g\xFCbre ruhu istiyorum, ne eksik ne fazla. Paras\u0131n\u0131
     pe\u015Fin veriyorum. Artan\u0131n hesab\u0131 senin cebinden."

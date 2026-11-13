@@ -22,6 +22,9 @@ namespace BilgiAdasi.UI
         public static Sprite Ring => ring ? ring : ring = MakeRing(64, 5f, false);
         public static Sprite RingDashed => ringDashed ? ringDashed : ringDashed = MakeRing(64, 4f, true);
         public static Sprite Check => check ? check : check = MakeCheck(64);
+        private static Sprite arrow;
+        /// <summary>Yukarı bakan ok ucu (haritada oyuncu): içi oyulmuş kuyruklu üçgen, pürüzsüz kenar.</summary>
+        public static Sprite Arrow => arrow ? arrow : arrow = MakeArrow(64);
         /// <summary>Alttan yukarı saydamlaşan degrade (scrim alt).</summary>
         public static Sprite FadeUp => fadeUp ? fadeUp : fadeUp = MakeFade(true);
         /// <summary>Soldan sağa saydamlaşan degrade (scrim sol).</summary>
@@ -265,6 +268,40 @@ namespace BilgiAdasi.UI
             tex.SetPixels32(px);
             tex.Apply(false, true);
             return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        private static Sprite MakeArrow(int size)
+        {
+            var tex = NewTex(size, size);
+            var px = new Color32[size * size];
+            // Uç (0.5, 0.94), kanatlar (0.16/0.84, 0.1), kuyruk çentiği (0.5, 0.32): dört kenarın içi.
+            Vector2 tip = new Vector2(0.5f, 0.94f) * size, l = new Vector2(0.16f, 0.08f) * size,
+                    r = new Vector2(0.84f, 0.08f) * size, notch = new Vector2(0.5f, 0.3f) * size;
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                var p = new Vector2(x + 0.5f, y + 0.5f);
+                // İşaretli mesafe: dışbükey olmayan biçim = iki üçgenin birleşimi (sol yarı + sağ yarı).
+                float a = Mathf.Max(Inside(p, tip, l, notch), Inside(p, tip, notch, r));
+                px[y * size + x] = new Color32(255, 255, 255, (byte)(255 * a));
+            }
+            tex.SetPixels32(px);
+            tex.Apply(false, true);
+            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        // Üçgen içi örtüşme (0–1), kenarda 1 piksel yumuşak geçiş. Köşe sırası fark etmez.
+        private static float Inside(Vector2 p, Vector2 a, Vector2 b, Vector2 c)
+        {
+            float s = Mathf.Sign((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x));
+            float d = Mathf.Min(Edge(p, a, b, s), Mathf.Min(Edge(p, b, c, s), Edge(p, c, a, s)));
+            return Mathf.Clamp01(d + 0.5f);
+        }
+
+        private static float Edge(Vector2 p, Vector2 a, Vector2 b, float s)
+        {
+            var e = b - a;
+            return s * (e.x * (p.y - a.y) - e.y * (p.x - a.x)) / e.magnitude;
         }
 
         private static Sprite MakeCheck(int size)

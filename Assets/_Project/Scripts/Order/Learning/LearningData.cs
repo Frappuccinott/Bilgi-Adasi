@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BilgiAdasi.Core;
 using UnityEngine;
 
 namespace BilgiAdasi.Order
@@ -36,31 +37,70 @@ namespace BilgiAdasi.Order
         }
     }
 
-    /// <summary>Bir görevin öğrenme katmanı: sorgu (isteğe bağlı) + Keşif Defteri kaydı.</summary>
+    /// <summary>Bir görevin öğrenme katmanı: ders notu (görevden önce) + sorgu (isteğe bağlı) + Keşif Defteri kaydı.</summary>
     [Serializable]
     public sealed class LearningEntry
     {
         [Tooltip("TaskData.Id ile aynı: denk_1 …")]
         [SerializeField] private string taskId = "";
+        [Tooltip("Görevden önce ustanın konu anlatımı (13-ders-notu-plani). Sayfası yoksa gösterilmez.")]
+        [SerializeField] private LessonNote lesson = new LessonNote();
         [SerializeField] private ReasoningPrompt reasoning = new ReasoningPrompt();
         [Tooltip("Keşif Defteri kayıt numarası: K-1")]
         [SerializeField] private string discoveryId = "";
         [TextArea(2, 4)] [SerializeField] private string discoveryText = "";
 
+        [Header("Defter sayfası (Keşiflerim)")]
+        [Tooltip("Görevin defterdeki adı: \"Kuru Çeşme\".")]
+        [SerializeField] private string title = "";
+        [Tooltip("Sakin ve yer: \"Muhtar Yusuf, meydan çeşmesi\".")]
+        [SerializeField] private string placeLine = "";
+        [Tooltip("Sayfadaki denklem (zengin metin, alt indisli).")]
+        [SerializeField] private string equation = "";
+        [Tooltip("Denklemin yanındaki kavanoz ikonu: UiTheme.IconFor formülü (H2O).")]
+        [SerializeField] private string iconFormula = "";
+        [Tooltip("Sayfanın altındaki soluk not: bu kayıt nerede işe yarar.")]
+        [SerializeField] private string usage = "";
+        [SerializeField] private List<FieldNote> fieldNotes = new List<FieldNote>();
+
         public string TaskId => taskId;
+        public string Title => title;
+        public string PlaceLine => placeLine;
+        public string Equation => equation;
+        public string IconFormula => iconFormula;
+        public string Usage => usage;
+        public IReadOnlyList<FieldNote> FieldNotes => fieldNotes;
+        public LessonNote Lesson => lesson;
         public ReasoningPrompt Reasoning => reasoning;
         public string DiscoveryId => discoveryId;
         public string DiscoveryText => discoveryText;
 
         public LearningEntry() { }
 
-        public LearningEntry(string taskId, ReasoningPrompt reasoning, string discoveryId, string discoveryText)
+        public LearningEntry(string taskId, ReasoningPrompt reasoning, string discoveryId, string discoveryText,
+            LessonNote lesson = null)
         {
             this.taskId = taskId;
             this.reasoning = reasoning ?? new ReasoningPrompt();
             this.discoveryId = discoveryId;
             this.discoveryText = discoveryText;
+            this.lesson = lesson ?? new LessonNote();
         }
+
+#if UNITY_EDITOR
+        /// <summary>Editör veri üreticisi için: defter sayfasının alanları.</summary>
+        public LearningEntry WithPage(string pageTitle, string place, string richEquation, string icon, string usageNote,
+            params FieldNote[] notes)
+        {
+            title = pageTitle ?? string.Empty;
+            placeLine = place ?? string.Empty;
+            equation = richEquation ?? string.Empty;
+            iconFormula = icon ?? string.Empty;
+            usage = usageNote ?? string.Empty;
+            fieldNotes = new List<FieldNote>(notes ?? new FieldNote[0]);
+            return this;
+        }
+#endif
     }
 
     /// <summary>
@@ -85,6 +125,12 @@ namespace BilgiAdasi.Order
         [Tooltip("Tepkime bittikten sonra sorgunun açılmasına kadar bekleme (sn).")]
         [SerializeField] private float delayAfterReaction = 0.6f;
 
+        [Header("Ders Notu (görevden önce)")]
+        [SerializeField] private LessonTexts lessonTexts = new LessonTexts();
+
+        [Header("Defter (ayraçlar, şeritler, Ustalık)")]
+        [SerializeField] private NotebookTexts notebookTexts = new NotebookTexts();
+
         [Header("Görevler")]
         [SerializeField] private List<LearningEntry> entries = new List<LearningEntry>();
 
@@ -96,6 +142,8 @@ namespace BilgiAdasi.Order
         public string CloseWord => closeWord;
         public string EmptyBook => emptyBook;
         public float DelayAfterReaction => delayAfterReaction;
+        public LessonTexts LessonTexts => lessonTexts;
+        public NotebookTexts NotebookTexts => notebookTexts;
         public IReadOnlyList<LearningEntry> Entries => entries;
 
         public LearningEntry Find(string taskId)

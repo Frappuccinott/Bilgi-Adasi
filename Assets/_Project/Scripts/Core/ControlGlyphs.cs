@@ -37,7 +37,15 @@ namespace BilgiAdasi.Core
         /// <summary>UI menüsünde yukarı/aşağı gezinme (UI Navigate): ok tuşları / D-pad.</summary>
         UiVertical,
         /// <summary>UI menüsünde sola/sağa: sekme ya da ayar değeri (UI Navigate): ok tuşları / D-pad.</summary>
-        UiHorizontal
+        UiHorizontal,
+        /// <summary>Eldekini yere / masaya bırak (Player Drop): G / D-pad ↓.</summary>
+        Drop,
+        /// <summary>Defteri aç (Player OpenBook): N / D-pad ↑.</summary>
+        OpenBook,
+        /// <summary>Defterde önceki ayraç (UI PrevTab): Q / LB.</summary>
+        PrevTab,
+        /// <summary>Defterde sonraki ayraç (UI NextTab): E / RB.</summary>
+        NextTab
     }
 
     /// <summary>
@@ -48,7 +56,7 @@ namespace BilgiAdasi.Core
     /// </summary>
     public static class ControlGlyphs
     {
-        private enum Pad { South, East, West, North, LeftShoulder, RightShoulder, Start, Select, LeftStickPress, DpadVertical, DpadHorizontal, Shoulders }
+        private enum Pad { South, East, West, North, LeftShoulder, RightShoulder, Start, Select, LeftStickPress, DpadVertical, DpadHorizontal, Shoulders, DpadDown, DpadUp }
 
         public static string For(PromptAction action) => For(action, GameInput.LastScheme);
 
@@ -81,6 +89,10 @@ namespace BilgiAdasi.Core
                 case PromptAction.Cancel: return "Esc";
                 case PromptAction.UiVertical: return "↑↓";
                 case PromptAction.UiHorizontal: return "←→";
+                case PromptAction.Drop: return "G";
+                case PromptAction.OpenBook: return "N";
+                case PromptAction.PrevTab: return "Q";
+                case PromptAction.NextTab: return "E";
                 default: return "?";
             }
         }
@@ -108,6 +120,10 @@ namespace BilgiAdasi.Core
                 case PromptAction.Cancel: return Pad.East;
                 case PromptAction.UiVertical: return Pad.DpadVertical;
                 case PromptAction.UiHorizontal: return Pad.DpadHorizontal;
+                case PromptAction.Drop: return Pad.DpadDown;
+                case PromptAction.OpenBook: return Pad.DpadUp;
+                case PromptAction.PrevTab: return Pad.LeftShoulder;
+                case PromptAction.NextTab: return Pad.RightShoulder;
                 default: return Pad.South;
             }
         }
@@ -176,6 +192,8 @@ namespace BilgiAdasi.Core
                         case Pad.LeftStickPress: return Text("L3");
                         case Pad.DpadVertical: return Text("↑↓");
                         case Pad.DpadHorizontal: return Text("←→");
+                        case Pad.DpadDown: return Text("↓");
+                        case Pad.DpadUp: return Text("↑");
                         case Pad.Shoulders: return Text("L1/R1");
                     }
                     break;
@@ -195,6 +213,8 @@ namespace BilgiAdasi.Core
                         case Pad.LeftStickPress: return Text("L-çubuk");
                         case Pad.DpadVertical: return Text("↑↓");
                         case Pad.DpadHorizontal: return Text("←→");
+                        case Pad.DpadDown: return Text("↓");
+                        case Pad.DpadUp: return Text("↑");
                         case Pad.Shoulders: return Text("L/R");
                     }
                     break;
@@ -213,6 +233,8 @@ namespace BilgiAdasi.Core
                         case Pad.LeftStickPress: return Text("LS");
                         case Pad.DpadVertical: return Text("↑↓");
                         case Pad.DpadHorizontal: return Text("←→");
+                        case Pad.DpadDown: return Text("↓");
+                        case Pad.DpadUp: return Text("↑");
                         case Pad.Shoulders: return Text("LB/RB");
                     }
                     break;

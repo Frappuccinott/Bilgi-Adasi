@@ -27,6 +27,13 @@ MonoBehaviour:
     stock: 5
     availableAfter: {fileID: 0}
     removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: 5ba0773fd7d5f244d9d65902a4d7d380, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
   - species: {fileID: 11400000, guid: 4d7d1e9c4ee5640419e910786ab51966, type: 2}
     overridePrice: 0
     price: 0
@@ -56,6 +63,48 @@ MonoBehaviour:
     availableAfter: {fileID: 0}
     removedAfter: {fileID: 0}
   - species: {fileID: 11400000, guid: 7365f7085cd6aad49b7f944cb76c871f, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: 09de350f5713fc441bf45c8c039b8186, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: ebee964df288a574aac6253b59b4893d, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: 50ddecd6f6537fd48aa42ccc142f47e6, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: 3ac17bbfbeb81114e8f05f300fb8c442, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: 22efa628d4955a043956e0eedbb0503e, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 0}
+    removedAfter: {fileID: 0}
+  - species: {fileID: 11400000, guid: 840b04b187db2274aa1cbe7f8c291754, type: 2}
     overridePrice: 0
     price: 0
     unlimitedStock: 1

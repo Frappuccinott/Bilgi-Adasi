@@ -73,6 +73,15 @@ namespace BilgiAdasi.Core
         /// <summary>Tuş düzeni değişti (ör. Xbox → PS). Tuş ipuçları bunu dinler.</summary>
         public static event Action<ControlScheme> SchemeChanged;
 
+        private static int inventoryLocks;
+
+        /// <summary>Envanterde gezinme (tekerlek, RB/LB, 1–6) kapalı mı? Ör. Ustanın Sorgusu açıkken.</summary>
+        public static bool InventoryLocked => inventoryLocks > 0;
+
+        /// <summary>Envanter gezinmesini kilitler/açar. Her kilit kendi açışıyla eşlenmeli (sayaç).</summary>
+        public static void LockInventory(bool locked) =>
+            inventoryLocks = Mathf.Max(0, inventoryLocks + (locked ? 1 : -1));
+
         public static void SetMode(InputMode mode)
         {
             if (isQuitting) return;

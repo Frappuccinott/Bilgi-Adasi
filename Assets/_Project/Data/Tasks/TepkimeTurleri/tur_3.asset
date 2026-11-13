@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Desk.DeskTask
   id: tur_3
   giverName: "F\u0131r\u0131nc\u0131 Zehra"
-  giverPortrait: {fileID: 0}
+  giverPortrait: {fileID: 21300000, guid: 0366aa63b404f6742aec29adebb7f8d1, type: 3}
   giverLines:
   - "\xC7\u0131rak, f\u0131r\u0131nda gaz yan\u0131nca neler \xE7\u0131k\u0131yor?
     Usta bir keresinde s\xF6ylemi\u015Fti, unuttum."

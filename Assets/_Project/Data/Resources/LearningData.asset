@@ -21,8 +21,299 @@ MonoBehaviour:
   emptyBook: "Defter hen\xFCz bo\u015F. G\xF6rd\xFC\u011F\xFCn\xFC yaz: her sipari\u015Ften
     sonra bir sayfa eklenir."
   delayAfterReaction: 0.6
+  lessonTexts:
+    tabWord: "Ustan\u0131n Notlar\u0131"
+    pageFormat: Sayfa {0} / {1}
+    turnWord: Sayfa
+    nextWord: Devam
+    startWord: "G\xF6reve ba\u015Fla"
+    closeWord: Kapat
+    elementHeader: Element
+    leftHeader: Sol kefe
+    rightHeader: "Sa\u011F kefe"
+    equalWord: "e\u015Fit"
+    notEqualWord: "e\u015Fit de\u011Fil"
+    introLine: "Dur \xE7\u0131rak, kazana ko\u015Fmadan \xF6nce \u015Fu notu bir
+      oku."
+  notebookTexts:
+    masterNotesTab: "Ustan\u0131n Notlar\u0131"
+    discoveriesTab: "Ke\u015Fiflerim"
+    masteryTab: "Ustal\u0131k"
+    subjects:
+    - name: Kimya
+      color: {r: 0.9098039, g: 0.3764706, b: 0.16470589, a: 1}
+      primary: 1
+      locked: 0
+    - name: Matematik
+      color: {r: 0.43529412, g: 0.6627451, b: 0.72156864, a: 1}
+      primary: 0
+      locked: 0
+    - name: Fizik
+      color: {r: 0.6392157, g: 0.69411767, b: 0.74509805, a: 1}
+      primary: 0
+      locked: 0
+    - name: Biyoloji
+      color: {r: 0.24705882, g: 0.65882355, b: 0.22745098, a: 1}
+      primary: 0
+      locked: 0
+    - name: "T\xFCrk\xE7e"
+      color: {r: 0.70980394, g: 0.2627451, b: 0.10980392, a: 1}
+      primary: 0
+      locked: 1
+    - name: Sosyal
+      color: {r: 0.5411765, g: 0.3529412, b: 0.22745098, a: 1}
+      primary: 0
+      locked: 1
+    groupTitles:
+    - neighborhoodId: ciraklik
+      title: "At\xF6lye"
+    - neighborhoodId: denklestirme
+      title: "Denkle\u015Ftirme K\xF6y\xFC"
+    - neighborhoodId: tepkime_turleri
+      title: "Tepkime T\xFCrleri K\xF6y\xFC"
+    groupFormat: "{0} K\xF6y\xFC"
+    pagesWritten: "{0} sayfa yaz\u0131ld\u0131"
+    notWritten: "{0}, yaz\u0131lmad\u0131"
+    placeFormat: "{0}. {1}, {2}. g\xF6rev"
+    otherSubjects: "\xD6teki derslerde"
+    emptyDiscovery: "Bu sayfa hen\xFCz bo\u015F. G\xF6revi bitirince kendi c\xFCmlenle
+      yazacaks\u0131n."
+    fieldNotesTitle: "{0} notlar\u0131"
+    fieldNotesEmpty: "Bu derste hen\xFCz notun yok. Kimya g\xF6revlerinde rastlad\u0131k\xE7a
+      buraya d\xFC\u015Fer."
+    lockedSubject: "Bu dersin \u015Fehri hen\xFCz sisli. Kap\u0131s\u0131 a\xE7\u0131l\u0131nca
+      defterin bu b\xF6l\xFCm\xFC de dolar."
+    notesOpened: "{0} not a\xE7\u0131ld\u0131"
+    lessonLocked: "G\xF6revi al\u0131nca a\xE7\u0131l\u0131r"
+    noLesson: Ders notu yok
+    lessonKicker: Ders notu
+    lessonDetail: "{0}, {1}. g\xF6rev"
+    inThisNote: Bu notta
+    sectionLabels:
+    - Konu
+    - "Y\xF6ntem"
+    - "\xC7\xF6z\xFCml\xFC \xF6rnek"
+    - "Bu g\xF6revde"
+    readHint: "Enter ile notu ba\u015Ftan oku. G\xF6rev bittikten sonra da burada
+      durur."
+    notesEmpty: "Usta hen\xFCz not b\u0131rakmad\u0131. Kap\u0131dan ilk sipari\u015Fi
+      al."
+    masteryTitle: "Ustal\u0131k"
+    masterySubtitle: "C\xE2bir Usta\u2019n\u0131n \xE7\u0131ra\u011F\u0131"
+    gradeLabel: "S\u0131n\u0131f"
+    heightLabel: Boy
+    heightFormat: '{0:0.00} m'
+    sealedLabel: "M\xFCh\xFCrl\xFC g\xF6rev"
+    achievementsLabel: "Ba\u015Far\u0131m"
+    villagesTitle: "K\xF6yler"
+    villageKicker: "K\xF6y"
+    villageDetail: "Kimya, Etkile\u015Fim"
+    stateDone: "M\xFCh\xFCrl\xFC"
+    stateNext: "S\u0131radaki"
+    stateLocked: "Hen\xFCz de\u011Fil"
+    noFails: "K\xF6p\xFCrmeden."
+    failFormat: "{0} k\xF6p\xFCrme."
+    villageRule: "Be\u015F g\xF6revin be\u015Fi de m\xFCh\xFCrlenince k\xF6y m\xFChr\xFC
+      verilir."
+    tabsWord: "Ayra\xE7"
+    subjectWord: Ders
+    selectWord: "Se\xE7"
+    readWord: Oku
+    backWord: Geri
+    closeWord: Kapat
+    hudWord: Defter
+    newPageWord: Deftere yeni sayfa
   entries:
+  - taskId: cirak_0
+    lesson:
+      title: 
+      pages: []
+    reasoning:
+      question: "Terazinin iki kefesi neden e\u015Fit kald\u0131?"
+      options:
+      - Atomlar yok olmaz, yoktan da var olmaz.
+      - "Kazan kapal\u0131 oldu\u011Fu i\xE7in hava girmedi."
+      - "Hidrojen hafif oldu\u011Fu i\xE7in tart\u0131lmaz."
+      correctIndex: 0
+      replies:
+      - "Aynen \xF6yle. Ne girdiyse o \xE7\u0131kt\u0131; deftere ilk kural\u0131
+        yaz."
+      - "Kapak tek ba\u015F\u0131na a\xE7\u0131klamaz. Is\u0131tsan da a\xE7\u0131k
+        b\u0131raksan da bu kazanda atom ne kaybolur ne t\xFCrer."
+      - "Hafif de olsa her atom say\u0131l\u0131r. D\xF6rt H girdi, d\xF6rt H \xE7\u0131kt\u0131."
+    discoveryId: K-0
+    discoveryText: "Kazana ne girerse o \xE7\u0131kar: tepkimede atomlar kaybolmaz,
+      yoktan var olmaz."
+    title: "\xC7\u0131rakl\u0131k: \u0130lk Kural"
+    placeLine: "C\xE2bir Usta, at\xF6lye"
+    equation: "2H<sub>2</sub> \u2192 2H<sub>2</sub>"
+    iconFormula: H2
+    usage: 
+    fieldNotes: []
   - taskId: denk_1
+    lesson:
+      title: Atomlar kaybolmaz
+      pages:
+      - blocks:
+        - kind: 0
+          text: Ders notu
+          detail: "Denkle\u015Ftirme K\xF6y\xFC, 1. g\xF6rev"
+          items: []
+          counts: []
+        - kind: 1
+          text: Atomlar kaybolmaz
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Kimyasal tepkimede atomlar yok olmaz, yoktan da var olmaz. Yaln\u0131zca
+            aralar\u0131ndaki ba\u011Flar kopar ve yeni ba\u011Flar kurulur. Bu y\xFCzden
+            tepkimeden \xF6nce ve sonra her elementin atom say\u0131s\u0131 ayn\u0131d\u0131r."
+          detail: 
+          items: []
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: "Kazan\u0131n terazisi de bunu \xF6l\xE7er"
+          detail: 
+          items: []
+          counts: []
+        - kind: 5
+          text: 
+          detail: 
+          items: []
+          counts:
+          - element: H
+            left: 4
+            right: 4
+          - element: O
+            left: 2
+            right: 2
+        - kind: 4
+          text: "2H<sub>2</sub> + O<sub>2</sub> \u2192 2H<sub>2</sub>O"
+          detail: 
+          items: []
+          counts: []
+        - kind: 10
+          text: "Lavoisier, 1789: k\xFCtlenin korunumu kanunu. C\xE2bir\u2019e atfedilen
+            yaz\u0131lar bu i\u015Fe terazi ilmi der."
+          detail: 
+          items: []
+          counts: []
+      - blocks:
+        - kind: 1
+          text: "Nas\u0131l denkle\u015Ftirilir?"
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "Girenleri (tepkenleri) sola, \xFCr\xFCnleri sa\u011Fa yaz."
+          - "Her elementin atomlar\u0131n\u0131 iki tarafta ayr\u0131 ayr\u0131 say."
+          - "Eksik kalan tarafta maddenin \xF6n\xFCne katsay\u0131 yaz."
+          - "B\xFCt\xFCn elementler e\u015Fitlenince dur. Katsay\u0131lar en k\xFC\xE7\xFCk
+            tam say\u0131lar olsun."
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 8
+          text: "2H<sub>2</sub>O\u2019daki b\xFCy\xFCk 2 katsay\u0131d\u0131r, ka\xE7
+            su molek\xFCl\xFC oldu\u011Funu s\xF6yler. K\xFC\xE7\xFCk 2 alt indistir
+            ve maddenin kendisidir. Alt indisi de\u011Fi\u015Ftirirsen madde de\u011Fi\u015Fir:
+            H<sub>2</sub>O<sub>2</sub> su de\u011Fildir."
+          detail: Dikkat
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "\xC7\xF6z\xFCml\xFC \xF6rnek"
+          detail: 
+          items: []
+          counts: []
+        - kind: 1
+          text: "H<sub>2</sub> + Cl<sub>2</sub> \u2192 HCl"
+          detail: 
+          items: []
+          counts: []
+        - kind: 5
+          text: 
+          detail: 
+          items: []
+          counts:
+          - element: H
+            left: 2
+            right: 1
+          - element: Cl
+            left: 2
+            right: 1
+        - kind: 3
+          text: "Sa\u011Fda hem H hem Cl birer atom eksik. Alt indise dokunmadan
+            HCl\u2019nin \xF6n\xFCne 2 yaz:"
+          detail: 
+          items: []
+          counts: []
+        - kind: 1
+          text: "H<sub>2</sub> + Cl<sub>2</sub> \u2192 2HCl"
+          detail: 
+          items: []
+          counts: []
+        - kind: 5
+          text: 
+          detail: 
+          items: []
+          counts:
+          - element: H
+            left: 2
+            right: 2
+          - element: Cl
+            left: 2
+            right: 2
+      - blocks:
+        - kind: 0
+          text: "Bu g\xF6revde"
+          detail: "Muhtar Yusuf, meydan \xE7e\u015Fmesi"
+          items: []
+          counts: []
+        - kind: 1
+          text: "\xC7e\u015Fmeye su"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Sipari\u015F kart\u0131 neyin girip neyin \xE7\u0131kaca\u011F\u0131n\u0131
+            s\xF6yler. Ka\xE7 kavanoz gerekti\u011Fini sen bulacaks\u0131n."
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "Pazardan ya da raftan H<sub>2</sub> ve O<sub>2</sub> kavanozlar\u0131n\u0131
+            al."
+          - "Kazana birer birer d\xF6k. Her d\xF6k\xFC\u015Fte teraziye bak: H ve
+            O iki kefede ayr\u0131 ayr\u0131 e\u015Fit mi?"
+          - "Terazi dengeye gelince oca\u011F\u0131 yak."
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 7
+          text: "D\xF6k\xFClen kavanoz geri al\u0131nmaz. D\xF6kmeden \xF6nce say."
+          detail: Unutma
+          items: []
+          counts: []
     reasoning:
       question: "Peki \xE7\u0131rak, neden iki su molek\xFCl\xFC elde ettin?"
       options:
@@ -43,7 +334,173 @@ MonoBehaviour:
     discoveryText: "Tepkimede atomlar\u0131n t\xFCr\xFC ve say\u0131s\u0131 korunur;
       de\u011Fi\u015Fen, atomlar\u0131n birbirine ba\u011Flan\u0131\u015F\u0131d\u0131r.
       Su olu\u015Furken her 2 H<sub>2</sub> i\xE7in 1 O<sub>2</sub> harcan\u0131r."
+    title: "Kuru \xC7e\u015Fme"
+    placeLine: "Muhtar Yusuf, meydan \xE7e\u015Fmesi"
+    equation: "2H<sub>2</sub> + O<sub>2</sub> \u2192 2H<sub>2</sub>O"
+    iconFormula: H2O
+    usage: 
+    fieldNotes:
+    - subject: Matematik
+      heading: Matematik, oran
+      text: "6 su i\xE7in 6 H<sub>2</sub> ve 3 O<sub>2</sub> gerekir."
+    - subject: Biyoloji
+      heading: "Biyoloji, su d\xF6ng\xFCs\xFC"
+      text: "Dere kurudu: d\xF6ng\xFCde ya\u011F\u0131\u015F eksik."
   - taskId: denk_2
+    lesson:
+      title: Yanma
+      pages:
+      - blocks:
+        - kind: 0
+          text: Ders notu
+          detail: "Denkle\u015Ftirme K\xF6y\xFC, 2. g\xF6rev"
+          items: []
+          counts: []
+        - kind: 1
+          text: Yanma
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Yanma, bir maddenin oksijenle tepkimeye girip \u0131s\u0131 ve \u0131\u015F\u0131k
+            vermesidir. Karbon ve hidrojenden olu\u015Fan yak\u0131tlar yeterli oksijenle
+            yan\u0131nca karbondioksit ve su verir."
+          detail: 
+          items: []
+          counts: []
+        - kind: 4
+          text: "yak\u0131t + O<sub>2</sub> \u2192 CO<sub>2</sub> + H<sub>2</sub>O"
+          detail: 
+          items: []
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: Hava yetmezse
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Yanma eksik kal\u0131r: alev sar\u0131la\u015F\u0131r, is (karbon)
+            ve karbon monoksit \xE7\u0131kar. Fenerlerin islenmesinin sebebi budur."
+          detail: 
+          items: []
+          counts: []
+        - kind: 10
+          text: "Evlere gelen do\u011Fal gaz\u0131n b\xFCy\xFCk k\u0131sm\u0131 metand\u0131r;
+            ocakta mavi alevle yanar."
+          detail: 
+          items: []
+          counts: []
+      - blocks:
+        - kind: 1
+          text: "Yak\u0131t nas\u0131l denkle\u015Ftirilir?"
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "\xD6nce karbonu e\u015Fitle: CO<sub>2</sub>\u2019nin \xF6n\xFCne yak\u0131ttaki
+            C say\u0131s\u0131n\u0131 yaz."
+          - "Sonra hidrojeni e\u015Fitle: her H<sub>2</sub>O iki H al\u0131r."
+          - "En son oksijeni say: sa\u011Fdaki b\xFCt\xFCn O\u2019lar\u0131 topla,
+            O<sub>2</sub> ile kar\u015F\u0131la."
+          - "Oksijen en sona kal\u0131r, \xE7\xFCnk\xFC O<sub>2</sub> ba\u015Fka
+            bir elementi bozmaz."
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 8
+          text: "Oksijeni yaln\u0131zca CO<sub>2</sub>\u2019de sayma. Sudaki oksijen
+            de sa\u011F tarafa dahildir."
+          detail: Dikkat
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "\xC7\xF6z\xFCml\xFC \xF6rnek"
+          detail: 
+          items: []
+          counts: []
+        - kind: 1
+          text: "C<sub>2</sub>H<sub>4</sub> + O<sub>2</sub> \u2192 CO<sub>2</sub>
+            + H<sub>2</sub>O"
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "C: solda 2 var. Sa\u011Fa 2CO<sub>2</sub> yaz."
+          - "H: solda 4 var. Sa\u011Fa 2H<sub>2</sub>O yaz."
+          - "O: sa\u011Fda 2\xB72 + 2 = 6 oldu. Sola 3O<sub>2</sub> yaz."
+          counts: []
+        - kind: 4
+          text: "C<sub>2</sub>H<sub>4</sub> + 3O<sub>2</sub> \u2192 2CO<sub>2</sub>
+            + 2H<sub>2</sub>O"
+          detail: 
+          items: []
+          counts: []
+        - kind: 5
+          text: 
+          detail: 
+          items: []
+          counts:
+          - element: C
+            left: 2
+            right: 2
+          - element: H
+            left: 4
+            right: 4
+          - element: O
+            left: 6
+            right: 6
+      - blocks:
+        - kind: 0
+          text: "Bu g\xF6revde"
+          detail: "Fenerci Demir, \xE7ar\u015F\u0131 fenerleri"
+          items: []
+          counts: []
+        - kind: 1
+          text: Fenerlere temiz alev
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Fenercinin gaz\u0131 metand\u0131r: CH<sub>4</sub>. Oksijeni ne
+            eksik ne fazla vereceksin."
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - Raftan ya da pazardan CH<sub>4</sub> ve O<sub>2</sub> al.
+          - "\xD6nce C ve H\u2019yi iki kefede e\u015Fitle."
+          - "Sonra O<sub>2</sub>\u2019yi teker teker d\xF6k, O say\u0131s\u0131n\u0131
+            izle."
+          - "Terazi dengeye gelince oca\u011F\u0131 yak."
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 7
+          text: "Fazla O<sub>2</sub> de dengeyi bozar; denge yoksa kazan k\xF6p\xFCr\xFCr."
+          detail: Unutma
+          items: []
+          counts: []
     reasoning:
       question: "Neden bir de\u011Fil iki O<sub>2</sub> koydun?"
       options:
@@ -63,7 +520,172 @@ MonoBehaviour:
     discoveryText: "Yanma tepkimelerinde oksijenin rol\xFC vard\u0131r: yak\u0131t
       O<sub>2</sub> ile birle\u015Fir. Karbon ve hidrojen i\xE7eren yak\u0131tlar
       CO<sub>2</sub> ve H<sub>2</sub>O verir. Hava yetmezse is (karbon) ve CO \xE7\u0131kar."
+    title: "\u0130sli Fenerler"
+    placeLine: "Fenerci Demir, \xE7ar\u015F\u0131 fenerleri"
+    equation: "CH<sub>4</sub> + 2O<sub>2</sub> \u2192 CO<sub>2</sub> + 2H<sub>2</sub>O"
+    iconFormula: CH4
+    usage: "Bu sayfa F\u0131r\u0131nc\u0131n\u0131n Mektubu\u2019nda i\u015Fe yarayacak."
+    fieldNotes:
+    - subject: Biyoloji
+      heading: "Biyoloji, h\xFCcresel solunum"
+      text: "H\xFCcre de besini O<sub>2</sub> ile kullan\u0131r; CO<sub>2</sub> ve
+        su \xE7\u0131kar, ama yava\u015F ve ad\u0131m ad\u0131m."
+    - subject: Fizik
+      heading: "Fizik, enerji bi\xE7imleri"
+      text: "Fenerde kimyasal enerji \u0131s\u0131ya ve \u0131\u015F\u0131\u011Fa
+        d\xF6n\xFC\u015F\xFCr."
   - taskId: denk_3
+    lesson:
+      title: "S\u0131rayla say"
+      pages:
+      - blocks:
+        - kind: 0
+          text: Ders notu
+          detail: "Denkle\u015Ftirme K\xF6y\xFC, 3. g\xF6rev"
+          items: []
+          counts: []
+        - kind: 1
+          text: "S\u0131rayla say"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Molek\xFCl b\xFCy\xFCd\xFCk\xE7e atom say\u0131s\u0131 artar ama
+            y\xF6ntem de\u011Fi\u015Fmez. Kar\u0131\u015Fmas\u0131n diye hep ayn\u0131
+            s\u0131ray\u0131 izle: \xF6nce karbon, sonra hidrojen, en son oksijen."
+          detail: 
+          items: []
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: Neden oksijen en sonda?
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Oksijen hem CO<sub>2</sub>\u2019de hem H<sub>2</sub>O\u2019da var.
+            Karbon ve hidrojen yerine oturmadan oksijeni sayarsan her de\u011Fi\u015Fiklikte
+            ba\u015Ftan saymak zorunda kal\u0131rs\u0131n. O<sub>2</sub> yaln\u0131z
+            oksijen ta\u015F\u0131r; en son onunla tamamlamak kolayd\u0131r."
+          detail: 
+          items: []
+          counts: []
+        - kind: 10
+          text: "T\xFCp gaz \xE7o\u011Funlukla propan ve b\xFCtand\u0131r. Tam yan\u0131nca
+            alevi mavi olur."
+          detail: 
+          items: []
+          counts: []
+      - blocks:
+        - kind: 1
+          text: "Katsay\u0131 b\xFCt\xFCn molek\xFCl\xFC \xE7arpar"
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "Katsay\u0131 ile alt indisi \xE7arp: 3CO<sub>2</sub> i\xE7inde 3 C ve
+            6 O var."
+          - "4H<sub>2</sub>O i\xE7inde 8 H ve 4 O var."
+          - "Oksijen say\u0131s\u0131 tek \xE7\u0131karsa b\xFCt\xFCn katsay\u0131lar\u0131
+            2 ile \xE7arp\u0131p yeniden say."
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 8
+          text: "Katsay\u0131y\u0131 yaln\u0131zca ilk atoma uygulama. 3CO<sub>2</sub>,
+            3 C ve 6 O demektir; 3 C ve 2 O de\u011Fil."
+          detail: Dikkat
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "\xC7\xF6z\xFCml\xFC \xF6rnek"
+          detail: 
+          items: []
+          counts: []
+        - kind: 1
+          text: "C<sub>2</sub>H<sub>6</sub> + O<sub>2</sub> \u2192 CO<sub>2</sub>
+            + H<sub>2</sub>O"
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "C: 2 karbon i\xE7in sa\u011Fa 2CO<sub>2</sub>."
+          - "H: 6 hidrojen i\xE7in sa\u011Fa 3H<sub>2</sub>O."
+          - "O: sa\u011Fda 4 + 3 = 7 oksijen, tek say\u0131. Hepsini 2 ile \xE7arp."
+          counts: []
+        - kind: 4
+          text: "2C<sub>2</sub>H<sub>6</sub> + 7O<sub>2</sub> \u2192 4CO<sub>2</sub>
+            + 6H<sub>2</sub>O"
+          detail: 
+          items: []
+          counts: []
+        - kind: 5
+          text: 
+          detail: 
+          items: []
+          counts:
+          - element: C
+            left: 4
+            right: 4
+          - element: H
+            left: 12
+            right: 12
+          - element: O
+            left: 14
+            right: 14
+      - blocks:
+        - kind: 0
+          text: "Bu g\xF6revde"
+          detail: "F\u0131r\u0131nc\u0131 Zehra, kasaba f\u0131r\u0131n\u0131"
+          items: []
+          counts: []
+        - kind: 1
+          text: "F\u0131r\u0131n\u0131 yeniden yak"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "F\u0131r\u0131n\u0131n yak\u0131t\u0131 propand\u0131r: C<sub>3</sub>H<sub>8</sub>.
+            Bu kez sipari\u015F kart\u0131nda yaln\u0131zca \xFCr\xFCnler yaz\u0131yor;
+            girenleri sen kuracaks\u0131n."
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "Sa\u011F kefeye bak: C, H ve O\u2019dan ka\xE7ar tane var?"
+          - "\xD6nce C<sub>3</sub>H<sub>8</sub> d\xF6k. C ve H iki kefede e\u015Fit
+            mi?"
+          - "En son O<sub>2</sub>\u2019yi teker teker ekle, oksijeni iki kefede topla."
+          - "Terazi dengeye gelince oca\u011F\u0131 yak."
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 7
+          text: "Katsay\u0131 kavanoz say\u0131s\u0131d\u0131r: 3O<sub>2</sub> \xFC\xE7
+            kavanoz, ama alt\u0131 oksijen atomu."
+          detail: Unutma
+          items: []
+          counts: []
     reasoning:
       question: 
       options:
@@ -79,7 +701,175 @@ MonoBehaviour:
     discoveryText: "Dengesizli\u011Fi bulmak i\xE7in her elementi iki kefede ayr\u0131
       say. Denkle\u015Ftirirken \xF6nce tek yerde ge\xE7en elementler (C, H), oksijen
       en son."
+    title: "So\u011Fuk F\u0131r\u0131n"
+    placeLine: "F\u0131r\u0131nc\u0131 Zehra, kasaba f\u0131r\u0131n\u0131"
+    equation: "C<sub>3</sub>H<sub>8</sub> + 5O<sub>2</sub> \u2192 3CO<sub>2</sub>
+      + 4H<sub>2</sub>O"
+    iconFormula: C3H8
+    usage: 
+    fieldNotes:
+    - subject: Matematik
+      heading: "Matematik, orant\u0131"
+      text: Bir propan 5 O<sub>2</sub> ister; 3 propan 15 O<sub>2</sub> ister.
+    - subject: Biyoloji
+      heading: Biyoloji, fermantasyon
+      text: "Hamur, mayan\u0131n \xE7\u0131kard\u0131\u011F\u0131 CO<sub>2</sub>
+        ile kabar\u0131r."
   - taskId: denk_4
+    lesson:
+      title: "Ara \xFCr\xFCn"
+      pages:
+      - blocks:
+        - kind: 0
+          text: Ders notu
+          detail: "Denkle\u015Ftirme K\xF6y\xFC, 4. g\xF6rev"
+          items: []
+          counts: []
+        - kind: 1
+          text: "Ara \xFCr\xFCn"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Baz\u0131 \xFCr\xFCnler tek tepkimede elde edilmez. \xD6nce bir
+            ara \xFCr\xFCn yap\u0131l\u0131r, sonra o ara \xFCr\xFCn yeni bir tepkimeye
+            girer."
+          detail: 
+          items: []
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: Analiz ve sentez
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Analizde (ayr\u0131\u015Fma) tek bir madde daha basit maddelere
+            ayr\u0131l\u0131r. Sentezde (olu\u015Fum) birden \xE7ok madde birle\u015Fip
+            tek bir \xFCr\xFCn verir."
+          detail: 
+          items: []
+          counts: []
+        - kind: 10
+          text: "Kire\xE7li har\xE7 duvarda havadaki CO<sub>2</sub>\u2019yi yava\u015F
+            yava\u015F geri al\u0131r ve ta\u015Fa d\xF6ner; bu y\xFCzden sertle\u015Fir."
+          detail: 
+          items: []
+          counts: []
+      - blocks:
+        - kind: 1
+          text: "Her denklem katsay\u0131 istemez"
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - 'Denklemi yaz ve hemen say: belki zaten denktir.'
+          - "Denkse b\xFCt\xFCn katsay\u0131lar 1\u2019dir; 1 yaz\u0131lmaz."
+          - "Birinci ad\u0131m\u0131n \xFCr\xFCn\xFC, ikinci ad\u0131m\u0131n gireni
+            olur. Onu kaybetme."
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 8
+          text: "Gaz \xE7\u0131k\u0131nca k\xFCtle kaybolmaz. Kire\xE7 ta\u015F\u0131
+            \u0131s\u0131t\u0131l\u0131nca hafifler, \xE7\xFCnk\xFC CO<sub>2</sub>
+            havaya kar\u0131\u015F\u0131r; atomlar\u0131 ba\u015Fka bir maddededir."
+          detail: Dikkat
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "\xC7\xF6z\xFCml\xFC \xF6rnek"
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: "1. ad\u0131m, sentez"
+          detail: 
+          items: []
+          counts: []
+        - kind: 4
+          text: "C + O<sub>2</sub> \u2192 CO<sub>2</sub>"
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: "2. ad\u0131m, CO<sub>2</sub> ara \xFCr\xFCn"
+          detail: 
+          items: []
+          counts: []
+        - kind: 4
+          text: "CO<sub>2</sub> + H<sub>2</sub>O \u2192 H<sub>2</sub>CO<sub>3</sub>"
+          detail: 
+          items: []
+          counts: []
+        - kind: 5
+          text: 
+          detail: 
+          items: []
+          counts:
+          - element: C
+            left: 1
+            right: 1
+          - element: H
+            left: 2
+            right: 2
+          - element: O
+            left: 3
+            right: 3
+        - kind: 3
+          text: "\u0130ki denklem de zaten denk: katsay\u0131 yok. Gazozdaki karbonik
+            asit b\xF6yle olu\u015Fur."
+          detail: 
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "Bu g\xF6revde"
+          detail: "Duvarc\u0131 Halil, y\u0131k\u0131k k\xF6pr\xFC"
+          items: []
+          counts: []
+        - kind: 1
+          text: "Ta\u015Ftan harca"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Halil s\xF6nm\xFC\u015F kire\xE7 istiyor: Ca(OH)<sub>2</sub>. Elinde
+            kire\xE7 ta\u015F\u0131 (CaCO<sub>3</sub>) ve su var. \u0130\u015F iki
+            ad\u0131mda biter."
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "Birinci ad\u0131m: kire\xE7 ta\u015F\u0131n\u0131 ayr\u0131\u015Ft\u0131r.
+            Ta\u015F, s\xF6nmemi\u015F kirece (CaO) ve CO<sub>2</sub>\u2019ye ayr\u0131l\u0131r."
+          - "\u0130kinci ad\u0131m: ara \xFCr\xFCn CaO\u2019yu suyla birle\u015Ftir."
+          - "Her ad\u0131mda \xF6nce say, sonra d\xF6k."
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 7
+          text: Saymadan kavanoz ekleme. Fazla madde de dengeyi bozar.
+          detail: Unutma
+          items: []
+          counts: []
     reasoning:
       question: "Kire\xE7 ta\u015F\u0131n\u0131n i\xE7indeki karbon nereye gitti?"
       options:
@@ -97,7 +887,187 @@ MonoBehaviour:
     discoveryId: K-4
     discoveryText: "Bir tepkimenin \xFCr\xFCn\xFC ba\u015Fka bir tepkimenin gireni
       olabilir (ara \xFCr\xFCn). Kire\xE7: CaCO<sub>3</sub> \u2192 CaO \u2192 Ca(OH)<sub>2</sub>."
+    title: "Y\u0131k\u0131k K\xF6pr\xFC"
+    placeLine: "Duvarc\u0131 Halil, ta\u015F k\xF6pr\xFC"
+    equation: "CaO + H<sub>2</sub>O \u2192 Ca(OH)<sub>2</sub>"
+    iconFormula: CaOH2
+    usage: 
+    fieldNotes:
+    - subject: Matematik
+      heading: "Matematik, iki ad\u0131ml\u0131 i\u015Flem"
+      text: "\u0130lk ad\u0131m\u0131n \xFCr\xFCn\xFC ikinci ad\u0131m\u0131n gireni
+        oldu."
+    - subject: Biyoloji
+      heading: "Biyoloji, karbon d\xF6ng\xFCs\xFC"
+      text: "Kire\xE7 ta\u015F\u0131ndaki karbon CO<sub>2</sub> olarak havaya kar\u0131\u015Ft\u0131."
+    - subject: Fizik
+      heading: "Fizik, enerji bi\xE7imleri"
+      text: "Kire\xE7 s\xF6nd\xFCr\xFCl\xFCrken kimyasal enerji \u0131s\u0131 olarak
+        \xE7\u0131kar."
   - taskId: denk_5
+    lesson:
+      title: Oranla hesap
+      pages:
+      - blocks:
+        - kind: 0
+          text: Ders notu
+          detail: "Denkle\u015Ftirme K\xF6y\xFC, 5. g\xF6rev"
+          items: []
+          counts: []
+        - kind: 1
+          text: Oranla hesap
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Denklemdeki katsay\u0131lar bir tarif gibidir: maddelerin hangi
+            oranda harcand\u0131\u011F\u0131n\u0131 s\xF6yler."
+          detail: 
+          items: []
+          counts: []
+        - kind: 4
+          text: "2H<sub>2</sub> + O<sub>2</sub> \u2192 2H<sub>2</sub>O"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Her 2 H<sub>2</sub> i\xE7in 1 O<sub>2</sub> harcan\u0131r ve 2 H<sub>2</sub>O
+            \xE7\u0131kar. Oran 2\_:\_1\_:\_2."
+          detail: 
+          items: []
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: Biri biterse
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Tepkime, girenlerden biri bitince durur. \xD6nce biten maddeye s\u0131n\u0131rlay\u0131c\u0131
+            bile\u015Fen denir. \xD6teki madde fazla kal\u0131r; buna artan madde
+            denir."
+          detail: 
+          items: []
+          counts: []
+        - kind: 10
+          text: "Havadaki azottan amonyak yapmak, bug\xFCn g\xFCbrenin temel kayna\u011F\u0131d\u0131r."
+          detail: 
+          items: []
+          counts: []
+      - blocks:
+        - kind: 1
+          text: "\u0130stenen kadar \xFCret"
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "\xD6nce denklemi en k\xFC\xE7\xFCk katsay\u0131larla denkle\u015Ftir."
+          - "\u0130stenen \xFCr\xFCn ka\xE7 kat\u0131ysa b\xFCt\xFCn katsay\u0131lar\u0131
+            o say\u0131yla \xE7arp."
+          - "Tam o kadar al. Artan madde bo\u015Fa gider, paras\u0131 da gider."
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 8
+          text: "Katlarken yaln\u0131zca \xFCr\xFCn\xFC \xE7arpma. B\xFCt\xFCn katsay\u0131lar
+            ayn\u0131 say\u0131yla \xE7arp\u0131l\u0131r, yoksa denge bozulur."
+          detail: Dikkat
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "\xC7\xF6z\xFCml\xFC \xF6rnek"
+          detail: 
+          items: []
+          counts: []
+        - kind: 1
+          text: 6 su gerekiyor
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "2H<sub>2</sub> + O<sub>2</sub> \u2192 2H<sub>2</sub>O iki su verir.
+            Alt\u0131 su i\xE7in b\xFCt\xFCn katsay\u0131lar\u0131 3 ile \xE7arp:"
+          detail: 
+          items: []
+          counts: []
+        - kind: 4
+          text: "6H<sub>2</sub> + 3O<sub>2</sub> \u2192 6H<sub>2</sub>O"
+          detail: 
+          items: []
+          counts: []
+        - kind: 5
+          text: 
+          detail: 
+          items: []
+          counts:
+          - element: H
+            left: 12
+            right: 12
+          - element: O
+            left: 6
+            right: 6
+        - kind: 2
+          text: Artan madde
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Kazana 7 H<sub>2</sub> ve 3 O<sub>2</sub> koysayd\u0131n 3 O<sub>2</sub>
+            yaln\u0131zca 6 H<sub>2</sub> harcard\u0131; 1 H<sub>2</sub> artard\u0131.
+            Burada O<sub>2</sub> s\u0131n\u0131rlay\u0131c\u0131d\u0131r."
+          detail: 
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "Bu g\xF6revde"
+          detail: "\xC7ift\xE7i Elif, tarla"
+          items: []
+          counts: []
+        - kind: 1
+          text: "D\xF6rt kavanoz g\xFCbre ruhu"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "G\xFCbre ruhu amonyakt\u0131r: NH<sub>3</sub>. Elif paray\u0131
+            pe\u015Fin verdi; pazarda N<sub>2</sub> ve H<sub>2</sub>\u2019nin fiyat\u0131na
+            bak."
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "Bir kavanoz NH<sub>3</sub> i\xE7in denklemi kur: N<sub>2</sub> ve H<sub>2</sub>\u2019den
+            NH<sub>3</sub>."
+          - "D\xF6rt kavanoza g\xF6re katsay\u0131lar\u0131 katla."
+          - "Pazardan tam o kadar al, kazana d\xF6k."
+          - "Terazi dengeye gelince oca\u011F\u0131 yak."
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 7
+          text: "\u0130ki giren her zaman birlikte t\xFCkenmez. Fazla ald\u0131\u011F\u0131n
+            kavanoz kazanda artar, bo\u015Fa gider; kesen de bo\u015Fal\u0131r."
+          detail: Unutma
+          items: []
+          counts: []
     reasoning:
       question: "Fazladan N<sub>2</sub> alsayd\u0131n neden kazanda kal\u0131rd\u0131?"
       options:
@@ -114,7 +1084,24 @@ MonoBehaviour:
     discoveryId: K-5
     discoveryText: "Tepkime girenleri katsay\u0131lar\u0131 oran\u0131nda harcar.
       Biri biterse tepkime durur; fazla olan artar."
+    title: "G\xFCbre Ruhu"
+    placeLine: "\xC7ift\xE7i Elif, tarla"
+    equation: "N<sub>2</sub> + 3H<sub>2</sub> \u2192 2NH<sub>3</sub>"
+    iconFormula: NH3
+    usage: 
+    fieldNotes:
+    - subject: Matematik
+      heading: "Matematik, do\u011Frusal maliyet"
+      text: "Maliyet = 3\xB7(N<sub>2</sub> say\u0131s\u0131) + 2\xB7(H<sub>2</sub>
+        say\u0131s\u0131). Fazla al\u0131nan kavanoz maliyeti bo\u015Funa art\u0131r\u0131r."
+    - subject: Biyoloji
+      heading: "Biyoloji, azot d\xF6ng\xFCs\xFC"
+      text: "Bitki havadaki N<sub>2</sub>\u2019yi do\u011Frudan kullanamaz; g\xFCbre
+        ba\u011Flanm\u0131\u015F azotu topra\u011Fa verir."
   - taskId: tur_1
+    lesson:
+      title: 
+      pages: []
     reasoning:
       question: 
       options:
@@ -131,7 +1118,16 @@ MonoBehaviour:
       madde \u2192 daha basit maddeler. Yanma: madde + O<sub>2</sub> \u2192 \u0131s\u0131
       ve \u0131\u015F\u0131k. (Kan\u0131tlar\u0131m: \xE7e\u015Fme, kire\xE7 ta\u015F\u0131,
       fener.)"
+    title: "Ustan\u0131n Defteri"
+    placeLine: "C\xE2bir Usta\u2019n\u0131n defteri, \xE7al\u0131\u015Fma masas\u0131"
+    equation: 
+    iconFormula: 
+    usage: 
+    fieldNotes: []
   - taskId: tur_2
+    lesson:
+      title: 
+      pages: []
     reasoning:
       question: 
       options:
@@ -147,7 +1143,24 @@ MonoBehaviour:
     discoveryText: "T\xFCr\xFC anlamak i\xE7in: tek giren varsa analiz, tek \xFCr\xFCn
       varsa sentez, girenlerde O<sub>2</sub> var ve \u0131s\u0131-\u0131\u015F\u0131k
       \xE7\u0131k\u0131yorsa yanma."
+    title: "Etiket Masas\u0131"
+    placeLine: "G\xFCvercinle gelen mektup, \xE7al\u0131\u015Fma masas\u0131"
+    equation: 
+    iconFormula: 
+    usage: 
+    fieldNotes:
+    - subject: Matematik
+      heading: "Matematik, s\u0131kl\u0131k tablosu"
+      text: "Kasaban\u0131n tepkimeleri t\xFCrlere g\xF6re say\u0131ld\u0131: en
+        az g\xF6r\xFClen analiz."
+    - subject: Biyoloji
+      heading: "Biyoloji, h\xFCcresel solunum"
+      text: "Glikozun O<sub>2</sub> ile tepkimesi yanmaya benzer, ama h\xFCcrede
+        enzimlerle ad\u0131m ad\u0131m olur."
   - taskId: tur_3
+    lesson:
+      title: 
+      pages: []
     reasoning:
       question: "Kazandan \xE7\u0131kan su buhar\u0131 neden kimyasal de\u011Fi\u015Fimin
         kan\u0131t\u0131 de\u011Fil?"
@@ -167,7 +1180,17 @@ MonoBehaviour:
     discoveryText: "Kimyasal de\u011Fi\u015Fimin kan\u0131tlar\u0131: yeni madde,
       gaz \xE7\u0131k\u0131\u015F\u0131, renk de\u011Fi\u015Fimi, \u0131s\u0131-\u0131\u015F\u0131k,
       koku. Yaln\u0131z \u015Fekil ya da h\xE2l de\u011Fi\u015Fimi fizikseldir."
+    title: "F\u0131r\u0131nc\u0131n\u0131n Mektubu"
+    placeLine: "F\u0131r\u0131nc\u0131 Zehra\u2019n\u0131n mektubu, \xE7al\u0131\u015Fma
+      masas\u0131"
+    equation: 
+    iconFormula: 
+    usage: 
+    fieldNotes: []
   - taskId: tur_4
+    lesson:
+      title: 
+      pages: []
     reasoning:
       question: 
       options:
@@ -182,7 +1205,24 @@ MonoBehaviour:
     discoveryId: K-9
     discoveryText: "Bir iddiay\u0131 \xE7\xFCr\xFCtmek i\xE7in tek kar\u015F\u0131
       \xF6rnek yeter; d\xFCzeltirken kan\u0131t g\xF6ster."
+    title: "Muhtar\u0131n Mektubu"
+    placeLine: "Muhtar Yusuf\u2019un mektubu, \xE7al\u0131\u015Fma masas\u0131"
+    equation: 
+    iconFormula: 
+    usage: 
+    fieldNotes:
+    - subject: Matematik
+      heading: "Matematik, kar\u015F\u0131 \xF6rnek"
+      text: "Her yanma CO<sub>2</sub> vermez: 2H<sub>2</sub> + O<sub>2</sub> \u2192
+        2H<sub>2</sub>O."
+    - subject: Biyoloji
+      heading: Biyoloji, fotosentez
+      text: "Bitki besinini fotosentezle kendi \xFCretir; topraktan su ve mineral
+        al\u0131r."
   - taskId: tur_5
+    lesson:
+      title: 
+      pages: []
     reasoning:
       question: "Fotosentezle solunum aras\u0131nda nas\u0131l bir ili\u015Fki g\xF6rd\xFCn?"
       options:
@@ -202,3 +1242,9 @@ MonoBehaviour:
     discoveryText: "T\xFCr, atomlar\u0131n nas\u0131l yeniden dizildi\u011Fini anlat\u0131r.
       Ayn\u0131 atomlar (C, H, O) do\u011Fada d\xF6ng\xFC h\xE2linde dola\u015F\u0131r:
       yak\u0131tta, havada, bitkide, bizde."
+    title: "Lonca S\u0131nav\u0131"
+    placeLine: "K\xE2tip Nevin, lonca"
+    equation: 
+    iconFormula: 
+    usage: 
+    fieldNotes: []
