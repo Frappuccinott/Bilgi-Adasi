@@ -1,0 +1,105 @@
+# 11 — Görev ve Başarım Listesi (ders bazlı)
+
+> Kaynak: `02_Mekanik/04-gorev-plani.md` (Mustafa + Claude, 13.11) ve `05-icerik-prototip.md`. Bu dosya o planı **kodun kullandığı kimliklerle** tek listede toplar: her görevin `taskId`'si, dersi, köyün `neighborhoodId`'si ve bitince açılan başarımlar.
+> Başarımlar **ders bazlı** ayrılır (karar 13.11): Esc → Başarımlar'da her ders bir sekme = bir `AchievementTree` asset'i (`Data/Achievements/AchievementTree_<Ders>.asset`). Bir görev, **defter kaydının (K-n) dersine** göre tek sekmeye girer; yeri (atölye, tarla, koru, çarşı) açıklamada yazar.
+> İlk sürüm menü **Kurulum → 13b** ile bu listeden üretilir; sonra metin, renk, simge, konum Inspector'dan düzenlenir (kod değişmez). Yeni ders = yeni asset; Achievements objesine kendiliğinden bağlanır.
+> Kimlik kuralı: görev `denk_n · tur_n · tarla_n · orman_n · carsi_n`, başarım `ach_<görev>` / `ach_<görev>_<koşul>`. Görev verisi yazılırken (`TaskData.id`) **bu kimlikler kullanılmalı**, yoksa başarım açılmaz.
+
+## Başarım türleri (sağ alttaki bildirim)
+
+| Tür | Bildirim başlığı | Ne zaman |
+|---|---|---|
+| Öğrenildi (`Learned`) | **Öğrenildi!** | Görev bitti; açıklama = o görevin Keşif Defteri cümlesi (K-n) |
+| Başarım (`Milestone`) | **Başarım kazanıldı!** | Çıraklık başladı, köy bitti, dersin bütün görevleri bitti (usta mührü) |
+| Meydan okuma (`Challenge`) | **Meydan okuma tamamlandı!** | Hatasız (köpürmeden / yanlışsız) ya da defter açmadan; bazıları gizli (`???`) |
+
+Koşullar: `GameStart` · `TaskCompleted` · `NeighborhoodCompleted` · `TaskFlawless` (görevde hiç hata yok) · `TaskWithoutHint` (defter açılmadı) · `AllOf` (listedeki başarımların hepsi açık).
+
+## Sekmeler
+
+| Sıra | Ders | Renk (09 paleti) | Durum | Usta |
+|---|---|---|---|---|
+| 0 | **Kimya** | bakır `#9F4E2B` | açık (prototip) | Câbir Usta |
+| 1 | **Matematik** | dağ mavisi `#4F7F96` | Yakında (Sürüm 2) | Hesap Ustası |
+| 2 | **Fizik** | kaya grisi `#6E8090` | Yakında (Sürüm 2) | Makine Ustası |
+| 3 | **Biyoloji** | yaprak yeşili `#3FA83A` | Yakında (Sürüm 2) | Hayat Ustası |
+
+Türkçe ve Sosyal'in henüz görevi yok; görevleri yazılınca asset eklenir (sekme kendiliğinden gelir).
+
+---
+
+## Kimya
+
+Ağaç: kök **İlk Kural** → üst dal Denkleştirme (D-1 → D-5 → köy), orta dal Tepkime Türleri (T-1 → T-5 → köy → iki köy), alt dal tarladaki Kimya görevleri. "Köpürmeden" meydan okumaları her denkleştirme görevinin altında.
+
+| Sv | Görev | taskId | Yer · veren | Katman (04 planı) | Defter | Başarımlar |
+|---|---|---|---|---|---|---|
+| 0 | Çıraklık: İlk Kural | — (tanıtım; görev verisi yok) | Atölye · Câbir Usta | Atom Görüşü (tanıtım) | K-0 | **İlk Kural** (kök, oyun başında) |
+| 1 | D-1 Kuru Çeşme | `denk_1` | Denk · çeşme · Muhtar Yusuf | Atom Görüşü | K-1 | Kuru Çeşme · *Köpürmeden: Çeşme* |
+| 2 | D-2 İsli Fenerler | `denk_2` | Denk · fener · Fenerci Demir | Tahmin: yanma için ne gerekir | K-2 | İsli Fenerler · *Köpürmeden: Fener* |
+| 3 | D-3 Soğuk Fırın | `denk_3` | Denk · fırın · Fırıncı Zehra | Hata Dedektifi | K-3 | Soğuk Fırın · *Köpürmeden: Fırın* |
+| 4 | D-4 Yıkık Köprü | `denk_4` | Denk · köprü · Duvarcı Halil | Ara ürün | K-4 | Yıkık Köprü · *Köpürmeden: Harç* |
+| 5 | D-5 Gübre Ruhu | `denk_5` | Denk · tarla · Çiftçi Elif | En az akçe + artan madde | K-5 | Gübre Ruhu · *Köpürmeden: Gübre* · *Defter Kapalı* (gizli) |
+| — | Köy bitti | köy `denklestirme` | | | | **Denkleştirme Köyü** |
+| 6 | T-1 Ustanın Defteri | `tur_1` | Tepk · masa · güvercin | Gözlemden çıkarım | K-6 | Ustanın Defteri |
+| 7 | T-2 Etiket Masası | `tur_2` | Tepk · masa · güvercin | Gözlem ↔ tür eşleme | K-7 | Etiket Masası |
+| 8 | T-3 Fırıncının Mektubu | `tur_3` | Tepk · masa · güvercin (Zehra) | Kimyasal değişim kanıtı | K-8 | Fırıncının Mektubu |
+| 9 | T-4 Muhtarın Mektubu | `tur_4` | Tepk · masa · güvercin (Yusuf) | Yanlış iddiayı düzelt | K-9 | Muhtarın Mektubu |
+| 10 | T-5 Lonca Sınavı | `tur_5` | Tepk · lonca · Kâtip Nevin | Transfer | K-10 | Lonca Sınavı · *Tek Seferde: Lonca* (gizli) |
+| — | Köy bitti | köy `tepkime_turleri` | | | | **Tepkime Türleri Köyü** |
+| — | İki köy bitti (kapanış) | `AllOf` | | | | **Hiçbir Atom Eksik Değil** |
+| 11 | Makineyi Uyandır (A1) | `tarla_1` | Bereket Tarlası (Sürüm 2) | Hata Dedektifi (yanma) | K-11 | Makineyi Uyandır |
+| 13 | Toprağı Tanı (A3) | `tarla_3` | Bereket Tarlası (Sürüm 2) | Tahmin (asit–baz) | K-13 | Toprağı Tanı |
+
+## Matematik (Sürüm 2)
+
+Ağaç: kök Tohum Hesabı → tarla dalı; koru dalı ve çarşı dalı kökten ayrılır. Bütün Matematik görevleri → **Hesap Ustası'nın Mührü**.
+
+| Sv | Görev | taskId | Yer | Konu | Defter |
+|---|---|---|---|---|---|
+| 14 | Tohum Hesabı (A4) | `tarla_4` | Bereket Tarlası | Veriden olasılığa | K-14 |
+| 15 | Ekim Düzeni (A5) | `tarla_5` | Bereket Tarlası | Sayma, algoritma | K-15 |
+| 19 | Hasat Raporu (A9) | `tarla_9` | Bereket Tarlası | İstatistik | K-19 |
+| 22 | Yön Çentiği (B2) | `orman_2` | Ormancı Korusu | Açı, yüzde | K-22 |
+| 27 | Teraziyle Satış | `carsi_1` | Çarşı | Oran | K-27 |
+| 28 | İndirim mi Kazık mı? | `carsi_2` | Çarşı | Yüzde | K-28 |
+| 29 | Yol Hesabı | `carsi_3` | Çarşı | Analitik | K-29 |
+| — | Çarşı bitti | köy `carsi` | | | **Çarşının Hesabı** |
+| — | Dersin bütün görevleri | `AllOf` | | | **Hesap Ustası'nın Mührü** |
+
+## Fizik (Sürüm 2)
+
+Ağaç: kök İlk Saban → tarla dalı; koru dalı kökten ayrılır. → **Makine Ustası'nın Mührü**.
+
+| Sv | Görev | taskId | Yer | Konu | Defter |
+|---|---|---|---|---|---|
+| 12 | İlk Saban (A2) | `tarla_2` | Bereket Tarlası | Sabit hız (FİZ.10.1.1) | K-12 |
+| 16 | Kuyudan Tarlaya (A6) | `tarla_6` | Bereket Tarlası | İş, güç (FİZ.10.2.2) | K-16 |
+| 20 | Değirmenden Fırına (A10) | `tarla_10` | Bereket Tarlası | Enerji kaynakları (FİZ.10.2.5) | K-20 |
+| 23 | Ağaç Düşüyor! (B3) | `orman_3` | Ormancı Korusu | Mekanik enerjinin korunumu (FİZ.10.2.4) | K-23 |
+| 24 | Kızakla Taşı (B4) | `orman_4` | Ormancı Korusu | İş, güç (FİZ.10.2.1–2) | K-24 |
+| 26 | Odun Ateşe (B6) | `orman_6` | Ormancı Korusu | Enerji dönüşümü (FİZ.10.2.3, 10.2.5) | K-26 |
+| — | Dersin bütün görevleri | `AllOf` | | | **Makine Ustası'nın Mührü** |
+
+## Biyoloji (Sürüm 2)
+
+Ağaç: kök Elif'in Gübresi → tarla dalı; koru dalı kökten ayrılır. → **Hayat Ustası'nın Mührü**.
+
+| Sv | Görev | taskId | Yer | Konu | Defter |
+|---|---|---|---|---|---|
+| 17 | Elif'in Gübresi (A7) | `tarla_7` | Bereket Tarlası | Azot döngüsü | K-17 |
+| 18 | Güneşten Besine (A8) | `tarla_8` | Bereket Tarlası | Fotosentez (BİY.10.1.2) | K-18 |
+| 21 | Hangi Ağaç? (B1) | `orman_1` | Ormancı Korusu | Sürdürülebilirlik | K-21 |
+| 25 | Bir Kes, Üç Dik (B5) | `orman_5` | Ormancı Korusu | Ekolojik ayak izi | K-25 |
+| — | Dersin bütün görevleri | `AllOf` | | | **Hayat Ustası'nın Mührü** |
+
+## Ders ataması (birden çok derse dokunan görevler)
+
+Görev, **defter cümlesinin dersine** girer. Planda iki ders yazanlar: A2 İlk Saban (Mat · alan + Fizik · hız → K-12 hız: **Fizik**), A10 Değirmenden Fırına (Mat · oran + Biyo + Fizik → K-20 enerji: **Fizik**), A1 Makineyi Uyandır (Kimya · yanma → **Kimya**), B5 Bir Kes, Üç Dik (Mat · olasılık + Biyo → K-25: **Biyoloji**). Değiştirmek için: başarımı ilgili asset'e taşı (kimlik aynı kalır, kayıt bozulmaz).
+
+Bölüm başarımları "Bereket Tarlası" ve "Ormancı Korusu" birden çok derse ait olduğu için kaldırıldı; köy olayları gelince istenirse Kimya sekmesine eklenebilir.
+
+## Sonra eklenebilecek koşullar (kod gerekir, P2)
+- Ustanın Sorgusu ilk seferde doğru → "Neden'ini biliyorum".
+- Hata Dedektifi tek seferde → "Dedektif".
+- Saha notu mührü (şehir başına 10 çentik) → dersin sekmesine.

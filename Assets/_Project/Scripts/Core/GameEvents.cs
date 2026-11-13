@@ -26,6 +26,15 @@ namespace BilgiAdasi.Core
         /// <summary>Şu an elde madde var mı (sonradan açılan dinleyiciler için).</summary>
         public static bool HasHandItem { get; private set; }
 
+        /// <summary>Başarım açıldı (achievementId). Ses/efekt dinleyebilir; bildirimi AchievementController gösterir.</summary>
+        public static event Action<string> AchievementUnlocked;
+
+        /// <summary>Duraklatma menüsü açıldı (true) / kapandı (false).</summary>
+        public static event Action<bool> PauseChanged;
+
+        public static void RaiseAchievementUnlocked(string achievementId) => AchievementUnlocked?.Invoke(achievementId);
+        public static void RaisePauseChanged(bool paused) => PauseChanged?.Invoke(paused);
+
         public static void RaiseHandItemChanged(bool hasItem)
         {
             if (hasItem == HasHandItem) return;
@@ -59,6 +68,8 @@ namespace BilgiAdasi.Core
             ActiveOrder = null;
             HandItemChanged = null;
             HasHandItem = false;
+            AchievementUnlocked = null;
+            PauseChanged = null;
         }
     }
 }

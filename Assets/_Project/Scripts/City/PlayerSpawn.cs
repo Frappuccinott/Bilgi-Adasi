@@ -11,7 +11,12 @@ namespace BilgiAdasi.City
         [Tooltip("PlayerRig prefab'ı (oyuncu + Main Camera). Prefab'da hazır gelir; değiştirmeyin.")]
         [SerializeField] private GameObject playerRigPrefab;
 
+        [Tooltip("Oyuncu doğma noktasının bu kadar altına düşerse (harita deliği, kenar) buraya geri ışınlanır.")]
+        [SerializeField] private float fallLimit = 50f;
+
         public GameObject SpawnedRig { get; private set; }
+
+        private BilgiAdasi.Player.PlayerMotor motor;
 
         private void Awake()
         {
@@ -24,6 +29,15 @@ namespace BilgiAdasi.City
             var rotation = Quaternion.Euler(0f, transform.eulerAngles.y, 0f);
             SpawnedRig = Instantiate(playerRigPrefab, transform.position, rotation);
             SpawnedRig.name = playerRigPrefab.name;
+            motor = SpawnedRig.GetComponentInChildren<BilgiAdasi.Player.PlayerMotor>();
+        }
+
+        private void Update()
+        {
+            // Bisikletteyken kapsül kapalıdır; o durumu Bicycle kendisi toparlar.
+            if (motor == null || !motor.Controller.enabled) return;
+            if (motor.transform.position.y < transform.position.y - fallLimit)
+                motor.Teleport(transform.position, Quaternion.Euler(0f, transform.eulerAngles.y, 0f));
         }
 
 #if UNITY_EDITOR

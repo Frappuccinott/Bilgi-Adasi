@@ -247,6 +247,8 @@ RectTransform:
   - {fileID: 1936092191}
   - {fileID: 2072981}
   - {fileID: 299477651}
+  - {fileID: 1248062230}
+  - {fileID: 2071991557}
   m_Father: {fileID: 84545788}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2168,6 +2170,65 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d4df151157c8f444bcd27ef14992c7e, type: 3}
+--- !u!1 &1248062229
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1248062230}
+  - component: {fileID: 1248062231}
+  m_Layer: 0
+  m_Name: AchievementToast
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1248062230
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1248062229}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 165857649}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1248062231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1248062229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d818956e1c6b9904ab78fb8996056ca3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.UI.PlaceholderAchievementToast
+  showSeconds: 4.5
+  slideSeconds: 0.35
+  size: {x: 460, y: 112}
+  margin: {x: 24, y: 24}
+  frameColor: {r: 0.33, g: 0.22, b: 0.13, a: 0.95}
+  backgroundColor: {r: 0.18, g: 0.13, b: 0.09, a: 0.95}
+  titleColor: {r: 0.91, g: 0.85, b: 0.71, a: 0.97}
+  headerFontSize: 24
+  titleFontSize: 28
+  font: {fileID: 0}
+  frameSprite: {fileID: 0}
 --- !u!1 &1290516240
 GameObject:
   m_ObjectHideFlags: 0
@@ -3581,6 +3642,144 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2060046165}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2071991556
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2071991557}
+  - component: {fileID: 2071991558}
+  m_Layer: 0
+  m_Name: PauseMenu
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2071991557
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071991556}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 165857649}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2071991558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071991556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a56b3e9967789a409a171c7278e82d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.UI.PlaceholderPauseMenu
+  pausedTitle: "Duraklat\u0131ld\u0131"
+  resumeWord: Devam et
+  achievementsWord: "Ba\u015Far\u0131mlar"
+  quitWord: "Oyundan \xE7\u0131k"
+  backWord: Geri
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.6}
+  panelColor: {r: 0.33, g: 0.22, b: 0.13, a: 0.95}
+  viewportColor: {r: 0.18, g: 0.13, b: 0.09, a: 0.95}
+  buttonColor: {r: 0.91, g: 0.85, b: 0.71, a: 0.97}
+  titleColor: {r: 0.91, g: 0.85, b: 0.71, a: 0.97}
+  inkColor: {r: 0.23, g: 0.16, b: 0.1, a: 1}
+  lockedNodeColor: {r: 0.55, g: 0.4, b: 0.24, a: 0.95}
+  secretNodeColor: {r: 0.18, g: 0.13, b: 0.09, a: 0.95}
+  unlockedNodeColor: {r: 0.91, g: 0.85, b: 0.71, a: 0.97}
+  lockedLineColor: {r: 0.55, g: 0.4, b: 0.24, a: 0.95}
+  activeTabColor: {r: 0.97, g: 0.66, b: 0, a: 1}
+  font: {fileID: 0}
+  panelSprite: {fileID: 0}
+  nodeSprite: {fileID: 0}
+  buttonSprite: {fileID: 0}
+  nodeSize: {x: 210, y: 84}
+  step: {x: 260, y: 124}
+  padding: 40
+  lineWidth: 5
+  nodeFontSize: 20
+  treePanelSize: {x: 1760, y: 960}
+--- !u!1 &2097492787
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2097492790}
+  - component: {fileID: 2097492789}
+  - component: {fileID: 2097492788}
+  m_Layer: 0
+  m_Name: Achievements
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2097492788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097492787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16b7c53e0318fb44e8cfae885fa16254, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Core.PauseMenuController
+  achievements: {fileID: 2097492789}
+--- !u!114 &2097492789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097492787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cfe2ebd9d5c3474889d2cfabf45be1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Core.AchievementController
+  trees:
+  - {fileID: 11400000, guid: cdf9b90f68c562f42962a9f89cc9eb53, type: 2}
+  - {fileID: 11400000, guid: b1795a08797887d4f9e211c1660890a1, type: 2}
+  - {fileID: 11400000, guid: dae0df2b406323d41834ba86bc19a18d, type: 2}
+  - {fileID: 11400000, guid: 7fd984e00c243524e84c8204b1d05bbd, type: 2}
+  tree: {fileID: 0}
+--- !u!4 &2097492790
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097492787}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -3600,3 +3799,4 @@ SceneRoots:
   - {fileID: 1695095431}
   - {fileID: 873276666}
   - {fileID: 1591888259}
+  - {fileID: 2097492790}

@@ -184,6 +184,12 @@ Oyuncu köyler arasında **yürüyerek** gider (karar: 13.11). Bu, dokümanlarda
 - Kamera birinci şahıs, roll yok; yatış yalnızca modelde (`BicycleRig`). Değerler `BicycleSettings` SO'sunda.
 - Görünüm `BicycleRig`'te (teker, gidon, aynakol, pedal referansları); model değişince yalnızca o bağlanır (`08-mustafa-entegrasyon.md`).
 
+### Başarımlar ve Esc menüsü (karar 13.11)
+- Görev/köy bitince sağ alttan bildirim (`IAchievementToastView`): "Öğrenildi!" (görev), "Başarım kazanıldı!" (köy, kök), "Meydan okuma…" (hatasız / defter açmadan).
+- Esc (Station'da P, gamepad Start) → `PauseMenuController`: zaman durur, UI modu; menüde dallanan başarım ağacı (`IPauseMenuView`). Yeni aksiyon yok.
+- Görev ↔ başarım listesi (Mustafa'nın görev planından, kimliklerle): `BilgiAdasi_Docs/04_Icerik/11-gorev-ve-basarim-listesi.md`. Görev verisi yazılırken oradaki `taskId`'ler kullanılır (`denk_n`, `tur_n`, `tarla_n`, `orman_n`, `carsi_n`).
+- Veri: **ders bazlı** — her ders bir sekme = bir `AchievementTree` asset'i (`Data/Achievements/AchievementTree_<Ders>.asset`: Kimya, Matematik, Fizik, Biyoloji); görev, defter kaydının dersine girer. Yeni asset Achievements objesine kendiliğinden bağlanır (`Tab Order`, `Accent Color`). Koşul: GameStart / TaskCompleted / NeighborhoodCompleted / TaskFlawless / TaskWithoutHint / AllOf; ebeveyn listede önce. Tasarım asset'te: sekme adı/simgesi, "Yakında", tür başlığı/rengi/varsayılan simgesi, düğümü elle konumlama. Inspector doğrular ve önizler. Kayıt: `SaveData.unlockedAchievements`. Kurulum: **Kurulum → 13** (sahne + eksik sekmeler), **13b** (listeyi yeniden yazar).
+
 ---
 
 ## 7. Boy uzama sistemi (büyüme)

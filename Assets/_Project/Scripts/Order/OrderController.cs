@@ -153,7 +153,8 @@ namespace BilgiAdasi.Order
             var task = session.Task;
             Current = State.Done;
             SetReadySave(null);
-            RefreshAll();
+            scaleView?.ClearFoamDifference();
+            RefreshAll(); // Done: terazi sıfırlanır (RefreshCauldron)
             GameEvents.RaiseTaskCompleted(task.Id);
             // Görev kayda işlendikten sonra: pazar "bitince açılır/kalkar" satırlarını doğru görür.
             GameEvents.RaiseActiveOrderChanged(null);
@@ -384,7 +385,8 @@ namespace BilgiAdasi.Order
 
         private void RefreshCauldron()
         {
-            if (session != null)
+            // Teslimden sonra (Done) yeni sipariş alınana kadar terazi ve kazan boş görünür; BeginTask yenisini çizer.
+            if (session != null && Current != State.Done)
             {
                 cauldronView?.ShowContents(session.Contents);
                 scaleView?.ShowAtoms(session.Rows, session.IsSatisfied);

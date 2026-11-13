@@ -96,6 +96,13 @@ Kod hiçbir Canvas'a ya da objeye bağlı değildir. Her UI parçası için bir 
 | `IScaleView` | **3D terazi** (`ScaleModel`): element başına sol / sağ / artan; dengede mi; köpürmede fark | 4 |
 | `IChalkboardView` | **3D:** tahtadaki denklemler (`ChalkboardText`, alt indisli TMP) | 4 |
 | `IDialogueView` | Konuşma balonu + portre: `ShowLine(satır, devamıVar)`, `Hide()`. Satırda konuşan adı, metin, portre (sprite, boş olabilir). Kapıda hareket durur, E/Space (X/A) ilerletir; tıklayınca `IDialogueCommands.Advance()` | 4 |
+| `IAchievementToastView` | **HUD:** sağ alttan kayan başarım bildirimi (simge, başlık "Öğrenildi!" / "Başarım kazanıldı!" / "Meydan okuma…", ad; tür rengi `info.Color`). Art arda gelirse sıraya alır; Esc menüsünde de akar (unscaled zaman) | 4 |
+| `IPauseMenuView` | **Esc menüsü (UI modu):** ana sayfa (Devam / Başarımlar / Çık) + ders sekmeli (`AchievementMenuInfo.Tabs`: Kimya, Matematik, Fizik, Biyoloji; sekme rengi `tab.Color`) dallanan başarım ağacı (`AchievementNodeInfo`: sütun, satır, ebeveyn, durum açık/kilitli/gizli, renk, simge). `TryGoBack()` alt sayfadan döner. Düğmeler `IPauseMenuCommands.Resume / QuitGame` | 4 |
+
+**Başarım tasarımını düzenlemek (kod gerekmez):**
+- *Metin, simge, renk, sekme:* `Data/Achievements/AchievementTree_<Ders>.asset` → sekme adı/simgesi/rengi, "Yakında", tür görünümü (başlık, renk, varsayılan simge), başarım başına simge. Düğüm yerini beğenmezsen *Manual Position* aç, sütun/satır yaz. Inspector altta ağacı önizler ve hataları gösterir.
+- *Bildirim ve menü kutuları:* ham view'larda (`_Placeholder/HUD/AchievementToast`, `PauseMenu`) renk, boyut, font, 9-slice sprite alanları var. Kendi prefab'ını yaparsan `IAchievementToastView` / `IPauseMenuView`'ı uygula ve ham olanı sil.
+- Görev ↔ başarım listesi: `04_Icerik/11-gorev-ve-basarim-listesi.md`.
 | `IPaperView` | Masa kâğıdı ve sorular | 5 |
 | `IMapView` | Harita: köy durumu + 5 nokta | 6 |
 
@@ -206,3 +213,9 @@ Kendi UI'ında tuş göstereceksen yazıyı elle yazma: `ControlGlyphs.For(Promp
 2. URP `PC_RPAsset`: 4 gölge kademesi × 50 m. Gölge düşüren üçgenler 4 kez çizilir; 2 kademe önerilir.
 3. Atölye kapısı: `Kapi_Rig` kökü artık menteşede, kanatta BoxCollider var; açma için `animator.Play("Kapi_Ac")` (etkileşim kodu).
 4. `Tabela_Yazi_*` boş objeleri TMP yazıları içindir (font seçilince).
+
+**Mehmet'in yanıtı (13.11, uygulandı):**
+1. Post processing: `PlayerRig` kamerasında açık; PlayerRig'in çocuğu `PostProcessVolume` (global, `SampleSceneProfile`: Neutral tonlama, bloom 0,25, vinyet 0,2). Oyuncuyla geldiği için her sahnede geçerli; sahneye ayrıca Volume koyma. Menü: **Kurulum/10**.
+2. `PC_RPAsset` gölge kademesi 4 → 2 (ilk kademe %25 = 12,5 m).
+3. Kapı: `DoorStation`'da `doorAnimator` alanı (Kapi_Rig kökündeki Animator). E'ye basınca `Kapi_Ac`, konuşma bitince `Kapi_Kapat`. Kanadın collider'ına bakınca da kapı çalışır (çalışırken `InteractableProxy` eklenir; prefab'a dokunulmaz). Town'a atölye sanatı girince menü **Kurulum/12** bağlar.
+4. Bisiklet: `Bisiklet.fbx` artık `Bicycle.prefab` → `Visual/Model_Bisiklet` (küp yer tutucu silindi). Gidon/teker/pedal `BicycleRig`'e bağlı (pedal ön tekerde, ön 0,39 / arka 0,30 m). Menü: **Kurulum/11** (model güncellenince yeniden çalıştır). **Mustafa'dan istek:** `HaritaYerlestir.cs`'deki sabit `Bisiklet` (BoxCollider'lı) artık gerekmiyor; Town'da o noktaya (Blender 3,6; 5,6, doğuya bakar) `Bicycle.prefab` konacak. Haritadakini kaldırırsan tek bisiklet kalır.

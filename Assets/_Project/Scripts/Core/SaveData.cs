@@ -119,6 +119,10 @@ namespace BilgiAdasi.Core
         [SerializeField] private List<FailEntry> failCounts = new List<FailEntry>();
         [SerializeField] private List<string> hintsOpened = new List<string>();
         [SerializeField] private List<string> boardEquations = new List<string>();
+        [SerializeField] private List<string> unlockedAchievements = new List<string>();
+
+        public bool IsAchievementUnlocked(string id) => unlockedAchievements != null && unlockedAchievements.Contains(id);
+        public void MarkAchievementUnlocked(string id) => AddUnique(unlockedAchievements ??= new List<string>(), id);
 
         public int Grade { get => grade; set => grade = value; }
         public IReadOnlyList<string> CompletedNeighborhoods => completedNeighborhoods;

@@ -75,6 +75,13 @@ namespace BilgiAdasi.Player
         private IInteractPromptView promptView;
         private bool promptShown;
 
+        // Sahnedeki park yeri: kayıttaki konum geçersizse ya da bisiklet dünyanın altına düşerse buraya döner.
+        private Vector3 homePosition;
+        private float homeYaw;
+        private const float FallLimit = 50f;       // park yerinin bu kadar altına düşerse geri dön
+        private const float GroundProbeUp = 1.5f;  // zemin yoklaması: noktanın üstünden başlar
+        private const float GroundProbeDown = 4f;
+
         /// <summary>Biri bisiklete binince / inince (ses, HUD, görev için).</summary>
         public event Action<bool> RiddenChanged;
 
@@ -102,6 +109,8 @@ namespace BilgiAdasi.Player
                 SetColliderHeight(settings.ParkedHeight);
             }
             yaw = transform.eulerAngles.y;
+            homePosition = transform.position;
+            homeYaw = yaw;
             if (rig != null && rig.TryGetWheelContactZ(transform, out float front, out float rear))
             {
                 frontContactZ = front;
@@ -115,8 +124,18 @@ namespace BilgiAdasi.Player
             bool resumeRide = false;
             if (data != null && data.TryGetPose(saveId, out var pose))
             {
-                PlaceAt(pose.position, pose.yaw);
-                resumeRide = pose.ridden;
+                // Kayıt sahneler arasında ortak: başka sahnede (ya da düşerken) kaydedilmiş konumun altında zemin
+                // olmayabilir. O zaman park yerinde kalınır ve bisiklete binilmiş başlanmaz.
+                if (HasGroundBelow(pose.position))
+                {
+                    PlaceAt(pose.position, pose.yaw);
+                    resumeRide = pose.ridden;
+                }
+                else
+                {
+                    Debug.LogWarning($"[Bicycle] Kayıttaki konumun altında zemin yok {pose.position}; park yerinde başlıyor.", this);
+                    data.SetPose(saveId, homePosition, homeYaw, false);
+                }
             }
             if (settings == null) return;
             // Kaldırım kenarına park edilmişse teker yere otursun.
@@ -227,6 +246,15 @@ namespace BilgiAdasi.Player
             if (state == RideState.Parked || settings == null) return;
             float dt = Time.deltaTime;
             if (dt <= 0f) return;
+
+            // Zeminden taşıp boşluğa düştüyse (harita kenarı, delik) park yerine dön; sürücü de selede gelir.
+            if (transform.position.y < homePosition.y - FallLimit)
+            {
+                PlaceAt(homePosition, homeYaw);
+                speed = momentum = verticalVelocity = 0f;
+                if (riderTransform != null) PlaceRider(seatAnchor.position);
+                return;
+            }
 
             switch (state)
             {
@@ -687,6 +715,21 @@ namespace BilgiAdasi.Player
             controller.center = new Vector3(0f, controller.height * 0.5f, 0f);
         }
 
+        /// <summary>Noktanın hemen altında (bisiklet ve sürücü dışında) zemin var mı? Yalnızca açılış ve kayıtta.</summary>
+        private bool HasGroundBelow(Vector3 position)
+        {
+            int count = Physics.RaycastNonAlloc(position + Vector3.up * GroundProbeUp, Vector3.down, probeHits,
+                GroundProbeUp + GroundProbeDown, obstacleMask, QueryTriggerInteraction.Ignore);
+            for (int i = 0; i < count; i++)
+            {
+                var t = probeHits[i].collider.transform;
+                if (t.IsChildOf(transform)) continue;
+                if (riderTransform != null && t.IsChildOf(riderTransform)) continue;
+                return true;
+            }
+            return false;
+        }
+
         private void PlaceAt(Vector3 position, float yawDegrees)
         {
             controller.enabled = false;
@@ -699,6 +742,8 @@ namespace BilgiAdasi.Player
         {
             var save = SaveSystem.Instance;
             if (save == null || save.Data == null || string.IsNullOrEmpty(saveId)) return;
+            // Havada / düşerken kaydetme: açılışta oyuncu boşlukta başlardı.
+            if (!HasGroundBelow(transform.position)) return;
             save.Data.SetPose(saveId, transform.position, yaw, ridden);
             save.Save();
         }
