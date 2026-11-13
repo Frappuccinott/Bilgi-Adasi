@@ -57,8 +57,9 @@ ROADS = [
     ("Yol_Tepkimeler", [(-50, -1.6), (-56, 6.0), (-62, 15.0), (-66, 24.0)], 3.0),    # kilitli
     ("Yol_Kule", [(-46, -2.0), (-50, 4.0), (-53, 8.5)], 2.4),
     # geçici tahta köprüye inen patikalar (Denkleştirme Part_4 bitene kadar dereyi buradan geçeriz)
-    ("Patika_Kopru_Bati", [(24.5, -8.6), (25.8, -5.0), (26.4, -2.0)], 1.5),
-    ("Patika_Kopru_Dogu", [(35.8, -2.0), (36.6, -5.0), (38.5, -7.6)], 1.5),
+    # yıkık taş köprünün ayaklarının (x 24.6…38.6, y −9.9…−6.1) dışından geçer (Unity yürüme testi, 13.11)
+    ("Patika_Kopru_Bati", [(21.5, -9.0), (23.6, -5.2), (26.0, -2.4)], 1.5),
+    ("Patika_Kopru_Dogu", [(36.2, -2.4), (38.8, -3.3), (40.3, -6.4)], 1.5),
     # kilitli şehirlere giden bisiklet yolları: tepeleri boğaz geçidiyle yarar, uçta şehir kapısı (harita_yon.py)
     ("Yol_Matematik", [(14.0, -9.3), (15.0, 0.0), (17.0, 14.0), (19.5, 30.0), (20.5, 48.0), (21.5, 66.0), (21.5, 98.0)], 3.4),
     ("Yol_Turkce", [(-21.0, -5.8), (-22.0, -18.0), (-24.0, -34.0), (-25.5, -50.0), (-24.5, -66.0), (-23.0, -101.0)], 3.4),

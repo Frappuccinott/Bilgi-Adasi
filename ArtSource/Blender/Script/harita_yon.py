@@ -651,7 +651,7 @@ TABELALAR = [  # (konum, [(kimlik, hedef konum, etiket)])
     (Vector((-47.5, 1.8)), [("Tepk", Vector((-53.0, 9.0)), "Guvercin_Kulesi"), ("Kilitli", Vector((-58.0, 9.0)), "Tepkimeler"),
                             ("Atolye", Vector((-38.0, -3.0)), "Atolye")]),
 ]
-KEMERLER = [("Denk", Vector((39.4, -7.2)), "Yol_Dogu"), ("Tepk", Vector((-33.5, -3.6)), "Yol_Bati")]
+KEMERLER = [("Denk", Vector((41.8, -7.0)), "Yol_Dogu"), ("Tepk", Vector((-33.5, -3.6)), "Yol_Bati")]
 MIL_YOLLARI = [("Denk", "Yol_Dogu", 8.0, 24.0), ("Tepk", "Yol_Bati", 8.0, 30.0),
                ("Mat", "Yol_Matematik", 8.0, 86.0), ("Tur", "Yol_Turkce", 8.0, 82.0)]   # (köy, yol, başlangıç, bitiş: meydandan uzaklık)
 ALLE_YOLLARI = [("Yol_Dogu", 12.0, 25.0), ("Yol_Bati", -32.0, -10.0)]

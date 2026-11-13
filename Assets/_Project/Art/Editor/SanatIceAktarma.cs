@@ -229,6 +229,16 @@ namespace BilgiAdasi.SanatAraclari
                                                           StaticEditorFlags.OccludeeStatic);
                 foreach (Transform t in s.GetComponentsInChildren<Transform>(true))
                     GameObjectUtility.SetStaticEditorFlags(t.gameObject, GameObjectUtility.GetStaticEditorFlags(s));
+                // Duvar, zemin, eşik ve mobilya çarpışması (oyuncu içeride yürür, duvardan geçmez).
+                // Işık/alev gibi kendi ışığı olan ince parçalar hariç.
+                foreach (var mf in s.GetComponentsInChildren<MeshFilter>(true))
+                {
+                    var r = mf.GetComponent<Renderer>();
+                    if (r == null || mf.GetComponent<Collider>() != null) continue;
+                    var m = r.sharedMaterial;
+                    if (m != null && (m.name.StartsWith("M_Fener") || m.name.StartsWith("M_Duman") || m.name.StartsWith("M_Kopuk"))) continue;
+                    mf.gameObject.AddComponent<MeshCollider>().sharedMesh = mf.sharedMesh;
+                }
             }
             foreach (var guid in AssetDatabase.FindAssets("t:Prefab", new[] { Kok + "Prefablar" }))
             {

@@ -149,3 +149,26 @@ Kod yalnızca: `animator.Play("Klip_Adi")` (ya da `CrossFade`). Her klip iskelet
 - Güne başlarken ve push'tan önce `main`'i çek.
 - **Çakışma olursa:** durdur, zorla birleştirme (`--force`, "theirs/ours" ile ezme) yapma. Çakışan dosya kimin alanındaysa onun sürümü geçerlidir. Sahne/prefab çakışmasında dosya elle düzeltilmez; sahibi kendi sürümünü alır, diğeri değişikliğini Unity içinde yeniden uygular. Sebebi buraya kural olarak eklenir.
 - **Mutlaka haber verilecekler:** `ProjectSettings/` ya da `Packages/` değişikliği, §2'deki bir adın değişmesi, klasör taşıma.
+
+## 9. Kasaba haritası (Unity'de birleştirme, 13.11)
+
+**Araç:** `Assets/_Project/Art/Editor/HaritaYerlestir.cs` → menü **BilgiAdasi → Sanat → Haritayı açık sahneye yerleştir**. Kök `Harita_Sanat`; atölye yoksa onu da kurar (`Atolye_Sanat`). Tekrar çalıştırılabilir (eski kökü silip yeniden kurar).
+- **Koordinat:** Blender (x, y, z) → Unity (−x, z, −y). Haritada atölye Blender (0, 12)'dedir; atölye Unity'de orijinde kaldığı için harita kökü (0, 0, +12)'ye konur. Meydan Unity (0, 0, 20) civarı; atölye kapısının önü (1,4; 0; 6).
+- **Köyler:** `Neighborhood_Denklestirme` / `Neighborhood_TepkimeTurleri` kökleri `NeighborhoodView` taşır (id: `denklestirme`, `tepkime_turleri`); `Before`, `After`, `Parts/Part_1…5` adlarla kurulur (önekler: `_Once_` → Before, `_Sonra_` → After, `_P<n>_` → Part_n). Town sahnesinde Mehmet'in Neighborhood prefab'ı varsa bu çocuklar onun altına taşınır.
+- **Kilitli bölgeler:** `LockedZone_Hesaplamalar`, `_Tepkimeler`, `_Matematik`, `_Turkce` → BoxCollider + `LockedZone` (unlockedBy boş = hep kilitli).
+- **Çarpışma:** arazi, meydan döşemesi, bütün yapılar, köprüler, kapılar MeshCollider; ağaç/kavak/çam/meyve gövde kapsülü; kayalar dışbükey mesh; çimen, çiçek, saz, ekin, yol şeritleri çarpışmasız. Atölye duvar/zemin/mobilyası da artık MeshCollider alır (`SanatIceAktarma.cs`).
+- **Doğa:** `Harita_Doga.fbx` türleri `Art/Harita/Prefablar/SM_<Tür>.prefab` olarak kaydedilir (LODGroup; ağaçta LOD0/LOD1, çimen ~35 m'de kesilir); `Harita_Yerler.fbx` noktalarına ~2.500 kopya, araziye oturtularak dizilir.
+- **Araçlar:** Traktör tarla girişine bakar (Blender 46, 14,8), 6 alet ahır önünde, bisiklet atölye kapısının doğusunda (park yerinin yanı); üçünde BoxCollider.
+- **Test sahnesi:** `Assets/_Project/Scenes/Deneme_Mustafa_Harita.unity` (Mustafa'nın; Town'a dokunulmadı).
+
+**Test sonucu (Play modu, gerçek PlayerRig + CharacterController):**
+- Kapı → meydan → batı patikası → tahta köprü → doğu patikası → Denkleştirme sokağı → tarla kapısı: 87 m, takılma yok (en büyük basamak 0,23 m). Meydan → Tepkime Türleri → güvercin kulesi: 52 m. Meydan → Matematik kapısı: 100 m. Meydan → Türkçe kapısı: 92 m. Hepsi takılmasız.
+- Kilitli kapılar (Tepkimeler, Hesaplamalar) ve onarılmamış taş köprü geçişi keser; `SetProgress(4)` sonrası taş köprüden geçilir.
+- Başlangıçta köy parçaları kapalı, `Before` açık (NeighborhoodView doğru çalışıyor). Konsolda hata/uyarı yok.
+- Doğuş noktasında ~250 bin üçgen (gölge geçişleri dahil), ~1.090 çizim çağrısı, 17 SetPass.
+
+**Mehmet için (dokunmadım, öneri):**
+1. `PlayerRig` kamerasında **Post Processing** kapalı, sahnede Volume yok → ton eşleme olmadığı için yeşiller fazla doygun. 09 §7 hedefi: Neutral tonlama + hafif bloom (`Assets/Settings/SampleSceneProfile.asset` hazır).
+2. URP `PC_RPAsset`: 4 gölge kademesi × 50 m. Gölge düşüren üçgenler 4 kez çizilir; 2 kademe önerilir.
+3. Atölye kapısı: `Kapi_Rig` kökü artık menteşede, kanatta BoxCollider var; açma için `animator.Play("Kapi_Ac")` (etkileşim kodu).
+4. `Tabela_Yazi_*` boş objeleri TMP yazıları içindir (font seçilince).

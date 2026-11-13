@@ -535,7 +535,7 @@ def kopru_gecici_bm(length=11.0, seed=51):
     rnd = random.Random(seed)
     parts = []
     def zc(u):
-        return 0.12 - 0.18 * (1 - (2 * u / length) ** 2)
+        return 0.05 - 0.14 * (1 - (2 * u / length) ** 2)      # uçlar zemine yakın: basamak < 0,3 m (CharacterController adımı)
     for s in (-1, 1):
         lg = tube_pts([(-length / 2 - 0.4, s * 0.55, zc(-length / 2) - 0.12), (0, s * 0.55, zc(0) - 0.14),
                        (length / 2 + 0.4, s * 0.55, zc(length / 2) - 0.12)], 0.14, sides=7)

@@ -35,6 +35,8 @@ PAL = {
     "siva":    ("#DDDCC5", "#A7A09B", "#686B70"),
     "bakir":   ("#D77A45", "#9F4E2B", "#773D23"),
     "kil":     ("#CBB595", "#987D6A", "#62524B"),
+    # türetilmiş (09 §3): öğrencinin eli — sıva/kil + çatı karışımı
+    "ten":     ("#EBB58F", "#BE8769", "#834C38"),
 }
 
 def demir(k=0.55):
@@ -331,9 +333,19 @@ def empty(name, col, loc=(0, 0, 0), rot=(0, 0, 0), kind="PLAIN_AXES", size=0.3):
     col.objects.link(ob)
     return ob
 
+def _world_now(ob):
+    """Objenin dünya matrisi, sahne güncellenmeden de doğru: matrix_basis her zaman günceldir,
+    matrix_world ise yeni oluşturulan objede view_layer.update()'e kadar birim matris kalır."""
+    m = ob.matrix_basis.copy()
+    if ob.parent is not None:
+        m = _world_now(ob.parent) @ ob.matrix_parent_inverse @ m
+    return m
+
 def parent_keep(child, parent):
+    """Dünya konumunu koruyarak bağla. Yeni oluşturulmuş ebeveynde matrix_world bayat olabildiği için
+    ebeveynin dünya matrisi matrix_basis'ten hesaplanır (aksi hâlde FBX'te çocuk yerel konumu = dünya konumu olur)."""
     child.parent = parent
-    child.matrix_parent_inverse = parent.matrix_world.inverted()
+    child.matrix_parent_inverse = _world_now(parent).inverted()
 
 def tri_count(objs):
     n = 0
