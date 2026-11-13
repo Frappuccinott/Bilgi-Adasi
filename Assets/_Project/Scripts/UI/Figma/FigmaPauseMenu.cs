@@ -24,6 +24,7 @@ namespace BilgiAdasi.UI
         [SerializeField] private string placeSubtitle = "Kimya şehri, Etkileşim ilçesi";
         [SerializeField] private string resumeWord = "Devam Et";
         [SerializeField] private string achievementsWord = "Başarılar";
+        [SerializeField] private string discoveryWord = "Keşif Defteri";
         [SerializeField] private string quitWord = "Oyundan Çık";
         [SerializeField] private string selectWord = "Seç";
         [SerializeField] private string browseWord = "Gez";
@@ -56,7 +57,7 @@ namespace BilgiAdasi.UI
 
         private GameObject overlay, mainPage, treePage, settingsPage;
         private FigmaSettingsPanel settingsPanel;
-        private Button resumeButton, achievementsButton, settingsButton;
+        private Button resumeButton, achievementsButton, settingsButton, discoveryButton;
         private TextMeshProUGUI achievementsCount;
         private RectTransform tabBar, viewport, content;
         private TextMeshProUGUI detailCode, detailTitle, detailHeader, detailBody;
@@ -107,6 +108,12 @@ namespace BilgiAdasi.UI
 
         public bool TryGoBack()
         {
+            var book = ViewLocator.Get<IDiscoveryBookView>();
+            if (book != null && book.IsOpen)
+            {
+                book.Close();
+                return true;
+            }
             if (treePage.activeSelf)
             {
                 ShowMain(achievementsButton);
@@ -121,6 +128,15 @@ namespace BilgiAdasi.UI
         }
 
         // ---------- Sayfalar ----------
+
+        /// <summary>Keşif Defteri (öğrenme katmanı, LearningDirector) menünün üstünde açılır; kapanınca menüye dönülür.</summary>
+        private void OpenDiscoveryBook()
+        {
+            var commands = ViewLocator.Get<IDiscoveryBookCommands>();
+            if (commands == null) return;
+            mainPage.SetActive(false);
+            commands.OpenBook(() => ShowMain(discoveryButton));
+        }
 
         private void ShowSettingsPage()
         {
@@ -486,13 +502,14 @@ namespace BilgiAdasi.UI
             UiKit.Text(head, "Where", th.BodyFont, 28f, UiKit.WithAlpha(th.Paper, 0.8f)).text = placeSubtitle;
 
             var menu = UiKit.Rect(page, "Menu");
-            UiKit.Place(menu, new Vector2(0f, 1f), new Vector2(120f, -400f), new Vector2(600f, 320f));
+            UiKit.Place(menu, new Vector2(0f, 1f), new Vector2(120f, -400f), new Vector2(600f, 400f));
             var mv = menu.gameObject.AddComponent<VerticalLayoutGroup>();
             mv.childControlWidth = mv.childControlHeight = true;
             mv.childForceExpandHeight = false;
             mv.spacing = 6f;
             resumeButton = MenuItem(menu, resumeWord, th, () => ViewLocator.Get<IPauseMenuCommands>()?.Resume(), out _);
             achievementsButton = MenuItem(menu, achievementsWord, th, ShowTreePage, out achievementsCount);
+            discoveryButton = MenuItem(menu, discoveryWord, th, OpenDiscoveryBook, out _);
             settingsButton = MenuItem(menu, settingsWord, th, ShowSettingsPage, out _);
             MenuItem(menu, quitWord, th, () => ViewLocator.Get<IPauseMenuCommands>()?.QuitGame(), out _);
 
