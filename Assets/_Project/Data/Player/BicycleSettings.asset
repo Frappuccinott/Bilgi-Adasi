@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7063e071e5cbf0488a29a3eddd8dcb1, type: 3}
+  m_Name: BicycleSettings
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Player.BicycleSettings
+  cruiseSpeed: 6.5
+  fastSpeed: 8.5
+  pedalAcceleration: 3
+  fastAcceleration: 4
+  brakeDeceleration: 7
+  coastDeceleration: 0.6
+  pushBackSpeed: 1
+  pushAcceleration: 3
+  slopeAcceleration: 4
+  maxDownhillSpeed: 10
+  wheelBase: 1.05
+  maxSteerAngleSlow: 35
+  maxSteerAngleFast: 10
+  steerResponse: 4
+  steerReturn: 6
+  maxLean: 8
+  leanSharpness: 6
+  gravity: -20
+  slopeLimit: 40
+  stepOffset: 0.3
+  parkedHeight: 1.1
+  ridingHeight: 1.75
+  probeRadius: 0.25
+  probeHeight: 0.55
+  frontReach: 0.95
+  rearReach: 0.85
+  mountDuration: 0.35
+  dismountMaxSpeed: 1.2
+  dismountSideOffset: 0.8
+  promptMaxSpeed: 0.5
+  yawLimit: 110
+  recenterDelay: 1.2
+  recenterSpeed: 90
+  speedFovBoost: 5
+  mountPrompt: Bisiklete bin
+  dismountPrompt: Bisikletten in

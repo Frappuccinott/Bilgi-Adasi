@@ -176,6 +176,14 @@ Oyuncu köyler arasında **yürüyerek** gider (karar: 13.11). Bu, dokümanlarda
 - Harita ekranı (`OpenMap`) kalır: bilgi + ilerleme ekranı (köy durumu, 5 nokta). Hızlı seyahat: P2, zaman kalırsa.
 - Görev akışı: köydeki sakin/ulak oyuncuyu **atölyeye** çağırır; görevler atölyedeki istasyonlarda çözülür. Köyde yalnızca "önce/sonra" değişimi görülür.
 
+### Bisiklet (karar 13.11, P2)
+- Şehirde duran bisiklet (`Bicycle`, `WorldInteractable`): Interact ile binilir/inilir; hızlıysa önce frenler, yanda/arkada boş yer bulunca indirir. Konum indikten sonra kaydedilir (`SaveData.TryGetPose/SetPose`).
+- Kinematik sürüş (CharacterController, devrilme yok). **Yeni aksiyon yok**, Player map'i kullanılır: Move ileri pedal / geri fren (dururken geri itme), Move yan gidon, Sprint hızlı pedal, Look serbest bakış (gidona göre ±110°, giderken öne döner), Interact in.
+- Hızlanma eğriyle (kalkış ağır, sonra güçlü, hedefe yaklaşınca yumuşak); kesintisiz pedalda seyir hızı 5 → 7.5 m/s'ye yavaşça çıkar (momentum), fren/bırakınca söner.
+- Kaldırım: `maxCurbHeight` (0.3 m) altı basamaklara çıkar; kamera ve model yumuşak geçer, tekerler zemine oturur (öne/arkaya eğim).
+- Kamera birinci şahıs, roll yok; yatış yalnızca modelde (`BicycleRig`). Değerler `BicycleSettings` SO'sunda.
+- Görünüm `BicycleRig`'te (teker, gidon, aynakol, pedal referansları); model değişince yalnızca o bağlanır (`08-mustafa-entegrasyon.md`).
+
 ---
 
 ## 7. Boy uzama sistemi (büyüme)

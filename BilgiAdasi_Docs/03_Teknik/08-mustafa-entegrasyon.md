@@ -48,6 +48,18 @@ MarketStall                 ← MarketStall (Catalog, Economy, Texts) + BoxColli
 - **Atom küresi:** terazideki küre `Prefabs/Workshop/Atom_Placeholder` (kökünde Renderer); kendi modelin varsa ScaleModel'in Atom Prefab alanına ver.
 - Masa ve tahta hâlâ istasyon (`StationBase` + `CameraPoint`); Faz 5'te kullanılır. Tahtanın önünde 3D yazı (`BoardText`, `ChalkboardText`).
 
+### Bisiklet (menü **Kurulum → 9**)
+```
+Bicycle                     ← Bicycle + CharacterController, layer = Interactable ("Bisiklete bin") — DOKUNMA
+├── InteractVolume          ← BoxCollider (bakma hacmi), layer Interactable; bisikletin boyutuna göre büyütülebilir
+├── Visual                  ← BicycleRig; virajda yatan kök (pivot yerde)
+│   └── _Placeholder        ← küp model: gerçek model gelince sil
+└── SeatAnchor              ← sürücünün kök noktası (göz = bu + 1.56 m); gidon ekranın altında görünecek şekilde ayarla
+```
+- Model: **+Z ileri, +X sağ**, orijin iki teker arasında yerde. Dönen parçalar ayrı obje ve **pivotu dönme noktasında**: `FrontWheel` / `RearWheel` (göbek), `Steering` (furş borusu; çatal + gidon + ön teker bunun çocuğu), `Crank` (orta göbek; `Pedal_L` / `Pedal_R` bunun çocuğu).
+- Modeli `Visual` altına koy, `BicycleRig` alanlarına bu parçaları sürükle. Model ekseni farklıysa `BicycleRig` → Eksenler'den düzelt (ters dönüyorsa eksiyi ver). `Wheel Radius` gerçek teker yarıçapı olmalı (dönüş hızı buradan).
+- Modelde collider olmasın (çarpışma kapsülü ve InteractVolume yeter).
+
 ### Köy önce/sonra
 ```
 Neighborhood_Denklestirme   ← NeighborhoodView

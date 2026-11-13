@@ -24,6 +24,7 @@ namespace BilgiAdasi.Player
         private IInteractable current;
         private IInteractPromptView promptView;
         private bool controlEnabled = true;
+        private bool riding;
         private string shownPrompt;
 
         /// <summary>Oyuncunun envanteri ve kesesi (aynı objede ya da üstünde).</summary>
@@ -38,6 +39,8 @@ namespace BilgiAdasi.Player
         public event Action<bool> ControlEnabledChanged;
 
         public bool ControlEnabled => controlEnabled;
+        /// <summary>Bisiklette: yürüme ve ışın kapalı, bakış ve crosshair açık. Interact'i bisiklet dinler.</summary>
+        public bool IsRiding => riding;
 
         private void OnEnable()
         {
@@ -63,7 +66,7 @@ namespace BilgiAdasi.Player
 
         private void Update()
         {
-            if (!controlEnabled || rayOrigin == null) return;
+            if (!controlEnabled || riding || rayOrigin == null) return;
 
             IInteractable found = null;
             if (Physics.Raycast(rayOrigin.position, rayOrigin.forward, out var hit, range, rayMask, QueryTriggerInteraction.Ignore))
@@ -118,7 +121,7 @@ namespace BilgiAdasi.Player
 
         private void OnInteractPerformed(InputAction.CallbackContext ctx)
         {
-            if (!controlEnabled || current == null || !current.CanInteract) return;
+            if (!controlEnabled || riding || current == null || !current.CanInteract) return;
             // Hedef seçili kalır: aynı kazana art arda dökülebilsin. İpucu bir sonraki karede tazelenir.
             current.Interact(this);
         }
@@ -128,9 +131,10 @@ namespace BilgiAdasi.Player
         {
             if (controlEnabled == enabled) return;
             controlEnabled = enabled;
-            if (motor != null) motor.enabled = enabled;
+            // Bisikletteyken yürüme ve kafa sallanması kapalı kalır (konuşma bitince geri açılmasın).
+            if (motor != null) motor.enabled = enabled && !riding;
             if (look != null) look.enabled = enabled;
-            if (headBob != null) headBob.enabled = enabled;
+            if (headBob != null) headBob.enabled = enabled && !riding;
 
             if (!enabled)
             {
@@ -140,6 +144,21 @@ namespace BilgiAdasi.Player
             }
             promptView?.SetCrosshairVisible(enabled);
             ControlEnabledChanged?.Invoke(enabled);
+        }
+
+        /// <summary>Bicycle çağırır: true → yürüme, kafa sallanması ve etkileşim ışını kapanır; bakış ve crosshair kalır.</summary>
+        public void SetRiding(bool value)
+        {
+            if (riding == value) return;
+            riding = value;
+            if (motor != null) motor.enabled = controlEnabled && !riding;
+            if (headBob != null) headBob.enabled = controlEnabled && !riding;
+            if (riding)
+            {
+                SetCurrent(null);
+                lastCollider = null;
+                lastHitInteractable = null;
+            }
         }
 
         private void OnSchemeChanged(ControlScheme scheme)

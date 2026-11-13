@@ -82,6 +82,35 @@ namespace BilgiAdasi.Core
             marketSold.Add(new StackEntry { key = catalogId, species = species, count = amount });
         }
 
+        /// <summary>Dünyada yeri değişen bir nesnenin konumu (bisiklet). key = nesnenin kayıt anahtarı.</summary>
+        [Serializable]
+        public struct PoseEntry
+        {
+            public string key;
+            public Vector3 position;
+            public float yaw;
+        }
+
+        [SerializeField] private List<PoseEntry> poses = new List<PoseEntry>();
+
+        public bool TryGetPose(string key, out PoseEntry entry)
+        {
+            if (poses != null)
+                for (int i = 0; i < poses.Count; i++)
+                    if (poses[i].key == key) { entry = poses[i]; return true; }
+            entry = default;
+            return false;
+        }
+
+        public void SetPose(string key, Vector3 position, float yaw)
+        {
+            poses ??= new List<PoseEntry>();
+            var entry = new PoseEntry { key = key, position = position, yaw = yaw };
+            for (int i = 0; i < poses.Count; i++)
+                if (poses[i].key == key) { poses[i] = entry; return; }
+            poses.Add(entry);
+        }
+
         [SerializeField] private int grade = DefaultGrade;
         [SerializeField] private List<string> completedNeighborhoods = new List<string>();
         [SerializeField] private List<string> completedTasks = new List<string>();

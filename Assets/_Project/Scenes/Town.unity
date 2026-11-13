@@ -327,7 +327,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
   m_UseReflectionProbes: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -555,7 +555,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -1414,6 +1414,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1273230210086197744, guid: 6a55a96fc45d91c4daec34cb1f0999df, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4292932346
+      objectReference: {fileID: 0}
+    - target: {fileID: 1273230210086197744, guid: 6a55a96fc45d91c4daec34cb1f0999df, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
+    - target: {fileID: 2651282245454021170, guid: 6a55a96fc45d91c4daec34cb1f0999df, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     - target: {fileID: 4262792514283213549, guid: 6a55a96fc45d91c4daec34cb1f0999df, type: 3}
       propertyPath: m_Name
       value: Station_Cauldron
@@ -1457,6 +1469,14 @@ PrefabInstance:
     - target: {fileID: 4985496509699745305, guid: 6a55a96fc45d91c4daec34cb1f0999df, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505675822132914341, guid: 6a55a96fc45d91c4daec34cb1f0999df, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4292932346
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505675822132914341, guid: 6a55a96fc45d91c4daec34cb1f0999df, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2158,6 +2178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1290516242}
   - component: {fileID: 1290516241}
+  - component: {fileID: 1290516243}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -2245,6 +2266,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1290516243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290516240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!114 &1296249238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2453,6 +2503,63 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1565438740}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &1591888259
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2413613787166526740, guid: 0c405d4455a324f4b950f8fd6f1f07e2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2413613787166526740, guid: 0c405d4455a324f4b950f8fd6f1f07e2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2413613787166526740, guid: 0c405d4455a324f4b950f8fd6f1f07e2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2413613787166526740, guid: 0c405d4455a324f4b950f8fd6f1f07e2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2413613787166526740, guid: 0c405d4455a324f4b950f8fd6f1f07e2, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2413613787166526740, guid: 0c405d4455a324f4b950f8fd6f1f07e2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2413613787166526740, guid: 0c405d4455a324f4b950f8fd6f1f07e2, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2413613787166526740, guid: 0c405d4455a324f4b950f8fd6f1f07e2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2413613787166526740, guid: 0c405d4455a324f4b950f8fd6f1f07e2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2413613787166526740, guid: 0c405d4455a324f4b950f8fd6f1f07e2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354125822510367714, guid: 0c405d4455a324f4b950f8fd6f1f07e2, type: 3}
+      propertyPath: m_Name
+      value: Bicycle
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0c405d4455a324f4b950f8fd6f1f07e2, type: 3}
 --- !u!1001 &1695095431
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3065,7 +3172,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -3201,6 +3308,10 @@ PrefabInstance:
     - target: {fileID: 2581532664672447590, guid: 7b9107c9b15f69949b140c3e83a1520e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3969522249901052628, guid: 7b9107c9b15f69949b140c3e83a1520e, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4158105165740842865, guid: 7b9107c9b15f69949b140c3e83a1520e, type: 3}
       propertyPath: m_Name
@@ -3488,3 +3599,4 @@ SceneRoots:
   - {fileID: 880188352}
   - {fileID: 1695095431}
   - {fileID: 873276666}
+  - {fileID: 1591888259}
