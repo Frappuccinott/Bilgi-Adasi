@@ -89,6 +89,8 @@ namespace BilgiAdasi.Core
             public string key;
             public Vector3 position;
             public float yaw;
+            /// <summary>Kayıt anında oyuncu üstündeydi (bisiklet): yüklemede oyuncu üstünde başlar.</summary>
+            public bool ridden;
         }
 
         [SerializeField] private List<PoseEntry> poses = new List<PoseEntry>();
@@ -102,10 +104,10 @@ namespace BilgiAdasi.Core
             return false;
         }
 
-        public void SetPose(string key, Vector3 position, float yaw)
+        public void SetPose(string key, Vector3 position, float yaw, bool ridden = false)
         {
             poses ??= new List<PoseEntry>();
-            var entry = new PoseEntry { key = key, position = position, yaw = yaw };
+            var entry = new PoseEntry { key = key, position = position, yaw = yaw, ridden = ridden };
             for (int i = 0; i < poses.Count; i++)
                 if (poses[i].key == key) { poses[i] = entry; return; }
             poses.Add(entry);
@@ -135,6 +137,7 @@ namespace BilgiAdasi.Core
         // Yalnızca geliştirici kısayolları (görev atlama geri de gidebilir).
         public void UnmarkTaskCompleted(string taskId) => completedTasks.Remove(taskId);
         public void UnmarkNeighborhoodCompleted(string id) => completedNeighborhoods.Remove(id);
+        public void RemoveBoardEquation(string richEquation) => boardEquations.Remove(richEquation);
 
         public int GetFailCount(string taskId)
         {

@@ -287,6 +287,18 @@ namespace BilgiAdasi.City
                 {
                     if (done) data.MarkTaskCompleted(id);
                     else data.UnmarkTaskCompleted(id);
+                    // Tahta yalnızca tepkimede yazılır; atlanan siparişlerin denklemleri de tahtada olsun (geri atlamada silinir).
+                    if (n.Tasks[i] is OrderTask skipped)
+                    {
+                        for (int s = 0; s < skipped.Steps.Count; s++)
+                        {
+                            var reaction = skipped.Steps[s].Reaction;
+                            if (reaction == null) continue;
+                            string equation = Chemistry.FormulaFormatter.Equation(reaction);
+                            if (done) data.AddBoardEquation(equation);
+                            else data.RemoveBoardEquation(equation);
+                        }
+                    }
                 }
                 else if (done) localCompleted.Add(id);
                 else localCompleted.Remove(id);

@@ -112,11 +112,23 @@ namespace BilgiAdasi.Player
         private void Start()
         {
             var data = Data;
-            if (data != null && data.TryGetPose(saveId, out var pose)) PlaceAt(pose.position, pose.yaw);
+            bool resumeRide = false;
+            if (data != null && data.TryGetPose(saveId, out var pose))
+            {
+                PlaceAt(pose.position, pose.yaw);
+                resumeRide = pose.ridden;
+            }
             if (settings == null) return;
             // Kaldırım kenarına park edilmişse teker yere otursun.
             UpdateWheelGrounding(0f, true);
             if (rig != null) rig.UpdatePose(0f, false, 0f, 0f, visualPitch, visualHeight, 0f);
+
+            // Oyun bisikletteyken kapandıysa oyuncu bisikletin üstünde başlar (PlayerSpawn oyuncuyu Awake'te yaratır).
+            if (resumeRide)
+            {
+                var player = FindAnyObjectByType<PlayerInteractor>(); // yalnızca açılışta bir kez
+                if (player != null) Mount(player, true);
+            }
         }
 
         private void OnDisable()
@@ -132,14 +144,17 @@ namespace BilgiAdasi.Player
         private void OnApplicationQuit()
         {
             isQuitting = true;
-            if (state != RideState.Parked) SavePose();
+            if (state != RideState.Parked) SavePose(true); // üstündeyken kapandı: açılışta oyuncu bisiklette başlar
         }
 
         // ---------- Etkileşim ----------
 
         public override string GetPrompt(PlayerInteractor interactor) => settings.MountPrompt;
 
-        public override void Interact(PlayerInteractor interactor)
+        public override void Interact(PlayerInteractor interactor) => Mount(interactor, false);
+
+        /// <summary>instant: geçiş yok, oyuncu doğrudan selede ve bisikletin yönüne bakar (kayıttan devam).</summary>
+        private void Mount(PlayerInteractor interactor, bool instant)
         {
             if (state != RideState.Parked || interactor == null) return;
             var motor = interactor.GetComponent<PlayerMotor>();
@@ -154,7 +169,7 @@ namespace BilgiAdasi.Player
             rider.SetRiding(true);                // hareket, kafa sallanması ve ışın kapanır; crosshair kalır
             riderMotor.Controller.enabled = false; // bisikletin kapsülü taşır
             riderMotor.Teleported += OnRiderTeleported;
-            riderLook.BeginAnchoredYaw(Mathf.DeltaAngle(yaw, riderTransform.eulerAngles.y),
+            riderLook.BeginAnchoredYaw(instant ? 0f : Mathf.DeltaAngle(yaw, riderTransform.eulerAngles.y),
                 settings.YawLimit, settings.RecenterDelay, settings.RecenterSpeed);
 
             var a = GameInput.Controls.Player;
@@ -176,6 +191,12 @@ namespace BilgiAdasi.Player
             blendFrom = riderTransform.position;
             blend = 0f;
             state = RideState.Mounting;
+            if (instant)
+            {
+                blend = 1f;
+                state = RideState.Riding;
+                PlaceRider(seatAnchor.position);
+            }
             RiddenChanged?.Invoke(true);
         }
 
@@ -589,7 +610,7 @@ namespace BilgiAdasi.Player
             if (tearingDown)
             {
                 // Kayıt OnApplicationQuit'te yapıldı; sahne değişiminde son konum burada yazılır.
-                if (!isQuitting) SavePose();
+                if (!isQuitting) SavePose(true); // sahne değişimi: yeni sahnede bisiklette devam
                 rider = null;
                 riderMotor = null;
                 riderLook = null;
@@ -628,7 +649,7 @@ namespace BilgiAdasi.Player
             if (rig != null) rig.UpdatePose(0f, false, steerAngle, 0f, visualPitch, visualHeight, 0f);
             if (rollingSource != null) rollingSource.volume = 0f;
 
-            SavePose();
+            SavePose(false);
             RiddenChanged?.Invoke(false);
         }
 
@@ -674,11 +695,11 @@ namespace BilgiAdasi.Player
             controller.enabled = true;
         }
 
-        private void SavePose()
+        private void SavePose(bool ridden)
         {
             var save = SaveSystem.Instance;
             if (save == null || save.Data == null || string.IsNullOrEmpty(saveId)) return;
-            save.Data.SetPose(saveId, transform.position, yaw);
+            save.Data.SetPose(saveId, transform.position, yaw, ridden);
             save.Save();
         }
     }
