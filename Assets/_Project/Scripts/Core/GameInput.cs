@@ -20,7 +20,7 @@ namespace BilgiAdasi.Core
 
     /// <summary>
     /// Tek BilgiAdasiControls örneği. Aynı anda yalnızca bir action map açık tutar (CLAUDE.md §3),
-    /// imleci moda göre ayarlar ve son kullanılan cihazı izler (ekrandaki E ↔ Ⓐ ipucu için).
+    /// imleci moda göre ayarlar ve son kullanılan cihazı izler (ekrandaki E ↔ Ⓧ ipucu için).
     /// </summary>
     public static class GameInput
     {

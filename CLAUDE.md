@@ -55,7 +55,7 @@ Yeni paket eklemeden önce **sor**.
 - Kodda tek giriş noktası: `GameInput.Controls` (tek örnek), map değişimi yalnızca `GameInput.SetMode(InputMode.Player|Station|UI)`. Son cihaz: `GameInput.LastDevice` / `DeviceChanged`.
 - Control scheme'ler: `KeyboardMouse`, `Gamepad`.
 - Action map'ler aynı anda yalnızca biri açık olacak şekilde yönetilir: `Player`, `Station`, `UI`.
-- Ekrandaki tuş ipuçları **son kullanılan cihaza göre** değişir (`E` ↔ `Ⓐ`). `InputUser.onChange` / `PlayerInput.onControlsChanged` ile.
+- Ekrandaki tuş ipuçları **son kullanılan cihaza göre** değişir (`E` ↔ `Ⓧ`). `GameInput.DeviceChanged` ile.
 - Gamepad'de istasyon modunda imleç: **sanal imleç** (`VirtualMouseInput`), sol çubukla hareket, A ile tıkla/sürükle.
 - Ölü bölge (deadzone): çubuklar için 0.15 (Stick Deadzone processor).
 
@@ -64,7 +64,10 @@ Yeni paket eklemeden önce **sor**.
 | Move | Player | WASD | Sol çubuk |
 | Look | Player | Fare delta | Sağ çubuk |
 | Sprint (hızlı yürü) | Player | Sol Shift (basılı) | Sol çubuk bas (L3, aç/kapa) |
-| Interact | Player | E | A (South) |
+| Interact | Player | E | X (West) |
+| Jump | Player | Space | A (South) |
+| Crouch (basılı) | Player | Sol Ctrl | — |
+| CrouchToggle (aç/kapa) | Player | C | B (East) |
 | OpenMap | Player | M / Tab | Select (View) |
 | Pause | Player | Esc | Start (Menu) |
 | Pause | Station | P (Esc istasyondan çıkar) | Start (Menu) |
@@ -94,11 +97,12 @@ Rigidbody değil `CharacterController` kullanılır (öngörülebilir, merdiven/
 |---|---|---|
 | Yürüme hızı | 3.8 m/s | Gerçekçi tempolu yürüyüş |
 | Hızlı yürüme (sprint) | 5.6 m/s | Koşu değil, "acele" |
-| Hızlanma (zemin) | 14 m/s² | Tam hıza ~0.3 sn — çevik |
-| Yavaşlama (zemin) | 18 m/s² | Bırakınca hemen durur, kaymaz |
+| Hızlanma (zemin) | 45 m/s² | Tam hıza ~0.08 sn — oturaklı (14 kaygan hissettirdi, 13.11) |
+| Yavaşlama (zemin) | 55 m/s² | Bırakınca hemen durur, kaymaz |
+| Eğilme | Boy 1.10 m, hız 2.0 m/s, geçiş 4 m/s | Tavan varsa kalkmaz; koşunca/zıplayınca kalkar |
 | Yön değiştirme | Hızlanma vektörel uygulanır | Ani dönüşte savrulma yok |
 | Havada kontrol | %30 | |
-| Zıplama | **Yok** (varsayılan kapalı, `[SerializeField] bool allowJump`) | Platform yok; isterse açılır |
+| Zıplama | **Açık**, 1.0 m (karar: 13.11), coyote 0.1 sn, tampon 0.12 sn | `allowJump` ile kapatılabilir |
 | Yerçekimi | −20 m/s² | Basamaklardan inerken "süzülme" olmasın |
 | Slope limit / Step offset | 45° / 0.3 m | Kaldırım ve eşikler takılmadan çıkılır |
 
@@ -112,12 +116,13 @@ Tüm değerler `PlayerMovementSettings` ScriptableObject'inde; play mode'da canl
 
 ### 4.4 Rahatlık (baş dönmesi önleme)
 - Kafa sallanması (head bob) çok hafif: genlik ≤ 0.025 m, ayarlardan kapatılabilir.
-- İniş sarsıntısı yok ya da çok küçük.
+- Adım hissi: dikey sallanma + yarım frekansta küçük yan salınım (≤ 0.0125 m).
+- İniş sarsıntısı çok küçük: kamera en fazla 0.035 m çöker, hızla toparlanır.
 - Ekran ortasında küçük bir nokta (crosshair) — referans noktası baş dönmesini azaltır.
 
 ### 4.5 Etkileşim
 - Kamera merkezinden raycast, menzil 2.2 m, `IInteractable` arayüzü.
-- Bakılan nesne hafif kontur alır + ekranda `[E] Kazana geç` / `Ⓐ Kazana geç` ipucu.
+- Bakılan nesne hafif kontur alır + ekranda `[E] Kazana geç` / `Ⓧ Kazana geç` ipucu.
 
 ---
 

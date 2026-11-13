@@ -60,7 +60,7 @@ Kod hiçbir Canvas'a ya da objeye bağlı değildir. Her UI parçası için bir 
 
 | Arayüz | Gösterdiği | Faz |
 |---|---|---|
-| `IInteractPromptView` | `[E] Kazana geç` / `Ⓐ Kazana geç` + crosshair | 2 |
+| `IInteractPromptView` | `[E] Kazana geç` / `Ⓧ Kazana geç` + crosshair | 2 |
 | `IScreenFader` | Sahne geçişi kararması | 1 |
 | `IScaleView` | Bir terazi: element başına `H 4 / 4`, dengede mi | 3 |
 | `IOrderCardView` | Sipariş kartı: ürün, miktar, (varsa) girenler | 3 |

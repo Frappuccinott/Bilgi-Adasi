@@ -14,7 +14,7 @@ namespace BilgiAdasi.UI
         [SerializeField] private TMP_Text promptLabel;
         [SerializeField] private GameObject crosshair;
         [SerializeField] private string keyboardGlyph = "[E]";
-        [SerializeField] private string gamepadGlyph = "(A)";
+        [SerializeField] private string gamepadGlyph = "(X)";
 
         protected override void OnEnable()
         {

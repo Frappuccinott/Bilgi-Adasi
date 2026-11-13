@@ -1,7 +1,7 @@
 namespace BilgiAdasi.Core
 {
     /// <summary>
-    /// Ekran ortasındaki nokta (crosshair) ve etkileşim ipucu: "[E] Kazana geç" / "Ⓐ Kazana geç".
+    /// Ekran ortasındaki nokta (crosshair) ve etkileşim ipucu: "[E] Kazana geç" / "Ⓧ Kazana geç".
     /// Hangi tuş simgesinin çizileceğine view karar verir (device parametresine göre).
     /// </summary>
     public interface IInteractPromptView

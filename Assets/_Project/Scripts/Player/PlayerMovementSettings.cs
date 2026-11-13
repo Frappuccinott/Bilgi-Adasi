@@ -9,15 +9,32 @@ namespace BilgiAdasi.Player
         [Header("Hareket (m/s, m/s²)")]
         [SerializeField] private float walkSpeed = 3.8f;
         [SerializeField] private float sprintSpeed = 5.6f;
-        [SerializeField] private float groundAcceleration = 14f;
-        [SerializeField] private float groundDeceleration = 18f;
+        [SerializeField] private float crouchSpeed = 2.0f;
+        [Tooltip("Yüksek = tam hıza hemen çıkar (oturaklı). 45 → ~0.08 sn.")]
+        [SerializeField] private float groundAcceleration = 45f;
+        [Tooltip("Yüksek = bırakınca hemen durur, kaymaz. 55 → ~0.07 sn.")]
+        [SerializeField] private float groundDeceleration = 55f;
         [Range(0f, 1f)] [SerializeField] private float airControl = 0.3f;
         [SerializeField] private float gravity = -20f;
-        [Tooltip("Varsayılan kapalı. Açılırsa input asset'e Jump aksiyonu (klavye + gamepad) eklenmeli.")]
-        [SerializeField] private bool allowJump = false;
-        [SerializeField] private float jumpHeight = 0.9f;
         [SerializeField] private float slopeLimit = 45f;
         [SerializeField] private float stepOffset = 0.3f;
+
+        [Header("Zıplama")]
+        [SerializeField] private bool allowJump = true;
+        [SerializeField] private float jumpHeight = 1.0f;
+        [Tooltip("Kenardan düştükten sonra hâlâ zıplanabilen süre (sn).")]
+        [SerializeField] private float coyoteTime = 0.1f;
+        [Tooltip("Yere değmeden hemen önce basılan zıplama hatırlanır (sn).")]
+        [SerializeField] private float jumpBufferTime = 0.12f;
+
+        [Header("Boy ve eğilme (m)")]
+        [Tooltip("Ayakta boy. 10. sınıf: 1.66 (CLAUDE.md §7). PlayerGrowth değiştirir.")]
+        [SerializeField] private float standingHeight = 1.66f;
+        [Tooltip("Göz, başın tepesinden bu kadar aşağıda (1.66 boy → 1.56 göz).")]
+        [SerializeField] private float eyeOffsetFromTop = 0.10f;
+        [SerializeField] private float crouchHeight = 1.10f;
+        [Tooltip("Eğilip kalkma hızı (m/s).")]
+        [SerializeField] private float crouchTransitionSpeed = 4f;
 
         [Header("Bakış")]
         [Tooltip("Fare: piksel başına derece. Ham girdi, yumuşatma yok.")]
@@ -34,21 +51,34 @@ namespace BilgiAdasi.Player
 
         [Header("Rahatlık")]
         [SerializeField] private bool headBobEnabled = true;
-        [Tooltip("En fazla 0.025 m.")]
+        [Tooltip("Dikey sallanma, en fazla 0.025 m.")]
         [Range(0f, 0.025f)] [SerializeField] private float headBobAmplitude = 0.02f;
-        [Tooltip("Yürüme hızında saniyedeki adım salınımı.")]
-        [SerializeField] private float headBobFrequency = 1.8f;
+        [Tooltip("Yürüme hızında saniyedeki adım sayısı.")]
+        [SerializeField] private float headBobFrequency = 1.9f;
+        [Tooltip("İnişte kamera çökmesi üst sınırı (çok küçük tutulur).")]
+        [Range(0f, 0.05f)] [SerializeField] private float landingDipMax = 0.035f;
+        [Tooltip("Düşüş hızı (m/s) başına çökme (m).")]
+        [SerializeField] private float landingDipPerSpeed = 0.006f;
 
         public float WalkSpeed => walkSpeed;
         public float SprintSpeed => sprintSpeed;
+        public float CrouchSpeed => crouchSpeed;
         public float GroundAcceleration => groundAcceleration;
         public float GroundDeceleration => groundDeceleration;
         public float AirControl => airControl;
         public float Gravity => gravity;
-        public bool AllowJump => allowJump;
-        public float JumpHeight => jumpHeight;
         public float SlopeLimit => slopeLimit;
         public float StepOffset => stepOffset;
+
+        public bool AllowJump => allowJump;
+        public float JumpHeight => jumpHeight;
+        public float CoyoteTime => coyoteTime;
+        public float JumpBufferTime => jumpBufferTime;
+
+        public float StandingHeight => standingHeight;
+        public float EyeOffsetFromTop => eyeOffsetFromTop;
+        public float CrouchHeight => crouchHeight;
+        public float CrouchTransitionSpeed => crouchTransitionSpeed;
 
         public float MouseSensitivity { get => mouseSensitivity; set => mouseSensitivity = Mathf.Max(0.001f, value); }
         public float GamepadYawSpeed => gamepadYawSpeed;
@@ -61,5 +91,7 @@ namespace BilgiAdasi.Player
         public bool HeadBobEnabled { get => headBobEnabled; set => headBobEnabled = value; }
         public float HeadBobAmplitude => headBobAmplitude;
         public float HeadBobFrequency => headBobFrequency;
+        public float LandingDipMax => landingDipMax;
+        public float LandingDipPerSpeed => landingDipPerSpeed;
     }
 }

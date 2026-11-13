@@ -56,7 +56,7 @@ Her faz sonunda: Play mode testi + commit. Süre daralırsa §2'deki sırayla ke
 | `PlayerLook` | Fare ham, gamepad eğri + ivme, ±80°, roll yok, FOV |
 | `HeadBob` | ≤0.025 m, kapatılabilir |
 | `PlayerInteractor` + `IInteractable` | 2.2 m raycast; ipucu `IInteractPromptView`'e gider |
-| `InputDeviceTracker` | Son cihaz → ipucu ikonu (`E` ↔ `Ⓐ`) |
+| `InputDeviceTracker` | Son cihaz → ipucu ikonu (`E` ↔ `Ⓧ`) |
 | `InputMapSwitcher` | Aynı anda tek map |
 | `StationBase` | Interact → Station map, Cinemachine 0.5 sn blend, imleç; Exit → geri |
 
