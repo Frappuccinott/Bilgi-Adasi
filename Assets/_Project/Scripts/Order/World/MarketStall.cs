@@ -16,10 +16,14 @@ namespace BilgiAdasi.Order
     /// görevle aç/kapat, siparişin ürününü satma, stok. Pazar açıkken sipariş alınır/biterse liste kendiliğinden yenilenir.
     /// Para en ucuz kavanoza yetmezse Usta keseye borç koyar (oyun kilitlenmez). Esc/B ile kapanır.
     /// </summary>
-    public sealed class MarketStall : WorldInteractable, IMarketCommands, IMarketState
+    public sealed class MarketStall : WorldInteractable, IMarketCommands, IMarketState, IMarketInfo
     {
         [Tooltip("Boşsa ortak \"Pazar\" ipucu. Birden çok tezgâhta ayırt etmek için: \"Element pazarı\", \"Alet pazarı\".")]
         [SerializeField] private string promptOverride = "";
+        [Tooltip("Pazar ekranının başlığı (boşsa ekranın varsayılanı: \"Pazar\").")]
+        [SerializeField] private string marketTitle = "";
+        [Tooltip("Başlığın altındaki tek satır (boşsa ekranın varsayılanı).")]
+        [SerializeField] private string marketSubtitle = "";
         [Tooltip("Bu tezgâhın satış listesi. İkinci pazar = başka bir katalog.")]
         [SerializeField] private MarketCatalog catalog;
         [Tooltip("Borç miktarı buradan okunur.")]
@@ -39,6 +43,9 @@ namespace BilgiAdasi.Order
         private bool open;
 
         public override bool CanInteract => base.CanInteract && !open && catalog != null && economy != null;
+
+        public string MarketTitle => marketTitle;
+        public string MarketSubtitle => marketSubtitle;
 
         public override string GetPrompt(PlayerInteractor interactor) =>
             !string.IsNullOrEmpty(promptOverride) ? promptOverride : texts != null ? texts.MarketPrompt : string.Empty;

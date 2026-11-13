@@ -12,7 +12,17 @@ namespace BilgiAdasi.UI
         [SerializeField] private TMP_Text text;
         [SerializeField] private string emptyText = "";
 
+        [Tooltip("Açık: yazı tema fontuyla (Alegreya Sans) çizilir; kapalı: sahnedeki TMP fontu kalır.")]
+        [SerializeField] private bool useThemeFont = true;
+
         private readonly StringBuilder sb = new StringBuilder(256);
+
+        private void Awake()
+        {
+            if (!useThemeFont || text == null) return;
+            var font = UiTheme.OrDefault(null).BodyFont;
+            if (font != null) text.font = font;
+        }
 
         public void ShowEquations(IReadOnlyList<string> richEquations)
         {

@@ -28,7 +28,7 @@ namespace BilgiAdasi.UI
 
         private GameObject root;
         private RectTransform grid;
-        private TextMeshProUGUI money;
+        private TextMeshProUGUI money, titleText, subtitleText;
         private readonly List<Card> cards = new List<Card>();
         private readonly List<(TextMeshProUGUI label, RectTransform rootRt, PromptAction action)> hints = new List<(TextMeshProUGUI, RectTransform, PromptAction)>();
 
@@ -56,6 +56,10 @@ namespace BilgiAdasi.UI
         public void Open(IReadOnlyList<MarketItem> items, int purse)
         {
             var th = Theme;
+            // Tezgâh başlığı: açık tezgâh IMarketInfo verirse onunki, yoksa bu ekranın varsayılanı.
+            var info = ViewLocator.Get<IMarketCommands>() as IMarketInfo;
+            titleText.text = info != null && !string.IsNullOrEmpty(info.MarketTitle) ? info.MarketTitle : title;
+            subtitleText.text = info != null && !string.IsNullOrEmpty(info.MarketSubtitle) ? info.MarketSubtitle : subtitle;
             bool wasOpen = root.activeSelf;
             int focus = 0;
             var es = EventSystem.current;
@@ -277,9 +281,11 @@ namespace BilgiAdasi.UI
             var head = UiKit.Text(top.transform, "Title", th.HeadingFont, 64f, th.Paper, TextAlignmentOptions.TopLeft, FontStyles.Bold);
             UiKit.Place(head.rectTransform, new Vector2(0f, 1f), new Vector2(56f, -30f), new Vector2(700f, 80f));
             head.text = title;
+            titleText = head;
             var sub = UiKit.Text(top.transform, "Subtitle", th.BodyFont, 26f, UiKit.WithAlpha(th.Paper, 0.75f), TextAlignmentOptions.TopLeft);
             UiKit.Place(sub.rectTransform, new Vector2(0f, 1f), new Vector2(58f, -112f), new Vector2(900f, 34f));
             sub.text = subtitle;
+            subtitleText = sub;
 
             // Kese: tezgâhın sağ üstü
             var purse = UiKit.PaperCard(top.transform, "Purse", th, 4f, out var ppaper, 5f);

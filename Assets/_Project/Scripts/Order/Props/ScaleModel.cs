@@ -69,11 +69,17 @@ namespace BilgiAdasi.Order
         private bool balanced, foam;
         private float targetTilt, shakeUntil;
 
+        private TMP_FontAsset themeFont;
+
         private void Awake()
         {
             left.Root = leftPan;
             right.Root = rightPan;
             if (statusLabel != null) statusLabel.text = string.Empty;
+            // Dünya içi yazılar (başlıklar, durum, satır etiketleri) HUD ile aynı tema fontunda.
+            themeFont = UI.UiTheme.OrDefault(null).BodyFont;
+            if (themeFont != null)
+                foreach (var t in GetComponentsInChildren<TMP_Text>(true)) t.font = themeFont;
         }
 
         public void ShowAtoms(IReadOnlyList<AtomRow> newRows, bool isBalanced)
@@ -236,6 +242,7 @@ namespace BilgiAdasi.Order
                 go.transform.SetParent(pan.Root, false);
                 ((RectTransform)go.transform).sizeDelta = new Vector2(0.3f, 0.06f);
                 var t = go.AddComponent<TextMeshPro>();
+                if (themeFont != null) t.font = themeFont;
                 t.fontSize = labelFontSize;
                 t.alignment = TextAlignmentOptions.Right;
                 t.textWrappingMode = TextWrappingModes.NoWrap;

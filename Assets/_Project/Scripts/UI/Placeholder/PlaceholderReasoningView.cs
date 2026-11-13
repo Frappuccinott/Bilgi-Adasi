@@ -53,10 +53,14 @@ namespace BilgiAdasi.UI
         private static void Ensure(Scene scene)
         {
             if (FindAnyObjectByType<OrderController>() == null) return;
+            // Sahnede tasarlanmış görünüm (Figma) varsa yer tutucu kurulmaz.
+            bool needReasoning = ViewLocator.Get<IReasoningView>() == null;
+            bool needBook = ViewLocator.Get<IDiscoveryBookView>() == null;
+            if (!needReasoning && !needBook) return;
             var canvas = PlaceholderLearningCanvas.Get(scene);
-            if (canvas.GetComponentInChildren<PlaceholderReasoningView>(true) == null)
+            if (needReasoning && canvas.GetComponentInChildren<PlaceholderReasoningView>(true) == null)
                 new GameObject("ReasoningView", typeof(RectTransform)).AddComponent<PlaceholderReasoningView>().Build(canvas);
-            if (canvas.GetComponentInChildren<PlaceholderDiscoveryBookView>(true) == null)
+            if (needBook && canvas.GetComponentInChildren<PlaceholderDiscoveryBookView>(true) == null)
                 new GameObject("DiscoveryBookView", typeof(RectTransform)).AddComponent<PlaceholderDiscoveryBookView>().Build(canvas);
         }
 

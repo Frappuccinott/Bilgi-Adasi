@@ -134,7 +134,12 @@ namespace BilgiAdasi.EditorTools
             Ensure<FigmaRealLifeCard>(hud.transform, "RealLifeCard", theme);
             Ensure<FigmaDialogueView>(hud.transform, "Dialogue", theme);
             Ensure<FigmaAchievementToast>(hud.transform, "AchievementToast", theme);
+            Ensure<FigmaHintBook>(hud.transform, "HintBook", theme);
+            Ensure<FigmaReasoningView>(hud.transform, "Reasoning", theme);
             Ensure<FigmaPauseMenu>(hud.transform, "PauseMenu", theme).transform.SetAsLastSibling();
+            // Esc menüsünün üstünde açılanlar ve kararma en sonda.
+            Ensure<FigmaDiscoveryBook>(hud.transform, "DiscoveryBook", theme).transform.SetAsLastSibling();
+            Ensure<FigmaScreenFader>(hud.transform, "ScreenFader", theme).transform.SetAsLastSibling();
 
             DisablePlaceholders();
 
