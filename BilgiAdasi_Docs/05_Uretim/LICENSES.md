@@ -1,0 +1,27 @@
+# Lisanslar ve Yapay Zekâ Beyanı
+
+Kayıtsız hiçbir hazır dosya projeye girmez. Bu tablo oyun içi **Emeği Geçenler** ekranına ve sunumdaki lisans slaytına aktarılır.
+
+## Hazır varlıklar
+
+| Varlık | Tür | Kaynak / yazar | Bağlantı | Lisans | Değişiklik | Ekleyen |
+|---|---|---|---|---|---|---|
+| Unity | Motor | Unity Technologies | — | Unity Personal | — | — |
+| TextMeshPro | Paket | Unity | — | Unity paketi | — | — |
+| | | | | | | |
+
+**Kurallar**
+- Öncelik **CC0**. CC-BY ise yazar adı Emeği Geçenler'e yazılır.
+- Freesound, Poly Pizza, Sketchfab gibi sitelerde lisans **dosya dosya** farklıdır; her dosyanın lisans sayfasının ekran görüntüsü `Docs/license-proof/` içine konur.
+- "Kişisel kullanım" ya da lisansı yazılmayan şey kullanılmaz. Oyun/film/dizi/anime görüntü ve sesi kullanılmaz.
+- Font: SIL Open Font License (ör. Google Fonts); Türkçe karakter desteği kontrol edilir.
+
+## Yapay zekâ kullanım beyanı
+
+| Araç | Ne için | Çıktı nerede | Kontrol eden |
+|---|---|---|---|
+| Claude | Senaryo güncellemesi, geliştirme dokümanları, kod yardımı | `Docs/`, ilgili scriptler | |
+| ChatGPT | Harita konsept görseli | Referans | |
+| | | | |
+
+Kimya içeriği AI çıktısı olsa bile ders kitabıyla ekipçe kontrol edilir.
