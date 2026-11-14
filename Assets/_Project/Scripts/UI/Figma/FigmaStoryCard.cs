@@ -28,6 +28,17 @@ namespace BilgiAdasi.UI
             routine = StartCoroutine(ShowRoutine(text));
         }
 
+        public void ShowImmediate(string text)
+        {
+            if (routine != null) StopCoroutine(routine);
+            routine = null;
+            gameObject.SetActive(true);
+            label.text = text;
+            textGroup.alpha = 1f;
+            group.alpha = 1f;
+            group.blocksRaycasts = true;
+        }
+
         public void Hide()
         {
             if (!isActiveAndEnabled) return;

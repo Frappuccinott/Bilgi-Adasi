@@ -86,6 +86,7 @@ MonoBehaviour:
     notesOpened: "{0} not a\xE7\u0131ld\u0131"
     lessonLocked: "G\xF6revi al\u0131nca a\xE7\u0131l\u0131r"
     noLesson: Ders notu yok
+    lessonsLater: "Bu k\xF6y\xFCn ders notlar\u0131 hen\xFCz yaz\u0131lmad\u0131"
     lessonKicker: Ders notu
     lessonDetail: "{0}, {1}. g\xF6rev"
     inThisNote: Bu notta

@@ -336,6 +336,12 @@ MonoBehaviour:
   interactor: {fileID: 3155439181847300276}
   cameraRoot: {fileID: 6690731476036977068}
   defaultJarPrefab: {fileID: 900802003827707071, guid: 6b993f312c131f342a0fd5c68af7f38f, type: 3}
+  gripPoint: {fileID: 0}
+  gripEuler: {x: 335.4, y: 162.1, z: 22}
+  gripInset: 0.035
+  armsAnimator: {fileID: 0}
+  holdState: Kol_Tut_Dongu
+  idleState: Kol_Bekle_Dongu
   localOffset: {x: 0.26, y: -0.27, z: 0.5}
   localEuler: {x: 4, y: -18, z: 0}
   holdSize: 0.2

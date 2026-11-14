@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a7a8c01b8f9e914395f70a0045fbbbc, type: 3}
+  m_Name: MenuTexts
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Core.MenuTexts
+  title: "Bilgi Adas\u0131"
+  subtitle: "Kimya \u015Fehrinde bir \xE7\u0131ra\u011F\u0131n defteri"
+  play: Oyna
+  continueGame: Devam et
+  quit: "\xC7\u0131k"
+  newGameWarning: "Yeni oyun ba\u015Flarsa kay\u0131tl\u0131 ilerlemen silinir."
+  confirmNewGame: Yeni oyun
+  cancel: "Vazge\xE7"
+  autoSaved: "Otomatik kaydedildi\u2026"

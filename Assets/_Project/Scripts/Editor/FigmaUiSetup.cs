@@ -134,6 +134,7 @@ namespace BilgiAdasi.EditorTools
             Ensure<FigmaRealLifeCard>(hud.transform, "RealLifeCard", theme);
             Ensure<FigmaDialogueView>(hud.transform, "Dialogue", theme);
             Ensure<FigmaAchievementToast>(hud.transform, "AchievementToast", theme);
+            Ensure<FigmaAutoSaveNotice>(hud.transform, "AutoSaveNotice", theme);
             Ensure<FigmaHintBook>(hud.transform, "HintBook", theme);
             Ensure<FigmaReasoningView>(hud.transform, "Reasoning", theme);
             Ensure<FigmaPauseMenu>(hud.transform, "PauseMenu", theme).transform.SetAsLastSibling();

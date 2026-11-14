@@ -1,13 +1,13 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1102 &-755515504287630808
+--- !u!1102 &-3776747731089242999
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: El_Al
+  m_Name: El_Dok
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -20,20 +20,20 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 8391554769454948357, guid: 0d409cb19af6499bac2b6dff221cbc26, type: 3}
+  m_Motion: {fileID: 8941344189455429073, guid: 0d409cb19af6499bac2b6dff221cbc26, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &-135104837398082068
+--- !u!1102 &-2930332607845879859
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: El_Bosta
+  m_Name: El_Birak
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -46,7 +46,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -4182525884513240367, guid: 0d409cb19af6499bac2b6dff221cbc26, type: 3}
+  m_Motion: {fileID: -1717158761565199464, guid: 0d409cb19af6499bac2b6dff221cbc26, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -75,14 +75,14 @@ AnimatorController:
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
   m_EvaluateTransitionsOnStart: 1
---- !u!1102 &579625503686164785
+--- !u!1102 &2676287285798711261
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: El_Birak
+  m_Name: El_Bosta
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -95,20 +95,20 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -1717158761565199464, guid: 0d409cb19af6499bac2b6dff221cbc26, type: 3}
+  m_Motion: {fileID: -4182525884513240367, guid: 0d409cb19af6499bac2b6dff221cbc26, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &6651267001526669984
+--- !u!1102 &6331474752207492245
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: El_Dok
+  m_Name: El_Al
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -121,7 +121,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 8941344189455429073, guid: 0d409cb19af6499bac2b6dff221cbc26, type: 3}
+  m_Motion: {fileID: 8391554769454948357, guid: 0d409cb19af6499bac2b6dff221cbc26, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -137,16 +137,16 @@ AnimatorStateMachine:
   m_Name: Base Layer
   m_ChildStates:
   - serializedVersion: 1
-    m_State: {fileID: -755515504287630808}
+    m_State: {fileID: 6331474752207492245}
     m_Position: {x: 200, y: 0, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: 579625503686164785}
+    m_State: {fileID: 2676287285798711261}
     m_Position: {x: 235, y: 65, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: -135104837398082068}
+    m_State: {fileID: -2930332607845879859}
     m_Position: {x: 270, y: 130, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: 6651267001526669984}
+    m_State: {fileID: -3776747731089242999}
     m_Position: {x: 305, y: 195, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
@@ -157,4 +157,4 @@ AnimatorStateMachine:
   m_EntryPosition: {x: 50, y: 120, z: 0}
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
-  m_DefaultState: {fileID: -135104837398082068}
+  m_DefaultState: {fileID: 2676287285798711261}

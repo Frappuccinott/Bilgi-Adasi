@@ -16,6 +16,9 @@ namespace BilgiAdasi.City
 
         public GameObject SpawnedRig { get; private set; }
 
+        /// <summary>Kayıttaki oyuncu konumu anahtarı (SaveData.poses).</summary>
+        public const string PlayerPoseKey = "player";
+
         private BilgiAdasi.Player.PlayerMotor motor;
 
         private void Awake()
@@ -26,10 +29,30 @@ namespace BilgiAdasi.City
                 return;
             }
 
+            // Devam: son otomatik kayıttaki konum ve bakış yönü; yeni oyunda doğma noktası.
+            var position = transform.position;
             var rotation = Quaternion.Euler(0f, transform.eulerAngles.y, 0f);
-            SpawnedRig = Instantiate(playerRigPrefab, transform.position, rotation);
+            var data = Core.SaveSystem.Instance != null ? Core.SaveSystem.Instance.Data : null;
+            if (data != null && data.TryGetPose(PlayerPoseKey, out var pose) && pose.position.y > transform.position.y - fallLimit)
+            {
+                position = pose.position;
+                rotation = Quaternion.Euler(0f, pose.yaw, 0f);
+            }
+            SpawnedRig = Instantiate(playerRigPrefab, position, rotation);
             SpawnedRig.name = playerRigPrefab.name;
             motor = SpawnedRig.GetComponentInChildren<BilgiAdasi.Player.PlayerMotor>();
+        }
+
+        private void OnEnable() => Core.GameEvents.BeforeSave += OnBeforeSave;
+
+        private void OnDisable() => Core.GameEvents.BeforeSave -= OnBeforeSave;
+
+        // Otomatik kayıt anı: oyuncu yerdeyse konumu yazılır. Bisikletteyken (kapsül kapalı) Bicycle kendi konumunu yazar.
+        private void OnBeforeSave(Core.SaveData data)
+        {
+            if (motor == null || !motor.Controller.enabled) return;
+            var t = motor.transform;
+            data.SetPose(PlayerPoseKey, t.position, t.eulerAngles.y);
         }
 
         private void Update()

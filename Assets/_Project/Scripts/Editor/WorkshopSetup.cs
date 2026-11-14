@@ -34,6 +34,9 @@ namespace BilgiAdasi.EditorTools
         private const string CauldronPath = PrefabsFolder + "/Stations/Station_Cauldron.prefab";
         private const string DoorPath = PrefabsFolder + "/Stations/Station_Door.prefab";
         private const string BoardPath = PrefabsFolder + "/Stations/Station_Chalkboard.prefab";
+        // Terazi başlıkları: büyük ad + altında küçük italik kaynak (levhalı, marka dilinde; ScaleModel çizer).
+        internal const string ScaleTitleLeft = "Giren\n<size=72%><i>kazan</i></size>";
+        internal const string ScaleTitleRight = "Çıkan\n<size=72%><i>sipariş</i></size>";
         private const string RigPath = PrefabsFolder + "/PlayerRig.prefab";
         private const string TownPath = BilgiAdasi.Core.SceneFlow.GameScenePath;
 
@@ -437,10 +440,10 @@ namespace BilgiAdasi.EditorTools
                 TextAlignmentOptions.Center, Color.white);
             var leftTitle = WorldText(scale.transform, "LeftTitle", new Vector3(-0.47f, 1.62f, 0f), new Vector2(0.5f, 0.08f), 0.45f,
                 TextAlignmentOptions.Center, new Color(0.98f, 0.95f, 0.88f));
-            leftTitle.text = "Giren (kazan)";
+            leftTitle.text = ScaleTitleLeft;
             var rightTitle = WorldText(scale.transform, "RightTitle", new Vector3(0.47f, 1.62f, 0f), new Vector2(0.5f, 0.08f), 0.45f,
                 TextAlignmentOptions.Center, new Color(0.98f, 0.95f, 0.88f));
-            rightTitle.text = "Çıkan (sipariş)";
+            rightTitle.text = ScaleTitleRight;
 
             var model = scale.AddComponent<ScaleModel>();
             var so = new SerializedObject(model);
@@ -449,6 +452,8 @@ namespace BilgiAdasi.EditorTools
             so.FindProperty("rightPan").objectReferenceValue = rightPan.transform;
             so.FindProperty("atomPrefab").objectReferenceValue = AssetDatabase.LoadAssetAtPath<GameObject>(AtomPath).GetComponent<Renderer>();
             so.FindProperty("statusLabel").objectReferenceValue = status;
+            so.FindProperty("leftTitle").objectReferenceValue = leftTitle;
+            so.FindProperty("rightTitle").objectReferenceValue = rightTitle;
             so.ApplyModifiedPropertiesWithoutUndo();
         }
 

@@ -456,7 +456,20 @@ namespace BilgiAdasi.EditorTools
                 so.FindProperty("atomSize").floatValue = 0.055f;
                 so.FindProperty("maxPerRow").intValue = 6;
                 so.FindProperty("labelFontSize").floatValue = 0.6f;
-                so.FindProperty("labelForward").floatValue = 0.16f;
+                so.FindProperty("labelForward").floatValue = 0.12f;   // sapın ve kefe zincirlerinin önü (sanat modelinde kefe yarıçapı ~0.2 m)
+                so.FindProperty("labelHeight").floatValue = 0.33f;    // sapta, zincirlerin toplandığı yere yakın
+                var titleL = scale.transform.Find("LeftTitle");
+                var titleR = scale.transform.Find("RightTitle");
+                if (titleL != null && titleL.TryGetComponent<TMP_Text>(out var tl))
+                {
+                    tl.text = WorkshopSetup.ScaleTitleLeft;
+                    so.FindProperty("leftTitle").objectReferenceValue = tl;
+                }
+                if (titleR != null && titleR.TryGetComponent<TMP_Text>(out var tr))
+                {
+                    tr.text = WorkshopSetup.ScaleTitleRight;
+                    so.FindProperty("rightTitle").objectReferenceValue = tr;
+                }
                 so.FindProperty("tiltPerAtom").floatValue = 0f;
                 so.FindProperty("maxTilt").floatValue = 0f;
                 so.FindProperty("plaqueMaterial").objectReferenceValue = PlaqueMaterial();

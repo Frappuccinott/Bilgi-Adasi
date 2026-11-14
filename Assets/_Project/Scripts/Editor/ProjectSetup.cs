@@ -35,6 +35,8 @@ namespace BilgiAdasi.EditorTools
 
             EditorBuildSettings.scenes = new[]
             {
+                // Ana menü (Kurulum 20) varsa ilk sahne o.
+                new EditorBuildSettingsScene(SceneFlow.MenuScenePath, AssetDatabase.LoadAssetAtPath<SceneAsset>(SceneFlow.MenuScenePath) != null),
                 new EditorBuildSettingsScene(game, true),
             };
 

@@ -10,6 +10,9 @@ namespace BilgiAdasi.Core
         // Tek oyun sahnesi: Harita (atölye + şehir). Boot/Classroom/Town kaldırıldı; sistemler GameBootstrap'ta kurulur.
         public const string GameScene = "Harita";
         public const string GameScenePath = "Assets/_Project/Scenes/Harita.unity";
+        // İlk açılan sahne: ana menü (Oyna / Devam et / Çık). Build Settings'te 0. sırada.
+        public const string MenuScene = "AnaMenu";
+        public const string MenuScenePath = "Assets/_Project/Scenes/AnaMenu.unity";
 
         [SerializeField] private float fadeDuration = 0.3f;
 

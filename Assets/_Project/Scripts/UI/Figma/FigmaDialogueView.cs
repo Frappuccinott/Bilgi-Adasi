@@ -65,8 +65,28 @@ namespace BilgiAdasi.UI
             SetVisible(false);
         }
 
+        private static bool lineShown;
+        private static int holds;
+
+        /// <summary>
+        /// Konuşma balonu dışında konuşma sayılan görünümler (ustanın tahmin sorusu) için: açıkken HUD'un
+        /// konuşmada çekilen parçaları (mini harita, defter sırtı, envanter) yine çekilir. Her Hold(true) bir Hold(false) ister.
+        /// </summary>
+        public static void Hold(bool on)
+        {
+            holds = Mathf.Max(0, holds + (on ? 1 : -1));
+            Publish();
+        }
+
         private static void SetVisible(bool visible)
         {
+            lineShown = visible;
+            Publish();
+        }
+
+        private static void Publish()
+        {
+            bool visible = lineShown || holds > 0;
             if (IsVisible == visible) return;
             IsVisible = visible;
             VisibilityChanged?.Invoke(visible);
@@ -77,6 +97,8 @@ namespace BilgiAdasi.UI
         {
             VisibilityChanged = null;
             IsVisible = false;
+            lineShown = false;
+            holds = 0;
         }
 
         private void OnScheme(ControlScheme _) => UpdateHint();

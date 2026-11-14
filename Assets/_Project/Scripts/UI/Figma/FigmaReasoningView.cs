@@ -34,6 +34,7 @@ namespace BilgiAdasi.UI
 
         private Action<int> onChosen;
         private Action onContinue;
+        private bool holding; // FigmaDialogueView.Hold: soru açıkken mini harita / defter / envanter çekilir
         private int visible, selected;
         private float shownAt, nextMoveAt;
         private InputAction move, interact, jump, slotKey;
@@ -49,6 +50,7 @@ namespace BilgiAdasi.UI
         protected override void OnDisable()
         {
             Listen(false);
+            SetHolding(false);
             GameInput.SchemeChanged -= OnScheme;
             base.OnDisable();
         }
@@ -92,6 +94,14 @@ namespace BilgiAdasi.UI
             onContinue = null;
             if (root != null) root.SetActive(false);
             Listen(false);
+            SetHolding(false);
+        }
+
+        private void SetHolding(bool on)
+        {
+            if (holding == on) return;
+            holding = on;
+            FigmaDialogueView.Hold(on);
         }
 
         private void Open(string speakerName, string text)
@@ -99,6 +109,7 @@ namespace BilgiAdasi.UI
             speaker.text = speakerName;
             body.text = text;
             root.SetActive(true);
+            SetHolding(true);
             shownAt = Time.unscaledTime;
             Listen(true);
             LayoutRebuilder.ForceRebuildLayoutImmediate(column);

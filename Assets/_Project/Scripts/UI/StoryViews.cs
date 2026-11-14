@@ -7,6 +7,8 @@ namespace BilgiAdasi.UI
     public interface IStoryCardView
     {
         void Show(string text);
+        /// <summary>Kartı solmadan, bu karede tamamen açar (sahne yüklenirken hiçbir şey görünmesin).</summary>
+        void ShowImmediate(string text);
         void Hide();
     }
 }

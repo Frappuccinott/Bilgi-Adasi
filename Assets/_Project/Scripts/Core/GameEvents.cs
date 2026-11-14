@@ -35,6 +35,14 @@ namespace BilgiAdasi.Core
         /// <summary>Ocak yakıldı: true = tepkime başladı, false = kazan köpürüyor. Titreşim/ses dinler.</summary>
         public static event Action<bool> StoveFired;
 
+        /// <summary>Otomatik kayıttan hemen önce: dünyadaki canlı durumu (oyuncu konumu …) kayda yazın.</summary>
+        public static event Action<SaveData> BeforeSave;
+
+        /// <summary>Otomatik kayıt diske yazıldı ("Otomatik kaydedildi" bildirimi).</summary>
+        public static event Action AutoSaved;
+
+        public static void RaiseBeforeSave(SaveData data) => BeforeSave?.Invoke(data);
+        public static void RaiseAutoSaved() => AutoSaved?.Invoke();
         public static void RaiseStoveFired(bool reacting) => StoveFired?.Invoke(reacting);
         public static void RaiseAchievementUnlocked(string achievementId) => AchievementUnlocked?.Invoke(achievementId);
         public static void RaisePauseChanged(bool paused) => PauseChanged?.Invoke(paused);
@@ -75,6 +83,8 @@ namespace BilgiAdasi.Core
             AchievementUnlocked = null;
             PauseChanged = null;
             StoveFired = null;
+            BeforeSave = null;
+            AutoSaved = null;
         }
     }
 }

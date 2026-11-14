@@ -101,7 +101,7 @@ namespace BilgiAdasi.Core
 
         public void QuitGame()
         {
-            SaveSystem.Instance?.Save();
+            // Kayıt yalnızca görev sonunda (otomatik): çıkışta yazılmaz, "Devam et" son görev anına döner.
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #else

@@ -71,12 +71,12 @@ Yeni paket eklemeden önce **sor**.
 | Jump | Player | Space | A (South) |
 | Crouch (basılı) | Player | Sol Ctrl | — |
 | CrouchToggle (aç/kapa) | Player | C | B (East) |
-| OpenMap | Player | M / Tab | Select (View) |
+| OpenMap | Player | M / Tab | D-pad ↓ (ipucu) ve Select (View) (karar 14.11) |
 | Pause | Player | Esc | Start (Menu) |
 | OpenHint (ustanın defteri, atölye) | Player | H | Y (North) |
 | NextSlot / PrevSlot (envanter) | Player | Fare tekeri ↓ / ↑ | RB / LB |
 | SelectSlot (envanter) | Player | 1–6 | — (RB/LB ile aynı iş) |
-| Drop (eldekini yere / masaya bırak) | Player | G | D-pad ↓ |
+| Drop (eldekini yere / masaya bırak) | Player | G | D-pad ← (karar 14.11; ↓ haritaya geçti) |
 | OpenBook (defteri aç: Ustanın Notları / Keşiflerim / Ustalık) | Player | N | D-pad ↑ |
 | Pause | Station | P (Esc istasyondan çıkar) | Start (Menu) |
 | Point | Station | Fare pozisyonu | — (imleç yok) |
@@ -176,7 +176,8 @@ Oyuncu köyler arasında **yürüyerek** gider (karar: 13.11). Bu, dokümanlarda
 **24 saat kapsamı için sınırlar:**
 - Prototipteki şehir **küçük ve kompakt**: atölye + iki köy alanı + aradaki tek sokak/meydan. Uçtan uca yürüyüş ≤ 40 sn.
 - Kilitli köy/ilçeler: sis + kapalı kapı/bariyer ile kesilir, içleri modellenmez.
-- Şehir greybox'ı ve modelleri **Mustafa** yapar; kod `08-mustafa-entegrasyon.md`'deki bağlantı noktalarına dayanır. Tek oyun sahnesi: `Harita` (atölye + şehir; `SceneFlow.GameScene`). Boot/Classroom/Town kaldırıldı (13.11).
+- Şehir greybox'ı ve modelleri **Mustafa** yapar; kod `08-mustafa-entegrasyon.md`'deki bağlantı noktalarına dayanır. Tek oyun sahnesi: `Harita` (atölye + şehir; `SceneFlow.GameScene`). Boot/Classroom/Town kaldırıldı (13.11). İlk açılan sahne `AnaMenu` (`SceneFlow.MenuScene`; Oyna / Devam et / Çık; Kurulum → 20).
+- **Kayıt (karar 14.11):** diske yalnızca otomatik kayıtla yazılır: her görev bitince `GameManager.RequestCheckpoint` → `SaveSystem.Checkpoint` (önce `GameEvents.BeforeSave`: oyuncu konumu `PlayerSpawn`, sürülen bisiklet `Bicycle`), sağ üstte "Otomatik kaydedildi…" (`IAutoSaveNoticeView`). Çıkışta kaydedilmez; "Devam et" son görev anına döner. Oyun içinde `SaveSystem.Save()` çağırmayın, `Data`ya yazın. Kodumuz sıfırdan; dış kayıt paketi kullanılmaz (yarışma kuralı).
 - Harita ekranı (`OpenMap`: M / Tab / Select; aynı tuş ya da Esc/B kapatır): bilgi + ilerleme ekranı (köy durumu, 5 nokta, kilitli şehirler). Sol altta dönen mini harita (yalnızca oyuncu modunda). Görüntü sahneden pişirilir; veri `Data/Map/MapData.asset`. Kurulum: **Kurulum → 19** (harita modeli değişince yeniden çalıştır). Hızlı seyahat: P2, zaman kalırsa.
 - Yön tabelalarında simge yok, hedefin adı yazar (karar 14.11): `Tabela_Yazi_*` çapalarına TMP, Kurulum → 19.
 - Görev akışı: köydeki sakin/ulak oyuncuyu **atölyeye** çağırır; görevler atölyedeki istasyonlarda çözülür. Köyde yalnızca "önce/sonra" değişimi görülür.

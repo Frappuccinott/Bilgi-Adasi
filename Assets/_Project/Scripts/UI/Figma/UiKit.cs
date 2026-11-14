@@ -70,6 +70,94 @@ namespace BilgiAdasi.UI
             }
         }
 
+        /// <summary>Gamepad menü tuşları: Options/Menu (üç çizgi ≡), Xbox View (üst üste iki pencere), PS Create (üç ışın).</summary>
+        public enum MenuSymbol { Lines, View, Create }
+
+        private static readonly Sprite[] menuSprites = new Sprite[3];
+
+        /// <summary>ControlGlyphs'in menü tuşu etiketi → simge. Switch'in +/− ve diğer haplar yazı olarak kalır.</summary>
+        public static bool TryGetMenuIcon(string label, out MenuSymbol kind)
+        {
+            switch (label)
+            {
+                case "Options":
+                case "Menu": kind = MenuSymbol.Lines; return true;
+                case "View": kind = MenuSymbol.View; return true;
+                case "Create": kind = MenuSymbol.Create; return true;
+                default: kind = MenuSymbol.Lines; return false;
+            }
+        }
+
+        /// <summary>Saydam zeminde mürekkep çizgi simge (hap tuş kapağının kâğıt yüzüne konur).</summary>
+        public static Sprite MenuIcon(MenuSymbol kind)
+        {
+            int i = (int)kind;
+            if (menuSprites[i] == null) menuSprites[i] = MakeMenuIcon(kind, UiTheme.OrDefault(null).InkDeep);
+            return menuSprites[i];
+        }
+
+        private static Sprite MakeMenuIcon(MenuSymbol kind, Color ink)
+        {
+            const int size = 96;
+            var tex = NewTex(size, size);
+            var px = new Color32[size * size];
+            var center = new Vector2(size * 0.5f, size * 0.5f);
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                var p = new Vector2(x + 0.5f, y + 0.5f) - center;
+                var c = ink;
+                c.a = Mathf.Clamp01(0.5f - MenuDistance(kind, p));
+                px[y * size + x] = c;
+            }
+            tex.SetPixels32(px);
+            tex.Apply(false, true);
+            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        /// <summary>Menü simgesi çizgisinin işaretli uzaklığı (piksel). Merkez (0,0), y yukarı; 96 px kare.</summary>
+        private static float MenuDistance(MenuSymbol kind, Vector2 p)
+        {
+            const float stroke = 4.5f;
+            switch (kind)
+            {
+                case MenuSymbol.Lines:
+                {
+                    float d = float.MaxValue;
+                    for (int i = -1; i <= 1; i++) d = Mathf.Min(d, Box(p - new Vector2(0f, i * 15f), new Vector2(22f, 0f)));
+                    return d - stroke;
+                }
+                case MenuSymbol.View:
+                {
+                    // Arkadaki pencere sağ üstte (yalnızca görünen kenarları), öndeki sol altta.
+                    float front = Mathf.Abs(Box(p - new Vector2(-6f, -6f), new Vector2(16f, 12f)) - 1.5f) - stroke * 0.8f;
+                    var q = p - new Vector2(6f, 6f);
+                    float back = Mathf.Abs(Box(q, new Vector2(16f, 12f)) - 1.5f) - stroke * 0.8f;
+                    bool hidden = Box(p - new Vector2(-6f, -6f), new Vector2(16f + 6f, 12f + 6f)) < 0f;
+                    return hidden ? front : Mathf.Min(front, back);
+                }
+                default: // Create: alttan yelpaze gibi açılan üç kısa ışın
+                {
+                    float d = float.MaxValue;
+                    for (int i = -1; i <= 1; i++)
+                    {
+                        float a = i * 38f * Mathf.Deg2Rad;
+                        var dir = new Vector2(Mathf.Sin(a), Mathf.Cos(a));
+                        var from = new Vector2(0f, -27f) + dir * 14f;   // ışınlar dikeyde ortalı
+                        d = Mathf.Min(d, Segment(p, from, from + dir * 22f));
+                    }
+                    return d - stroke;
+                }
+            }
+        }
+
+        private static float Segment(Vector2 p, Vector2 a, Vector2 b)
+        {
+            var ab = b - a;
+            float t = Mathf.Clamp01(Vector2.Dot(p - a, ab) / ab.sqrMagnitude);
+            return (p - (a + ab * t)).magnitude;
+        }
+
         // ---------- Düzen ----------
 
         public static RectTransform Rect(Transform parent, string name)
@@ -196,6 +284,29 @@ namespace BilgiAdasi.UI
             Style(frame, th.InkDeep, sprite);
             Style(face, th.Paper, sprite);
             if (face != null) Fill(face.rectTransform, 3, 3, 3, 5);   // alt pay: basılı tuş derinliği
+
+            // Menü tuşları (PS Create/Options, Xbox View/Menu): hap içinde vektör simge; tuşun adı yazılmaz.
+            var icon = face != null ? face.transform.Find("Icon")?.GetComponent<Image>() : null;
+            if (shape == GlyphShape.Pill && TryGetMenuIcon(text, out var menu) && face != null)
+            {
+                if (icon == null)
+                {
+                    icon = Img(face.transform, "Icon", Color.white, null);
+                    icon.raycastTarget = false;
+                }
+                icon.enabled = true;
+                icon.sprite = MenuIcon(menu);
+                icon.color = Color.white;
+                icon.preserveAspect = true;
+                Fill(icon.rectTransform, 4, 4, 4, 4);
+                label.text = string.Empty;
+                float iw = height * 1.5f;
+                root.sizeDelta = new Vector2(iw, height);
+                var ile = root.GetComponent<LayoutElement>();
+                if (ile != null) ile.preferredWidth = iw;
+                return;
+            }
+            if (icon != null) icon.enabled = false;
 
             label.text = text;
             label.color = th.InkDeep;

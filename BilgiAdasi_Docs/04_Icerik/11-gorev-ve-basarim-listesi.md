@@ -34,7 +34,7 @@ Ağaç: kök **İlk Kural** → üst dal Denkleştirme (D-1 → D-5 → köy), o
 
 | Sv | Görev | taskId | Yer · veren | Katman (04 planı) | Defter | Başarımlar |
 |---|---|---|---|---|---|---|
-| 0 | Çıraklık: İlk Kural | — (tanıtım; görev verisi yok) | Atölye · Câbir Usta | Atom Görüşü (tanıtım) | K-0 | **İlk Kural** (kök, oyun başında) |
+| 0 | Çıraklık: İlk Kural | — (tanıtım; görev verisi yok) | Atölye · Câbir Usta | Atom Görüşü (tanıtım) | K-0 | **İlk Kural** (kök, Çıraklık görevi `cirak_0` bitince; karar 14.11) |
 | 1 | D-1 Kuru Çeşme | `denk_1` | Denk · çeşme · Muhtar Yusuf | Atom Görüşü | K-1 | Kuru Çeşme · *Köpürmeden: Çeşme* |
 | 2 | D-2 İsli Fenerler | `denk_2` | Denk · fener · Fenerci Demir | Tahmin: yanma için ne gerekir | K-2 | İsli Fenerler · *Köpürmeden: Fener* |
 | 3 | D-3 Soğuk Fırın | `denk_3` | Denk · fırın · Fırıncı Zehra | Hata Dedektifi | K-3 | Soğuk Fırın · *Köpürmeden: Fırın* |

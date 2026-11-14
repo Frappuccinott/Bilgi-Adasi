@@ -30,19 +30,48 @@ namespace BilgiAdasi.UI
         [Tooltip("Kapalı: renk türden gelir (Görev altın, Köy mühür, Meydan okuma su — marka paleti). Açık: sekme asset'indeki tür rengi.")]
         [SerializeField] private bool useAssetColor;
 
+        [Tooltip("Bildirim, ekran bu kadar süre konuşmasız kalınca başlar (sn). Görev sonu usta sorusu ~0.6 sn sonra açılır.")]
+        [SerializeField] private float startDelay = 1f;
+
         private readonly Queue<AchievementToastInfo> queue = new Queue<AchievementToastInfo>();
         private RectTransform box, sealRoot, barFill;
         private Image sealImage, iconImage, barImage;
         private TextMeshProUGUI header, title, description;
-        private float timer;
+        private float timer, quietTime;
         private bool showing;
+        private AchievementToastInfo current;
+        private bool hasPaused;           // konuşma açılınca geri çekilen bildirim: önce o yeniden gösterilir
+        private AchievementToastInfo paused;
 
         private void Awake() => Build();
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            FigmaDialogueView.VisibilityChanged += OnDialogue;
+        }
+
+        protected override void OnDisable()
+        {
+            FigmaDialogueView.VisibilityChanged -= OnDialogue;
+            base.OnDisable();
+        }
 
         public void ShowToast(AchievementToastInfo info)
         {
             queue.Enqueue(info);
-            if (!showing) Next();
+            // Başlatma Update'te: ekran startDelay kadar konuşmasız kalınca.
+        }
+
+        // Konuşma (ya da ustanın sorusu) açılınca ekrandaki bildirim geri çekilir; konuşma bitince baştan gösterilir.
+        private void OnDialogue(bool visible)
+        {
+            quietTime = 0f;
+            if (!visible || !showing) return;
+            paused = current;
+            hasPaused = true;
+            showing = false;
+            box.gameObject.SetActive(false);
         }
 
         private Color AccentFor(in AchievementToastInfo info)
@@ -59,13 +88,20 @@ namespace BilgiAdasi.UI
 
         private void Next()
         {
-            if (queue.Count == 0)
+            if ((queue.Count == 0 && !hasPaused) || FigmaDialogueView.IsVisible)
             {
                 showing = false;
                 box.gameObject.SetActive(false);
                 return;
             }
-            var info = queue.Dequeue();
+            AchievementToastInfo info;
+            if (hasPaused)
+            {
+                info = paused;
+                hasPaused = false;
+            }
+            else info = queue.Dequeue();
+            current = info;
             var accent = AccentFor(info);
             header.text = info.Header;
             header.color = accent;
@@ -90,11 +126,21 @@ namespace BilgiAdasi.UI
 
         private void Update()
         {
-            if (!showing) return;
+            if (!showing)
+            {
+                if (queue.Count == 0 && !hasPaused) return;
+                if (FigmaDialogueView.IsVisible) { quietTime = 0f; return; }
+                quietTime += Time.unscaledDeltaTime;
+                if (quietTime >= startDelay) Next();
+                return;
+            }
             timer += Time.unscaledDeltaTime;
             if (timer >= showSeconds + 2f * slideSeconds)
             {
-                Next();
+                // Sıradaki de aynı sessizlik beklemesiyle başlar (arka arkaya bildirimler arası kısa ara).
+                showing = false;
+                quietTime = startDelay * 0.5f;
+                box.gameObject.SetActive(false);
                 return;
             }
             Animate();

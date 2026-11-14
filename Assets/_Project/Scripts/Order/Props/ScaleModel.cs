@@ -41,9 +41,15 @@ namespace BilgiAdasi.Order
         [Header("Yerleşim")]
         [SerializeField] private float atomSize = 0.045f;
         [SerializeField] private int maxPerRow = 8;
+        [Tooltip("Kefe tabanının ortası, kefe kökünden yukarı (m). Atomlar bu tabana oturur.")]
+        [SerializeField] private float panSurface = 0.005f;
+        [Tooltip("Taban kenara doğru yükselir (çanak): merkezden metre başına yükselme.")]
+        [SerializeField] private float panRise = 0.06f;
         [SerializeField] private float labelFontSize = 0.6f;
-        [Tooltip("Satır etiketlerinin kefe merkezinden oyuncuya doğru uzaklığı (m).")]
-        [SerializeField] private float labelForward = 0.16f;
+        [Tooltip("Satır etiketlerinin kefe merkezinden oyuncuya doğru uzaklığı (m). Sapın ve iplerin önü.")]
+        [SerializeField] private float labelForward = 0.12f;
+        [Tooltip("Satır levhasının ortası, kefeden yukarı (m): kefeyi taşıyan sapın üstünde, atomların üstünde.")]
+        [SerializeField] private float labelHeight = 0.33f;
         [Tooltip("Satır etiketlerinin arkasındaki levha (düz, ışıksız malzeme; renk plaqueColor). Boşsa levha yok.")]
         [SerializeField] private Material plaqueMaterial;
         [SerializeField] private Color plaqueColor = new Color(0.886f, 0.859f, 0.694f);   // 09 palet: kâğıt aydınlık #E2DBB1
@@ -52,12 +58,19 @@ namespace BilgiAdasi.Order
         [SerializeField] private float tiltPerAtom = 1.5f;
         [SerializeField] private float maxTilt = 12f;
 
-        [Header("Metin ve renk (yer tutucu)")]
+        [Header("Başlıklar (Giren / Çıkan)")]
+        [Tooltip("Kefelerin üstündeki başlıklar; kâğıt levha + altın kenar ile marka dilinde çizilir.")]
+        [SerializeField] private TMP_Text leftTitle;
+        [SerializeField] private TMP_Text rightTitle;
+        [Tooltip("Başlık ve durum levhasının kenarı (09 palet: altın koyu #D07A00).")]
+        [SerializeField] private Color edgeColor = new Color(0.816f, 0.478f, 0f);
+
+        [Header("Metin ve renk")]
         [SerializeField] private string balancedText = "Dengede — ateşi yakabilirsin";
         [SerializeField] private string unbalancedText = "Dengede değil";
-        [SerializeField] private Color goodColor = new Color(0.25f, 0.55f, 0.2f);
-        [SerializeField] private Color badColor = new Color(0.7f, 0.18f, 0.14f);
-        [SerializeField] private Color neutralColor = new Color(0.23f, 0.16f, 0.10f);
+        [SerializeField] private Color goodColor = new Color(0.122f, 0.431f, 0.227f);   // 09 palet: yeşil yaprak koyu #1F6E3A
+        [SerializeField] private Color badColor = new Color(0.635f, 0.255f, 0.118f);    // 09 palet: mühür mumu orta #A2411E
+        [SerializeField] private Color neutralColor = new Color(0.243f, 0.157f, 0.106f); // 09 palet: mürekkep en koyu #3E281B
 
         private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
         private static readonly int ColorId = Shader.PropertyToID("_Color");
@@ -78,20 +91,93 @@ namespace BilgiAdasi.Order
         private float targetTilt, shakeUntil;
 
         private TMP_FontAsset themeFont;
+        private Transform statusFace, statusEdge;
+
+        // Levha ölçüsü: yazının çevresinde pay (m) ve altın kenar kalınlığı (m).
+        private const float PlaquePadX = 0.035f, PlaquePadY = 0.018f, EdgeWidth = 0.006f;
 
         private void Awake()
         {
             left.Root = leftPan;
             right.Root = rightPan;
+            // Dünya içi yazılar (başlıklar, durum, satır etiketleri) HUD ile aynı tema fontunda; başlık ve durum
+            // marka dilinde: Alegreya başlık fontu, kâğıt levha üstünde mürekkep, ince altın kenar, kontur yok.
+            var theme = UI.UiTheme.OrDefault(null);
+            themeFont = theme.BodyFont;
+            if (themeFont != null)
+                foreach (var t in GetComponentsInChildren<TMP_Text>(true)) t.font = themeFont;
+            var heading = theme.HeadingFont != null ? theme.HeadingFont : themeFont;
+
+            StyleTitle(leftTitle, heading);
+            StyleTitle(rightTitle, heading);
             if (statusLabel != null)
             {
                 statusLabel.text = string.Empty;
                 statusLabel.transform.localPosition = statusLocal;
+                StyleWorldText(statusLabel, heading, FontStyles.Bold);
+                MakeFramedPlaque(statusLabel.transform, out statusFace, out statusEdge);
+                FitPlaque(statusLabel, statusFace, statusEdge);
             }
-            // Dünya içi yazılar (başlıklar, durum, satır etiketleri) HUD ile aynı tema fontunda.
-            themeFont = UI.UiTheme.OrDefault(null).BodyFont;
-            if (themeFont != null)
-                foreach (var t in GetComponentsInChildren<TMP_Text>(true)) t.font = themeFont;
+        }
+
+        private void StyleTitle(TMP_Text title, TMP_FontAsset font)
+        {
+            if (title == null) return;
+            StyleWorldText(title, font, FontStyles.Bold);
+            title.color = neutralColor;
+            MakeFramedPlaque(title.transform, out var face, out var edge);
+            FitPlaque(title, face, edge);
+        }
+
+        private static void StyleWorldText(TMP_Text t, TMP_FontAsset font, FontStyles style)
+        {
+            if (font != null) t.font = font;
+            // Fontun kendi malzemesi: kurulumdan kalan kalın kontur (ve kopya malzeme) gider.
+            if (t.font != null) t.fontSharedMaterial = t.font.material;
+            t.fontStyle = style;
+            t.alignment = TextAlignmentOptions.Center;
+            t.textWrappingMode = TextWrappingModes.NoWrap;
+        }
+
+        /// <summary>Yazının arkasına kâğıt yüz + biraz daha büyük altın kenar (iki düz quad, yazının arkasında).</summary>
+        private void MakeFramedPlaque(Transform text, out Transform face, out Transform edge)
+        {
+            face = edge = null;
+            if (plaqueMaterial == null) return;
+            face = MakeQuad(text, "Levha", plaqueColor, 0.004f);
+            edge = MakeQuad(text, "Levha_Kenar", edgeColor, 0.006f);
+        }
+
+        private Transform MakeQuad(Transform parent, string name, Color color, float back)
+        {
+            var go = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            go.name = name;
+            Destroy(go.GetComponent<Collider>());
+            go.transform.SetParent(parent, false);
+            go.transform.localPosition = new Vector3(0f, 0f, back);
+            var r = go.GetComponent<MeshRenderer>();
+            r.sharedMaterial = plaqueMaterial;
+            r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            Tint(r, color);
+            return go.transform;
+        }
+
+        /// <summary>Levhayı yazının ölçüsüne oturtur; yazı boşsa levha gizlenir.</summary>
+        private static void FitPlaque(TMP_Text text, Transform face, Transform edge)
+        {
+            if (face == null) return;
+            bool show = !string.IsNullOrEmpty(text.text);
+            face.gameObject.SetActive(show);
+            edge.gameObject.SetActive(show);
+            if (!show) return;
+            text.ForceMeshUpdate();
+            var b = text.textBounds;
+            var size = new Vector2(b.size.x + PlaquePadX * 2f, b.size.y + PlaquePadY * 2f);
+            var center = new Vector3(b.center.x, b.center.y, 0f);
+            face.localPosition = new Vector3(center.x, center.y, face.localPosition.z);
+            face.localScale = new Vector3(size.x, size.y, 1f);
+            edge.localPosition = new Vector3(center.x, center.y, edge.localPosition.z);
+            edge.localScale = new Vector3(size.x + EdgeWidth * 2f, size.y + EdgeWidth * 2f, 1f);
         }
 
         public void ShowAtoms(IReadOnlyList<AtomRow> newRows, bool isBalanced)
@@ -157,8 +243,13 @@ namespace BilgiAdasi.Order
             if (statusLabel != null)
             {
                 bool any = rows.Count > 0 && totalLeft > 0;
-                statusLabel.text = !any ? string.Empty : balanced ? balancedText : unbalancedText;
+                string text = !any ? string.Empty : balanced ? balancedText : unbalancedText;
                 statusLabel.color = balanced ? goodColor : badColor;
+                if (statusLabel.text != text)
+                {
+                    statusLabel.text = text;
+                    FitPlaque(statusLabel, statusFace, statusEdge);
+                }
             }
         }
 
@@ -173,24 +264,26 @@ namespace BilgiAdasi.Order
                 var row = rows[r];
                 int count = isLeft ? row.Left : row.Right;
                 int drawn = Mathf.Min(count, maxPerRow);
-                float y = atomSize * 0.5f + r * spacing;
+                // Satırlar kefenin tabanında yan yana yatar (önden arkaya), üst üste yığılmaz: ilk satır arkada.
+                float z = ((rows.Count - 1) * 0.5f - r) * spacing;
                 float startX = -(drawn - 1) * 0.5f * spacing;
                 Color c = row.Element != null ? row.Element.Color : Color.white;
 
                 for (int i = 0; i < drawn; i++)
                 {
                     var atom = GetAtom(pan, atomIndex++);
-                    var basePos = new Vector3(startX + i * spacing, y, 0f);
+                    float x = startX + i * spacing;
+                    float y = panSurface + panRise * Mathf.Sqrt(x * x + z * z) + atomSize * 0.5f;
+                    var basePos = new Vector3(x, y, z);
                     ApplyShape(atom, row.Element, basePos);
                     Tint(atom, c);
                 }
 
-                // Etiket yığının üstünde ve kefe kenarının önünde (oyuncu tarafı, yerel -Z): kenarın arkasında kalmasın.
-                // İlk satır en üstte; satırlar alt alta.
+                // Etiket kefeyi taşıyan sapın üstünde (labelHeight ortası), sapın hemen önünde (oyuncu tarafı, yerel -Z):
+                // atomları örtmez. İlk satır en üstte; satırlar alt alta, levha ortası sabit.
                 var label = GetLabel(pan, r);
                 float lineH = labelFontSize * 0.11f;
-                float top = rows.Count * spacing + 0.05f;
-                label.transform.localPosition = new Vector3(0f, top + (rows.Count - 1 - r) * lineH, -labelForward);
+                label.transform.localPosition = new Vector3(0f, LabelCenter() + ((rows.Count - 1) * 0.5f - r) * lineH, -labelForward);
                 string symbol = row.Element != null ? row.Element.Symbol : "?";
                 string extra = count > drawn ? "+" : "";
                 string leftover = isLeft && row.Leftover > 0 ? $" <size=70%>(+{row.Leftover} artan)</size>" : "";
@@ -233,6 +326,15 @@ namespace BilgiAdasi.Order
 
         private Mesh defaultMesh;
 
+        /// <summary>Satır levhasının ortası: sapta labelHeight; satır çoksa atom yığınının üstüne çıkar (örtmesin).</summary>
+        private float LabelCenter()
+        {
+            float lineH = labelFontSize * 0.11f;
+            float half = (rows.Count * lineH + 0.03f) * 0.5f;
+            float atomTop = panSurface + atomSize + 0.03f;   // atomlar tabanda tek kat
+            return Mathf.Max(labelHeight, atomTop + half);
+        }
+
         /// <summary>Etiket yığınının arkasına kâğıt levha (koyu raf ve duvar önünde de okunsun).</summary>
         private void UpdatePlaque(Pan pan)
         {
@@ -256,11 +358,9 @@ namespace BilgiAdasi.Order
             bool show = rows.Count > 0;
             pan.Plaque.gameObject.SetActive(show);
             if (!show) return;
-            float spacing = atomSize * 1.1f;
             float lineH = labelFontSize * 0.11f;
-            float top = rows.Count * spacing + 0.05f;
             float h = rows.Count * lineH + 0.03f;
-            pan.Plaque.localPosition = new Vector3(0f, top + (rows.Count - 1) * lineH * 0.5f, -labelForward + 0.004f);
+            pan.Plaque.localPosition = new Vector3(0f, LabelCenter(), -labelForward + 0.004f);
             pan.Plaque.localRotation = Quaternion.identity;
             pan.Plaque.localScale = new Vector3(0.26f, h, 1f);
         }

@@ -276,6 +276,8 @@ namespace BilgiAdasi.EditorTools
             int count = 0;
             foreach (var t in Object.FindObjectsByType<Transform>(FindObjectsInactive.Include))
             {
+                // Yeniden çalıştırmada eski Yazi_ çocukları bu döngüde silinir; listede kalan ölü referansları atla.
+                if (t == null) continue;
                 if (!t.name.StartsWith("Tabela_Yazi_") || t.parent == null || !t.parent.name.StartsWith("SM_Tabela_")) continue;
                 string key = KeyOf(t.name);
                 if (key == null || !SignNames.TryGetValue(key, out var label)) continue;

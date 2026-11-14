@@ -408,7 +408,7 @@ namespace BilgiAdasi.Core
                 {
                     ""name"": """",
                     ""id"": ""04d3f2ce-c999-4d7a-9edf-9af0a1d25b77"",
-                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""path"": ""<Gamepad>/dpad/left"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -519,6 +519,17 @@ namespace BilgiAdasi.Core
                     ""name"": """",
                     ""id"": ""f49691ae-c66f-4063-b984-5a5f74ad63e2"",
                     ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""OpenMap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d3fd30e6-a9c9-4268-860c-9326b9b09cae"",
+                    ""path"": ""<Gamepad>/dpad/down"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",

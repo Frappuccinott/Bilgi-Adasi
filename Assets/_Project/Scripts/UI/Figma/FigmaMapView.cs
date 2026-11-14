@@ -348,6 +348,8 @@ namespace BilgiAdasi.UI
             hrow.childForceExpandWidth = hrow.childForceExpandHeight = false;
             keyMap = UiKit.KeyCap(hintRow, th, 40f, out keyMapRoot);
             keyEsc = UiKit.KeyCap(hintRow, th, 40f, out keyEscRoot);
+            // Karar 14.11: harita açıkken tuş ipuçları gösterilmez (Kapat düğmesi yeter; açan tuş yine kapatır).
+            hintRow.gameObject.SetActive(false);
 
             var btnRt = UiKit.Rect(page.transform, "Close");
             UiKit.Place(btnRt, new Vector2(1f, 0f), new Vector2(-50f, 34f), new Vector2(200f, 58f));

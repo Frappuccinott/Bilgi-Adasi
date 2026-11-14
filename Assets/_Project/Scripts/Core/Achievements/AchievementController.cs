@@ -125,7 +125,6 @@ namespace BilgiAdasi.Core
 
         private void Evaluate(bool notify, bool onlyStart = false)
         {
-            bool any = false;
             // AllOf, aynı geçişte açılan başarımlara bağlı olabilir: değişiklik kalmayana kadar (en çok 4 tur).
             for (int pass = 0; pass < 4; pass++)
             {
@@ -145,10 +144,9 @@ namespace BilgiAdasi.Core
                         changed = true;
                     }
                 }
-                any |= changed;
                 if (!changed) break;
             }
-            if (any) SaveSystem.Instance?.Save();
+            // Diske görev sonu otomatik kayıtla gider (GameManager.RequestCheckpoint); burada yalnızca Data.
         }
 
         private bool IsSatisfied(AchievementEntry e)

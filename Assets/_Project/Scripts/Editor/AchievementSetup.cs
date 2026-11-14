@@ -142,8 +142,8 @@ namespace BilgiAdasi.EditorTools
         // Sıra önemli: her düğümün ilk çocuğu ana dal (düz devam eder), sonrakiler alta iner.
         private static AchievementEntry[] Kimya() => new[]
         {
-            // Sv 0 — kök
-            new AchievementEntry("ach_start", "", M, AchievementTrigger.GameStart, "",
+            // Sv 0 — kök: Çıraklık görevi (K-0) bitince; oyun başında verilmez, ders öğrenilmeden başarım olmaz.
+            new AchievementEntry("ach_start", "", M, AchievementTrigger.TaskCompleted, "cirak_0",
                 "İlk Kural", "K-0 · Kazana ne girerse o çıkar: tepkimede atomlar kaybolmaz, yoktan var olmaz."),
 
             // Denkleştirme köyü (Sv 1–5) — üst dal

@@ -55,13 +55,32 @@ namespace BilgiAdasi.City
         private IEnumerator Start()
         {
             if (data == null || data.Task == null || runner == null) yield break;
+            var task = data.Task;
+
+            // Açılış oynanacaksa ilk kart ilk karede (solmadan) ekranı örter: sahne hiç görünmez.
+            var card = ViewLocator.Get<IStoryCardView>();
+            bool covered = false;
+            if (card != null && data.ClassroomCards.Length > 0 && !runner.IsTaskDone(task) && !HasOtherProgress(task))
+            {
+                card.ShowImmediate(data.ClassroomCards[0]);
+                covered = true;
+            }
+
             // Oyuncu (PlayerSpawn) ve runner'ın kayıttan kurulumu bitsin.
+            user = FindAnyObjectByType<PlayerInteractor>();
             for (int i = 0; i < 120 && user == null; i++)
             {
                 yield return null;
                 user = FindAnyObjectByType<PlayerInteractor>();
             }
-            var task = data.Task;
+            if (covered && user != null) user.SetControlEnabled(false);
+
+            if (runner.IsTaskDone(task) || HasOtherProgress(task) ||
+                (orderController != null && orderController.ActiveTask == task))
+            {
+                if (covered) card.Hide();
+            }
+
             if (runner.IsTaskDone(task)) yield break;
 
             if (HasOtherProgress(task))
@@ -85,22 +104,23 @@ namespace BilgiAdasi.City
         {
             IsPlaying = true;
             if (user != null) user.SetControlEnabled(false);
+            // Uyanışta kapıya dönük: kartların arkasında döner, kart kalkınca oyuncu zaten kapıya bakar.
+            FaceWakeTarget();
 
-            // 1) Sınıf: kararmış ekranda kartlar
+            // 1) Sınıf: kararmış ekranda kartlar (ilki Start'ta solmadan açıldı)
             var card = ViewLocator.Get<IStoryCardView>();
             if (card != null && data.ClassroomCards.Length > 0)
             {
                 for (int i = 0; i < data.ClassroomCards.Length; i++)
                 {
-                    card.Show(data.ClassroomCards[i]);
+                    if (i > 0) card.Show(data.ClassroomCards[i]);
                     yield return WaitOrSkip(data.CardSeconds);
                 }
                 card.Hide();
                 yield return new WaitForSecondsRealtime(0.7f);
             }
 
-            // 2) Uyanış: atölye kapısında usta (oyuncu kapıya döner)
-            FaceWakeTarget();
+            // 2) Uyanış: atölye kapısında usta
             lines.Clear();
             for (int i = 0; i < data.WakeLines.Length; i++) lines.Add(new DialogueLine(data.MasterName, data.WakeLines[i], null));
             bool talked = false;

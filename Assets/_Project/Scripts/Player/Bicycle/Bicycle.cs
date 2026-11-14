@@ -157,12 +157,21 @@ namespace BilgiAdasi.Player
 
         private void OnDisable()
         {
+            GameEvents.BeforeSave -= OnBeforeSave;
             if (state == RideState.Parked) return;
             // Çıkışta / sahne boşalırken oyuncuya dokunma: SetRiding(false) PlayerMotor'u açar, OnEnable'ı
             // kapanmış GameInput'tan yeni (dispose edilmeyen) bir Controls örneği yaratırdı.
             bool tearingDown = isQuitting || !gameObject.scene.isLoaded;
             EndRide(riderTransform != null ? riderTransform.position : transform.position,
                 riderTransform != null && !tearingDown, tearingDown);
+        }
+
+        private void OnEnable() => GameEvents.BeforeSave += OnBeforeSave;
+
+        // Otomatik kayıt anı: bisiklet sürülüyorsa o anki konum "üstünde" yazılır (park hâli inişte zaten yazıldı).
+        private void OnBeforeSave(SaveData _)
+        {
+            if (state != RideState.Parked) SavePose(true);
         }
 
         private void OnApplicationQuit()
@@ -799,7 +808,7 @@ namespace BilgiAdasi.Player
             // Havada / düşerken kaydetme: açılışta oyuncu boşlukta başlardı.
             if (!HasGroundBelow(transform.position)) return;
             save.Data.SetPose(saveId, transform.position, yaw, ridden);
-            save.Save();
+            // Diske otomatik kayıtla gider (görev sonu); burada yalnızca Data.
         }
     }
 }

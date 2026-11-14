@@ -36,8 +36,8 @@ MonoBehaviour:
   - id: ach_start
     parentId: 
     kind: 1
-    trigger: 0
-    target: 
+    trigger: 1
+    target: cirak_0
     title: "\u0130lk Kural"
     description: "K-0 \xB7 Kazana ne girerse o \xE7\u0131kar: tepkimede atomlar kaybolmaz,
       yoktan var olmaz."

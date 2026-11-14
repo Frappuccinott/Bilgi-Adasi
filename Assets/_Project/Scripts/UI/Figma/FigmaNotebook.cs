@@ -115,6 +115,10 @@ namespace BilgiAdasi.UI
                 cancel.performed += OnCancel;
                 prevTab.performed += OnPrevTab;
                 nextTab.performed += OnNextTab;
+                // Yön olayla okunur: D-pad'e hızlı dokunuşta basma + bırakma aynı karede gelse de kaçmaz
+                // (her karede ReadValue ile okumak bu basışları atlıyordu: "1–2 kez basmak gerekiyor").
+                navigate.performed += OnNavigate;
+                navigate.canceled += OnNavigate;
             }
         }
 
@@ -134,6 +138,8 @@ namespace BilgiAdasi.UI
                 cancel.performed -= OnCancel;
                 prevTab.performed -= OnPrevTab;
                 nextTab.performed -= OnNextTab;
+                navigate.performed -= OnNavigate;
+                navigate.canceled -= OnNavigate;
             }
             base.OnDisable();
         }
@@ -210,7 +216,8 @@ namespace BilgiAdasi.UI
             phase = Phase.Opening;
             phaseTime = 0f;
             openedAt = Time.unscaledTime;
-            navArmed = false;
+            // Yön basılı değilse hemen kurulu: ilk basış yutulmasın. Basılıysa (D-pad ↑ ile açıldı) bırakınca kurulur.
+            navArmed = navigate == null || !navigate.enabled || navigate.ReadValue<Vector2>().sqrMagnitude < 0.09f;
             EventSystem.current?.SetSelectedGameObject(null);
             if (Texts != null) coverTitle.text = Texts.DiscoveriesTab;
             Render();
@@ -234,9 +241,7 @@ namespace BilgiAdasi.UI
                 float k = Mathf.Clamp01(phaseTime / closeTime);
                 ApplyClosing(k);
                 if (k >= 1f) FinishClose();
-                return;
             }
-            ReadNavigation();
         }
 
         /// <summary>t: 0 → 1 açılış. 0–rise: defter alttan eğik yükselir, kararma; rise–cover: kapak açılır; sonra yazı belirir.</summary>
@@ -292,16 +297,20 @@ namespace BilgiAdasi.UI
 
         private bool Ready => phase == Phase.Open && Time.unscaledTime - openedAt >= inputGuardSeconds;
 
-        private void ReadNavigation()
+        /// <summary>
+        /// Yön girdisi (UI/Navigate) her değişimde: bırakınca (merkeze dönünce) yeniden kurulur, eşiği geçen ilk değer bir adım atar.
+        /// Defteri açan basış (D-pad ↑) açılırken basılı kalsa da bırakılınca kurulur; açılış canlandırmasında adım atılmaz.
+        /// </summary>
+        private void OnNavigate(InputAction.CallbackContext ctx)
         {
-            if (navigate == null || !navigate.enabled) return;
-            var v = navigate.ReadValue<Vector2>();
-            if (!navArmed)
+            if (phase == Phase.Hidden) return;
+            var v = ctx.ReadValue<Vector2>();
+            if (v.sqrMagnitude < 0.09f)
             {
-                if (v.sqrMagnitude < 0.09f && Ready) navArmed = true;
+                navArmed = true;
                 return;
             }
-            if (!Ready) return;
+            if (!navArmed || !Ready) return;
             if (Mathf.Abs(v.x) >= 0.5f && Mathf.Abs(v.x) > Mathf.Abs(v.y))
             {
                 navArmed = false;

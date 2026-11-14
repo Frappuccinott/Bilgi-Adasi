@@ -27,7 +27,11 @@ namespace BilgiAdasi.Core
             GameEvents.NeighborhoodCompleted += HandleNeighborhoodCompleted;
             GameEvents.HintOpened += HandleHintOpened;
             GameEvents.Failed += HandleFailed;
+            GameEvents.AutoSaved += HandleAutoSaved;
         }
+
+        private static void HandleAutoSaved() =>
+            ViewLocator.Get<IAutoSaveNoticeView>()?.ShowSaved(MenuTexts.Load().AutoSaved);
 
         private void OnDisable()
         {
@@ -35,6 +39,7 @@ namespace BilgiAdasi.Core
             GameEvents.NeighborhoodCompleted -= HandleNeighborhoodCompleted;
             GameEvents.HintOpened -= HandleHintOpened;
             GameEvents.Failed -= HandleFailed;
+            GameEvents.AutoSaved -= HandleAutoSaved;
         }
 
         private void OnDestroy()
@@ -47,13 +52,35 @@ namespace BilgiAdasi.Core
         private static void HandleTaskCompleted(string taskId)
         {
             Data?.MarkTaskCompleted(taskId);
-            SaveSystem.Instance?.Save();
+            Instance?.RequestCheckpoint();
         }
 
         private static void HandleNeighborhoodCompleted(string neighborhoodId)
         {
             Data?.MarkNeighborhoodCompleted(neighborhoodId);
-            SaveSystem.Instance?.Save();
+            Instance?.RequestCheckpoint();
+        }
+
+        // ---------- Otomatik kayıt ----------
+
+        [Tooltip("Görev bitince otomatik kayıttan önce bekleme (sn): köy tamamlanması, başarımlar, ödeme aynı anda işlensin.")]
+        [SerializeField] private float checkpointDelay = 0.5f;
+
+        private bool checkpointPending;
+
+        /// <summary>Her görev sonunda (ve köy bitince) tek otomatik kayıt; aynı anda gelen istekler birleşir.</summary>
+        public void RequestCheckpoint()
+        {
+            if (checkpointPending || !isActiveAndEnabled) return;
+            checkpointPending = true;
+            StartCoroutine(CheckpointRoutine());
+        }
+
+        private System.Collections.IEnumerator CheckpointRoutine()
+        {
+            yield return new WaitForSecondsRealtime(checkpointDelay);
+            checkpointPending = false;
+            SaveSystem.Instance?.Checkpoint();
         }
 
         private static void HandleHintOpened(string taskId) => Data?.MarkHintOpened(taskId);

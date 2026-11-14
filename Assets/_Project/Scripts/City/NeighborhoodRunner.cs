@@ -275,10 +275,8 @@ namespace BilgiAdasi.City
             }
             else if (activeOrder != null)
             {
-                // Sipariş alındı ama hazır değil.
-                string waiting = texts != null ? texts.OrderWaiting : null;
-                if (AlreadyReminded(activeOrder, waiting)) return;
-                AddLine(activeOrder.GiverName, waiting, activeOrder.GiverPortrait);
+                // Sipariş alındı ama hazır değil: görev sol üstteki kartta zaten görünür, kapıdan geçerken hatırlatılmaz.
+                return;
             }
             else if (OfferNextOrder(inv))
             {
