@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c670cfb0f787a94aa1b43f0e9ba1637, type: 3}
+  m_Name: PortraitBook
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Core.PortraitBook
+  entries:
+  - speaker: "C\xE2bir Usta"
+    portrait: {fileID: 21300000, guid: b7e84432d0a627d43a070b2fa049fdc3, type: 3}
+  - speaker: Muhtar Yusuf
+    portrait: {fileID: 21300000, guid: 02a92025a19d72b46a1c23446050f9bb, type: 3}
+  - speaker: Fenerci Demir
+    portrait: {fileID: 21300000, guid: 02a92025a19d72b46a1c23446050f9bb, type: 3}
+  - speaker: "F\u0131r\u0131nc\u0131 Zehra"
+    portrait: {fileID: 21300000, guid: 0366aa63b404f6742aec29adebb7f8d1, type: 3}
+  - speaker: "Duvarc\u0131 Halil"
+    portrait: {fileID: 21300000, guid: 02a92025a19d72b46a1c23446050f9bb, type: 3}
+  - speaker: "\xC7ift\xE7i Elif"
+    portrait: {fileID: 21300000, guid: 0366aa63b404f6742aec29adebb7f8d1, type: 3}
+  - speaker: "K\xE2tip Nevin"
+    portrait: {fileID: 21300000, guid: 0366aa63b404f6742aec29adebb7f8d1, type: 3}

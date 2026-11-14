@@ -65,6 +65,8 @@ namespace BilgiAdasi.City
         {
             if (data == null || data.Task == null || runner == null) yield break;
             var task = data.Task;
+            // Çıraklıkta kapı yok: kart rehberinin son adımı "Usta bakıyor".
+            if (orderController != null) orderController.NoDoorTask = task;
 
             // Açılış oynanacaksa ilk kart ilk karede (solmadan) ekranı örter: sahne hiç görünmez.
             var card = ViewLocator.Get<IStoryCardView>();
