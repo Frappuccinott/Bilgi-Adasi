@@ -10,12 +10,16 @@ Bu klasör, prototipi geliştiren ekibin tek doğru kaynağıdır. Bir karar de�
 ```
 BilgiAdasi_Docs/
 ├── README.md                  ← buradan başla
-├── 01_Tasarim/   01-oyun-tasarimi.md · 09-tema-ve-model-kurallari.md · referans/
-├── 02_Mekanik/   02-siparis-mekanigi.md · 03-masa-mekanigi.md
+├── 01_Tasarim/   01-oyun-tasarimi.md · 09-tema-ve-model-kurallari.md · 11-ui-ux-plani.md · referans/
+├── 02_Mekanik/   02-siparis-mekanigi.md · 03-masa-mekanigi.md · 04-gorev-plani.md
 ├── 03_Teknik/    04-teknik-mimari.md · 08-mustafa-entegrasyon.md
-├── 04_Icerik/    05-icerik-prototip.md · 10-gorev-pazar-npc.md
-└── 05_Uretim/    06-yapilacaklar.md · 07-kod-plani.md · LICENSES.md
+├── 04_Icerik/    05-icerik-prototip.md · 10-gorev-pazar-npc.md · 11-gorev-ve-basarim-listesi.md ·
+│                 12-ders-notu-arastirma.md · 15-bereket-tarlasi-mat-biyo.md · 17-icerik-kontrol-listesi.md
+└── 05_Uretim/    06-yapilacaklar.md · 07-kod-plani.md · 12-ilk-20-gorev-mekanikleri.md · 13-ders-notu-plani.md ·
+                  14-defter-plani.md · 16-traktor-tarla-mekanikleri.md · 17-fragman-plani.md · LICENSES.md
 ```
+
+**Güncel durum (14.11):** oynanan görevler ve sırası → `04_Icerik/11-gorev-ve-basarim-listesi.md` ("Oynanabilir durum"); yapılanlar → `05_Uretim/06-yapilacaklar.md` ("14.11 eklenenler"). Tek oyun sahnesi `Harita`, ilk sahne `AnaMenu`.
 
 ## Dosyalar
 
@@ -32,6 +36,16 @@ BilgiAdasi_Docs/
 | `03_Teknik/08-mustafa-entegrasyon.md` | Sahne bağlantı noktaları ve UI arayüzleri (harita/UI ↔ kod) | Mustafa, kod |
 | `05_Uretim/07-kod-plani.md` | Kod fazları, öncelik ve kesme sırası | Kod |
 | `05_Uretim/LICENSES.md` | Hazır varlık lisansları + yapay zekâ beyanı | İçerik/sunum |
+| `01_Tasarim/11-ui-ux-plani.md` | Ekran akışı, ekran listesi, UI arayüzleri | UI, kod |
+| `02_Mekanik/04-gorev-plani.md` | Seviye seviye görev planı ve eğitsel katmanlar (Tahmin, Hata Dedektifi, Atom Görüşü, Sorgu, Keşif Defteri) | Herkes |
+| `04_Icerik/11-gorev-ve-basarim-listesi.md` | Görev kimlikleri (`taskId`), başarımlar, **oynanabilir durum** | Kod, içerik |
+| `04_Icerik/12-ders-notu-arastirma.md` | Ders notu içeriğinin kazanım ve kavram yanılgısı araştırması | İçerik |
+| `04_Icerik/15-bereket-tarlasi-mat-biyo.md` | Bereket Tarlası (Mat + Biyo) görevleri; `bereket_2` oyunda | İçerik, kod, harita |
+| `04_Icerik/17-icerik-kontrol-listesi.md` | Kitapla kontrol edilecek metinler | İçerik |
+| `05_Uretim/12-ilk-20-gorev-mekanikleri.md` | İlk 20 görevin mekanik özeti | Kod |
+| `05_Uretim/13-ders-notu-plani.md` · `14-defter-plani.md` | Ders Notu ve defter tasarımı/akışı | Kod, UI |
+| `05_Uretim/16-traktor-tarla-mekanikleri.md` | Simya Traktörü ve tarla mekanikleri | Kod, harita |
+| `05_Uretim/17-fragman-plani.md` | Fragman/sunum planı | Sunum |
 
 ## Tek cümlede oyun
 

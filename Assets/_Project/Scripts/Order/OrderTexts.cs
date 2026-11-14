@@ -21,6 +21,8 @@ namespace BilgiAdasi.Order
         [TextArea(1, 3)] [SerializeField] private string foamLost = "Kazan köpürdü, içindekiler gitti. Teraziye bak, baştan dök.";
         [TextArea(1, 3)] [SerializeField] private string drained = "Kazan boşaltıldı.";
         [TextArea(1, 3)] [SerializeField] private string nextStep = "Bir adım tamam. Sıradaki adım için kazanı yeniden doldur.";
+        [Tooltip("Zincir siparişte ara ürün heba olunca: sipariş ilk adıma döner.")]
+        [TextArea(1, 3)] [SerializeField] private string chainRestart = "Câbir Usta: Ara ürünü heba ettin. Baştan başla evlat.";
         [SerializeField] private string currencyName = "akçe";
 
         [Header("İpuçları (crosshair)")]
@@ -45,6 +47,8 @@ namespace BilgiAdasi.Order
         [SerializeField] private string guidePourDetail = "Elindeki kavanozla kazana bak. Dökülen geri alınmaz";
         [SerializeField] private string guideBalance = "Teraziyi dengele";
         [SerializeField] private string guideBalanceDetail = "Sol kefedeki atomlar sağ kefedekilere eşit olsun";
+        [Tooltip("Kazanda bu tepkimeye girmeyen madde varken (atomlar eşit olsa da dengede sayılmaz).")]
+        [SerializeField] private string guideForeignDetail = "Kazanda bu siparişe girmeyen bir madde var. Kolu çekip kazanı boşalt; yalnızca siparişin malzemelerini dök.";
         [SerializeField] private string guidePurchase = "Yeterince koy";
         [SerializeField] private string guidePurchaseDetail = "İstenen ürün kadar malzeme olsun";
         [SerializeField] private string guideFire = "Ateşi yak";
@@ -67,6 +71,7 @@ namespace BilgiAdasi.Order
         public string FoamLost => foamLost;
         public string Drained => drained;
         public string NextStep => nextStep;
+        public string ChainRestart => chainRestart;
         public string CurrencyName => currencyName;
 
         public string PourPrompt => pourPrompt;
@@ -87,6 +92,7 @@ namespace BilgiAdasi.Order
         public string GuidePourDetail => guidePourDetail;
         public string GuideBalance => guideBalance;
         public string GuideBalanceDetail => guideBalanceDetail;
+        public string GuideForeignDetail => guideForeignDetail;
         public string GuidePurchase => guidePurchase;
         public string GuidePurchaseDetail => guidePurchaseDetail;
         public string GuideFire => guideFire;

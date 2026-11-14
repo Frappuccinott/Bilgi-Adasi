@@ -34,6 +34,13 @@ namespace BilgiAdasi.Desk
         [TextArea(1, 2)] [SerializeField] private string guildArrived = "Loncadan mühürlü bir zarf geldi. Masada seni bekliyor.";
         [SerializeField] private string currentTaskStep = "Masadaki mektubu cevapla";
 
+        [Header("HUD görev kartı (adım rehberi)")]
+        [SerializeField] private string guideOpen = "Masadaki mektubu aç";
+        [TextArea(1, 2)] [SerializeField] private string guideOpenDetail = "Atölyedeki masaya otur; zarf yeşil ışıkla parlıyor.";
+        [SerializeField] private string guideAnswer = "Soruları yanıtla";
+        [SerializeField] private string guideSeal = "Mühürlü kâğıdı gönder";
+        [TextArea(1, 2)] [SerializeField] private string guideSealDetail = "Mühür basıldı; Devam'a bas.";
+
         public string SubmitWord => submitWord;
         public string ContinueWord => continueWord;
         public string FromLabel => fromLabel;
@@ -52,5 +59,10 @@ namespace BilgiAdasi.Desk
         public string PigeonArrived => pigeonArrived;
         public string GuildArrived => guildArrived;
         public string CurrentTaskStep => currentTaskStep;
+        public string GuideOpen => guideOpen;
+        public string GuideOpenDetail => guideOpenDetail;
+        public string GuideAnswer => guideAnswer;
+        public string GuideSeal => guideSeal;
+        public string GuideSealDetail => guideSealDetail;
     }
 }

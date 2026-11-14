@@ -10,8 +10,8 @@ namespace BilgiAdasi.City
 {
     /// <summary>
     /// Konuşma sırası: satırları IDialogueView'a tek tek verir. Kamera değişmez.
-    /// Oyuncuyla yüz yüze konuşmada (Play'e interactor verilirse) hareket durur, imleç görünür; Interact / Jump
-    /// (E, Space / X, A) ya da fareyle tıklama (view → IDialogueCommands.Advance) ilerletir. Interactor verilmezse satırlar kendiliğinden akar.
+    /// Oyuncuyla yüz yüze konuşmada (Play'e interactor verilirse) hareket durur, imleç görünür; Interact / Confirm
+    /// (E, Enter, Space / X, A) ya da fareyle tıklama (view → IDialogueCommands.Advance) ilerletir. Interactor verilmezse satırlar kendiliğinden akar.
     /// Görünümü yalnızca arayüzle tanır.
     /// </summary>
     public sealed class DialogueDirector : MonoBehaviour, IDialogueCommands
@@ -40,12 +40,56 @@ namespace BilgiAdasi.City
         private void OnDisable()
         {
             ViewLocator.Changed -= OnViewsChanged;
+            ClearDeferred();
             Finish();
+        }
+
+        // ---------- Ertelenen konuşma ----------
+
+        private readonly List<DialogueLine> deferredLines = new List<DialogueLine>();
+        private Action deferredFinished;
+        private PlayerInteractor deferredUser;
+
+        private void Defer(IReadOnlyList<DialogueLine> source, Action finished, PlayerInteractor blockingUser)
+        {
+            ClearDeferred();
+            for (int i = 0; i < source.Count; i++) deferredLines.Add(source[i]); // çağıran listesini yeniden kullanabilir
+            deferredFinished = finished;
+            deferredUser = blockingUser;
+            GameInput.ModeChanged += OnModeChangedWhileDeferred;
+        }
+
+        private void ClearDeferred()
+        {
+            if (deferredUser == null) return;
+            GameInput.ModeChanged -= OnModeChangedWhileDeferred;
+            deferredLines.Clear();
+            deferredFinished = null;
+            deferredUser = null;
+        }
+
+        private void OnModeChangedWhileDeferred(InputMode mode)
+        {
+            if (mode != InputMode.Player || deferredUser == null) return;
+            var copy = new List<DialogueLine>(deferredLines);
+            var finished = deferredFinished;
+            var user = deferredUser;
+            ClearDeferred();
+            Play(copy, finished, user);
         }
 
         /// <summary>Konuşmayı başlatır; sürmekte olan konuşma önce biter. blockingUser verilirse hareket durur.</summary>
         public void Play(IReadOnlyList<DialogueLine> source, Action finished, PlayerInteractor blockingUser = null)
         {
+            // Pazar / Esc menüsü / harita gibi bir ekran açıkken birebir konuşma onun üstüne açılmasın: tam ekran
+            // tıklama yakalayıcısı ekranın fare girdisini yutar, UI modunda E/Space de konuşmayı ilerletemez.
+            // Ekran kapanıp oyuncu moduna dönülünce başlar.
+            if (blockingUser != null && GameInput.Mode == InputMode.UI)
+            {
+                Defer(source, finished, blockingUser);
+                return;
+            }
+            ClearDeferred();
             Finish();
             lines.Clear();
             for (int i = 0; i < source.Count; i++)
@@ -65,7 +109,7 @@ namespace BilgiAdasi.City
                 user.SetControlEnabled(false);
                 GameInput.SetCursorFree(true); // fareyle balona tıklanabilsin
                 interactAction = GameInput.Controls.Player.Interact;
-                jumpAction = GameInput.Controls.Player.Jump;
+                jumpAction = GameInput.FindAction("Player/Confirm"); // Enter, Space / A
                 interactAction.performed += OnAdvanceInput;
                 jumpAction.performed += OnAdvanceInput;
             }

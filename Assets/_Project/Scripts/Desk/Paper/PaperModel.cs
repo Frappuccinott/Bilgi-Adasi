@@ -188,6 +188,31 @@ namespace BilgiAdasi.Desk
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Satırın cümlesi, bütün boşlukları aynı kelimeyle dolu (bu satırınki altı çizili). Görünüm satır yüksekliğini
+        /// bankadaki en uzun kelimeye göre baştan ayırır; seçim değişince kâğıt zıplamaz (Play 14.11).
+        /// </summary>
+        public string RowLabelFilled(int row, string word)
+        {
+            int s = rowSentence[row];
+            string text = sentences[s];
+            sb.Clear();
+            for (int i = 0; i < text.Length; i++)
+            {
+                char c = text[i];
+                int close = c == '{' ? text.IndexOf('}', i + 1) : -1;
+                if (close < 0 || !int.TryParse(text.Substring(i + 1, close - i - 1), out int blank))
+                {
+                    sb.Append(c);
+                    continue;
+                }
+                if (RowOf(s, blank) == row) sb.Append("<u><b>").Append(word).Append("</b></u>");
+                else sb.Append(word);
+                i = close;
+            }
+            return sb.ToString();
+        }
+
         private int RowOf(int sentence, int blank)
         {
             for (int i = 0; i < Rows.Count; i++)

@@ -78,6 +78,7 @@ namespace BilgiAdasi.UI
             bool visible = lineShown || holds > 0;
             if (IsVisible == visible) return;
             IsVisible = visible;
+            DialogueFocus.Set(visible);
             VisibilityChanged?.Invoke(visible);
         }
 

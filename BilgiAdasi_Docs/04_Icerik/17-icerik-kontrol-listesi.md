@@ -50,5 +50,6 @@ Kaynak: her görev asset'inin `realLifeText` alanı (`Data/Tasks/...`).
 `BilgiAdasi_Docs/04_Icerik/12-ders-notu-arastirma.md` kazanımlara (KİM.10.1.6, 10.1.7) dayanıyor. Oyundaki notlar `LessonNotesData` → `LearningData.asset`.
 
 - [ ] denk_1…5 ders notları kitaptaki terimlerle uyumlu (katsayı, alt indis, kütlenin korunumu).
+- [ ] tur_1…5 ders notları: türlerin tanımları ve "yanma = karbonlu yakıt + O₂" ayrımı kitapla uyumlu (H₂ + O₂ → H₂O oyunda sentez kutusunda; kitap bunu yanma sayıyorsa `tur_2_etiket` ile birlikte düzeltilmeli).
 
 Kontrol eden: ______  Tarih/saat: ______

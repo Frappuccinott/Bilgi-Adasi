@@ -97,6 +97,22 @@ namespace BilgiAdasi.City
         [Tooltip("Turlar bitince (kalan parseller ekilirken).")]
         [TextArea(1, 3)] [SerializeField] private string lapsDoneLine = "";
 
+        [Header("Sipariş kartı rehberi (HUD; Emin'in adım rehberi)")]
+        [Tooltip("Adımlar: 0 plan soruları · 1 tohum al · 2 sandığa dök · 3 traktörle tur · 4 ekim sonrası soru.")]
+        [SerializeField] private string[] guideSteps = new string[5];
+        [Tooltip("Sıradaki adımın kısa açıklaması. 2: {0} dökülen kese · 3: {0} biten tur, {1} gereken.")]
+        [SerializeField] private string[] guideDetails = new string[5];
+
+        [Header("Tarladaki kişiler (Elif, Hesap Ustası, Hayat Ustası)")]
+        [Tooltip("Sırayla: veren (Elif), Hesap Ustası, Hayat Ustası.")]
+        [SerializeField] private string[] npcNames = { "Çiftçi Elif", "Hesap Ustası", "Hayat Ustası" };
+        [Tooltip("Etkileşim ipucu; {0} kişinin adı.")]
+        [SerializeField] private string talkPrompt = "{0} ile konuş";
+        [Tooltip("Aşamaya göre söz (6): 0 görev gelmedi · 1 ders notu/hesap · 2 tohum al/dök · 3 traktörle tur · 4 ekim sonrası · 5 görev bitti.")]
+        [TextArea(1, 3)] [SerializeField] private string[] giverTalk = new string[6];
+        [TextArea(1, 3)] [SerializeField] private string[] mathTalk = new string[6];
+        [TextArea(1, 3)] [SerializeField] private string[] biologyTalk = new string[6];
+
         [Header("Saha soruları (sırayla; her biri kendi anında)")]
         [SerializeField] private List<FieldQuestion> questions = new List<FieldQuestion>();
 
@@ -122,6 +138,21 @@ namespace BilgiAdasi.City
         public string NoSeedLine => noSeedLine;
         public string[] FinishLines => finishLines;
         public IReadOnlyList<FieldQuestion> Questions => questions;
+        public string NpcName(FieldNpcRole r) => npcNames != null && (int)r < npcNames.Length ? npcNames[(int)r] : string.Empty;
+        public string TalkPrompt => talkPrompt;
+
+        /// <summary>Kişinin o aşamadaki sözü; boşsa bir önceki dolu aşamanınki.</summary>
+        public string TalkLine(FieldNpcRole r, int stage)
+        {
+            var arr = r == FieldNpcRole.Giver ? giverTalk : r == FieldNpcRole.Math ? mathTalk : biologyTalk;
+            if (arr == null) return string.Empty;
+            for (int i = Mathf.Min(stage, arr.Length - 1); i >= 0; i--)
+                if (!string.IsNullOrWhiteSpace(arr[i])) return arr[i];
+            return string.Empty;
+        }
+
+        public string[] GuideSteps => guideSteps;
+        public string[] GuideDetails => guideDetails;
         public int RequiredLaps => requiredLaps;
         public string[] DriveLines => driveLines;
         public string LapNotice => lapNotice;
@@ -139,6 +170,16 @@ namespace BilgiAdasi.City
 #if UNITY_EDITOR
         public void EditorSetCommon(string taskId, string giver, string[] lines, string hint, string realLife) =>
             SetCommon(taskId, giver, lines, new string[0], hint, realLife);
+
+        public void EditorSetTalk(string[] names, string prompt, string[] giver, string[] math, string[] biology)
+        {
+            npcNames = names; talkPrompt = prompt; giverTalk = giver; mathTalk = math; biologyTalk = biology;
+        }
+
+        public void EditorSetGuide(string[] steps, string[] details)
+        {
+            guideSteps = steps; guideDetails = details;
+        }
 
         public void EditorSetDriving(int laps, string[] drive, string notice, string done)
         {

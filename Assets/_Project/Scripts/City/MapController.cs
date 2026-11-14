@@ -63,8 +63,9 @@ namespace BilgiAdasi.City
         private void OnOpenMap(InputAction.CallbackContext _)
         {
             if (IsOpen) CloseMap();
-            // Açılış sekansında (kartlar, uyanış, ustanın sorusu) harita açılmaz.
-            else if (GameInput.Mode == InputMode.Player && !ApprenticeshipDirector.IsPlaying) OpenMap();
+            // Açılış sekansında (kartlar, uyanış, ustanın sorusu) ve birebir konuşma / soru açıkken harita açılmaz
+            // (gamepad'de D-pad ↓ soruda seçim taşır).
+            else if (GameInput.Mode == InputMode.Player && !ApprenticeshipDirector.IsPlaying && !DialogueFocus.IsOpen) OpenMap();
         }
 
         private void OnCancel(InputAction.CallbackContext _)

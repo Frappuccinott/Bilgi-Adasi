@@ -20,6 +20,7 @@ namespace BilgiAdasi.UI
         private GameObject crosshair;
         private RectTransform box, keyRoot;
         private TextMeshProUGUI keyLabel, actionLabel;
+        private string lastText, lastGlyph;
 
         private void Awake() => Build();
 
@@ -31,6 +32,10 @@ namespace BilgiAdasi.UI
 
         public void ShowPrompt(string text, string glyph)
         {
+            // Aynı ipucu zaten açıksa yeniden kurma: her kare TMP + layout rebuild kasma yaratıyordu.
+            if (box.gameObject.activeSelf && text == lastText && glyph == lastGlyph) return;
+            lastText = text;
+            lastGlyph = glyph;
             actionLabel.text = text;
             UiKit.SetKeyCap(keyLabel, keyRoot, glyph, keyHeight);
             box.gameObject.SetActive(true);

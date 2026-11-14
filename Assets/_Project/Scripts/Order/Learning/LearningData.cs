@@ -100,6 +100,13 @@ namespace BilgiAdasi.Order
             return this;
         }
 
+        /// <summary>Editör veri üreticisi için: yalnızca Ders Notu'nu değiştirir (öteki alanlara dokunmaz).</summary>
+        public LearningEntry WithLesson(LessonNote note)
+        {
+            lesson = note ?? new LessonNote();
+            return this;
+        }
+
         /// <summary>Editör veri üreticisi için: defter sayfasının alanları.</summary>
         public LearningEntry WithPage(string pageTitle, string place, string richEquation, string icon, string usageNote,
             params FieldNote[] notes)

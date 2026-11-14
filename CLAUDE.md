@@ -10,7 +10,7 @@ Bu dosya, bu Unity projesinde çalışan Claude için kalıcı bağlamdır. Her 
 - **Hikâye:** Kimya dersinde uyuyakalan öğrenci, ortaçağda her şehri bir ders olan bir adada uyanır. Kimya şehrinde Câbir Usta'nın çırağı olur. Şehir = ders, ilçe = ünite (tema), köy = konu, her köy = 5 görev. Örnek: Kimya şehri → Kimya Bilimi ilçesi → Simya köyü.
 - **Şehirler:** Kimya (açık); Matematik, Fizik, Biyoloji, Türkçe, Sosyal (haritada sisli/kilitli).
 - **İki görev tipi:** *Sipariş* (kazan + iki terazi, uygulama konuları) ve *Masa* (kâğıt üzerinde sözel sorular). Kurallar: `BilgiAdasi_Docs/02_Mekanik/`.
-- **Prototip kapsamı:** Kimya şehri, Etkileşim ilçesi, iki oynanabilir köy: *Denkleştirme* (5 sipariş) ve *Tepkime Türleri* (5 masa görevi).
+- **Prototip kapsamı:** Kimya şehri, Etkileşim ilçesi, iki oynanabilir köy: *Denkleştirme* (5 sipariş + 2. sırada tarla görevi `bereket_2`, toplam 6) ve *Tepkime Türleri* (5 masa görevi); önünde *Çıraklık* (`cirak_0`). Güncel sıra ve durum: `BilgiAdasi_Docs/04_Icerik/11-gorev-ve-basarim-listesi.md` → "Oynanabilir durum".
 - **Yarışma teslimi:** Cumartesi 14 Kasım 2026, 11.00 — çalışan build + sunum. **Kod dondurma: 08.00.**
 
 ### Roller
@@ -63,7 +63,8 @@ Yeni paket eklemeden önce **sor**.
 
 | Aksiyon | Map | Klavye / Fare | Gamepad |
 |---|---|---|---|
-| Move | Player | WASD | Sol çubuk |
+| Move | Player | WASD / ok tuşları (karar 14.11) | Sol çubuk |
+| Confirm (konuşmayı ilerlet / soruda şıkkı onayla; Interact da çalışır) | Player | Enter / Space | A (South) |
 | Look | Player | Fare delta | Sağ çubuk |
 | Sprint (hızlı yürü) | Player | Sol Shift (basılı) | Sol çubuk bas (L3, aç/kapa) |
 | Interact | Player | E | X (West) |
@@ -91,6 +92,8 @@ Yeni paket eklemeden önce **sor**.
 | PrevTab / NextTab (defter ayracı) | UI | Q / E | LB / RB |
 | DevJumpTask (yalnızca geliştirici) | Dev | F1–F6 (o göreve atla; Denkleştirme 6 görev) | LT+RT+D-pad → (sıradaki görevi bitmiş say) |
 | DevResetSave (yalnızca geliştirici) | Dev | Ctrl+R | LT+RT+D-pad ← |
+
+Soru/konuşma kutusu açıkken (`DialogueFocus.IsOpen`) harita ve defter açılmaz; soruda gamepad D-pad ↑↓ şık seçer. UI modunda (pazar, Esc, harita) başlatılan birebir konuşma ekran kapanınca başlar (`DialogueDirector`), yol sohbeti altyazısı konuşma/soru açıkken gizlenir.
 
 `Dev` map'i oyun modundan bağımsız hep açıktır ama yalnızca editörde, Development Build'de ya da `BILGIADASI_DEMO` tanımlıyken (`DevShortcuts`).
 
@@ -161,6 +164,7 @@ Tüm değerler `PlayerMovementSettings` ScriptableObject'inde; play mode'da canl
 - **Atölye önü pazarı** (karar 14.11, `ShopCounter` + `CustomerQueue`): sipariş ve teslim artık **kapıda değil, atölyenin önündeki tezgâhta** (E / X). Kapı yalnızca açılır (`NeighborhoodRunner.counter` boşsa eski kapı akışı). Siparişi veren sakin sokaktan gelir, tezgâhta bekler; sipariş alınınca bankın yanında bekler, ürün hazır olunca tezgâha döner, teslimden sonra gider. Tezgâh boşken oyuncunun envanterindeki ürünü almaya alıcılar gelir (`Data/Market/MusteriIstekleri.asset`; teslim edilecek sipariş ürünü istenmez). Kurulum: **Kurulum → 22**.
 - **Atölye ışığı (karar 14.11):** atölye içi bake edilir. `Fener_1/2/3_Isik` noktalarında yalnızca bake edilen sıcak nokta ışıklar var. `Atolye_Statik` objeleri yalnızca Contribute GI statik; fener gövdeleri ışığı hapsetmesin diye hariç. Lightmap UV'leri `SanatIceAktarma` üretir; `Stilize` shader lightmap okur ve Meta pass içerir. Ayarlar `Scenes/Harita_Isik.lighting`. Hareketli objeler ve oyuncu ışığı `Isik_Sondalari` ile alır (atölye içi, duvar halkası, kasaba ızgarası); gerçek zamanlı nokta ışık yok. Atölyede bir şey taşınırsa yeniden bake edin (Window → Rendering → Lighting → Generate Lighting).
 - **Kazan buharı:** `ArtCauldronView` başarılı tepkimede kodla puf üretir; modelin buhar kütleleri kapalı. Ayarlar Inspector'da (`steam*` alanları).
+- **Masa (karar 14.11):** mektup beklerken zarf yeşil nabızla ışır (`ArtDeskView.letterHalo`, **Kurulum → 26**); mektup ilk açılınca kâğıttan önce Ders Notu (`tur_1…5`, `DeskController` → `LearningDirector.ShowLesson`).
 
 İstasyon modu yalnızca masa ve tahtada kalır (Faz 5). Oyuncu bir istasyona yaklaşıp Interact yapınca:
 1. `Player` map kapanır, `Station` map açılır; hareket ve bakış durur.
@@ -169,6 +173,7 @@ Tüm değerler `PlayerMovementSettings` ScriptableObject'inde; play mode'da canl
 4. ExitStation ile tersine döner; oyuncu bıraktığı noktaya ve bakış açısına geri gelir.
 
 İstasyonlar: `DeskStation` (masa), `ChalkboardStation` (okuma); `StationBase`'ten türer.
+- **Masada mektup ışığı (karar 14.11):** zarf masada beklerken (güvercin geldi, kâğıt açılmadı ya da yarım kaldı) zarftan yeşil (09 paleti açık yeşil `#7ED63B`) nabız gibi atan bir hale ve dik ışık sütunu yükselir; zarf da yeşile kayarak ışır. Atölyeye girer girmez fark edilsin diye. Masaya oturunca söner. Kod `ArtDeskView` (görünüm; denetleyici bilmez), kurulum **Kurulum → 26** (doku kodla üretilir, URP Particles/Unlit toplamalı; gerçek zamanlı ışık yok).
 
 ---
 
@@ -183,7 +188,7 @@ Oyuncu köyler arasında **yürüyerek** gider (karar: 13.11). Bu, dokümanlarda
 - **Kayıt (karar 14.11):** diske yalnızca otomatik kayıtla yazılır: her görev bitince `GameManager.RequestCheckpoint` → `SaveSystem.Checkpoint` (önce `GameEvents.BeforeSave`: oyuncu konumu `PlayerSpawn`, sürülen bisiklet `Bicycle`), sağ üstte "Otomatik kaydedildi…" (`IAutoSaveNoticeView`). Çıkışta kaydedilmez; "Devam et" son görev anına döner. Oyun içinde `SaveSystem.Save()` çağırmayın, `Data`ya yazın. Kodumuz sıfırdan; dış kayıt paketi kullanılmaz (yarışma kuralı).
 - Harita ekranı (`OpenMap`: M / Tab / Select; aynı tuş ya da Esc/B kapatır): bilgi + ilerleme ekranı (köy durumu, 5 nokta, kilitli şehirler). Sol altta dönen mini harita (yalnızca oyuncu modunda). Görüntü sahneden pişirilir; veri `Data/Map/MapData.asset`. Kurulum: **Kurulum → 19** (harita modeli değişince yeniden çalıştır). Hızlı seyahat: P2, zaman kalırsa.
 - Yön tabelalarında simge yok, hedefin adı yazar (karar 14.11): `Tabela_Yazi_*` çapalarına TMP, Kurulum → 19.
-- Görev akışı: köydeki sakin/ulak oyuncuyu **atölyeye** çağırır; görevler atölyedeki istasyonlarda çözülür. Köyde yalnızca "önce/sonra" değişimi görülür.
+- Görev akışı: köydeki sakin/ulak oyuncuyu **atölyeye** çağırır; görevler atölyedeki istasyonlarda çözülür. Köyde yalnızca "önce/sonra" değişimi görülür. İstisna: tarla görevi `bereket_2` Bereket Tarlası'nda oynanır (traktör, ekim sandığı; Elif / Hesap Ustası / Hayat Ustası `FieldNpc` ile aşamaya göre ipucu verir; Kurulum → 23, 24).
 
 ### Bisiklet (karar 13.11, P2)
 - Şehirde duran bisiklet (`Bicycle`, `WorldInteractable`): **Use (F / X)** ile binilir/inilir (karar 13.11); hızlıysa önce frenler, yanda/arkada boş yer bulunca indirir. Konum indikten sonra kaydedilir (`SaveData.TryGetPose/SetPose`).

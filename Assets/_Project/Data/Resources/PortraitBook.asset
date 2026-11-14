@@ -27,3 +27,7 @@ MonoBehaviour:
     portrait: {fileID: 21300000, guid: 0366aa63b404f6742aec29adebb7f8d1, type: 3}
   - speaker: "K\xE2tip Nevin"
     portrait: {fileID: 21300000, guid: 0366aa63b404f6742aec29adebb7f8d1, type: 3}
+  - speaker: "Hesap Ustas\u0131"
+    portrait: {fileID: 21300000, guid: e7f805a8830fe0c42a5548cb4954821f, type: 3}
+  - speaker: "Hayat Ustas\u0131"
+    portrait: {fileID: 21300000, guid: 02a92025a19d72b46a1c23446050f9bb, type: 3}

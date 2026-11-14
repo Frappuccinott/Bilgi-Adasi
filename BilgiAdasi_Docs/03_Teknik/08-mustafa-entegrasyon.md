@@ -5,9 +5,9 @@
 
 ## 1. Sahne
 
-- Tek oyun sahnesi: `Assets/_Project/Scenes/Town.unity` (atölye + şehir). `Boot` ve `Classroom` sahnelerine dokunma.
-- `Town` şu an test sahnesidir: `_Placeholder` kökü (zemin, duvar, basamak, rampa, ham HUD) senin düzenin gelince silinir. Prefab örnekleri (`PlayerSpawn`, `Station_*`, `Neighborhood_*`, `LockedZone_Example`) kalır, yalnızca yerlerini değiştirirsin.
-- Kendi düzenini ayrı bir sahnede kurup sonra `Town`'a taşıyabilirsin; aynı sahnede aynı anda ikimiz çalışmayalım (merge çakışır). Sahneyi açmadan önce haber ver.
+- **Güncel (13.11'den beri):** tek oyun sahnesi `Assets/_Project/Scenes/Harita.unity` (atölye + şehir, `SceneFlow.GameScene`); ilk açılan sahne `AnaMenu.unity`. `Boot`, `Classroom`, `Town` kaldırıldı. Aşağıda geçen "Town" adları tarihî; hepsi artık `Harita`.
+- `_Placeholder` kökü (zemin, duvar, basamak, rampa, ham HUD) senin düzenin gelince silinir. Prefab örnekleri (`PlayerSpawn`, `Station_*`, `Neighborhood_*`, `LockedZone_Example`) kalır, yalnızca yerlerini değiştirirsin.
+- Kendi düzenini ayrı bir sahnede kurup sonra `Harita`'ya taşıyabilirsin; aynı sahnede aynı anda ikimiz çalışmayalım (merge çakışır). Sahneyi açmadan önce haber ver.
 - Ölçek: 1 birim = 1 m. Göz yüksekliği 1.56 → 1.68 m (oyuncu büyür). Kapı ≥ 2.1 m, tezgâh ~0.9 m, raf üstü ≤ 1.8 m.
 - Uçtan uca yürüyüş ≤ 40 sn (yürüme hızı 3.8 m/s → yol ~150 m'yi geçmesin).
 - Yürünecek her yüzeyde **collider** olmalı. Kaldırım/eşik ≤ 0.3 m, rampa ≤ 45°.
@@ -293,3 +293,23 @@ Sakinler siparişi artık **kapıda değil, atölyenin önündeki tezgâhta** ve
 - `CustomerQueue` (`Pazar_Musteriler` kökü): müşteri gövdeleri (`Musteri_Yusuf/Demir/Zehra/Halil/Elif`, `GiverName` ile eşleşir; eşleşmeyen sipariş, ör. Câbir Usta'nın çıraklık görevi, pazara müşteri getirmez) ve alıcılar (`Alici_*`, adı boş). Yol: `Musteri_Sokak` (atölyenin arkası, görünmez) → `Musteri_Yaklasma_1..2` → tezgâh; sipariş alınınca `Musteri_Bekleme`'de bekler, ürün hazır olunca tezgâha döner, teslimden sonra sokağa gider.
 - Alıcılar: `Data/Market/MusteriIstekleri.asset` (ürün, fiyat, replikler). Yalnızca oyuncunun envanterinde istenen ürün varsa gelir; teslim edilecek sipariş ürününü istemez. Satış sonrası `SaveSystem.Checkpoint`.
 - Kurulum: **Kurulum → 22 (Atölye pazarı)**.
+
+## 13. Bereket Tarlası görevi (Sv2 `bereket_2`, 14.11)
+
+Denkleştirme köyünün 2. görevi (D-1'den sonra). Ayrıntı: `04_Icerik/15-bereket-tarlasi-mat-biyo.md`.
+
+- Kurulum: **Kurulum → 23** (Simya Traktörü sürüşü), **Kurulum → 24** (tarla: `FieldTaskDirector`, ekim sandığı `SeedBox`, `FieldPlots`, tarladaki kişiler). Harita modeli değişince 24 yeniden çalıştırılır.
+- Tarladaki kişiler (`FieldNpc`, layer `Interactable`, E / X): `Tarla_Elif` (NPC_KoyluKadin kopyası, rol Giver), `Tarla_HesapUstasi` (NPC_HesapHocasi, Math), `Tarla_HayatUstasi` (NPC_KoyluErkek, Biology; kendi modeli yok). Kopyalar `NPC_Sanat`'takilerden alınır, `NpcAgent` silinir (yürümezler). Konuşunca oyuncuya döner; söz görevin aşamasına göre (0 gelmedi · 1 hesap · 2 tohum · 3 traktör · 4 ekim sonrası · 5 bitti) `FieldTask` asset'inde durur, cevabı vermez.
+- HUD sipariş kartında 5 adımlı rehber (`FieldTask.guideSteps/guideDetails`, "İstenen 120 filiz").
+- Tohum kesesi Element ve Alet Pazarı'nda listenin en başında.
+
+## 14. Masa: Ders Notu ve mektup ışığı (14.11)
+
+- `tur_1…5` için Ders Notu: mektup ilk açılınca (`DeskController.OnStationEnter`) kâğıttan önce gelir; kapanınca kâğıt açılır, yarım kâğıda dönüşte gelmez. Metin `LessonNotesData` → `LearningData.asset` (menü: BilgiAdasi → Seviye → Masa görevlerinin ders notlarını yaz).
+- Mektup beklerken zarf yeşil nabızla ışır: `ArtDeskView` → `letterHalo` (`Mektup_Isik` çocuğu; doku kodla üretilir, URP Particles/Unlit toplamalı; renk 09 paleti yaprak yeşili). Kurulum: **Kurulum → 26**. Zarf modeli değişirse yeniden çalıştır.
+
+## 15. Konuşma ve soru odağı (14.11)
+
+- `DialogueFocus.IsOpen`: soru/konuşma kutusu açıkken harita (M / Tab / Select) ve defter açılmaz; gamepad'de D-pad ↑↓ şık seçer.
+- Pazar, Esc menüsü ya da harita açıkken (UI modu) başlatılan birebir konuşma ekran kapanınca başlar (`DialogueDirector` erteler). Usta haberi de ekran kapanınca gelir.
+- Konuşma **Confirm** (Enter / Space · A) ya da Interact (E / X) ile ilerler.

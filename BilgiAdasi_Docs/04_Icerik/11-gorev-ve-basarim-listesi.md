@@ -4,6 +4,7 @@
 > Başarımlar **ders bazlı** ayrılır (karar 13.11): Esc → Başarımlar'da her ders bir sekme = bir `AchievementTree` asset'i (`Data/Achievements/AchievementTree_<Ders>.asset`). Bir görev, **defter kaydının (K-n) dersine** göre tek sekmeye girer; yeri (atölye, tarla, koru, çarşı) açıklamada yazar.
 > İlk sürüm menü **Kurulum → 13b** ile bu listeden üretilir; sonra metin, renk, simge, konum Inspector'dan düzenlenir (kod değişmez). Yeni ders = yeni asset; Achievements objesine kendiliğinden bağlanır.
 > **Güncelleme 14.11:** Bereket Tarlası'nın Mat/Biyo görevleri tek köyde toplandı: `bereket_1…5` (köy `bereket_tarlasi`, K-11…K-15), her görev hem Matematik hem Biyoloji sekmesinde. Ayrıntı ve ders notları: `04_Icerik/15-bereket-tarlasi-mat-biyo.md`. Traktörlü Kimya/Fizik tarla görevleri (`tarla_1, 2, 3, 6, 10`) sonraki sürümde, defterleri K-16'dan devam eder.
+> **Güncelleme 14.11 (sabah):** oyunda oynanan sıra aşağıdaki "Oynanabilir durum" tablosunda. Denkleştirme köyü artık **6 görev**: Sv2 tarla görevi `bereket_2` (Tohum Nefes Alır) D-1'den sonra gelir (`Neighborhood_denklestirme.asset`; geliştirici kısayolu F1–F6). Matematik ve Biyoloji sekmeleri `ach_bereket_2_*` ile açıldı ("Yakında" değil).
 > Kimlik kuralı: görev `denk_n · tur_n · bereket_n · tarla_n · orman_n · carsi_n`, başarım `ach_<görev>` / `ach_<görev>_<koşul>`. Görev verisi yazılırken (`TaskData.id`) **bu kimlikler kullanılmalı**, yoksa başarım açılmaz.
 
 ## Başarım türleri (sağ alttaki bildirim)
@@ -21,11 +22,28 @@ Koşullar: `GameStart` · `TaskCompleted` · `NeighborhoodCompleted` · `TaskFla
 | Sıra | Ders | Renk (09 paleti) | Durum | Usta |
 |---|---|---|---|---|
 | 0 | **Kimya** | bakır `#9F4E2B` | açık (prototip) | Câbir Usta |
-| 1 | **Matematik** | dağ mavisi `#4F7F96` | Yakında (Sürüm 2) | Hesap Ustası |
+| 1 | **Matematik** | dağ mavisi `#4F7F96` | açık (yalnız `bereket_2`), gerisi Sürüm 2 | Hesap Ustası |
 | 2 | **Fizik** | kaya grisi `#6E8090` | Yakında (Sürüm 2) | Makine Ustası |
-| 3 | **Biyoloji** | yaprak yeşili `#3FA83A` | Yakında (Sürüm 2) | Hayat Ustası |
+| 3 | **Biyoloji** | yaprak yeşili `#3FA83A` | açık (yalnız `bereket_2`), gerisi Sürüm 2 | Hayat Ustası |
 
 Türkçe ve Sosyal'in henüz görevi yok; görevleri yazılınca asset eklenir (sekme kendiliğinden gelir).
+
+## Oynanabilir durum (14.11, teslim build'i)
+
+Görev verisi olan (`Data/Tasks/`) ve oyunda uçtan uca oynanan görevler. Gerisi bu listede plan olarak durur.
+
+| Sıra | Köy (`neighborhoodId`) | Görev | Tip | Önünde | Durum |
+|---|---|---|---|---|---|
+| 0 | `ciraklik` | `cirak_0` İlk Kural | Sipariş (R_isitma) | açılış kartları + uyanış + tahmin | ✅ oynanıyor, K-0 |
+| 1 | `denklestirme` | `denk_1` Kuru Çeşme | Sipariş | Ders Notu + Tahmin, Atom Görüşü | ✅ |
+| 2 | `denklestirme` | `bereket_2` Tohum Nefes Alır (Sv2) | Tarla (Mat + Biyo) | Ders Notu + hesap soruları, traktörle 2 tur, Hayat Ustası sorusu | ✅ adım rehberi HUD kartında; tarlada Elif / Hesap Ustası / Hayat Ustası ile konuşulur (`FieldNpc`) |
+| 3 | `denklestirme` | `denk_2` İsli Fenerler | Sipariş | Ders Notu + Tahmin | ✅ |
+| 4 | `denklestirme` | `denk_3` Soğuk Fırın | Sipariş | Ders Notu + Hata Dedektifi (tahta) | ✅ |
+| 5 | `denklestirme` | `denk_4` Yıkık Köprü | Sipariş (zincir) | Ders Notu + Tahmin (ara ürün sorusu) | ✅ |
+| 6 | `denklestirme` | `denk_5` Gübre Ruhu | Sipariş (`Purchase`) | Ders Notu + Tahmin | ✅ |
+| 7–11 | `tepkime_turleri` | `tur_1` … `tur_5` | Masa | **Ders Notu (yeni, 14.11):** mektup ilk açılınca, kâğıttan önce | ✅ tur_5 Lonca Sınavı rastgele çekme |
+
+Masada mektup beklerken zarf yeşil nabızla ışır (Kurulum 26). Sipariş/teslim atölye önü pazarında (Kurulum 22). Her görev sonunda otomatik kayıt.
 
 ---
 
@@ -59,7 +77,7 @@ Ağaç: kök Toprağın Canlıları (bereket_1) → tarla dalı (1 → 5 → kö
 | Sv | Görev | taskId | Yer | Konu | Defter | Başarım |
 |---|---|---|---|---|---|---|
 | 11 | Toprağın Canlıları | `bereket_1` | Bereket Tarlası | Örneklemden tahmin, ortalama | K-11 | `ach_bereket_1_mat` Örnekten Bütüne |
-| 12 | Tohum Nefes Alır | `bereket_2` | Bereket Tarlası | Olasılık | K-12 | `ach_bereket_2_mat` Beklenen Sayı · *Tek Kese Fazla Yok* (gizli) |
+| 12 | Tohum Nefes Alır ✅ oynanıyor | `bereket_2` | Bereket Tarlası (Denkleştirme köyünün 2. görevi) | Olasılık | K-12 | `ach_bereket_2_mat` Beklenen Sayı · *Tek Kese Fazla Yok* (gizli) |
 | 13 | Işık ve Boy | `bereket_3` | Bereket Tarlası | Eğim (MAT.10.6.2) | K-13 | `ach_bereket_3_mat` Tablodan Doğruya |
 | 14 | Tırtıl, Kuş, Şahin | `bereket_4` | Bereket Tarlası | Yüzde, oran | K-14 | `ach_bereket_4_mat` Yüzde On |
 | 15 | Hasat Raporu | `bereket_5` | Bereket Tarlası | İki kategorik değişken (MAT.10.2.1), ortalama | K-15 | `ach_bereket_5_mat` Hasat Raporu · *Defter Kapalı: Hasat* (gizli) |
@@ -93,7 +111,7 @@ Ağaç: kök Toprağın Canlıları (bereket_1) → tarla dalı (1 → 5 → kö
 | Sv | Görev | taskId | Yer | Konu | Defter | Başarım |
 |---|---|---|---|---|---|---|
 | 11 | Toprağın Canlıları | `bereket_1` | Bereket Tarlası | Ekosistem bileşenleri, ayrıştırıcılar (BİY.10.2.1, 10.2.3, 10.2.4) | K-11 | `ach_bereket_1_biyo` Toprağın Canlıları |
-| 12 | Tohum Nefes Alır | `bereket_2` | Bereket Tarlası | Oksijenli solunum (BİY.10.1.7, 10.1.8) | K-12 | `ach_bereket_2_biyo` Tohum Nefes Alır |
+| 12 | Tohum Nefes Alır ✅ oynanıyor | `bereket_2` | Bereket Tarlası | Oksijenli solunum (BİY.10.1.7, 10.1.8) | K-12 | `ach_bereket_2_biyo` Tohum Nefes Alır |
 | 13 | Işık ve Boy | `bereket_3` | Bereket Tarlası | Fotosentez, çevresel faktörler (BİY.10.1.2, 10.1.3) | K-13 | `ach_bereket_3_biyo` Işıktan Besine |
 | 14 | Tırtıl, Kuş, Şahin | `bereket_4` | Bereket Tarlası | Enerji akışı (BİY.10.2.3, 10.2.2) | K-14 | `ach_bereket_4_biyo` Zehirsiz Çare |
 | 15 | Hasat Raporu | `bereket_5` | Bereket Tarlası | Deney, değişkenler, azot (BİY.10.1.3, 10.2.4) | K-15 | `ach_bereket_5_biyo` Kontrol Grubu |

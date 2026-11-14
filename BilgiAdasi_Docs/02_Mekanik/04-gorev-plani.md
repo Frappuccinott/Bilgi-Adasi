@@ -1,5 +1,6 @@
 # 04 — Görev Planı (seviye seviye): eğitsel katmanlar, Kimya köyleri, Tarla, Orman, Pazar
 
+> **Uygulama durumu (14.11):** Seviye 0 (çıraklık), D-1…D-5 (Tahmin: D-1, D-2, D-4, D-5 · Hata Dedektifi: D-3 · Atom Görüşü), T-1…T-5 (masa, ders notlarıyla) ve Bölüm 2'den Sv2 Tohum Nefes Alır (`bereket_2`, Denkleştirme köyünün 2. görevi) **oynanıyor**. Keşif Defteri, Ustanın Sorgusu ve Ders Notu oyunda. Görev ↔ kimlik ↔ durum tablosu: `04_Icerik/11-gorev-ve-basarim-listesi.md` → "Oynanabilir durum".
 > Durum: **tasarım** (13.11.2026, Mustafa + Claude). Kod Mehmet'in alanıdır; bu belge her seviyede ne olacağını, ekrana gelen soruları, defter kayıtlarını, veriyi ve sahne bağlantı noktalarını tanımlar.
 > Bağlı belgeler: `01-oyun-tasarimi.md` (hikâye) · `02-siparis-mekanigi.md` (kazan + terazi) · `03-masa-mekanigi.md` (kâğıt soruları) · `04_Icerik/05-icerik-prototip.md` (D-1…D-5, T-1…T-5 verisi; **bu belge oradaki satırları değiştirmez, üstlerine katman ekler**) · `ArtSource/Referans/yon_bulma.md` (şehir renkleri ve simgeleri).
 > Kazanım adları: TYMM 10. sınıf resmî sayfaları (§12). Fizik ve Biyoloji'de kod biliniyorsa yazıldı; Kimya ve Matematik'te tema adı kullanıldı.

@@ -107,6 +107,32 @@ namespace BilgiAdasi.Order
             if (HasNextStep) StartStep(StepIndex + 1);
         }
 
+        /// <summary>Zincir: ara ürün elden gitti, sipariş ilk adımdan yeniden başlar (hata sayısı korunur).</summary>
+        public void RestartFromFirstStep() => StartStep(0);
+
+        /// <summary>
+        /// Bu adımın girenlerinden önceki adımların ürünü olanlar (ara ürün; ör. CaO) ve tepkimedeki miktarı.
+        /// İlk adımda boş.
+        /// </summary>
+        public void GetIntermediates(List<SpeciesAmount> into)
+        {
+            into.Clear();
+            if (StepIndex == 0) return;
+            var reactants = Step.Reaction.Reactants;
+            for (int i = 0; i < reactants.Count; i++)
+            {
+                var s = reactants[i].Species;
+                bool made = false;
+                for (int p = 0; p < StepIndex && !made; p++)
+                {
+                    var products = Task.Steps[p].TargetProducts;
+                    for (int k = 0; k < products.Count; k++)
+                        if (products[k].Species == s) { made = true; break; }
+                }
+                if (made) into.Add(reactants[i]);
+            }
+        }
+
         private void StartStep(int index)
         {
             StepIndex = index;

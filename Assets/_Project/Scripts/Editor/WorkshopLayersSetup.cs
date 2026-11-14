@@ -337,8 +337,15 @@ namespace BilgiAdasi.EditorTools
             if (view == null) view = root.gameObject.AddComponent<ChalkboardHuntView>();
             var so = new SerializedObject(view);
             so.FindProperty("title").objectReferenceValue = BoardText(root, "Baslik", boardTmp, size, 0.40f, 0.14f, 1.5f, TextAlignmentOptions.Top);
-            so.FindProperty("body").objectReferenceValue = BoardText(root, "Govde", boardTmp, size, 0.0f, 0.66f, 1.15f, TextAlignmentOptions.TopLeft);
-            so.FindProperty("footer").objectReferenceValue = BoardText(root, "Alt", boardTmp, size, -0.44f, 0.1f, 0.75f, TextAlignmentOptions.Bottom);
+            // Gövde tahtanın başlık altındaki bütün yüksekliğini alır, sığmazsa küçülür. Tuş ipucu (Alt) tahtanın altında,
+            // koyu mürekkeple: uzun soru/şıklar artık onun üstüne binmez (Play 14.11).
+            var body = BoardText(root, "Govde", boardTmp, size, -0.08f, 0.80f, 1.15f, TextAlignmentOptions.TopLeft);
+            FitBody(body);
+            so.FindProperty("body").objectReferenceValue = body;
+            var footer = BoardText(root, "Alt", boardTmp, size, -0.72f, 0.1f, 1.0f, TextAlignmentOptions.Top);
+            footer.rectTransform.localPosition += new Vector3(0f, 0f, -0.08f); // tebeşir rafının önünde
+            footer.color = FooterInk;
+            so.FindProperty("footer").objectReferenceValue = footer;
             so.FindProperty("boardText").objectReferenceValue = boardTmp.gameObject;
             var mark = BoardText(root, "Bekleyen", boardTmp, size, 0.3f, 0.3f, 4f, TextAlignmentOptions.Right);
             mark.text = "?";
@@ -349,7 +356,8 @@ namespace BilgiAdasi.EditorTools
             var cam = station != null ? station.GetComponentInChildren<Unity.Cinemachine.CinemachineCamera>(true) : null;
             if (cam != null)
             {
-                var dir = root.position - cam.transform.position;
+                // Biraz aşağı: tahtanın altındaki tuş ipucu da kadrajda kalsın.
+                var dir = root.position + Vector3.down * 0.11f - cam.transform.position;
                 if (dir.sqrMagnitude > 0.0001f) cam.transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
             }
             report.Add("✓ Tahta: Hata Dedektifi yazısı (" + parent.name + "), kamera tahtaya çevrildi: " + (cam != null));
@@ -490,6 +498,16 @@ namespace BilgiAdasi.EditorTools
         }
 
         /// <summary>Tahta yazısının kopyası: aynı font/renk, tahta alanının bir şeridi (yMid: merkez oranı, h: yükseklik oranı).</summary>
+        private static readonly Color FooterInk = new Color(0.886f, 0.859f, 0.694f); // 09 palet: kâğıt aydınlık #E2DBB1 (koyu ahşap üstünde)
+
+        private static void FitBody(TMP_Text body)
+        {
+            body.enableAutoSizing = true;
+            body.fontSizeMax = body.fontSize;
+            body.fontSizeMin = body.fontSize * 0.6f;
+            body.overflowMode = TextOverflowModes.Truncate;
+        }
+
         private static TMP_Text BoardText(Transform root, string name, TMP_Text src, Vector2 area, float yMid, float h, float sizeK,
             TextAlignmentOptions align)
         {

@@ -13,18 +13,18 @@
 
 ## P0 — Çekirdek (Cuma akşamına kadar)
 
-- [ ] `[KOD]` Proje iskeleti: klasörler, sahneler, `SceneFlow`, `GameEvents`, `SaveSystem`
-- [ ] `[KOD]` Kimya verisi: `ElementData`, `SpeciesData`, `ReactionData` + `AtomMath` + **birim testleri** (R_propane dengede mi, IsMinimal)
-- [ ] `[KOD]` FPS oyuncu (CharacterController, bakış, etkileşim) + istasyon modu (Cinemachine geçişi)
-- [ ] `[KOD]` Test sahnesi (`_Placeholder`) + sahne bağlantı noktaları (`08-mustafa-entegrasyon.md`)
-- [ ] `[KOD]` Sipariş: raf → kazan sürükleme, `−/+`, iki terazi + sayaçlar, ateşi yak → tepkime ya da köpürme
-- [ ] `[KOD]` Köpürme + yanıp sönen atomlar + `failCount`
-- [ ] `[KOD]` Mühür notu
-- [ ] `[KOD]` Tahta: denklem metni üretimi (alt indis, 1 katsayısı gizli)
-- [ ] `[KOD]` `NeighborhoodRunner`: 5 görevi sırayla çalıştır
-- [ ] `[İÇERİK]` Denkleştirme köyünün 5 siparişi SO olarak girildi
-- [ ] `[KOD]` Görev 4 zinciri + Görev 5 `Purchase` modu
-- [ ] **Gece yarısı ilk build**
+- [x] `[KOD]` Proje iskeleti: klasörler, sahneler, `SceneFlow`, `GameEvents`, `SaveSystem`
+- [x] `[KOD]` Kimya verisi: `ElementData`, `SpeciesData`, `ReactionData` + `AtomMath` + **birim testleri** (R_propane dengede mi, IsMinimal)
+- [x] `[KOD]` FPS oyuncu (CharacterController, bakış, etkileşim) + istasyon modu (Cinemachine geçişi)
+- [x] `[KOD]` Test sahnesi (`_Placeholder`) + sahne bağlantı noktaları (`08-mustafa-entegrasyon.md`)
+- [x] `[KOD]` Sipariş: raf → kazan sürükleme, `−/+`, iki terazi + sayaçlar, ateşi yak → tepkime ya da köpürme
+- [x] `[KOD]` Köpürme + yanıp sönen atomlar + `failCount`
+- [x] `[KOD]` Mühür notu
+- [x] `[KOD]` Tahta: denklem metni üretimi (alt indis, 1 katsayısı gizli)
+- [x] `[KOD]` `NeighborhoodRunner`: 5 görevi sırayla çalıştır
+- [x] `[İÇERİK]` Denkleştirme köyünün 5 siparişi SO olarak girildi
+- [x] `[KOD]` Görev 4 zinciri + Görev 5 `Purchase` modu
+- [x] **Gece yarısı ilk build**
 
 ## P1 — İkinci görev tipi ve çerçeve
 
@@ -42,12 +42,28 @@
 
 ## P2 — Cila
 
-- [ ] `[KOD]` Sınıf açılış/kapanış ara sahnesi
+- [ ] `[KOD]` Sınıf açılış/kapanış ara sahnesi (yarım) — açılış: çıraklık açılış kartları (Kurulum 17); kapanış yok
 - [ ] `[KOD]` Köy canlanma görselleri (aç/kapa parçalar)
-- [ ] `[KOD]` Geliştirici kısayolları (görev atla, kayıt sıfırla) — **demo için**
-- [ ] `[KOD]` Sakin figürleri / 2D kartlar kapıda
-- [ ] Ses: köpürme, ocak, mühür, kâğıt (CC0)
+- [x] `[KOD]` Geliştirici kısayolları (görev atla, kayıt sıfırla) — **demo için** — `DevShortcuts`: F1–F6 / Ctrl+R; gamepad LT+RT+D-pad
+- [x] `[KOD]` Sakin figürleri / 2D kartlar kapıda — 14.11: müşteriler atölye önü pazarına gelir (`CustomerQueue`, Kurulum 22); konuşmalarda portre
+- [x] Ses: köpürme, ocak, mühür, kâğıt (CC0) — `AudioDirector` + `SoundLibrary.asset`, adım sesleri `PlayerFootsteps`
 - [ ] Müzik (CC0)
+
+## 14.11 eklenenler (son görevler ve level)
+
+- [x] Tek oyun sahnesi **`Harita`** (atölye + şehir), ilk açılan **`AnaMenu`** (menü arkasında kuş bakışı uçuş, `MenuFlyover`, Kurulum 20). Boot/Classroom/Town yok.
+- [x] Çıraklık köyü `cirak_0` (İlk Kural): açılış kartları, uyanış, tahmin, ısıtma siparişi, K-0 (Kurulum 17).
+- [x] Denkleştirme köyü **6 görev**: `denk_1` → `bereket_2` (Sv2 tarla) → `denk_2…5`.
+- [x] Sv2 Tohum Nefes Alır (`bereket_2`, Mat + Biyo): ders notu + hesap soruları → tohum al → sandığa dök → traktörle 2 tur → Hayat Ustası'nın sorusu. HUD sipariş kartında 5 adımlı rehber; tarlada Elif, Hesap Ustası, Hayat Ustası'yla aşamaya göre konuşma (`FieldNpc`, ipucu verir, cevap vermez). Kurulum 23 (traktör) + 24 (tarla).
+- [x] Masa görevleri `tur_1…5` için Ders Notu (mektup ilk açılınca, kâğıttan önce). Menü: BilgiAdasi → Seviye → Masa görevlerinin ders notlarını yaz.
+- [x] Masada mektup beklerken zarf yeşil nabızla ışır (`ArtDeskView.letterHalo`, Kurulum 26).
+- [x] Atölye önü pazarı: sipariş ve teslim tezgâhta, alıcılar envanterdeki ürünü almaya gelir (Kurulum 22).
+- [x] Görev adım rehberi (HUD kartı), ortak diyalog çerçevesi, kazan buharı, atölye ışığı bake.
+- [x] Harita ekranı + mini harita (Kurulum 19), defter (Ustanın Notları / Keşiflerim / Ustalık), Hata Dedektifi, Tahmin.
+- [x] Boy uzama (Kurulum 25), görev sonu otomatik kayıt, başarım ağacı (ders sekmeleri; Mat/Biyo `bereket_2` ile açık).
+- [x] Girdi: Move'a ok tuşları, yeni **Confirm** (Enter / Space · A) konuşmayı ilerletir ve şıkkı onaylar; soru/konuşma açıkken harita ve defter açılmaz (`DialogueFocus`); pazar/menü açıkken başlayan konuşma ekran kapanınca gelir.
+- [ ] Hayat Ustası'nın kendi modeli yok (tarlada köylü erkek modeli ve portresi yer tutucu).
+- [ ] `tur_1…5` ders notlarının kitapla kontrolü (`04_Icerik/17-icerik-kontrol-listesi.md`).
 
 ## P3 — Varsa
 

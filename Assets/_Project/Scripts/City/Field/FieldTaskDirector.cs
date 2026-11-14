@@ -53,9 +53,7 @@ namespace BilgiAdasi.City
         private Coroutine offerRoutine;
 
         // tur sayacı
-        private float lapAngle;      // tarla merkezi çevresinde biriken dönüş (°)
-        private float lastAngle;
-        private bool hasLastAngle;
+        private int lapQuadrants;    // bu turda bulunulan çeyrekler (4 bit; hepsi = 1 tur)
         private int laps;
 
         // ekicinin traktörden önceki yeri
@@ -159,8 +157,9 @@ namespace BilgiAdasi.City
                 HasDelivery = false
             };
             // adımlar: 0 tohum al · 1 sandığa dök · 2 traktörle tur · 3 sorular
+            int inHand = user != null && user.Inventory != null ? user.Inventory.CountOf(task.SeedBag) : 0;
             int reached = phase == Phase.Driving || phase == Phase.Sowing ? 2
-                : planted >= task.RequiredBags ? 2 : planted > 0 ? 1 : 0;
+                : planted >= task.RequiredBags ? 2 : inHand > 0 ? 1 : 0;
             if (phase == Phase.Sowing) reached = 3;
             var steps = task.StepTexts;
             for (int i = 0; steps != null && i < steps.Length; i++)
@@ -182,7 +181,7 @@ namespace BilgiAdasi.City
             // Açık konuşma / ders notu / sorgu bitsin. LearningDirector.IsBusy takılı kalabiliyor (Play 14.11: açık hiçbir
             // şey yokken true kaldı); konuşma ve istasyon dışındaki beklemeye üst sınır.
             float waited = 0f;
-            while (IsSomethingOpen() && (waited < 15f || DialogueBusy() || StationBase.Active != null))
+            while (IsSomethingOpen() && (waited < 15f || DialogueBusy() || StationBase.Active != null || GameInput.Mode == InputMode.UI))
             {
                 waited += Time.unscaledDeltaTime;
                 yield return null;
@@ -200,8 +199,10 @@ namespace BilgiAdasi.City
             else ShowLesson();
         }
 
+        // Pazar, Esc menüsü, harita, defter gibi bir ekran açıkken (UI modu) haber gelmez (Play 14.11: pazarın üstüne açılıyordu).
         private static bool IsSomethingOpen() =>
-            LearningDirector.IsBusy || PredictionDirector.IsBusy || StationBase.Active != null || DialogueBusy();
+            LearningDirector.IsBusy || PredictionDirector.IsBusy || StationBase.Active != null || DialogueBusy()
+            || GameInput.Mode == InputMode.UI;
 
         private static bool DialogueBusy()
         {
@@ -326,14 +327,15 @@ namespace BilgiAdasi.City
             {
                 // Traktörsüz sahne: tarla kendiliğinden ekilir.
                 phase = Phase.Sowing;
+                drivingDone = true;
                 if (plots != null) plots.SowTo(task.EndState, AfterSowing);
                 else AfterSowing();
                 return;
             }
             phase = Phase.Driving;
+            drivingDone = false;
             laps = 0;
-            lapAngle = 0f;
-            hasLastAngle = false;
+            lapQuadrants = 0;
             AttachSeeder();
             plots.BeginDriveSow(task.EndState);
             if (seedBox != null) seedBox.SetFill(0f, false); // tohum ekiciye geçti
@@ -342,8 +344,146 @@ namespace BilgiAdasi.City
             if (dialogue != null && lines.Count > 0) dialogue.Play(lines, null, user);
         }
 
+        // ---------- Tarladaki kişilerle konuşma (FieldNpc) ----------
+
+        /// <summary>Konuşma tablosunun görevi: süren görev, yoksa sahnedeki ilk tarla görevi.</summary>
+        private FieldTask TalkTask => task != null ? task : knownTasks.Count > 0 ? knownTasks[0] : null;
+
+        /// <summary>Konuşulabilir mi: soru kartı, ders notu ya da başka konuşma açık değilken.</summary>
+        public bool CanTalk => TalkTask != null && phase != Phase.Questions && phase != Phase.Lesson && !DialogueBusy()
+                               && GameInput.Mode == InputMode.Player;
+
+        public string TalkPrompt(FieldNpcRole role)
+        {
+            var t = TalkTask;
+            if (t == null) return string.Empty;
+            // Her kare çağrılır (crosshair NPC'deyken): metni önbellekle, her karede yeni string üretme.
+            if (talkCache == null || role != talkRole || t != talkTask)
+            {
+                talkRole = role;
+                talkTask = t;
+                talkCache = string.Format(t.TalkPrompt, t.NpcName(role));
+            }
+            return talkCache;
+        }
+
+        private string talkCache;
+        private FieldNpcRole talkRole;
+        private FieldTask talkTask;
+
+        /// <summary>0 görev gelmedi · 1 haber/ders notu/hesap · 2 tohum al/dök · 3 traktörle tur · 4 ekim sonrası · 5 bitti.</summary>
+        private int TalkStage()
+        {
+            var t = TalkTask;
+            var data = Data;
+            if (task == null)
+                return t != null && data != null && data.IsTaskCompleted(t.Id) ? 5 : 0;
+            switch (phase)
+            {
+                case Phase.Offering:
+                case Phase.Lesson: return 1;
+                case Phase.Planting: return 2;
+                case Phase.Driving: return 3;
+                case Phase.Sowing: return 4;
+                case Phase.Questions: return planted <= 0 ? 1 : drivingDone ? 4 : 2;
+                default: return 0;
+            }
+        }
+
+        public void Talk(FieldNpcRole role, PlayerInteractor interactor)
+        {
+            var t = TalkTask;
+            if (t == null || !CanTalk) return;
+            string line = t.TalkLine(role, TalkStage());
+            if (string.IsNullOrWhiteSpace(line)) return;
+            string speaker = t.NpcName(role);
+            Sprite portrait = role == FieldNpcRole.Giver ? t.GiverPortrait : PortraitBook.Resolve(speaker, null);
+            lines.Clear();
+            Add(speaker, line, portrait);
+            dialogue?.Play(lines, null, interactor);
+        }
+
+        // ---------- HUD sipariş kartı: adım rehberi (Emin'in kartı; OrderController siparişsiz anda kartı kapatabilir,
+        // bu yüzden görev boyunca yarım saniyede bir yeniden gösterilir) ----------
+
+        private readonly List<OrderGuideStep> guide = new List<OrderGuideStep>(5);
+        private readonly List<Chemistry.SpeciesAmount> noProducts = new List<Chemistry.SpeciesAmount>();
+        private readonly List<Chemistry.SpeciesData> seedList = new List<Chemistry.SpeciesData>(1);
+        private float cardTimer;
+        private int cardKey = -1;
+        private bool cardShown;
+        private bool drivingDone;
+
+        private void RefreshCard(float dt)
+        {
+            var view = ViewLocator.Get<IOrderCardView>();
+            bool visible = task != null && phase != Phase.Idle && phase != Phase.Offering && phase != Phase.Lesson;
+            if (!visible || view == null)
+            {
+                if (cardShown) view?.ClearOrder();
+                cardShown = false;
+                cardKey = -1;
+                return;
+            }
+            var data = Data;
+            int inHand = user != null && user.Inventory != null ? user.Inventory.CountOf(task.SeedBag) : 0;
+            int required = task.RequiredBags;
+            bool planDone = planted > 0 || phase != Phase.Questions || (data != null && data.HasFlag(PlanFlag));
+            bool pourDone = planted >= required;
+            // Elde kese varsa sıradaki adım "sandığa dök" (Play 14.11: 12 kese alınınca kart ilerlemiyordu; kaç kese
+            // gerektiğini kart değil, döküldüğünde Elif söyler). Döküp eli boşalınca az geldiyse yeniden "pazardan al".
+            bool buyDone = pourDone || inHand > 0;
+            int key = (planDone ? 1 : 0) | (buyDone ? 2 : 0) | (pourDone ? 4 : 0) | (drivingDone ? 8 : 0)
+                      | (planted << 4) | (Mathf.Min(laps, 15) << 12);
+            if (key != cardKey)
+            {
+                cardKey = key;
+                guide.Clear();
+                bool current = false;
+                AddGuide(0, null, planDone, ref current);
+                AddGuide(1, null, buyDone, ref current);
+                AddGuide(2, Format(2, planted, required), pourDone, ref current);
+                AddGuide(3, Format(3, Mathf.Min(laps, task.RequiredLaps), task.RequiredLaps), drivingDone, ref current);
+                AddGuide(4, null, false, ref current);
+                seedList.Clear();
+                if (task.SeedBag != null) seedList.Add(task.SeedBag);
+                cardTimer = 0f;
+            }
+            cardTimer -= dt;
+            if (cardTimer > 0f) return;
+            cardTimer = 0.5f;
+            view.ShowOrder(new OrderCardInfo(task.GiverName, noProducts, seedList, 0, 1, task.Advance, false, guide, task.WantedText));
+            cardShown = true;
+        }
+
+        private string Format(int i, int a, int b)
+        {
+            var d = task.GuideDetails;
+            return d != null && i < d.Length && !string.IsNullOrEmpty(d[i]) ? string.Format(d[i], a, b) : null;
+        }
+
+        private void AddGuide(int i, string formatted, bool done, ref bool currentTaken)
+        {
+            var steps = task.GuideSteps;
+            if (steps == null || i >= steps.Length || string.IsNullOrEmpty(steps[i])) return;
+            var state = GuideState.Done;
+            if (!done)
+            {
+                state = currentTaken ? GuideState.Pending : GuideState.Current;
+                currentTaken = true;
+            }
+            string detail = null;
+            if (state == GuideState.Current)
+            {
+                var d = task.GuideDetails;
+                detail = formatted ?? (d != null && i < d.Length ? d[i] : null);
+            }
+            guide.Add(new OrderGuideStep(steps[i], detail, state));
+        }
+
         private void Update()
         {
+            RefreshCard(Time.deltaTime);
             if (phase != Phase.Driving || tractor == null || plots == null) return;
             float dt = Time.deltaTime;
             if (!tractor.IsDriving || Mathf.Abs(tractor.Speed) < 0.2f) return;
@@ -351,23 +491,36 @@ namespace BilgiAdasi.City
             Vector3 drop = tractor.transform.position - tractor.transform.forward * DropDistance();
             plots.SowAt(drop, dt);
 
-            // Tur: tarla merkezi çevresinde biriken açı (yalnız tarlanın içinde ya da kenarında).
+            // Bütün parseller ekildiyse turu beklemeye gerek yok: ekim bitti (Play 14.11: tarla dolduğu hâlde 2. tur
+            // sayılmıyordu).
+            if (plots.CellCount > 0 && plots.SownCount >= plots.CellCount)
+            {
+                if (laps < task.RequiredLaps) { laps = task.RequiredLaps; LapNotice(); }
+                FinishDriving();
+                return;
+            }
+
+            // Tur: tarlanın dört çeyreğinin (merkeze göre) hepsinde bulunmak = 1 tur. Yön ve sıra fark etmez;
+            // eski yönlü açı toplamı ters yönde dönünce ya da sıra sıra ekerken (merkezden geçişte ±180° sıçrama)
+            // birbirini götürüyordu (Play 14.11). Yalnız tarlanın içinde ya da kenarında sayılır.
             var fb = plots.FieldBounds;
             Vector3 p = tractor.transform.position;
             bool near = p.x > fb.min.x - lapMargin && p.x < fb.max.x + lapMargin
                         && p.z > fb.min.z - lapMargin && p.z < fb.max.z + lapMargin;
-            if (!near) { hasLastAngle = false; return; }
-            float angle = Mathf.Atan2(p.z - fb.center.z, p.x - fb.center.x) * Mathf.Rad2Deg;
-            if (hasLastAngle) lapAngle += Mathf.DeltaAngle(lastAngle, angle);
-            lastAngle = angle;
-            hasLastAngle = true;
+            if (!near) return;
+            int quadrant = (p.x >= fb.center.x ? 1 : 0) | (p.z >= fb.center.z ? 2 : 0);
+            lapQuadrants |= 1 << quadrant;
+            if (lapQuadrants != 0b1111) return;
+            lapQuadrants = 1 << quadrant; // yeni tur bulunduğu çeyrekten başlar
+            laps++;
+            LapNotice();
+            if (laps >= task.RequiredLaps) FinishDriving();
+        }
 
-            int now = Mathf.FloorToInt(Mathf.Abs(lapAngle) / 360f);
-            if (now <= laps) return;
-            laps = now;
+        private void LapNotice()
+        {
             ViewLocator.Get<INoticeView>()?.ShowNotice(string.Format(task.LapNotice, Mathf.Min(laps, task.RequiredLaps), task.RequiredLaps));
             GameEvents.RaiseSound(SoundId.Correct);
-            if (laps >= task.RequiredLaps) FinishDriving();
         }
 
         private float DropDistance()
@@ -380,6 +533,7 @@ namespace BilgiAdasi.City
         private void FinishDriving()
         {
             phase = Phase.Sowing;
+            drivingDone = true;
             lines.Clear();
             Add(task.ElifSpeaker, task.LapsDoneLine, task.GiverPortrait);
             if (dialogue != null && lines.Count > 0) dialogue.Play(lines, null, user);
@@ -427,6 +581,8 @@ namespace BilgiAdasi.City
             for (int i = 0; i < task.Questions.Count; i++)
                 if (task.Questions[i].Stage == stage) pending.Add(task.Questions[i]);
             if (pending.Count == 0 || ViewLocator.Get<IReasoningView>() == null) { onDone?.Invoke(); return; }
+            // Soru kartı açılırken açık konuşma (ör. Elif'in "İki tur tamam") kapanır: iki panel üst üste binmesin (Play 14.11).
+            if (dialogue != null && dialogue.IsPlaying) dialogue.Finish();
             var before = phase;
             phase = Phase.Questions;
             afterQuestions = () =>

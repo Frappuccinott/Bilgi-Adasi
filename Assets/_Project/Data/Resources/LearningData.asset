@@ -1111,8 +1111,8 @@ MonoBehaviour:
       pages:
       - blocks:
         - kind: 0
-          text: "Ders notu \xB7 Biyoloji + Matematik"
-          detail: "Bereket Tarlas\u0131, Hayat Ustas\u0131"
+          text: Ders notu
+          detail: "Biyoloji + Matematik \xB7 Hayat Ustas\u0131"
           items: []
           counts: []
         - kind: 1
@@ -1297,8 +1297,174 @@ MonoBehaviour:
         toprakta \xE7imlenme azal\u0131r."
   - taskId: tur_1
     lesson:
-      title: 
-      pages: []
+      title: "G\xF6zlemden t\xFCre"
+      pages:
+      - blocks:
+        - kind: 0
+          text: Ders notu
+          detail: "Tepkime T\xFCrleri K\xF6y\xFC, 1. g\xF6rev"
+          items: []
+          counts: []
+        - kind: 1
+          text: "G\xF6zlem kan\u0131tt\u0131r"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Bir tepkimenin t\xFCr\xFCn\xFC anlamak i\xE7in \xF6nce ne g\xF6rd\xFC\u011F\xFCne
+            bak: ka\xE7 madde girdi, ka\xE7 madde \xE7\u0131kt\u0131, \u0131s\u0131
+            ya da \u0131\u015F\u0131k var m\u0131? G\xF6zlem, t\xFCr\xFCn kan\u0131t\u0131d\u0131r."
+          detail: 
+          items: []
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: "Her olayda \xFC\xE7 soru sor"
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "Girenler ka\xE7 tane: tek madde mi, birden \xE7ok mu?"
+          - "\xDCr\xFCnler ka\xE7 tane: tek \xFCr\xFCn m\xFC, birden \xE7ok mu?"
+          - "Bir yak\u0131t oksijenle yan\u0131yor mu, \u0131s\u0131 ve \u0131\u015F\u0131k
+            \xE7\u0131k\u0131yor mu?"
+          counts: []
+        - kind: 10
+          text: "Bu k\xF6yde \xFC\xE7 t\xFCrle \xE7al\u0131\u015Facaks\u0131n: sentez,
+            analiz, yanma."
+          detail: 
+          items: []
+          counts: []
+      - blocks:
+        - kind: 1
+          text: "\xDC\xE7 t\xFCr"
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: "Sentez (birle\u015Fme)"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Birden \xE7ok madde birle\u015Fir, tek bir \xFCr\xFCn olu\u015Fur."
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: "Analiz (ayr\u0131\u015Fma)"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Tek bir madde daha basit maddelere ayr\u0131l\u0131r."
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: Yanma
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Bir madde oksijenle tepkimeye girer; genellikle \u0131s\u0131 ve
+            \u0131\u015F\u0131k \xE7\u0131kar."
+          detail: 
+          items: []
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 8
+          text: "Is\u0131nan her kap yanma de\u011Fildir. Kire\xE7 s\xF6nd\xFCr\xFCl\xFCrken
+            kova \u0131s\u0131n\u0131r ama ortada alev ve oksijen yoktur: s\xF6nmemi\u015F
+            kire\xE7 suyla birle\u015Fip tek \xFCr\xFCn verir."
+          detail: Dikkat
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "\xC7\xF6z\xFCml\xFC \xF6rnek"
+          detail: 
+          items: []
+          counts: []
+        - kind: 1
+          text: "G\xFCm\xFC\u015F ka\u015F\u0131k karard\u0131"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "G\xF6zlem: parlak g\xFCm\xFC\u015F ka\u015F\u0131k, havadaki k\xFCk\xFCrtle
+            birle\u015Fti; y\xFCzeyinde tek bir siyah madde olu\u015Ftu."
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "Girenler: g\xFCm\xFC\u015F ve k\xFCk\xFCrt, iki madde."
+          - "\xDCr\xFCn: tek bir siyah madde."
+          - "Alev yok, oksijen yanm\u0131yor."
+          counts: []
+        - kind: 4
+          text: "2Ag + S \u2192 Ag<sub>2</sub>S"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Birden \xE7ok giren, tek \xFCr\xFCn: sentez."
+          detail: 
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "Bu g\xF6revde"
+          detail: "C\xE2bir Usta\u2019n\u0131n defteri, \xE7al\u0131\u015Fma masas\u0131"
+          items: []
+          counts: []
+        - kind: 1
+          text: Defteri tamamla
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Usta masaya, kazanda senin g\xF6rd\xFC\u011F\xFCn olaylar\u0131n
+            g\xF6zlem kartlar\u0131n\u0131 b\u0131rakt\u0131. Defterinin baz\u0131
+            sat\u0131rlar\u0131 da \u0131slan\u0131p silinmi\u015F."
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "Her kartta \xFC\xE7 soruyu sor: ka\xE7 giren, ka\xE7 \xFCr\xFCn, yanma
+            var m\u0131?"
+          - "Kart\u0131 kan\u0131t\u0131 oldu\u011Fu t\xFCr\xFCn kutusuna koy."
+          - "Sonra defterin bo\u015F sat\u0131rlar\u0131n\u0131 kelime bankas\u0131yla
+            doldur."
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 7
+          text: "Kelime bankas\u0131nda fazladan kelimeler var; hepsini kullanmak
+            zorunda de\u011Filsin."
+          detail: Unutma
+          items: []
+          counts: []
     reasoning:
       question: 
       options:
@@ -1324,8 +1490,170 @@ MonoBehaviour:
     fieldNotes: []
   - taskId: tur_2
     lesson:
-      title: 
-      pages: []
+      title: "Denklemden t\xFCre"
+      pages:
+      - blocks:
+        - kind: 0
+          text: Ders notu
+          detail: "Tepkime T\xFCrleri K\xF6y\xFC, 2. g\xF6rev"
+          items: []
+          counts: []
+        - kind: 1
+          text: "Denklemden t\xFCr\xFC oku"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Denklemde girenler okun solunda, \xFCr\xFCnler sa\u011F\u0131ndad\u0131r.
+            T\xFCr\xFC bulmak i\xE7in iki tarafta ka\xE7 farkl\u0131 madde oldu\u011Funu
+            say."
+          detail: 
+          items: []
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: "Bakma s\u0131ras\u0131"
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "Solda tek madde, sa\u011Fda birden \xE7ok madde: analiz."
+          - "Solda karbonlu bir yak\u0131t ve O<sub>2</sub>, sa\u011Fda CO<sub>2</sub>
+            (\xE7o\u011Fu zaman H<sub>2</sub>O da): yanma."
+          - "Solda birden \xE7ok madde, sa\u011Fda tek \xFCr\xFCn: sentez."
+          counts: []
+        - kind: 10
+          text: "Form\xFCls\xFCz bir g\xF6zlem kart\u0131nda da ayn\u0131 s\u0131ray\u0131
+            izle: ayr\u0131lan m\u0131 var, yanan m\u0131, birle\u015Fen mi?"
+          detail: 
+          items: []
+          counts: []
+      - blocks:
+        - kind: 1
+          text: "Katsay\u0131 madde say\u0131s\u0131 de\u011Fildir"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "T\xFCr i\xE7in ka\xE7 farkl\u0131 madde oldu\u011Funa bak, katsay\u0131ya
+            de\u011Fil. 2H<sub>2</sub>O yine tek bir maddedir: su."
+          detail: 
+          items: []
+          counts: []
+        - kind: 4
+          text: "2H<sub>2</sub> + O<sub>2</sub> \u2192 2H<sub>2</sub>O"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Solda iki farkl\u0131 madde (H<sub>2</sub> ve O<sub>2</sub>), sa\u011Fda
+            tek madde (H<sub>2</sub>O)."
+          detail: 
+          items: []
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 8
+          text: "Katsay\u0131 2 diye \u201Ciki \xFCr\xFCn var\u201D deme. Sa\u011F
+            tarafta ka\xE7 farkl\u0131 form\xFCl oldu\u011Funu say."
+          detail: Dikkat
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "\xC7\xF6z\xFCml\xFC \xF6rnek"
+          detail: 
+          items: []
+          counts: []
+        - kind: 1
+          text: "\xDC\xE7 \u015Fi\u015Fe, \xFC\xE7 kutu"
+          detail: 
+          items: []
+          counts: []
+        - kind: 4
+          text: "2HgO \u2192 2Hg + O<sub>2</sub>"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Solda tek madde, sa\u011Fda iki madde: analiz."
+          detail: 
+          items: []
+          counts: []
+        - kind: 4
+          text: "C + O<sub>2</sub> \u2192 CO<sub>2</sub>"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Karbon (k\xF6m\xFCr) oksijenle yan\u0131yor: yanma."
+          detail: 
+          items: []
+          counts: []
+        - kind: 4
+          text: "Fe + S \u2192 FeS"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "\u0130ki madde birle\u015Fti, tek \xFCr\xFCn: sentez."
+          detail: 
+          items: []
+          counts: []
+        - kind: 10
+          text: "K\xF6m\xFCr\xFCn yanmas\u0131 da tek \xFCr\xFCn verir; ama yak\u0131t
+            oksijenle yand\u0131\u011F\u0131 i\xE7in \xF6nce yanmay\u0131 d\xFC\u015F\xFCn."
+          detail: 
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "Bu g\xF6revde"
+          detail: "G\xFCvercinle gelen mektup, \xE7al\u0131\u015Fma masas\u0131"
+          items: []
+          counts: []
+        - kind: 1
+          text: "Etiketleri d\xFCzelt"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "\u015Ei\u015Felerin etiketleri kar\u0131\u015Fm\u0131\u015F. Baz\u0131
+            \u015Fi\u015Fede denklem yaz\u0131yor, baz\u0131s\u0131nda yaln\u0131zca
+            bir g\xF6zlem."
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "Her \u015Fi\u015Fede iki taraf\u0131 say: ka\xE7 giren, ka\xE7 \xFCr\xFCn?"
+          - "Bakma s\u0131ras\u0131n\u0131 izle: \xF6nce ayr\u0131\u015Fma, sonra
+            yanma, en son birle\u015Fme."
+          - "\u015Ei\u015Feyi kutusuna koy: Sentez, Analiz ya da Yanma."
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 7
+          text: "Kasaban\u0131n kazan\u0131nda yapt\u0131\u011F\u0131n tepkimeleri
+            tan\u0131yacaks\u0131n. Defterindeki kay\u0131tlara bakabilirsin."
+          detail: Unutma
+          items: []
+          counts: []
     reasoning:
       question: 
       options:
@@ -1358,8 +1686,148 @@ MonoBehaviour:
         enzimlerle ad\u0131m ad\u0131m olur."
   - taskId: tur_3
     lesson:
-      title: 
-      pages: []
+      title: "Kimyasal de\u011Fi\u015Fimin kan\u0131t\u0131"
+      pages:
+      - blocks:
+        - kind: 0
+          text: Ders notu
+          detail: "Tepkime T\xFCrleri K\xF6y\xFC, 3. g\xF6rev"
+          items: []
+          counts: []
+        - kind: 1
+          text: "Fiziksel mi, kimyasal m\u0131?"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Fiziksel de\u011Fi\u015Fimde madde ayn\u0131 kal\u0131r; yaln\u0131zca
+            \u015Fekli ya da h\xE2li de\u011Fi\u015Fir. Kimyasal de\u011Fi\u015Fimde
+            yeni bir madde olu\u015Fur."
+          detail: 
+          items: []
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: "Yeni madde olu\u015Ftu\u011Funu nereden anlar\u0131z?"
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "Gaz \xE7\u0131k\u0131\u015F\u0131, kabarc\u0131k"
+          - "Renk de\u011Fi\u015Fimi"
+          - Yeni bir koku
+          - "Is\u0131 ya da \u0131\u015F\u0131k \xE7\u0131kmas\u0131"
+          counts: []
+        - kind: 10
+          text: "Bir kan\u0131t tek ba\u015F\u0131na her zaman yetmez; ne kadar \xE7ok
+            kan\u0131t varsa o kadar emin olursun."
+          detail: 
+          items: []
+          counts: []
+      - blocks:
+        - kind: 1
+          text: "H\xE2l de\u011Fi\u015Fimi tepkime de\u011Fildir"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Buz eriyince su olur, su kaynay\u0131nca buhar olur. \xDC\xE7\xFC
+            de ayn\u0131 maddedir: H<sub>2</sub>O. Yeni madde yoktur, de\u011Fi\u015Fim
+            fizikseldir."
+          detail: 
+          items: []
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 8
+          text: "Kesmek, ezmek, yo\u011Furmak, eritmek ve buharla\u015Ft\u0131rmak
+            maddenin kendisini de\u011Fi\u015Ftirmez. G\xF6r\xFCn\xFC\u015F de\u011Fi\u015Fti
+            diye kimyasal deme."
+          detail: Dikkat
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "\xC7\xF6z\xFCml\xFC \xF6rnek"
+          detail: 
+          items: []
+          counts: []
+        - kind: 1
+          text: Buz ve odun
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: Buzun erimesi
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Kat\u0131 su s\u0131v\u0131 su oldu. Madde yine H<sub>2</sub>O:
+            fiziksel de\u011Fi\u015Fim."
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: "Odunun yanmas\u0131"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Alev ve \u0131s\u0131 \xE7\u0131kt\u0131, duman y\xFCkseldi, geriye
+            siyah k\xFCl kald\u0131. Yeni maddeler olu\u015Ftu: kimyasal de\u011Fi\u015Fim."
+          detail: 
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "Bu g\xF6revde"
+          detail: "F\u0131r\u0131nc\u0131 Zehra\u2019n\u0131n mektubu, \xE7al\u0131\u015Fma
+            masas\u0131"
+          items: []
+          counts: []
+        - kind: 1
+          text: "Zehra\u2019ya kan\u0131t g\xF6ster"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Zehra f\u0131r\u0131n\u0131n\u0131n yak\u0131t\u0131n\u0131 ve ekme\u011Fini
+            soruyor."
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "\xD6nce yak\u0131t\u0131n yan\u0131nca ne verdi\u011Fini se\xE7. \u0130sli
+            Fenerler\u2019de yanmay\u0131 g\xF6rm\xFC\u015Ft\xFCn; defterindeki kayd\u0131
+            hat\u0131rla."
+          - "Sonra ekmekte olanlardan kimyasal de\u011Fi\u015Fimin kan\u0131tlar\u0131n\u0131
+            i\u015Faretle."
+          - "Her se\xE7enekte kendine sor: yeni bir madde olu\u015Ftu mu?"
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 7
+          text: "Birden \xE7ok do\u011Fru se\xE7enek olabilir."
+          detail: Unutma
+          items: []
+          counts: []
     reasoning:
       question: "Kazandan \xE7\u0131kan su buhar\u0131 neden kimyasal de\u011Fi\u015Fimin
         kan\u0131t\u0131 de\u011Fil?"
@@ -1389,8 +1857,154 @@ MonoBehaviour:
     fieldNotes: []
   - taskId: tur_4
     lesson:
-      title: 
-      pages: []
+      title: "Yanl\u0131\u015F iddiay\u0131 d\xFCzelt"
+      pages:
+      - blocks:
+        - kind: 0
+          text: Ders notu
+          detail: "Tepkime T\xFCrleri K\xF6y\xFC, 4. g\xF6rev"
+          items: []
+          counts: []
+        - kind: 1
+          text: "Bir iddia nas\u0131l s\u0131nan\u0131r?"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Bir c\xFCmlenin do\u011Fru oldu\u011Funu s\xF6ylemek i\xE7in bildi\u011Fin
+            kurallarla kar\u015F\u0131la\u015Ft\u0131r. Yanl\u0131\u015F oldu\u011Funu
+            g\xF6stermek i\xE7in tek bir kar\u015F\u0131 \xF6rnek yeter."
+          detail: 
+          items: []
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: "\xDC\xE7 ad\u0131m"
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "\u0130ddiay\u0131 dikkatle oku: hangi t\xFCr ya da hangi kural hakk\u0131nda?"
+          - "Bildi\u011Fin tan\u0131mla ve bir \xF6rnek denklemle kar\u015F\u0131la\u015Ft\u0131r."
+          - "Yanl\u0131\u015Fsa do\u011Frusunu s\xF6yle ve kan\u0131t\u0131n\u0131
+            g\xF6ster."
+          counts: []
+        - kind: 10
+          text: "Dedikoduya kar\u015F\u0131 en iyi ila\xE7 kan\u0131tt\u0131r."
+          detail: 
+          items: []
+          counts: []
+      - blocks:
+        - kind: 1
+          text: "S\u0131k duyulan yan\u0131lg\u0131lar"
+          detail: 
+          items: []
+          counts: []
+        - kind: 8
+          text: "\u201CYanan odun hafifliyor, demek ki k\xFCtle kayboldu.\u201D Kaybolmad\u0131:
+            CO<sub>2</sub> ve su buhar\u0131 havaya kar\u0131\u015Ft\u0131. Atomlar
+            ba\u015Fka maddelerde."
+          detail: "Yan\u0131lg\u0131"
+          items: []
+          counts: []
+        - kind: 8
+          text: "\u201C2H<sub>2</sub>O\u2019daki 2, suyun form\xFCl\xFCne aittir.\u201D
+            Hay\u0131r: katsay\u0131 ka\xE7 molek\xFCl oldu\u011Funu s\xF6yler. Suyun
+            form\xFCl\xFC H<sub>2</sub>O\u2019dur."
+          detail: "Yan\u0131lg\u0131"
+          items: []
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 7
+          text: Atomlar tepkimede kaybolmaz, yoktan da var olmaz (K-0).
+          detail: Unutma
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "\xC7\xF6z\xFCml\xFC \xF6rnek"
+          detail: 
+          items: []
+          counts: []
+        - kind: 1
+          text: "\u201CHer yanma CO<sub>2</sub> verir.\u201D"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Kar\u015F\u0131 \xF6rnek ara: karbon i\xE7ermeyen bir yak\u0131t
+            var m\u0131?"
+          detail: 
+          items: []
+          counts: []
+        - kind: 4
+          text: "2H<sub>2</sub> + O<sub>2</sub> \u2192 2H<sub>2</sub>O"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Hidrojen oksijenle yanar ama karbon yoktur, CO<sub>2</sub> de \xE7\u0131kmaz.
+            Tek \xF6rnek iddiay\u0131 \xE7\xFCr\xFCtt\xFC."
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: "Do\u011Frusu"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Karbon i\xE7eren yak\u0131tlar yan\u0131nca CO<sub>2</sub> verir."
+          detail: 
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "Bu g\xF6revde"
+          detail: "Muhtar Yusuf\u2019un mektubu, \xE7al\u0131\u015Fma masas\u0131"
+          items: []
+          counts: []
+        - kind: 1
+          text: Kasabadaki dedikodular
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Muhtar kasabada dola\u015Fan c\xFCmleleri g\xF6nderdi. Hangisi do\u011Fru,
+            hangisi yanl\u0131\u015F, m\xFCh\xFCrle i\u015Faretleyeceksin."
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "Her c\xFCmleyi tan\u0131mlarla kar\u015F\u0131la\u015Ft\u0131r."
+          - "Do\u011Fruysa D, yanl\u0131\u015Fsa Y m\xFChr\xFC bas."
+          - "Y dedi\u011Fin c\xFCmlenin do\u011Frusunu da se\xE7."
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 7
+          text: "Defterindeki kay\u0131tlar kan\u0131tt\u0131r. Sentez, analiz ve
+            atomlar\u0131n korunumu i\xE7in \xF6nceki sayfalar\u0131na bak."
+          detail: Unutma
+          items: []
+          counts: []
     reasoning:
       question: 
       options:
@@ -1422,8 +2036,154 @@ MonoBehaviour:
         al\u0131r."
   - taskId: tur_5
     lesson:
-      title: 
-      pages: []
+      title: "Lonca s\u0131nav\u0131: tekrar"
+      pages:
+      - blocks:
+        - kind: 0
+          text: Ders notu
+          detail: "Tepkime T\xFCrleri K\xF6y\xFC, 5. g\xF6rev"
+          items: []
+          counts: []
+        - kind: 1
+          text: "Bu \xFCnitede \xF6\u011Frendiklerin"
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - Tepkimede atomlar kaybolmaz, yoktan var olmaz.
+          - "Denkle\u015Ftirirken katsay\u0131 yaz\u0131l\u0131r; alt indis de\u011Fi\u015Fmez."
+          - "\xD6nce tek yerde ge\xE7en elementleri, oksijeni en son say."
+          - "Sentez: birden \xE7ok giren, tek \xFCr\xFCn. Analiz: tek giren, birden
+            \xE7ok \xFCr\xFCn. Yanma: yak\u0131t + O<sub>2</sub>."
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 10
+          text: "Bu sayfada yeni bilgi yok; hepsi defterinde yaz\u0131l\u0131."
+          detail: 
+          items: []
+          counts: []
+      - blocks:
+        - kind: 1
+          text: Kontrol listesi
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: "T\xFCr sorusunda"
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - Girenleri say.
+          - "\xDCr\xFCnleri say."
+          - "Yak\u0131t ve O<sub>2</sub> ara."
+          counts: []
+        - kind: 2
+          text: "Denkle\u015Ftirme sorusunda"
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "Her elementi iki tarafta ayr\u0131 say."
+          - "Katsay\u0131yla alt indisi \xE7arp."
+          - "B\xFCt\xFCn elementler e\u015Fitse dur."
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 8
+          text: "Baz\u0131 tepkimeler \xFC\xE7 kutunun hi\xE7birine tam uymaz. T\xFCrler
+            b\xFCt\xFCn tepkimeleri kapsamaz."
+          detail: Dikkat
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "Hat\u0131rla"
+          detail: 
+          items: []
+          counts: []
+        - kind: 1
+          text: "D\xF6ng\xFC"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Fotosentezde bitki CO<sub>2</sub> ve suyu glikoza ba\u011Flar; solunumda
+            glikoz yeniden CO<sub>2</sub> ve suya d\xF6ner."
+          detail: 
+          items: []
+          counts: []
+        - kind: 4
+          text: "6CO<sub>2</sub> + 6H<sub>2</sub>O \u2192 C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>
+            + 6O<sub>2</sub>"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Ayn\u0131 atomlar (C, H, O) yak\u0131tta, havada, bitkide ve bizde
+            dola\u015F\u0131r."
+          detail: 
+          items: []
+          counts: []
+        - kind: 10
+          text: "Glikozun form\xFCl\xFC C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>;
+            denkle\u015Ftirirken \xF6nce karbonu say."
+          detail: 
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "Bu g\xF6revde"
+          detail: "K\xE2tip Nevin, lonca"
+          items: []
+          counts: []
+        - kind: 1
+          text: "Lonca m\xFChr\xFC"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "K\xE2tip Nevin kar\u0131\u015F\u0131k sorular soracak: t\xFCrler,
+            denkle\u015Ftirme ve yeni tepkimeler."
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "Her soruda \xF6nce soruyu tan\u0131: t\xFCr m\xFC, denkle\u015Ftirme
+            mi?"
+          - Kontrol listesini uygula.
+          - "Yanl\u0131\u015F yazd\u0131\u011F\u0131n soru \xE7ekilir, yerine ba\u015Fkas\u0131
+            gelir. M\xFCh\xFCr hepsi do\u011Fru olunca bas\u0131l\u0131r."
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 7
+          text: "Acele etme; her soruyu sayd\u0131ktan sonra g\xF6nder."
+          detail: Unutma
+          items: []
+          counts: []
     reasoning:
       question: "Fotosentezle solunum aras\u0131nda nas\u0131l bir ili\u015Fki g\xF6rd\xFCn?"
       options:

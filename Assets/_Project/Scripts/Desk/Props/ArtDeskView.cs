@@ -39,12 +39,49 @@ namespace BilgiAdasi.Desk
         [Tooltip("İstasyondayken masada açık duran kâğıt. Boş bırakılabilir.")]
         [SerializeField] private GameObject openPaper;
 
+        [Header("Mektup ışığı (zarf masada beklerken)")]
+        [Tooltip("Zarfın çevresinde kameraya dönen yumuşak hale (Kurulum 26). Boşsa yalnızca zarf ışır.")]
+        [SerializeField] private Renderer letterHalo;
+        [Tooltip("Zarftan yukarı yükselen ince ışık sütunu (yalnızca dikey eksende kameraya döner). Boş bırakılabilir.")]
+        [SerializeField] private Renderer letterBeam;
+        [Tooltip("09 paleti, yeşil yaprak açık ton (#7ED63B): koyu ahşap masada en iyi seçilen.")]
+        [SerializeField] private Color glowColor = new Color(0.494f, 0.839f, 0.231f, 1f);
+        [Tooltip("Nabız hızı (atım/sn). Sakin kalsın: göz yormadan fark edilsin.")]
+        [SerializeField] private float pulseHz = 0.7f;
+        [SerializeField] [Range(0f, 1f)] private float haloAlphaMin = 0.45f;
+        [SerializeField] [Range(0f, 1f)] private float haloAlphaMax = 1f;
+        [Tooltip("Hale boyu (m); nabızla bu ile ×1.15 arasında büyür.")]
+        [SerializeField] private float haloSize = 1.4f;
+        [Tooltip("Hale zarftan kameraya doğru bu kadar öne alınır (m): masaya gömülmez.")]
+        [SerializeField] private float haloForward = 0.35f;
+        [Tooltip("Sütun: genişlik × yükseklik (m). Alt ucu zarfta.")]
+        [SerializeField] private Vector2 beamSize = new Vector2(0.45f, 1.8f);
+        [SerializeField] [Range(0f, 1f)] private float beamAlphaMax = 0.9f;
+        [Tooltip("Zarfın ışıma gücü (Stilize _Isima) nabızda en çok.")]
+        [SerializeField] private float envelopeGlow = 1.6f;
+        [Tooltip("Zarfın rengi bu oranda yeşile kayar (nabzın tepesinde).")]
+        [SerializeField] [Range(0f, 1f)] private float envelopeTint = 0.45f;
+
+        private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
+        private static readonly int GlowId = Shader.PropertyToID("_Isima");
+        private static readonly int TintId = Shader.PropertyToID("_Renk");
+        private Renderer[] envelopeRenderers;
+        private MaterialPropertyBlock block;
+        private Transform cameraTransform;
+        private Vector3 glowCenter;
+        private bool glowing;
+
         private Quaternion wingLeftRest, wingRightRest;
         private Coroutine flight;
         private bool envelopeWanted, envelopeGuild, landing;
 
         private void Awake()
         {
+            block = new MaterialPropertyBlock();
+            envelopeRenderers = CollectRenderers(envelope, guildEnvelope);
+            if (letterHalo != null) letterHalo.gameObject.SetActive(false);
+            if (letterBeam != null) letterBeam.gameObject.SetActive(false);
+            glowCenter = envelope != null ? envelope.transform.position : transform.position;
             if (wingLeft != null) wingLeftRest = wingLeft.localRotation;
             if (wingRight != null) wingRightRest = wingRight.localRotation;
             if (pigeon != null) pigeon.gameObject.SetActive(false);
@@ -87,6 +124,85 @@ namespace BilgiAdasi.Desk
             bool guildShown = show && envelopeGuild && guildEnvelope != null;
             if (envelope != null) envelope.SetActive(show && !guildShown);
             if (guildEnvelope != null) guildEnvelope.SetActive(guildShown);
+            SetGlowing(show);
+        }
+
+        // ---------- Mektup ışığı ----------
+
+        private void SetGlowing(bool on)
+        {
+            if (glowing == on) return;
+            glowing = on;
+            if (letterHalo != null) letterHalo.gameObject.SetActive(on);
+            if (letterBeam != null) letterBeam.gameObject.SetActive(on);
+            if (!on) ClearEnvelopeGlow();
+        }
+
+        private void Update()
+        {
+            if (!glowing) return;
+            // 0…1 yumuşak nabız (sinüs, en altta biraz bekler).
+            float p = 0.5f - 0.5f * Mathf.Cos(Time.time * pulseHz * Mathf.PI * 2f);
+            p *= p * (3f - 2f * p);
+
+            if (cameraTransform == null && Camera.main != null) cameraTransform = Camera.main.transform;
+            Vector3 toCam = cameraTransform != null ? cameraTransform.position - glowCenter : Vector3.back;
+
+            if (letterHalo != null)
+            {
+                var t = letterHalo.transform;
+                Vector3 dir = toCam.sqrMagnitude > 1e-4f ? toCam.normalized : Vector3.back;
+                t.position = glowCenter + Vector3.up * 0.05f + dir * haloForward;
+                t.rotation = Quaternion.LookRotation(-dir, Vector3.up);
+                t.localScale = Vector3.one * (haloSize * (1f + 0.15f * p));
+                Tint(letterHalo, Mathf.Lerp(haloAlphaMin, haloAlphaMax, p));
+            }
+
+            if (letterBeam != null)
+            {
+                // Yalnızca Y ekseninde döner: sütun hep dik kalır.
+                var t = letterBeam.transform;
+                Vector3 flat = new Vector3(toCam.x, 0f, toCam.z);
+                if (flat.sqrMagnitude > 1e-4f) t.rotation = Quaternion.LookRotation(-flat.normalized, Vector3.up);
+                float h = beamSize.y * (0.9f + 0.1f * p);
+                t.position = glowCenter + Vector3.up * (h * 0.5f);
+                t.localScale = new Vector3(beamSize.x, h, 1f);
+                Tint(letterBeam, beamAlphaMax * Mathf.Lerp(0.5f, 1f, p));
+            }
+
+            for (int i = 0; i < envelopeRenderers.Length; i++)
+            {
+                var r = envelopeRenderers[i];
+                if (r == null || !r.gameObject.activeInHierarchy) continue;
+                r.GetPropertyBlock(block);
+                block.SetFloat(GlowId, envelopeGlow * p);
+                block.SetColor(TintId, Color.Lerp(Color.white, glowColor, envelopeTint * p));
+                r.SetPropertyBlock(block);
+            }
+        }
+
+        private void Tint(Renderer r, float alpha)
+        {
+            var c = glowColor;
+            c.a = alpha;
+            r.GetPropertyBlock(block);
+            block.SetColor(BaseColorId, c);
+            r.SetPropertyBlock(block);
+        }
+
+        private void ClearEnvelopeGlow()
+        {
+            if (envelopeRenderers == null) return;
+            for (int i = 0; i < envelopeRenderers.Length; i++)
+                if (envelopeRenderers[i] != null) envelopeRenderers[i].SetPropertyBlock(null);
+        }
+
+        private static Renderer[] CollectRenderers(GameObject a, GameObject b)
+        {
+            var list = new System.Collections.Generic.List<Renderer>();
+            if (a != null) list.AddRange(a.GetComponentsInChildren<Renderer>(true));
+            if (b != null) list.AddRange(b.GetComponentsInChildren<Renderer>(true));
+            return list.ToArray();
         }
 
         private IEnumerator Fly(Transform from, Transform to, bool arriving)

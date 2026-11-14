@@ -13,8 +13,8 @@ namespace BilgiAdasi.UI
     /// Ustanın Sorgusu / tahmin sorusu (IReasoningView) — normal konuşmayla birebir aynı çerçeve (DialogueFrame):
     /// alttan karartma, portre, altın konuşan adı, kâğıt rengi soru. Altında seçenekler: kâğıt tuş kapağında numara +
     /// kâğıt rengi metin; seçili olan koyu şerit, ince altın çerçeve ve altın yazı. Sağ altta "[E] Seç" (soru) ya da
-    /// "[E] Devam" (cevap). Fare: tıkla / üstüne gel. Klavye/gamepad: Move ↑↓ (W/S, sol çubuk) seç, Interact/Jump
-    /// (E, Space / X, A) onayla; klavyede 1/2/3 doğrudan seçer. Açıkken envanter gezinmesi kilitli.
+    /// "[E] Devam" (cevap). Fare: tıkla / üstüne gel. Klavye/gamepad: Move ↑↓ (W/S, ok tuşları, sol çubuk) ya da D-pad ↑↓ seç,
+    /// Interact/Confirm (E, Enter, Space / X, A) onayla; klavyede 1/2/3 doğrudan seçer. Açıkken envanter gezinmesi kilitli.
     /// </summary>
     public sealed class FigmaReasoningView : FigmaView<IReasoningView>, IReasoningView
     {
@@ -31,11 +31,12 @@ namespace BilgiAdasi.UI
         private readonly Image[] optionBands = new Image[MaxOptions];
 
         private Action<int> onChosen;
+        private readonly int[] choiceMap = new int[MaxOptions]; // ekrandaki şık → verideki sıra
         private Action onContinue;
         private bool holding; // FigmaDialogueView.Hold: soru açıkken mini harita / defter / envanter çekilir
         private int visible, selected;
         private float shownAt, nextMoveAt;
-        private InputAction move, interact, jump, slotKey;
+        private InputAction move, interact, jump, slotKey, dpadUp, dpadDown;
 
         private void Awake() => Build();
 
@@ -59,14 +60,21 @@ namespace BilgiAdasi.UI
         {
             onChosen = chosen;
             onContinue = null;
+            // Şıklar her soruda karışık sırada (Play 14.11: verideki doğru cevap çoğunlukla ilk şıktı). Seçilen şık
+            // çağırana verinin kendi sırasıyla döner (choiceMap), denetleyiciler değişmez.
             visible = 0;
+            for (int i = 0; optionList != null && i < optionList.Count && visible < MaxOptions; i++)
+                if (!string.IsNullOrEmpty(optionList[i])) choiceMap[visible++] = i;
+            for (int i = visible - 1; i > 0; i--)
+            {
+                int j = UnityEngine.Random.Range(0, i + 1);
+                (choiceMap[i], choiceMap[j]) = (choiceMap[j], choiceMap[i]);
+            }
             for (int i = 0; i < MaxOptions; i++)
             {
-                bool on = optionList != null && i < optionList.Count && !string.IsNullOrEmpty(optionList[i]);
+                bool on = i < visible;
                 options[i].transform.parent.gameObject.SetActive(on);
-                if (!on) continue;
-                optionTexts[i].text = optionList[i];
-                visible++;
+                if (on) optionTexts[i].text = optionList[choiceMap[i]];
             }
             frame.HintWord.text = chooseWord;
             Open(speakerName, question);
@@ -120,11 +128,16 @@ namespace BilgiAdasi.UI
             {
                 move = GameInput.FindAction("Player/Move");
                 interact = GameInput.FindAction("Player/Interact");
-                jump = GameInput.FindAction("Player/Jump");
+                jump = GameInput.FindAction("Player/Confirm"); // Enter, Space / A
                 slotKey = GameInput.FindAction("Player/SelectSlot");
+                // Gamepad D-pad ↑/↓ Player map'inde defter/harita tuşudur; soru açıkken onlar açılmaz, seçim taşınır.
+                dpadUp = GameInput.FindAction("Player/OpenBook");
+                dpadDown = GameInput.FindAction("Player/OpenMap");
                 interact.performed += OnSubmit;
                 jump.performed += OnSubmit;
                 slotKey.performed += OnNumberKey;
+                dpadUp.performed += OnDpadUp;
+                dpadDown.performed += OnDpadDown;
                 GameInput.LockInventory(true); // soru açıkken envanterde gezinilmez
             }
             else if (!on && move != null)
@@ -134,10 +147,22 @@ namespace BilgiAdasi.UI
                     interact.performed -= OnSubmit;
                     jump.performed -= OnSubmit;
                     slotKey.performed -= OnNumberKey;
+                    dpadUp.performed -= OnDpadUp;
+                    dpadDown.performed -= OnDpadDown;
                 }
                 GameInput.LockInventory(false);
-                move = interact = jump = slotKey = null;
+                move = interact = jump = slotKey = dpadUp = dpadDown = null;
             }
+        }
+
+        private void OnDpadUp(InputAction.CallbackContext ctx) => StepDpad(ctx, -1);
+        private void OnDpadDown(InputAction.CallbackContext ctx) => StepDpad(ctx, 1);
+
+        private void StepDpad(InputAction.CallbackContext ctx, int dir)
+        {
+            if (onChosen == null || visible == 0) return;
+            if (!(ctx.control.parent is UnityEngine.InputSystem.Controls.DpadControl)) return; // N / M / Tab / Select değil
+            Select((selected + dir + visible) % visible);
         }
 
         /// <summary>Klavyede 1/2/3 doğrudan o şıkkı seçer (envanter kilitliyken aynı tuşlar).</summary>
@@ -190,7 +215,7 @@ namespace BilgiAdasi.UI
         {
             var cb = onChosen;
             onChosen = null;
-            cb?.Invoke(index);
+            cb?.Invoke(index >= 0 && index < visible ? choiceMap[index] : index);
         }
 
         private void Continue()

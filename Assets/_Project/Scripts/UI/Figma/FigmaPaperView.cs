@@ -418,6 +418,7 @@ namespace BilgiAdasi.UI
             Hit.Add(frame.gameObject, null, () => Commands?.Focus(index), delta => Commands?.StepOption(index, delta));
 
             w.Label = UiKit.Text(frame.transform, "Label", th.BodyFont, 28f, th.InkDark, TextAlignmentOptions.TopLeft);
+            ReserveFillBlankHeight(w.Label, index, data, col.padding.horizontal);
 
             if (data.Style == RowStyle.Cycle) BuildCycle(w, frame.transform, index, th);
             else BuildOptions(w, frame.transform, index, data, th);
@@ -434,6 +435,23 @@ namespace BilgiAdasi.UI
             w.Blot = blot;
             blot.gameObject.SetActive(false);
             return w;
+        }
+
+        /// <summary>
+        /// Boşluk doldurmada cümle seçilen kelimeyle yeniden kırılır; uzun kelime ("buharlaşma") satırı iki satıra
+        /// çıkarıp kâğıdı büyütüyor, kâğıt da ekrana sığmak için küçülüyordu (Play 14.11). Satır, bankadaki her kelimeyle
+        /// alacağı en büyük yüksekliği baştan ayırır.
+        /// </summary>
+        private void ReserveFillBlankHeight(TextMeshProUGUI label, int index, PaperRow data, int rowPadding)
+        {
+            if (question is not FillBlankPaper fill || data.Style != RowStyle.Cycle) return;
+            var paperPad = paper.GetComponent<VerticalLayoutGroup>().padding.horizontal;
+            float textWidth = width - paperPad - rowPadding;
+            float tallest = 0f;
+            for (int k = 0; k < data.Options.Length; k++)
+                tallest = Mathf.Max(tallest, label.GetPreferredValues(fill.RowLabelFilled(index, data.Options[k]), textWidth, 0f).y);
+            tallest = Mathf.Max(tallest, label.GetPreferredValues(fill.RowLabelFilled(index, FillBlankPaper.Empty), textWidth, 0f).y);
+            label.gameObject.AddComponent<LayoutElement>().minHeight = Mathf.Ceil(tallest);
         }
 
         private void BuildCycle(RowWidget w, Transform parent, int index, UiTheme th)

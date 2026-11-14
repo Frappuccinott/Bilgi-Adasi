@@ -15,13 +15,16 @@ Kaynak: `01`, `02`, `03`, `04-gorev-plani`, `05`, `10`, `08` §4, `06-yapilacakl
 ## 2. Ekran akışı
 
 ```
-Boot → [Ana menü] ─ Devam Et ─→ Town (kayıttan)
-                   ─ Yeni Oyun ─→ (kayıt varsa onay) → Classroom ara sahnesi (P2) → Town
-                   ─ Ayarlar ⇄
-                   ─ Emeği Geçenler ⇄
-Town (Player) ─ Esc/Start → Duraklatma ─ Devam / Harita / Ayarlar / Kaydet ve ana menü
-              ─ M/Tab/Select → Harita (bilgi + ilerleme)
-              ─ E/Ⓧ → İstasyon (Kazan | Masa | Kapı | Tahta)
+AnaMenu ─ Devam Et ─→ Harita sahnesi (son görev anındaki otomatik kayıttan)
+        ─ Yeni Oyun ─→ (kayıt varsa onay) → çıraklık açılış kartları (sınıf) → Harita sahnesi
+        ─ Ayarlar ⇄
+        ─ Emeği Geçenler ⇄
+Harita (Player) ─ Esc/Start → Duraklatma ─ Devam / Başarımlar / Ders Notu / Ayarlar / ana menü
+                ─ M/Tab/Select → Harita ekranı (bilgi + ilerleme)   [soru/konuşma açıkken açılmaz]
+                ─ N/D-pad ↑ → Defter (Ustanın Notları | Keşiflerim | Ustalık)
+                ─ E/Ⓧ → Kazan, raf, pazar tezgâhı, tarladaki kişiler (FPS) | Masa, Tahta (istasyon)
+                ─ F/Ⓧ → Kapı, bisiklet, traktör
+(14.11 güncel: Boot/Classroom/Town yok; kayıt yalnızca görev sonunda otomatik.)
 İstasyon (Station) ─ P/Start → Duraklatma   ─ Esc/B → Player
 Köy bitti → kısa kutlama + boy notu → (son köy) Kapanış → Son ekran (tahta, hata sayıları, Keşif Defteri) → Emeği Geçenler
 ```

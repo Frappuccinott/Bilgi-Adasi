@@ -138,9 +138,23 @@ namespace BilgiAdasi.Desk
         internal void OnStationEnter()
         {
             if (task == null) return;
-            if (Current == State.Waiting) BeginPaper();
+            bool firstOpen = Current == State.Waiting;
+            if (firstOpen) BeginPaper();
             propsView?.SetEnvelope(false, task.IsGuildExam);
             propsView?.SetPaperOpen(true);
+            // Mektup ilk açılışta: kâğıttan önce Ders Notu (13-ders-notu-plani §2). Yarım kâğıda dönüşte gösterilmez.
+            var lessons = Order.LearningDirector.Instance;
+            if (firstOpen && lessons != null && lessons.ShowLesson(task.Id, OnLessonClosed))
+            {
+                return;
+            }
+            OpenView();
+            StartListening();
+        }
+
+        private void OnLessonClosed()
+        {
+            if (task == null || station == null || !station.IsActive) return;
             OpenView();
             StartListening();
         }
@@ -194,6 +208,7 @@ namespace BilgiAdasi.Desk
             if (paperView == null || current == null) return;
             string counter = texts != null ? string.Format(texts.QuestionCounter, index + 1, sequence.Count) : string.Empty;
             focus = FirstVisible(0, 1);
+            listenStartedAt = Time.unscaledTime; // yeni soru da boş gelir: önceki Gönder'in tuşu buraya düşmesin
             paperView.ShowQuestion(current, counter);
             paperView.Refresh(current, focus);
             if (fails >= HintFailThreshold) hintBookView?.SetGlowing(true);
@@ -369,6 +384,7 @@ namespace BilgiAdasi.Desk
         {
             if (listening) return;
             listening = true;
+            listenStartedAt = Time.unscaledTime;
             var s = GameInput.Controls.Station;
             s.SelectPrevious.performed += OnPrevious;
             s.SelectNext.performed += OnNext;
@@ -394,12 +410,19 @@ namespace BilgiAdasi.Desk
 
         private void OnPrevious(InputAction.CallbackContext _) => MoveFocus(-1);
         private void OnNext(InputAction.CallbackContext _) => MoveFocus(1);
-        private void OnIncrease(InputAction.CallbackContext _) => StepFocused(1);
-        private void OnDecrease(InputAction.CallbackContext _) => StepFocused(-1);
+        private void OnIncrease(InputAction.CallbackContext _) { if (!InGrace) StepFocused(1); }
+        private void OnDecrease(InputAction.CallbackContext _) { if (!InGrace) StepFocused(-1); }
+
+        // Kâğıt açılırken basılan tuş (masaya oturma, ders notunu kapatan Enter) boş satıra seçenek yazmasın
+        // (Play 14.11: mektupta bazı satırlar seçili geliyordu). Oyuncu her satırı kendi seçer.
+        private float listenStartedAt = -10f;
+        private const float InputGrace = 0.3f;
+        private bool InGrace => Time.unscaledTime - listenStartedAt < InputGrace;
         private void OnHint(InputAction.CallbackContext _) => ToggleHint();
 
         private void OnConfirm(InputAction.CallbackContext _)
         {
+            if (InGrace) return;
             if (Current == State.Sealed)
             {
                 Continue();
@@ -453,10 +476,63 @@ namespace BilgiAdasi.Desk
             return string.Join("\n", lines);
         }
 
+        // ---------- HUD görev kartı: adım rehberi (karar 14.11: her görevin kartı olur) ----------
+        // Mektup masadayken kart: Mektubu aç → Soruları yanıtla (Soru x / y) → Mührü bas. Sipariş sürerken kart
+        // siparişindir (OrderController); OrderController siparişsiz anda kartı kapatabildiği için yarım saniyede bir
+        // yeniden gösterilir (FieldTaskDirector ile aynı yol).
+
+        private readonly List<Order.OrderGuideStep> guide = new List<Order.OrderGuideStep>(3);
+        private readonly List<Chemistry.SpeciesAmount> noAmounts = new List<Chemistry.SpeciesAmount>();
+        private Order.OrderController orders;
+        private Order.IOrderCardView cardView;
+        private float cardTimer;
+        private int cardKey = -1;
+        private bool cardShown;
+
+        private void Update() => RefreshCard(Time.deltaTime);
+
+        private void RefreshCard(float dt)
+        {
+            if (orders == null) orders = FindAnyObjectByType<Order.OrderController>();
+            bool orderActive = orders != null && orders.Session != null && orders.Current != Order.OrderController.State.Done;
+            bool visible = task != null && HasLetter && !orderActive && cardView != null && texts != null;
+            if (!visible)
+            {
+                if (cardShown && !orderActive) cardView?.ClearOrder();
+                cardShown = false;
+                cardKey = -1;
+                return;
+            }
+            int step = Current == State.Waiting ? 0 : Current == State.Sealed ? 2 : 1;
+            int key = step | (index << 2) | (sequence.Count << 10);
+            if (key != cardKey)
+            {
+                cardKey = key;
+                guide.Clear();
+                AddGuide(texts.GuideOpen, texts.GuideOpenDetail, 0, step);
+                AddGuide(texts.GuideAnswer, sequence.Count > 0 ? string.Format(texts.QuestionCounter, index + 1, sequence.Count) : null, 1, step);
+                AddGuide(texts.GuideSeal, texts.GuideSealDetail, 2, step);
+                cardTimer = 0f;
+            }
+            cardTimer -= dt;
+            if (cardTimer > 0f) return;
+            cardTimer = 0.5f;
+            cardView.ShowOrder(new Order.OrderCardInfo(task.GiverName, noAmounts, null, 0, 1, 0, false, guide, task.PaperTitle));
+            cardShown = true;
+        }
+
+        private void AddGuide(string text, string detail, int i, int step)
+        {
+            if (string.IsNullOrEmpty(text)) return;
+            var state = i < step ? Order.GuideState.Done : i == step ? Order.GuideState.Current : Order.GuideState.Pending;
+            guide.Add(new Order.OrderGuideStep(text, state == Order.GuideState.Current ? detail : null, state));
+        }
+
         private void OnViewsChanged(Type _) => CacheViews();
 
         private void CacheViews()
         {
+            cardView = ViewLocator.Get<Order.IOrderCardView>();
             paperView = ViewLocator.Get<IPaperView>();
             propsView = ViewLocator.Get<IDeskPropsView>();
             realLifeView = ViewLocator.Get<IRealLifeCardView>();

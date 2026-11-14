@@ -13,6 +13,13 @@ MonoBehaviour:
   m_Name: Pazar_Aletler
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Order.MarketCatalog
   entries:
+  - species: {fileID: 11400000, guid: f00ff055cb7fca24f8db0a5ec951fd0f, type: 2}
+    overridePrice: 0
+    price: 0
+    unlimitedStock: 1
+    stock: 5
+    availableAfter: {fileID: 11400000, guid: 3badd807bc6567342899ac7841ee6f76, type: 2}
+    removedAfter: {fileID: 11400000, guid: b1a818b6ca3901649910406b66ffc2d0, type: 2}
   - species: {fileID: 11400000, guid: 4d3c850907591ae4da9da9145f4630e2, type: 2}
     overridePrice: 0
     price: 0

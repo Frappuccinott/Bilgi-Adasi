@@ -182,6 +182,36 @@ namespace BilgiAdasi.EditorTools
             Debug.Log("[Öğrenme] Sorgu + Keşif Defteri verisi üretildi: " + Path);
         }
 
+        /// <summary>
+        /// Yalnızca masa görevlerinin (tur_1–5) Ders Notu'nu yazar; asset'teki öteki görevlerin Inspector düzeltmelerine
+        /// ve sorgu/defter alanlarına dokunmaz. Tam üretim yukarıdaki menüdür.
+        /// </summary>
+        [MenuItem("BilgiAdasi/Seviye/Masa görevlerinin ders notlarını yaz (tur_1–5)")]
+        public static void WriteDeskLessons()
+        {
+            var data = AssetDatabase.LoadAssetAtPath<LearningData>(Path);
+            if (data == null)
+            {
+                Debug.LogWarning("[Öğrenme] LearningData yok; önce tam üretimi çalıştırın: " + Path);
+                return;
+            }
+            int written = 0;
+            foreach (var id in new[] { "tur_1", "tur_2", "tur_3", "tur_4", "tur_5" })
+            {
+                var entry = data.Find(id);
+                if (entry == null)
+                {
+                    Debug.LogWarning("[Öğrenme] LearningData'da kayıt yok: " + id);
+                    continue;
+                }
+                entry.WithLesson(LessonNotesData.For(id));
+                written++;
+            }
+            EditorUtility.SetDirty(data);
+            AssetDatabase.SaveAssets();
+            Debug.Log("[Öğrenme] Masa ders notları yazıldı: " + written + " görev.");
+        }
+
         private static LearningEntry Entry(string taskId, string question, string[] options, int correct, string[] replies,
             string discoveryId, string discovery)
         {

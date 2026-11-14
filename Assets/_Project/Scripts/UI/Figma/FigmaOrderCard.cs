@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 using BilgiAdasi.Chemistry;
+using BilgiAdasi.Core;
 using BilgiAdasi.Order;
 using TMPro;
 using UnityEngine;
@@ -43,7 +44,36 @@ namespace BilgiAdasi.UI
             public TextMeshProUGUI Number, Text, Detail;
         }
 
+        [Tooltip("Oyuncu modu dışında (pazar, Esc menüsü, harita, masa) kart solup gizlenir (mini harita gibi).")]
+        [SerializeField] private float fadeSeconds = 0.15f;
+
+        private CanvasGroup group;
+        private float fadeTarget = 1f;
+
         private void Awake() => Build();
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            GameInput.ModeChanged += OnModeChanged;
+            OnModeChanged(GameInput.Mode);
+            if (group != null) group.alpha = fadeTarget;
+        }
+
+        protected override void OnDisable()
+        {
+            GameInput.ModeChanged -= OnModeChanged;
+            base.OnDisable();
+        }
+
+        // Mini harita gibi yalnızca oyuncu modunda: pazar / Esc / harita (UI) ve masa / tahta (istasyon) ekranıyla çakışmaz.
+        private void OnModeChanged(InputMode mode) => fadeTarget = mode == InputMode.Player ? 1f : 0f;
+
+        private void Update()
+        {
+            if (group == null || Mathf.Approximately(group.alpha, fadeTarget)) return;
+            group.alpha = Mathf.MoveTowards(group.alpha, fadeTarget, Time.unscaledDeltaTime / Mathf.Max(0.01f, fadeSeconds));
+        }
 
         public void ShowOrder(OrderCardInfo info)
         {
@@ -56,7 +86,8 @@ namespace BilgiAdasi.UI
             ShowGuide(info.Guide);
 
             sb.Clear();
-            AppendAmounts(info.Products);
+            if (!string.IsNullOrEmpty(info.WantedText)) sb.Append(info.WantedText);
+            else AppendAmounts(info.Products);
             formula.text = sb.ToString();
 
             if (info.Reactants != null && info.Reactants.Count > 0)
@@ -74,6 +105,7 @@ namespace BilgiAdasi.UI
 
             sb.Clear().Append(rewardWord).Append(": <b>").Append(info.Reward).Append("</b> ").Append(currencyWord);
             reward.text = sb.ToString();
+            reward.gameObject.SetActive(info.Reward > 0); // masa mektubunda ödeme yok
             readyStrip.SetActive(info.ReadyToDeliver);
             card.gameObject.SetActive(true);
         }
@@ -200,6 +232,10 @@ namespace BilgiAdasi.UI
             seal.preserveAspect = true;
 
             card.gameObject.AddComponent<CardSizer>().Init(paper, 6f);
+            group = card.gameObject.AddComponent<CanvasGroup>();
+            group.interactable = false;
+            group.blocksRaycasts = false;
+            group.alpha = fadeTarget;
             card.gameObject.SetActive(false);
         }
 

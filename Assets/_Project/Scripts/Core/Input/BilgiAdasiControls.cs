@@ -237,6 +237,15 @@ namespace BilgiAdasi.Core
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Confirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""3e5a7c91-2b4d-4f68-9a1c-5d7e9f0b2c46"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -288,6 +297,61 @@ namespace BilgiAdasi.Core
                     ""name"": ""right"",
                     ""id"": ""c7dbef51-88a9-42e6-b11e-7b6ccd606dd4"",
                     ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Arrows"",
+                    ""id"": ""5b8d2f40-7c1e-4a93-b6d2-0e4f8a1c3b57"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""6c9e3a51-8d2f-4ba4-87e3-1f5a9b2d4c68"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""7daf4b62-9e3a-4cb5-98f4-2a6bac3e5d79"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""8eba5c73-af4b-4dc6-a905-3b7cbd4f6e8a"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""9fcb6d84-b05c-4ed7-ba16-4c8dce507f9b"",
+                    ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
@@ -435,6 +499,50 @@ namespace BilgiAdasi.Core
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""OpenBook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a0dc7e95-c16d-4fe8-8b27-5d9edf618a0c"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b1ed8fa6-d27e-4af9-9c38-6eaf0a729b1d"",
+                    ""path"": ""<Keyboard>/numpadEnter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c2fe9ab7-e38b-4b0a-ad49-7fb01b83ac2e"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d30fabc8-f49c-4c1b-be5a-80c12c94bd3f"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Confirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1610,6 +1718,7 @@ namespace BilgiAdasi.Core
             m_Player_SelectSlot = m_Player.FindAction("SelectSlot", throwIfNotFound: true);
             m_Player_Drop = m_Player.FindAction("Drop", throwIfNotFound: true);
             m_Player_OpenBook = m_Player.FindAction("OpenBook", throwIfNotFound: true);
+            m_Player_Confirm = m_Player.FindAction("Confirm", throwIfNotFound: true);
             // Station
             m_Station = asset.FindActionMap("Station", throwIfNotFound: true);
             m_Station_Point = m_Station.FindAction("Point", throwIfNotFound: true);
@@ -1733,6 +1842,7 @@ namespace BilgiAdasi.Core
         private readonly InputAction m_Player_SelectSlot;
         private readonly InputAction m_Player_Drop;
         private readonly InputAction m_Player_OpenBook;
+        private readonly InputAction m_Player_Confirm;
         /// <summary>
         /// Provides access to input actions defined in input action map "Player".
         /// </summary>
@@ -1809,6 +1919,10 @@ namespace BilgiAdasi.Core
             /// </summary>
             public InputAction @OpenBook => m_Wrapper.m_Player_OpenBook;
             /// <summary>
+            /// Provides access to the underlying input action "Player/Confirm".
+            /// </summary>
+            public InputAction @Confirm => m_Wrapper.m_Player_Confirm;
+            /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
             public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -1882,6 +1996,9 @@ namespace BilgiAdasi.Core
                 @OpenBook.started += instance.OnOpenBook;
                 @OpenBook.performed += instance.OnOpenBook;
                 @OpenBook.canceled += instance.OnOpenBook;
+                @Confirm.started += instance.OnConfirm;
+                @Confirm.performed += instance.OnConfirm;
+                @Confirm.canceled += instance.OnConfirm;
             }
 
             /// <summary>
@@ -1941,6 +2058,9 @@ namespace BilgiAdasi.Core
                 @OpenBook.started -= instance.OnOpenBook;
                 @OpenBook.performed -= instance.OnOpenBook;
                 @OpenBook.canceled -= instance.OnOpenBook;
+                @Confirm.started -= instance.OnConfirm;
+                @Confirm.performed -= instance.OnConfirm;
+                @Confirm.canceled -= instance.OnConfirm;
             }
 
             /// <summary>
@@ -2572,6 +2692,13 @@ namespace BilgiAdasi.Core
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnOpenBook(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Confirm" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnConfirm(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Station" which allows adding and removing callbacks.

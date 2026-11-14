@@ -68,6 +68,8 @@ namespace BilgiAdasi.Order
         [Header("Metin ve renk")]
         [SerializeField] private string balancedText = "Dengede — ateşi yakabilirsin";
         [SerializeField] private string unbalancedText = "Dengede değil";
+        [Tooltip("Atomlar eşit ama kazanda bu tepkimeye girmeyen madde var.")]
+        [SerializeField] private string foreignText = "Kazanda yanlış madde var";
         [SerializeField] private Color goodColor = new Color(0.122f, 0.431f, 0.227f);   // 09 palet: yeşil yaprak koyu #1F6E3A
         [SerializeField] private Color badColor = new Color(0.635f, 0.255f, 0.118f);    // 09 palet: mühür mumu orta #A2411E
         [SerializeField] private Color neutralColor = new Color(0.243f, 0.157f, 0.106f); // 09 palet: mürekkep en koyu #3E281B
@@ -87,7 +89,7 @@ namespace BilgiAdasi.Order
         private readonly Pan right = new Pan();
         private readonly List<AtomRow> rows = new List<AtomRow>();
         private MaterialPropertyBlock block;
-        private bool balanced, foam;
+        private bool balanced, foam, foreign;
         private float targetTilt, shakeUntil;
 
         private TMP_FontAsset themeFont;
@@ -187,6 +189,8 @@ namespace BilgiAdasi.Order
             Layout();
         }
 
+        public void SetForeign(bool hasForeign) => foreign = hasForeign;
+
         public void ShowFoamDifference(IReadOnlyList<AtomRow> newRows)
         {
             CopyRows(newRows);
@@ -243,7 +247,7 @@ namespace BilgiAdasi.Order
             if (statusLabel != null)
             {
                 bool any = rows.Count > 0 && totalLeft > 0;
-                string text = !any ? string.Empty : balanced ? balancedText : unbalancedText;
+                string text = !any ? string.Empty : balanced ? balancedText : foreign ? foreignText : unbalancedText;
                 statusLabel.color = balanced ? goodColor : badColor;
                 if (statusLabel.text != text)
                 {
@@ -285,11 +289,11 @@ namespace BilgiAdasi.Order
                 float lineH = labelFontSize * 0.11f;
                 label.transform.localPosition = new Vector3(0f, LabelCenter() + ((rows.Count - 1) * 0.5f - r) * lineH, -labelForward);
                 string symbol = row.Element != null ? row.Element.Symbol : "?";
-                string extra = count > drawn ? "+" : "";
                 string leftover = isLeft && row.Leftover > 0 ? $" <size=70%>(+{row.Leftover} artan)</size>" : "";
-                label.text = $"<b>{symbol}</b> {count}{extra}{leftover}";
+                label.text = $"<b>{symbol}</b> {count}{leftover}"; // sayı her zaman tam (8'den fazlası çizilmese de)
                 bool bad = !row.IsEqual && (isLeft || foam);
-                label.color = !isLeft ? neutralColor : row.IsEqual ? goodColor : badColor;
+                // Yanlış madde varken eşit satır yeşil yanmaz (Play 14.11: hepsi yeşildi ama "Dengede değil" yazıyordu).
+                label.color = !isLeft ? neutralColor : row.IsEqual ? (foreign ? neutralColor : goodColor) : badColor;
                 label.fontStyle = foam && bad ? FontStyles.Bold | FontStyles.Underline : FontStyles.Normal;
             }
 

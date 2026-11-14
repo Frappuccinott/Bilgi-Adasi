@@ -6,9 +6,10 @@ Hedef: 24 saatte bitecek kadar sade, ama yeni köy eklemenin **yalnızca veri gi
 
 | Sahne | İçerik | Not |
 |---|---|---|
-| `Boot` | Yönetici nesneler (DontDestroyOnLoad), kayıt yükleme | Tek kare, hemen `Classroom`'a geçer |
-| `Classroom` | Açılış/kapanış ara sahnesi (2D UI + basit animasyon) | `CutsceneMode.Intro / Outro` |
-| `Town` | Atölye (kazan, teraziler, raf, tahta, kapı, çalışma masası) **ve** yürünen şehir | Tek oyun sahnesi; masa ve kazan birer istasyon kamerası. Harita = bu sahnede UI katmanı. Bağlantı noktaları: `08-mustafa-entegrasyon.md` |
+| `AnaMenu` | Ana menü (Devam Et / Yeni Oyun / Ayarlar / Emeği Geçenler / Çıkış), arkada haritanın üstünde kuş bakışı uçuş (`MenuFlyover`) | İlk açılan sahne, `SceneFlow.MenuScene` (Kurulum 20) |
+| `Harita` | Atölye (kazan, teraziler, raf, tahta, kapı, çalışma masası, atölye önü pazarı) **ve** yürünen şehir, Bereket Tarlası | Tek oyun sahnesi, `SceneFlow.GameScene`. Kazan ve kapı FPS; istasyon kamerası yalnızca masa ve tahtada. Açılış (sınıf) kartları çıraklık akışında (Kurulum 17). Harita ekranı = UI katmanı. Bağlantı noktaları: `08-mustafa-entegrasyon.md` |
+
+> 13.11'de `Boot`, `Classroom`, `Town` kaldırıldı.
 
 Sahne geçişi: kısa kararma (0,3 sn). `SceneFlow.Load(string)`.
 

@@ -10,7 +10,7 @@
 > - Akış: kapı konuşması → ustanın satırı → Ders Notu → kapanınca sipariş başlar (`NeighborhoodRunner.OnDoorDialogueFinished`). Açıkken `LearningDirector.IsBusy`, girdi UI modunda. Tahmin kartı (PredictionDirector) nottan sonra gelir.
 > - Görünüm: `UI/Figma/FigmaLessonNote.cs` (Kurulum 14 ekler). ← → sayfa, Enter/A ileri, Esc/B geri; fareyle sol sayfa geri, sağ sayfa ileri.
 > - Yeniden okuma: H yerine Esc menüsünde "Ders Notu" düğmesi (yalnızca notu olan sipariş alınmışken). Ustanın ipucunu (H) ve `TaskWithoutHint`'i etkilemez.
-> - Masa görevleri (tur_1–5) bu turda yok.
+> - **Masa görevleri (tur_1–5) eklendi (14.11, 06.15):** içerik `LessonNotesData` (Tur1…Tur5), veriye yalnızca bu beş notu yazan menü: BilgiAdasi → Seviye → Masa görevlerinin ders notlarını yaz. Akış: `DeskController.OnStationEnter` mektubun ilk açılışında `LearningDirector.ShowLesson` çağırır, kapanınca kâğıt açılır; yarım kâğıda dönüşte not gelmez. Türler oyundaki üç kutuyla aynı (Sentez · Analiz · Yanma; §6 tablosundaki nötralleşme/çökelme oyunda yok). Esc menüsünden yeniden okuma yalnızca siparişte.
 
 ## 1. Öğrenme döngüsüne yeri
 

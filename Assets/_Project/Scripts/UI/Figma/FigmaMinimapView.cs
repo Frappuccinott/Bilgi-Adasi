@@ -25,6 +25,8 @@ namespace BilgiAdasi.UI
         private TextMeshProUGUI northLabel, keyLabel, hintLabel;
         private float imageSize = 600f, target = 1f;
         private bool wanted = true;
+        private float lastYaw = float.NaN; // NaN: ilk çağrı her zaman yazar
+        private Vector2 lastUv;
 
         private float Inner => diameter - ring * 2f;
 
@@ -55,6 +57,7 @@ namespace BilgiAdasi.UI
             image.texture = info.Image;
             imageSize = Inner / Mathf.Max(0.05f, info.MinimapUvSpan);
             content.sizeDelta = new Vector2(imageSize, imageSize);
+            lastYaw = float.NaN; // ölçek değişti: oyuncu kıpırdamasa da sonraki SetPlayer konumu yeniden yazsın
             northLabel.text = info.NorthLetter;
             hintLabel.text = info.MapWord;
 
@@ -93,6 +96,10 @@ namespace BilgiAdasi.UI
 
         public void SetPlayer(Vector2 uv, float yawDegrees)
         {
+            // Oyuncu kıpırdamadıysa yazma (her kare Canvas'ı kirletmesin).
+            if (Mathf.Abs(Mathf.DeltaAngle(yawDegrees, lastYaw)) < 0.05f && (uv - lastUv).sqrMagnitude < 1e-8f) return;
+            lastYaw = yawDegrees;
+            lastUv = uv;
             // Harita, bakılan yön yukarıda kalacak şekilde döner; kuzey harfi çemberde aynı açıyla.
             rotator.localRotation = Quaternion.Euler(0f, 0f, yawDegrees);
             content.anchoredPosition = -(uv - new Vector2(0.5f, 0.5f)) * imageSize;

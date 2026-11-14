@@ -45,10 +45,14 @@ namespace BilgiAdasi.Order
         public readonly int Reward;
         /// <summary>Ürün hazır, kapıda teslim bekliyor.</summary>
         public readonly bool ReadyToDeliver;
+        /// <summary>Doluysa "İstenen" satırında ürün formülü yerine bu yazı (tarla görevi: "120 filiz").</summary>
+        public readonly string WantedText;
 
         public OrderCardInfo(string giverName, IReadOnlyList<SpeciesAmount> products, IReadOnlyList<SpeciesData> reactants,
-            int stepIndex, int stepCount, int reward, bool readyToDeliver, IReadOnlyList<OrderGuideStep> guide = null)
+            int stepIndex, int stepCount, int reward, bool readyToDeliver, IReadOnlyList<OrderGuideStep> guide = null,
+            string wantedText = null)
         {
+            WantedText = wantedText;
             Guide = guide;
             GiverName = giverName;
             Products = products;
@@ -92,6 +96,8 @@ namespace BilgiAdasi.Order
     public interface IScaleView
     {
         void ShowAtoms(IReadOnlyList<AtomRow> rows, bool balanced);
+        /// <summary>Kazanda bu tepkimeye girmeyen bir madde var: atomlar eşit olsa da dengede sayılmaz (ShowAtoms'tan önce).</summary>
+        void SetForeign(bool hasForeign);
         /// <summary>Köpürme: Left &gt; Right olan elementler fazla, Left &lt; Right eksik.</summary>
         void ShowFoamDifference(IReadOnlyList<AtomRow> rows);
         void ClearFoamDifference();

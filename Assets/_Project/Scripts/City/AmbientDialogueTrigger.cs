@@ -83,10 +83,11 @@ namespace BilgiAdasi.City
             return dx * dx + dz * dz <= r * r;
         }
 
-        /// <summary>Kapı/NPC konuşması, istasyon, harita ya da menü açıkken altyazı beklesin.</summary>
+        /// <summary>Kapı/NPC konuşması, ustanın sorusu, istasyon, harita ya da menü açıkken altyazı beklesin.</summary>
         private static bool IsBlocked()
         {
             if (GameInput.Mode != InputMode.Player || Time.timeScale <= 0f) return true;
+            if (DialogueFocus.IsOpen) return true;                // birebir konuşma / ustanın sorusu açık
             if (ApprenticeshipDirector.IsPlaying) return true;   // açılış sinematiği, uyanış, tahmin
             return ViewLocator.Get<IDialogueCommands>() is DialogueDirector director && director.IsPlaying;
         }

@@ -68,11 +68,14 @@ namespace BilgiAdasi.UI
             cb?.Invoke();
         }
 
+        private UnityEngine.InputSystem.InputAction navAction;
+
         private void Update()
         {
             if (!IsOpen) return;
             // Gamepad/klavye: UI ↑↓ seçim olmadığı için kaydırmaya çevrilir.
-            var nav = GameInput.FindAction("UI/Navigate");
+            // Her kare string ile aramamak için ilk seferde önbellekle.
+            var nav = navAction ??= GameInput.FindAction("UI/Navigate");
             float y = nav != null && nav.enabled ? nav.ReadValue<Vector2>().y : 0f;
             if (Mathf.Abs(y) > 0.5f)
                 scroll.verticalNormalizedPosition = Mathf.Clamp01(scroll.verticalNormalizedPosition + Mathf.Sign(y) * scrollStep * Time.unscaledDeltaTime * 8f);

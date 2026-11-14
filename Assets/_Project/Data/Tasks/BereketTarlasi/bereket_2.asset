@@ -19,7 +19,8 @@ MonoBehaviour:
   - "Tarlay\u0131 s\xFCrd\xFCm, toprak havaland\u0131. Bu y\u0131l 120 \xF6bek filiz
     isterim."
   - "Tohum pahal\u0131: fazla al\u0131rsam kesem bo\u015Fal\u0131r, az al\u0131rsam
-    tarla bo\u015F kal\u0131r. Tohum paras\u0131n\u0131n bir k\u0131sm\u0131 benden."
+    tarla bo\u015F kal\u0131r. Tohum paras\u0131n\u0131n bir k\u0131sm\u0131 benden;
+    tohumu Element ya da Alet Pazar\u0131'nda bulursun."
   deliveryLines: []
   hintText: "Ders notundaki kural\u0131 kullan: tohum = filiz \xF7 olas\u0131l\u0131k.
     Sonra 10'luk keselere b\xF6l."
@@ -43,8 +44,8 @@ MonoBehaviour:
     verir. Ustalar sana bir \u015Fey soracakm\u0131\u015F."
   tooManyLine: "Tarla doldu ama {0} kese fazla geldi; o tohumlar bo\u015Fa gitti.
     Neyse, ustalar sana bir \u015Fey soracakm\u0131\u015F."
-  noSeedLine: "Elinde tohum kesesi yok. Pazardan tohum al, keseyi elinde tutup sand\u0131\u011Fa
-    d\xF6k."
+  noSeedLine: "Elinde tohum kesesi yok. Element ya da Alet Pazar\u0131'ndan tohum
+    al, keseyi elinde tutup sand\u0131\u011Fa d\xF6k."
   finishLines:
   - "Ekim tamam! Toprak haval\u0131, tohum nefes alacak."
   - "Filizler \xE7\u0131k\u0131nca seni yine \xE7a\u011F\u0131r\u0131r\u0131m, \xE7\u0131rak."
@@ -55,6 +56,60 @@ MonoBehaviour:
     b\u0131rak\u0131r."
   lapNotice: 'Ekim: {0}. tur tamam ({0} / {1})'
   lapsDoneLine: "\u0130ki tur tamam! Kalan k\xF6\u015Feleri ekici bitiriyor, izle."
+  guideSteps:
+  - "Ustalar\u0131n hesab\u0131n\u0131 yan\u0131tla"
+  - Pazardan tohum kesesi al
+  - "Ekim sand\u0131\u011F\u0131na d\xF6k"
+  - "Trakt\xF6rle tarlada 2 tur at"
+  - "Hayat Ustas\u0131'n\u0131n sorusunu yan\u0131tla"
+  guideDetails:
+  - "Ka\xE7 tohum, ka\xE7 kese? Ders notundaki kural: tohum = filiz \xF7 olas\u0131l\u0131k."
+  - "Element ya da Alet Pazar\u0131'nda en ba\u015Fta: Tohum kesesi (10 tohum). Hesaplad\u0131\u011F\u0131n
+    kadar al."
+  - "Tarla kap\u0131s\u0131n\u0131n solunda. D\xF6kt\xFC\u011F\xFCn kese: {0}"
+  - "Ekici trakt\xF6r\xFCn arkas\u0131nda; ge\xE7ti\u011Fin parsel ekilir. Tur {0}
+    / {1}"
+  - "Tohum toprakta: nas\u0131l nefes alacak?"
+  npcNames:
+  - "\xC7ift\xE7i Elif"
+  - "Hesap Ustas\u0131"
+  - "Hayat Ustas\u0131"
+  talkPrompt: "{0} ile konu\u015F"
+  giverTalk:
+  - "Toprak dinleniyor. Ekim zaman\u0131 gelince ustana haber yollar\u0131m."
+  - "Ustan\u0131n notunu okudun mu? 120 \xF6bek filiz isterim; tohumun hepsi \xE7imlenmez,
+    ona g\xF6re hesapla."
+  - "Tohum keseleri Element ya da Alet Pazar\u0131'nda. Ald\u0131\u011F\u0131n keseleri
+    elinde tutup \u015Fu sand\u0131\u011Fa d\xF6k."
+  - "Ekici trakt\xF6r\xFCn arkas\u0131nda. Tarlada iki tur at; tohum ekicinin ge\xE7ti\u011Fi
+    yere d\xFC\u015Fer."
+  - "Tohumlar toprakta. Hayat Ustas\u0131'n\u0131n sorusuna kulak ver."
+  - "Filizler \xE7\u0131k\u0131nca seni yine \xE7a\u011F\u0131r\u0131r\u0131m, \xE7\u0131rak.
+    Bu y\u0131l tarla bo\u015F kalmayacak."
+  mathTalk:
+  - "Say\u0131n\u0131n da s\u0131ras\u0131 var, \xE7\u0131rak. \xD6nce kazandaki
+    i\u015Fini bitir."
+  - "Beklenen say\u0131 = olas\u0131l\u0131k \xD7 tohum. Bize filiz say\u0131s\u0131
+    verildi; tersinden d\xFC\u015F\xFCn."
+  - "Bir kese 10 tohum al\u0131r. Buldu\u011Fun tohum say\u0131s\u0131n\u0131 10'a
+    b\xF6l; artan kal\u0131rsa bir kese daha."
+  - "Tarlan\u0131n \xE7evresini say: merkezin etraf\u0131nda bir tam d\xF6n\xFC\u015F,
+    bir tur. \u0130ki tur at, ekici gerisini halleder."
+  - "Hesap tuttu mu, tarla s\xF6yleyecek. Filizler \xE7\u0131k\u0131nca birlikte
+    sayar\u0131z."
+  - "150 tohumun yakla\u015F\u0131k 120'si filiz verir. Yakla\u015F\u0131k dedim:
+    olas\u0131l\u0131k kesinlik vermez."
+  biologyTalk:
+  - "Toprak da canl\u0131d\u0131r, \xE7\u0131rak. S\u0131ras\u0131 gelince birlikte
+    bakar\u0131z."
+  - "Tohum da nefes al\u0131r. Ustan\u0131n notundaki solunum denklemine bak."
+  - "Bu toprak s\xFCr\xFCld\xFC; aras\u0131nda hava var. Tohum o havadaki oksijeni
+    kullanacak."
+  - "Ekim bitince sana bir \u015Fey soraca\u011F\u0131m: topra\u011F\u0131n alt\u0131nda
+    \u0131\u015F\u0131k yokken tohum enerjisini nereden al\u0131r?"
+  - "\u015Eimdi sor kendine: \u0131\u015F\u0131k g\xF6rmeyen tohum nas\u0131l b\xFCy\xFCr?"
+  - "Tohum depolad\u0131\u011F\u0131 besini oksijenle kullan\u0131r; filiz ye\u015Ferince
+    fotosentez ba\u015Flar."
   questions:
   - stage: 0
     speaker: "Hesap Ustas\u0131"

@@ -188,7 +188,11 @@ namespace BilgiAdasi.Order
                 Notice(texts != null ? texts.ToolNotPourable : null);
                 return;
             }
-            if (s == null || !inventory.RemoveSelected(1)) return;
+            // Envanterden çıkıp kazana girene kadar ara ürün "kayboldu" sayılmasın (OnInventoryChanged).
+            pouring = true;
+            bool removed = s != null && inventory.RemoveSelected(1);
+            pouring = false;
+            if (!removed) return;
 
             session.Pour(s);
             cauldronView?.PlayPour(s);
@@ -204,6 +208,7 @@ namespace BilgiAdasi.Order
             cauldronView?.PlayDrain();
             GameEvents.RaiseSoundAt(SoundId.Drain, transform.position);
             Notice(texts != null ? texts.Drained : null);
+            if (RestartIfIntermediateLost()) return; // boşaltılan kazanda ara ürün vardı
             RefreshCauldron();
         }
 
@@ -277,6 +282,7 @@ namespace BilgiAdasi.Order
             }
             Notice(note);
             if (fails >= HintFailThreshold) hintView?.SetGlowing(true);
+            if (RestartIfIntermediateLost()) yield break; // köpüren kazanda ara ürün gitti
             RefreshAll();
         }
 
@@ -456,7 +462,7 @@ namespace BilgiAdasi.Order
             AddGuide(texts.GuideCollect, collectDetail, inHand, ref current);
             AddGuide(texts.GuidePour, texts.GuidePourDetail, poured, ref current);
             if (session.IsPurchase) AddGuide(texts.GuidePurchase, texts.GuidePurchaseDetail, balanced, ref current);
-            else AddGuide(texts.GuideBalance, texts.GuideBalanceDetail, balanced, ref current);
+            else AddGuide(texts.GuideBalance, session.HasForeign ? texts.GuideForeignDetail : texts.GuideBalanceDetail, balanced, ref current);
             AddGuide(reacting ? texts.GuideReacting : texts.GuideFire, texts.GuideFireDetail, ready, ref current);
 
             if (session.HasNextStep)
@@ -498,7 +504,43 @@ namespace BilgiAdasi.Order
 
         private void OnInventoryChanged()
         {
-            if (session != null && Current != State.Done) RefreshCard();
+            if (session == null || Current == State.Done) return;
+            if (RestartIfIntermediateLost()) return;
+            RefreshCard();
+        }
+
+        // ---------- Zincir: ara ürün heba olursa baştan ----------
+
+        private readonly List<SpeciesAmount> intermediates = new List<SpeciesAmount>(2);
+        private bool pouring;
+
+        /// <summary>
+        /// Zincirin sonraki adımında ara ürün (ör. CaO) artık hiçbir yerde yetmiyorsa (envanter + kazan + kazanda bekleyen)
+        /// sipariş ilk adıma döner, usta "baştan başla" der (Play 14.11: CaO köpürünce kireç taşı yeniden tepkimeye
+        /// giremiyordu, görev takılıyordu). Pazardan alınabiliyorsa alınan da sayılır.
+        /// </summary>
+        private bool RestartIfIntermediateLost()
+        {
+            if (pouring || session == null || Current != State.Preparing || session.StepIndex == 0) return false;
+            session.GetIntermediates(intermediates);
+            if (intermediates.Count == 0) return false;
+            var inv = watchedInventory != null ? watchedInventory : lastInventory;
+            bool lost = false;
+            for (int i = 0; i < intermediates.Count && !lost; i++)
+            {
+                var s = intermediates[i].Species;
+                int have = session.CountInCauldron(s) + (inv != null ? inv.CountOf(s) : 0);
+                for (int p = 0; p < pending.Count; p++)
+                    if (pending[p].Species == s) have += pending[p].Amount;
+                if (have < intermediates[i].Amount) lost = true;
+            }
+            if (!lost) return false;
+
+            session.RestartFromFirstStep();
+            Notice(texts != null ? texts.ChainRestart : null);
+            RefreshAll();
+            StepStarted?.Invoke(session.Task, 0);
+            return true;
         }
 
         // ---------- Kayıt: kazanda kalanlar ----------
@@ -565,11 +607,13 @@ namespace BilgiAdasi.Order
             if (session != null && Current != State.Done)
             {
                 cauldronView?.ShowContents(session.Contents);
+                scaleView?.SetForeign(session.HasForeign);
                 scaleView?.ShowAtoms(session.Rows, session.IsSatisfied);
             }
             else
             {
                 cauldronView?.ShowContents(Array.Empty<SpeciesAmount>());
+                scaleView?.SetForeign(false);
                 scaleView?.ShowAtoms(Array.Empty<AtomRow>(), false);
             }
             StateChanged?.Invoke();

@@ -93,7 +93,7 @@ namespace BilgiAdasi.City
         private void OnOpenPressed(InputAction.CallbackContext _)
         {
             if (IsOpen || GameInput.Mode != InputMode.Player) return;
-            if (LearningDirector.IsBusy || StationBase.Active != null) return;
+            if (LearningDirector.IsBusy || StationBase.Active != null || DialogueFocus.IsOpen) return;
             var dialogue = runner != null ? runner.GetComponent<DialogueDirector>() : null;
             if (dialogue != null && dialogue.IsPlaying) return;
             var view = ViewLocator.Get<INotebookView>();

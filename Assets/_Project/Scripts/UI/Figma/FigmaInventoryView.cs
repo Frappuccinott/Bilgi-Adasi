@@ -47,7 +47,11 @@ namespace BilgiAdasi.UI
             base.OnEnable();
             FigmaDialogueView.VisibilityChanged += OnDialogue;
             OnDialogue(FigmaDialogueView.IsVisible);
-            if (barGroup != null) barGroup.alpha = barTarget;
+            if (barGroup != null)
+            {
+                barGroup.alpha = barTarget;
+                barGroup.blocksRaycasts = barTarget > 0.5f; // Update artık yalnızca geçişte yazıyor; burada eşitle
+            }
         }
 
         protected override void OnDisable()
@@ -110,13 +114,20 @@ namespace BilgiAdasi.UI
         private void Update()
         {
             float dt = Time.unscaledDeltaTime;
-            barGroup.alpha = Mathf.MoveTowards(barGroup.alpha, barTarget, dt / Mathf.Max(0.01f, fadeSeconds));
-            barGroup.blocksRaycasts = barGroup.alpha > 0.5f;
+            // Yalnızca değer değişince yaz: sabit değerleri her kare yazmak HUD Canvas'ını yeniden batch'liyordu.
+            if (barGroup.alpha != barTarget)
+            {
+                barGroup.alpha = Mathf.MoveTowards(barGroup.alpha, barTarget, dt / Mathf.Max(0.01f, fadeSeconds));
+                bool block = barGroup.alpha > 0.5f;
+                if (barGroup.blocksRaycasts != block) barGroup.blocksRaycasts = block;
+            }
 
             for (int i = 0; i < Slots; i++)
             {
-                lift[i] = Mathf.MoveTowards(lift[i], i == selected ? raise : 0f, dt * 80f);
-                slotRoots[i].anchoredPosition = new Vector2(slotRoots[i].anchoredPosition.x, lift[i]);
+                float y = Mathf.MoveTowards(lift[i], i == selected ? raise : 0f, dt * 80f);
+                if (y == lift[i]) continue;
+                lift[i] = y;
+                slotRoots[i].anchoredPosition = new Vector2(slotRoots[i].anchoredPosition.x, y);
             }
 
             if (pulse > 0f)
@@ -136,7 +147,7 @@ namespace BilgiAdasi.UI
                 }
                 else
                 {
-                    delta.gameObject.SetActive(true);
+                    if (!delta.gameObject.activeSelf) delta.gameObject.SetActive(true);
                     deltaRt.anchoredPosition = new Vector2(-12f, -82f - 24f * t);
                     var c = delta.color;
                     c.a = 1f - t * t;

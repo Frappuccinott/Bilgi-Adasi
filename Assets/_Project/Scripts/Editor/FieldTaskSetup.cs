@@ -145,7 +145,7 @@ namespace BilgiAdasi.EditorTools
                 new[]
                 {
                     "Tarlayı sürdüm, toprak havalandı. Bu yıl 120 öbek filiz isterim.",
-                    "Tohum pahalı: fazla alırsam kesem boşalır, az alırsam tarla boş kalır. Tohum parasının bir kısmı benden."
+                    "Tohum pahalı: fazla alırsam kesem boşalır, az alırsam tarla boş kalır. Tohum parasının bir kısmı benden; tohumu Element ya da Alet Pazarı'nda bulursun."
                 },
                 "Ders notundaki kuralı kullan: tohum = filiz ÷ olasılık. Sonra 10'luk keselere böl.",
                 "Çiftçiler ekimden önce tohumun bir kısmını ıslak bezde çimlendirip oranını ölçer (çimlenme testi); kaç tohum alacaklarını buna göre hesaplar.");
@@ -158,11 +158,56 @@ namespace BilgiAdasi.EditorTools
                 "{0} kese, {1} tohum eder. Bunun yaklaşık {2} tanesi filiz verir; 120'ye yetmez. Pazardan biraz daha getir.",
                 "Tam yetecek kadar! Bu tohumların yaklaşık 120'si filiz verir. Ustalar sana bir şey soracakmış.",
                 "Tarla doldu ama {0} kese fazla geldi; o tohumlar boşa gitti. Neyse, ustalar sana bir şey soracakmış.",
-                "Elinde tohum kesesi yok. Pazardan tohum al, keseyi elinde tutup sandığa dök.",
+                "Elinde tohum kesesi yok. Element ya da Alet Pazarı'ndan tohum al, keseyi elinde tutup sandığa dök.",
                 new[] { "Ekim tamam! Toprak havalı, tohum nefes alacak.", "Filizler çıkınca seni yine çağırırım, çırak." },
                 questions, "Bereket Tarlası", "120 filiz",
                 new[] { "Pazardan tohum kesesi al", "Tarladaki ekim sandığına dök", "Traktörle tarlada 2 tur at", "Ustaların sorularını yanıtla" },
                 "Tohumları sandığa dök");
+            task.EditorSetTalk(new[] { "Çiftçi Elif", "Hesap Ustası", "Hayat Ustası" }, "{0} ile konuş",
+                new[]
+                {
+                    "Toprak dinleniyor. Ekim zamanı gelince ustana haber yollarım.",
+                    "Ustanın notunu okudun mu? 120 öbek filiz isterim; tohumun hepsi çimlenmez, ona göre hesapla.",
+                    "Tohum keseleri Element ya da Alet Pazarı'nda. Aldığın keseleri elinde tutup şu sandığa dök.",
+                    "Ekici traktörün arkasında. Tarlada iki tur at; tohum ekicinin geçtiği yere düşer.",
+                    "Tohumlar toprakta. Hayat Ustası'nın sorusuna kulak ver.",
+                    "Filizler çıkınca seni yine çağırırım, çırak. Bu yıl tarla boş kalmayacak."
+                },
+                new[]
+                {
+                    "Sayının da sırası var, çırak. Önce kazandaki işini bitir.",
+                    "Beklenen sayı = olasılık × tohum. Bize filiz sayısı verildi; tersinden düşün.",
+                    "Bir kese 10 tohum alır. Bulduğun tohum sayısını 10'a böl; artan kalırsa bir kese daha.",
+                    "Tarlanın çevresini say: merkezin etrafında bir tam dönüş, bir tur. İki tur at, ekici gerisini halleder.",
+                    "Hesap tuttu mu, tarla söyleyecek. Filizler çıkınca birlikte sayarız.",
+                    "150 tohumun yaklaşık 120'si filiz verir. Yaklaşık dedim: olasılık kesinlik vermez."
+                },
+                new[]
+                {
+                    "Toprak da canlıdır, çırak. Sırası gelince birlikte bakarız.",
+                    "Tohum da nefes alır. Ustanın notundaki solunum denklemine bak.",
+                    "Bu toprak sürüldü; arasında hava var. Tohum o havadaki oksijeni kullanacak.",
+                    "Ekim bitince sana bir şey soracağım: toprağın altında ışık yokken tohum enerjisini nereden alır?",
+                    "Şimdi sor kendine: ışık görmeyen tohum nasıl büyür?",
+                    "Tohum depoladığı besini oksijenle kullanır; filiz yeşerince fotosentez başlar."
+                });
+            task.EditorSetGuide(
+                new[]
+                {
+                    "Ustaların hesabını yanıtla",
+                    "Pazardan tohum kesesi al",
+                    "Ekim sandığına dök",
+                    "Traktörle tarlada 2 tur at",
+                    "Hayat Ustası'nın sorusunu yanıtla"
+                },
+                new[]
+                {
+                    "Kaç tohum, kaç kese? Ders notundaki kural: tohum = filiz ÷ olasılık.",
+                    "Element ya da Alet Pazarı'nda en başta: Tohum kesesi (10 tohum). Hesapladığın kadar al.",
+                    "Tarla kapısının solunda. Döktüğün kese: {0}",
+                    "Ekici traktörün arkasında; geçtiğin parsel ekilir. Tur {0} / {1}",
+                    "Tohum toprakta: nasıl nefes alacak?"
+                });
             task.EditorSetDriving(2,
                 new[]
                 {
@@ -183,9 +228,17 @@ namespace BilgiAdasi.EditorTools
 
         private static void AddToMarket(SpeciesData seed, FieldTask task)
         {
-            var catalog = AssetDatabase.LoadAssetAtPath<MarketCatalog>(MarketPath);
-            if (catalog == null) { Debug.LogWarning("[Tarla] Pazar kataloğu yok: " + MarketPath); return; }
+            // Hem Element Pazarı'nda hem Alet Pazarı'nda (oyuncular tohumu alet/eşya pazarında arıyor, Play 14.11).
+            AddToCatalog(MarketPath, seed, task);
+            AddToCatalog("Assets/_Project/Data/Market/Pazar_Aletler.asset", seed, task);
+        }
+
+        private static void AddToCatalog(string path, SpeciesData seed, FieldTask task)
+        {
+            var catalog = AssetDatabase.LoadAssetAtPath<MarketCatalog>(path);
+            if (catalog == null) { Debug.LogWarning("[Tarla] Pazar kataloğu yok: " + path); return; }
             catalog.AddIfMissing(seed);
+            MoveToTop(catalog, seed); // 4 sütunlu pazar ekranında en sonda kalıyordu, kaydırmadan görünmüyordu (14.11)
             var so = new SerializedObject(catalog);
             var entries = so.FindProperty("entries");
             for (int i = 0; i < entries.arraySize; i++)
@@ -322,14 +375,42 @@ namespace BilgiAdasi.EditorTools
 
             // Tarlada bekleyenler: Elif (köylü kadın modeli) ve Hesap Ustası (Hesap Hocası modeli), sandığın yanında.
             // Gezinme (NpcAgent) ve fizik kaldırılır; yerinde durur, Animator varsayılan (bekleme) pozunda.
-            PlaceNpc("NPC_KoyluKadin", "Tarla_Elif", new Vector3(-66.6f, 0f, -2.4f), box.transform.position);
-            PlaceNpc("NPC_HesapHocasi", "Tarla_HesapUstasi", new Vector3(-67.6f, 0f, -1.0f), box.transform.position);
+            PlaceNpc("NPC_KoyluKadin", "Tarla_Elif", new Vector3(-66.6f, 0f, -2.4f), box.transform.position, FieldNpcRole.Giver, director);
+            PlaceNpc("NPC_HesapHocasi", "Tarla_HesapUstasi", new Vector3(-67.6f, 0f, -1.0f), box.transform.position, FieldNpcRole.Math, director);
+            // Hayat Ustası'nın kendi modeli yok: köylü erkek modeli (yer tutucu; Mustafa'nın modeli gelince değişir).
+            PlaceNpc("NPC_KoyluErkek", "Tarla_HayatUstasi", new Vector3(-68.4f, 0f, -2.6f), box.transform.position, FieldNpcRole.Biology, director);
+            SetPortraits();
 
             EditorSceneManager.MarkSceneDirty(runner.gameObject.scene);
             Selection.activeGameObject = box;
         }
 
-        private static void PlaceNpc(string sourceName, string newName, Vector3 position, Vector3 lookAt)
+        /// <summary>Emin'in diyalog çerçevesi portreyi konuşanın adından bulur (PortraitBook): iki usta eklenir.</summary>
+        private static void SetPortraits()
+        {
+            var book = AssetDatabase.LoadAssetAtPath<PortraitBook>("Assets/_Project/Data/Resources/PortraitBook.asset");
+            if (book == null) return;
+            var hesap = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/Portreler/Portre_HesapHocasi.png");
+            var hayat = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/Portreler/Portre_KoyluErkek.png");
+            if (hesap != null) book.Set("Hesap Ustası", hesap);
+            if (hayat != null) book.Set("Hayat Ustası", hayat);
+            EditorUtility.SetDirty(book);
+        }
+
+        private static void MoveToTop(MarketCatalog catalog, SpeciesData seed)
+        {
+            var so = new SerializedObject(catalog);
+            var entries = so.FindProperty("entries");
+            for (int i = 0; i < entries.arraySize; i++)
+                if (entries.GetArrayElementAtIndex(i).FindPropertyRelative("species").objectReferenceValue == seed)
+                {
+                    if (i > 0) entries.MoveArrayElement(i, 0);
+                    break;
+                }
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void PlaceNpc(string sourceName, string newName, Vector3 position, Vector3 lookAt, FieldNpcRole role, FieldTaskDirector director)
         {
             var old = GameObject.Find(newName);
             if (old != null) Undo.DestroyObjectImmediate(old);
@@ -348,6 +429,22 @@ namespace BilgiAdasi.EditorTools
             Vector3 dir = lookAt - position;
             dir.y = 0f;
             npc.transform.SetPositionAndRotation(position, dir.sqrMagnitude > 0.01f ? Quaternion.LookRotation(dir) : Quaternion.identity);
+            // Konuşulabilir: Interact (E / X) → aşamaya göre ipucu (FieldNpc). Bakma ışını için Interactable katmanı + collider.
+            int layer = ProjectSetup.InteractableLayer;
+            npc.layer = layer;
+            if (npc.GetComponent<Collider>() == null)
+            {
+                var cap = npc.AddComponent<CapsuleCollider>();
+                cap.center = new Vector3(0f, 0.9f, 0f);
+                cap.height = 1.8f;
+                cap.radius = 0.35f;
+            }
+            foreach (var c in npc.GetComponentsInChildren<Collider>(true)) c.gameObject.layer = layer;
+            var talk = npc.AddComponent<FieldNpc>();
+            var so = new SerializedObject(talk);
+            so.FindProperty("director").objectReferenceValue = director;
+            so.FindProperty("role").enumValueIndex = (int)role;
+            so.ApplyModifiedPropertiesWithoutUndo();
         }
 
         /// <summary>Model yoksa yer tutucu sandık (_Placeholder): Mustafa'nın modeli gelince değişir.</summary>

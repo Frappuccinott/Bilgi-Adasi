@@ -24,6 +24,14 @@
 > başarım `ach_bereket_2` Matematik ve Biyoloji sekmelerinde kök (iki sekme artık "Yakında" değil); kartta "Görev x / 6", teslim adımı yok;
 > Elif (köylü kadın modeli) ve Hesap Ustası (Hesap Hocası modeli) sandığın yanında. Harita sahnesi kaydedildi.
 > Kalan: Hayat Ustası'nın modeli yok (konuşma portreyle); K-12 defterde Denkleştirme Köyü'nün 2. kaydı (seviye sırası gereği).
+> **Pull sonrası (06.10, Emin'in arayüzüyle uyum):** görev HUD'daki sipariş kartında kendi adım rehberini gösterir (5 adım: hesap soruları →
+> tohum al → sandığa dök → traktörle 2 tur → Hayat Ustası'nın sorusu; sıradaki adımda kısa açıklama, "İstenen 120 filiz",
+> `OrderCardInfo.WantedText`). Sorular ve konuşmalar yeni diyalog çerçevesinde; Hesap Ustası (Portre_HesapHocasi) ve Hayat Ustası
+> (Portre_KoyluErkek, yer tutucu) portre defterinde. Tohum kesesi Element **ve** Alet Pazarı'nda, listenin en başında (en sonda kalıp
+> kaydırmadan görünmüyordu). Usta haberi pazar/menü açıkken beklemez, kapanınca gelir. Ders notu etiketi çakışması düzeltildi.
+> **Tarladaki kişiler (14.11):** Elif, Hesap Ustası ve Hayat Ustası (köylü erkek modeli, yer tutucu) sandığın yanında duruyor; bakıp E / X ile
+> konuşulur (`FieldNpc`). Her biri görevin aşamasına göre (gelmedi · hesap · tohum · traktör · ekim sonrası · bitti) kısa bir ipucu söyler,
+> cevabı vermez; konuşurken oyuncuya döner. Metinler `bereket_2.asset` (`giverTalk / mathTalk / biologyTalk`), Kurulum 24 yazar.
 > (Eski not) Eksik: Mat/Biyo başarım ağaçlarına `ach_bereket_2_*` düğümleri (Kurulum 13b listesi) eklenmedi; Elif ve iki usta tarlada model olarak durmuyor
 > (konuşmalar portreyle).
 

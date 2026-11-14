@@ -21,9 +21,12 @@ namespace BilgiAdasi.UI
         [SerializeField] private Vector2 badgePos = new Vector2(404f, -28f);
         [SerializeField] private Vector2 notePos = new Vector2(28f, -300f);
         [SerializeField] private float noteWidth = 460f;
+        [Tooltip("Masa/tahta (istasyon) açıkken rozet sağ üstte, para göstergesinin altında: kâğıdın başlığını örtmesin (Play 14.11).")]
+        [SerializeField] private Vector2 stationBadgePos = new Vector2(-28f, -120f);
         [SerializeField] private float pulseSpeed = 3.2f;
 
         private GameObject badge;
+        private RectTransform badgeRt;
         private Image badgeGlow;
         private TextMeshProUGUI badgeKey, noteKey, noteBody;
         private RectTransform badgeKeyRoot, noteKeyRoot, note;
@@ -37,12 +40,22 @@ namespace BilgiAdasi.UI
         {
             base.OnEnable();
             GameInput.SchemeChanged += OnScheme;
+            GameInput.ModeChanged += OnModeChanged;
+            OnModeChanged(GameInput.Mode);
+        }
+
+        private void OnModeChanged(InputMode mode)
+        {
+            if (badgeRt == null) return;
+            if (mode == InputMode.Station) UiKit.Place(badgeRt, new Vector2(1f, 1f), stationBadgePos, badgeRt.sizeDelta);
+            else UiKit.Place(badgeRt, new Vector2(0f, 1f), badgePos, badgeRt.sizeDelta);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
             GameInput.SchemeChanged -= OnScheme;
+            GameInput.ModeChanged -= OnModeChanged;
         }
 
         public void SetGlowing(bool value)
@@ -96,6 +109,7 @@ namespace BilgiAdasi.UI
             var b = UiKit.Rect(root, "Badge");
             UiKit.Place(b, new Vector2(0f, 1f), badgePos, new Vector2(0f, 64f));
             badge = b.gameObject;
+            badgeRt = b;
             badgeGlow = UiKit.Img(b, "Glow", th.Gold, UiKit.Round8);
             UiKit.Fill(badgeGlow.rectTransform, -4, -4, -4, -4);
             var plate = UiKit.Img(b, "Plate", th.WoodDark, UiKit.Round8);

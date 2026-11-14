@@ -10,6 +10,11 @@ Sözel konu **kâğıt üzerinde** çözülür, ama her kâğıdın hikâyede bi
 
 Atölyenin köşesinde **çalışma masası**. Kamera masaya yaklaşır (aynı sahne, ayrı kamera noktası). Masada: kâğıt alanı, divit, mürekkep hokkası, ustanın defteri.
 
+**Güncelleme 14.11:**
+- Mektup masada beklerken zarf yeşil nabızla ışır (oyuncu masayı uzaktan fark eder; `ArtDeskView.letterHalo`, Kurulum 26).
+- Mektup **ilk açılışta** kâğıttan önce o görevin **Ders Notu** gelir (`tur_1…5`; türler oyundaki üç kutuyla aynı: Sentez · Analiz · Yanma). Not kapanınca kâğıt açılır; yarım kâğıda dönüşte not gelmez. Plan: `05_Uretim/13-ders-notu-plani.md`.
+- Soruda şık **Confirm** (Enter / Space · A) ile onaylanır; gamepad'de D-pad ↑↓ şık seçer.
+
 Görev gelişi: Pencereye **ulak güvercin** konar → zarf masaya düşer → oyuncu tıklar → kâğıt açılır.
 
 ## 3. Hikâye sarmalayıcıları (wrapper)

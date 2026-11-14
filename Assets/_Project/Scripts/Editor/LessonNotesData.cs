@@ -21,6 +21,11 @@ namespace BilgiAdasi.EditorTools
                 case "denk_4": return Denk4();
                 case "denk_5": return Denk5();
                 case "bereket_2": return Bereket2();
+                case "tur_1": return Tur1();
+                case "tur_2": return Tur2();
+                case "tur_3": return Tur3();
+                case "tur_4": return Tur4();
+                case "tur_5": return Tur5();
                 default: return new LessonNote();
             }
         }
@@ -219,7 +224,7 @@ namespace BilgiAdasi.EditorTools
 
         private static LessonNote Bereket2() => new LessonNote("Tohum nefes alır",
             Page(
-                K("Ders notu · Biyoloji + Matematik", "Bereket Tarlası, Hayat Ustası"),
+                K("Ders notu", "Biyoloji + Matematik · Hayat Ustası"),
                 T("Tohum nefes alır"),
                 B("Tohumun içinde depolanmış besin vardır. Tohum çimlenirken bu besini oksijenli solunumla kullanır ve büyümek için gereken enerjiyi elde eder."),
                 E("besin (glikoz) + O₂ → CO₂ + H₂O + enerji"),
@@ -253,6 +258,192 @@ namespace BilgiAdasi.EditorTools
                     "Tarladaki ekim sandığına dök."),
                 R(),
                 N("Unutma", "Dökülen tohum geri alınmaz; fazla kese akçeni boşa harcar.")));
+
+        // ---------- Masa görevleri (Tepkime Türleri, 13-ders-notu-plani §6) ----------
+        // Türler oyundaki üç kutuyla aynı: Sentez · Analiz · Yanma (DeskDataBuilder.Boxes). Yanma = karbonlu yakıt + O₂;
+        // H₂ + O₂ → H₂O oyunda Sentez kutusunda (tur_2_etiket), not bununla çelişmez. "Bu görevde" sayfası cevap vermez.
+
+        private static LessonNote Tur1() => new LessonNote("Gözlemden türe",
+            Page(
+                K("Ders notu", "Tepkime Türleri Köyü, 1. görev"),
+                T("Gözlem kanıttır"),
+                B("Bir tepkimenin türünü anlamak için önce ne gördüğüne bak: kaç madde girdi, kaç madde çıktı, ısı ya da ışık var mı? Gözlem, türün kanıtıdır."),
+                R(),
+                S("Her olayda üç soru sor"),
+                St("Girenler kaç tane: tek madde mi, birden çok mu?",
+                    "Ürünler kaç tane: tek ürün mü, birden çok mu?",
+                    "Bir yakıt oksijenle yanıyor mu, ısı ve ışık çıkıyor mu?"),
+                F("Bu köyde üç türle çalışacaksın: sentez, analiz, yanma.")),
+            Page(
+                T("Üç tür"),
+                S("Sentez (birleşme)"),
+                B("Birden çok madde birleşir, tek bir ürün oluşur."),
+                S("Analiz (ayrışma)"),
+                B("Tek bir madde daha basit maddelere ayrılır."),
+                S("Yanma"),
+                B("Bir madde oksijenle tepkimeye girer; genellikle ısı ve ışık çıkar."),
+                R(),
+                W("Dikkat", "Isınan her kap yanma değildir. Kireç söndürülürken kova ısınır ama ortada alev ve oksijen yoktur: sönmemiş kireç suyla birleşip tek ürün verir.")),
+            Page(
+                K("Çözümlü örnek"),
+                T("Gümüş kaşık karardı"),
+                B("Gözlem: parlak gümüş kaşık, havadaki kükürtle birleşti; yüzeyinde tek bir siyah madde oluştu."),
+                St("Girenler: gümüş ve kükürt, iki madde.",
+                    "Ürün: tek bir siyah madde.",
+                    "Alev yok, oksijen yanmıyor."),
+                E("2Ag + S → Ag₂S"),
+                B("Birden çok giren, tek ürün: sentez.")),
+            Page(
+                K("Bu görevde", "Câbir Usta’nın defteri, çalışma masası"),
+                T("Defteri tamamla"),
+                B("Usta masaya, kazanda senin gördüğün olayların gözlem kartlarını bıraktı. Defterinin bazı satırları da ıslanıp silinmiş."),
+                St("Her kartta üç soruyu sor: kaç giren, kaç ürün, yanma var mı?",
+                    "Kartı kanıtı olduğu türün kutusuna koy.",
+                    "Sonra defterin boş satırlarını kelime bankasıyla doldur."),
+                R(),
+                N("Unutma", "Kelime bankasında fazladan kelimeler var; hepsini kullanmak zorunda değilsin.")));
+
+        private static LessonNote Tur2() => new LessonNote("Denklemden türe",
+            Page(
+                K("Ders notu", "Tepkime Türleri Köyü, 2. görev"),
+                T("Denklemden türü oku"),
+                B("Denklemde girenler okun solunda, ürünler sağındadır. Türü bulmak için iki tarafta kaç farklı madde olduğunu say."),
+                R(),
+                S("Bakma sırası"),
+                St("Solda tek madde, sağda birden çok madde: analiz.",
+                    "Solda karbonlu bir yakıt ve O₂, sağda CO₂ (çoğu zaman H₂O da): yanma.",
+                    "Solda birden çok madde, sağda tek ürün: sentez."),
+                F("Formülsüz bir gözlem kartında da aynı sırayı izle: ayrılan mı var, yanan mı, birleşen mi?")),
+            Page(
+                T("Katsayı madde sayısı değildir"),
+                B("Tür için kaç farklı madde olduğuna bak, katsayıya değil. 2H₂O yine tek bir maddedir: su."),
+                E("2H₂ + O₂ → 2H₂O"),
+                B("Solda iki farklı madde (H₂ ve O₂), sağda tek madde (H₂O)."),
+                R(),
+                W("Dikkat", "Katsayı 2 diye “iki ürün var” deme. Sağ tarafta kaç farklı formül olduğunu say.")),
+            Page(
+                K("Çözümlü örnek"),
+                T("Üç şişe, üç kutu"),
+                E("2HgO → 2Hg + O₂"),
+                B("Solda tek madde, sağda iki madde: analiz."),
+                E("C + O₂ → CO₂"),
+                B("Karbon (kömür) oksijenle yanıyor: yanma."),
+                E("Fe + S → FeS"),
+                B("İki madde birleşti, tek ürün: sentez."),
+                F("Kömürün yanması da tek ürün verir; ama yakıt oksijenle yandığı için önce yanmayı düşün.")),
+            Page(
+                K("Bu görevde", "Güvercinle gelen mektup, çalışma masası"),
+                T("Etiketleri düzelt"),
+                B("Şişelerin etiketleri karışmış. Bazı şişede denklem yazıyor, bazısında yalnızca bir gözlem."),
+                St("Her şişede iki tarafı say: kaç giren, kaç ürün?",
+                    "Bakma sırasını izle: önce ayrışma, sonra yanma, en son birleşme.",
+                    "Şişeyi kutusuna koy: Sentez, Analiz ya da Yanma."),
+                R(),
+                N("Unutma", "Kasabanın kazanında yaptığın tepkimeleri tanıyacaksın. Defterindeki kayıtlara bakabilirsin.")));
+
+        private static LessonNote Tur3() => new LessonNote("Kimyasal değişimin kanıtı",
+            Page(
+                K("Ders notu", "Tepkime Türleri Köyü, 3. görev"),
+                T("Fiziksel mi, kimyasal mı?"),
+                B("Fiziksel değişimde madde aynı kalır; yalnızca şekli ya da hâli değişir. Kimyasal değişimde yeni bir madde oluşur."),
+                R(),
+                S("Yeni madde oluştuğunu nereden anlarız?"),
+                St("Gaz çıkışı, kabarcık",
+                    "Renk değişimi",
+                    "Yeni bir koku",
+                    "Isı ya da ışık çıkması"),
+                F("Bir kanıt tek başına her zaman yetmez; ne kadar çok kanıt varsa o kadar emin olursun.")),
+            Page(
+                T("Hâl değişimi tepkime değildir"),
+                B("Buz eriyince su olur, su kaynayınca buhar olur. Üçü de aynı maddedir: H₂O. Yeni madde yoktur, değişim fizikseldir."),
+                R(),
+                W("Dikkat", "Kesmek, ezmek, yoğurmak, eritmek ve buharlaştırmak maddenin kendisini değiştirmez. Görünüş değişti diye kimyasal deme.")),
+            Page(
+                K("Çözümlü örnek"),
+                T("Buz ve odun"),
+                S("Buzun erimesi"),
+                B("Katı su sıvı su oldu. Madde yine H₂O: fiziksel değişim."),
+                S("Odunun yanması"),
+                B("Alev ve ısı çıktı, duman yükseldi, geriye siyah kül kaldı. Yeni maddeler oluştu: kimyasal değişim.")),
+            Page(
+                K("Bu görevde", "Fırıncı Zehra’nın mektubu, çalışma masası"),
+                T("Zehra’ya kanıt göster"),
+                B("Zehra fırınının yakıtını ve ekmeğini soruyor."),
+                St("Önce yakıtın yanınca ne verdiğini seç. İsli Fenerler’de yanmayı görmüştün; defterindeki kaydı hatırla.",
+                    "Sonra ekmekte olanlardan kimyasal değişimin kanıtlarını işaretle.",
+                    "Her seçenekte kendine sor: yeni bir madde oluştu mu?"),
+                R(),
+                N("Unutma", "Birden çok doğru seçenek olabilir.")));
+
+        private static LessonNote Tur4() => new LessonNote("Yanlış iddiayı düzelt",
+            Page(
+                K("Ders notu", "Tepkime Türleri Köyü, 4. görev"),
+                T("Bir iddia nasıl sınanır?"),
+                B("Bir cümlenin doğru olduğunu söylemek için bildiğin kurallarla karşılaştır. Yanlış olduğunu göstermek için tek bir karşı örnek yeter."),
+                R(),
+                S("Üç adım"),
+                St("İddiayı dikkatle oku: hangi tür ya da hangi kural hakkında?",
+                    "Bildiğin tanımla ve bir örnek denklemle karşılaştır.",
+                    "Yanlışsa doğrusunu söyle ve kanıtını göster."),
+                F("Dedikoduya karşı en iyi ilaç kanıttır.")),
+            Page(
+                T("Sık duyulan yanılgılar"),
+                W("Yanılgı", "“Yanan odun hafifliyor, demek ki kütle kayboldu.” Kaybolmadı: CO₂ ve su buharı havaya karıştı. Atomlar başka maddelerde."),
+                W("Yanılgı", "“2H₂O’daki 2, suyun formülüne aittir.” Hayır: katsayı kaç molekül olduğunu söyler. Suyun formülü H₂O’dur."),
+                R(),
+                N("Unutma", "Atomlar tepkimede kaybolmaz, yoktan da var olmaz (K-0).")),
+            Page(
+                K("Çözümlü örnek"),
+                T("“Her yanma CO₂ verir.”"),
+                B("Karşı örnek ara: karbon içermeyen bir yakıt var mı?"),
+                E("2H₂ + O₂ → 2H₂O"),
+                B("Hidrojen oksijenle yanar ama karbon yoktur, CO₂ de çıkmaz. Tek örnek iddiayı çürüttü."),
+                S("Doğrusu"),
+                B("Karbon içeren yakıtlar yanınca CO₂ verir.")),
+            Page(
+                K("Bu görevde", "Muhtar Yusuf’un mektubu, çalışma masası"),
+                T("Kasabadaki dedikodular"),
+                B("Muhtar kasabada dolaşan cümleleri gönderdi. Hangisi doğru, hangisi yanlış, mühürle işaretleyeceksin."),
+                St("Her cümleyi tanımlarla karşılaştır.",
+                    "Doğruysa D, yanlışsa Y mührü bas.",
+                    "Y dediğin cümlenin doğrusunu da seç."),
+                R(),
+                N("Unutma", "Defterindeki kayıtlar kanıttır. Sentez, analiz ve atomların korunumu için önceki sayfalarına bak.")));
+
+        private static LessonNote Tur5() => new LessonNote("Lonca sınavı: tekrar",
+            Page(
+                K("Ders notu", "Tepkime Türleri Köyü, 5. görev"),
+                T("Bu ünitede öğrendiklerin"),
+                St("Tepkimede atomlar kaybolmaz, yoktan var olmaz.",
+                    "Denkleştirirken katsayı yazılır; alt indis değişmez.",
+                    "Önce tek yerde geçen elementleri, oksijeni en son say.",
+                    "Sentez: birden çok giren, tek ürün. Analiz: tek giren, birden çok ürün. Yanma: yakıt + O₂."),
+                R(),
+                F("Bu sayfada yeni bilgi yok; hepsi defterinde yazılı.")),
+            Page(
+                T("Kontrol listesi"),
+                S("Tür sorusunda"),
+                St("Girenleri say.", "Ürünleri say.", "Yakıt ve O₂ ara."),
+                S("Denkleştirme sorusunda"),
+                St("Her elementi iki tarafta ayrı say.", "Katsayıyla alt indisi çarp.", "Bütün elementler eşitse dur."),
+                R(),
+                W("Dikkat", "Bazı tepkimeler üç kutunun hiçbirine tam uymaz. Türler bütün tepkimeleri kapsamaz.")),
+            Page(
+                K("Hatırla"),
+                T("Döngü"),
+                B("Fotosentezde bitki CO₂ ve suyu glikoza bağlar; solunumda glikoz yeniden CO₂ ve suya döner."),
+                E("6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂"),
+                B("Aynı atomlar (C, H, O) yakıtta, havada, bitkide ve bizde dolaşır."),
+                F("Glikozun formülü C₆H₁₂O₆; denkleştirirken önce karbonu say.")),
+            Page(
+                K("Bu görevde", "Kâtip Nevin, lonca"),
+                T("Lonca mührü"),
+                B("Kâtip Nevin karışık sorular soracak: türler, denkleştirme ve yeni tepkimeler."),
+                St("Her soruda önce soruyu tanı: tür mü, denkleştirme mi?",
+                    "Kontrol listesini uygula.",
+                    "Yanlış yazdığın soru çekilir, yerine başkası gelir. Mühür hepsi doğru olunca basılır."),
+                R(),
+                N("Unutma", "Acele etme; her soruyu saydıktan sonra gönder.")));
 
         // ---------- Defter sayfası (Keşiflerim) ve şeritler ----------
 

@@ -42,7 +42,10 @@ namespace BilgiAdasi.UI
         {
             if (!band.gameObject.activeSelf) return;
             float step = fadeSeconds > 0f ? Time.unscaledDeltaTime / fadeSeconds : 1f;
-            alpha = Mathf.MoveTowards(alpha, visible ? 1f : 0f, step);
+            float next = Mathf.MoveTowards(alpha, visible ? 1f : 0f, step);
+            // Geçiş bittiyse her kare aynı değerleri yazma.
+            if (next == alpha && group.alpha == alpha) return;
+            alpha = next;
             group.alpha = alpha;
             band.anchoredPosition = new Vector2(0f, bottom - (1f - alpha) * 10f);
             if (!visible && alpha <= 0f) band.gameObject.SetActive(false);

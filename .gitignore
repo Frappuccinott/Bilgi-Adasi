@@ -43,3 +43,6 @@ desktop.ini
 # Blender otomatik yedekleri
 *.blend1
 *.blend2
+
+# Assets dışına alınan ekran görüntüleri / kurtarma sahnesi (build’e girmez)
+/_Yedek/
