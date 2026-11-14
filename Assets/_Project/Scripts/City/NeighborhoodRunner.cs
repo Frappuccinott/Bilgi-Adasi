@@ -518,9 +518,45 @@ namespace BilgiAdasi.City
         /// Odaktaki köyde index'inci göreve atlar: öncekiler bitmiş, sonrakiler bitmemiş sayılır.
         /// index == görev sayısı → köy tamamlanır. Sipariş göreviyse kapıyı beklemeden kazana verilir.
         /// </summary>
-        public void DevJumpTo(int index)
+        public void DevJumpTo(int index) => DevJumpTo(FocusedNeighborhood(), index);
+
+        /// <summary>
+        /// Hile menüsü: verilen türden ilk görevi olan köye atlar. Önceki köyler bitmiş sayılır (kayıtta), o köy
+        /// o görevden başlar. Döner: atlanan görev (yoksa null).
+        /// </summary>
+        public T DevJumpToFirst<T>() where T : TaskData
         {
-            var n = FocusedNeighborhood();
+            var data = Data;
+            for (int k = 0; k < neighborhoods.Count; k++)
+            {
+                var n = neighborhoods[k];
+                if (n == null) continue;
+                for (int t = 0; t < n.Tasks.Count; t++)
+                {
+                    if (n.Tasks[t] is not T found) continue;
+                    // Önceki köyler bitmiş: odak bu köye geçsin.
+                    for (int p = 0; p < k; p++)
+                    {
+                        var prev = neighborhoods[p];
+                        if (prev == null) continue;
+                        for (int i = 0; i < prev.Tasks.Count; i++)
+                        {
+                            if (data != null) data.MarkTaskCompleted(prev.Tasks[i].Id);
+                            else localCompleted.Add(prev.Tasks[i].Id);
+                        }
+                        if (data != null) data.MarkNeighborhoodCompleted(prev.Id);
+                        introShown.Add(prev.Id);
+                        PublishProgress(prev);
+                    }
+                    DevJumpTo(n, t);
+                    return found;
+                }
+            }
+            return null;
+        }
+
+        private void DevJumpTo(NeighborhoodData n, int index)
+        {
             if (n == null || n.Tasks.Count == 0) return;
             index = Mathf.Clamp(index, 0, n.Tasks.Count);
 

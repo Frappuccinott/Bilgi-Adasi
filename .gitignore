@@ -46,3 +46,6 @@ desktop.ini
 
 # Assets dışına alınan ekran görüntüleri / kurtarma sahnesi (build’e girmez)
 /_Yedek/
+
+# Fragman kayıtları (büyük video, repoya girmez)
+/Kayitlar/

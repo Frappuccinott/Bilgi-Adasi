@@ -44,9 +44,14 @@ section.altin { background: #F7A800; }
 
 .bas { display: flex; flex-direction: column; gap: 16px; }
 
-/* Jüri kriteri rozeti (sağ üst) */
-.kriter { position: absolute; top: 60px; right: 128px; font-size: 24px; font-weight: 700; color: #FFD23F; background: #3E281B; padding: 8px 22px; border-radius: 999px; white-space: nowrap; }
-.koyu .kriter { color: #3E281B; background: #FFD23F; }
+/* Vurgu cümlesi: sunumda akılda kalacak tek satır */
+.vurgu { font-family: 'Alegreya', Georgia, serif; font-style: italic; font-weight: 700; font-size: 36px; line-height: 1.25; color: #A2411E; }
+.koyu .vurgu { color: #FFD23F; }
+.altin .vurgu { color: #3E281B; }
+
+/* Bölüm etiketi (sağ üst): sunumun akışındaki yer */
+.bolum { position: absolute; top: 60px; right: 128px; font-size: 24px; font-weight: 700; color: #FFD23F; background: #3E281B; padding: 8px 22px; border-radius: 999px; white-space: nowrap; }
+.koyu .bolum { color: #3E281B; background: #FFD23F; }
 
 /* Alt bant */
 .alt { position: absolute; left: 128px; bottom: 64px; width: 1664px; display: flex; justify-content: space-between; }

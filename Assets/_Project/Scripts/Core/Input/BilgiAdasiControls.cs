@@ -1477,6 +1477,15 @@ namespace BilgiAdasi.Core
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DevCheatMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""6e8a1c42-7b3d-4f95-a2c6-3d9e5f7a1b84"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1531,7 +1540,7 @@ namespace BilgiAdasi.Core
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""DevJumpTask"",
+                    ""action"": ""DevCheatMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1666,6 +1675,50 @@ namespace BilgiAdasi.Core
                     ""action"": ""DevResetSave"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""LT+RT+R3"",
+                    ""id"": ""7f9b2d53-8c4e-4a06-b3d7-4e0f6a8b2c95"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DevCheatMenu"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""80ac3e64-9d5f-4b17-84e8-5f1a7b9c3da6"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""DevCheatMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""91bd4f75-ae60-4c28-95f9-6a2b8cad4eb7"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""DevCheatMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""a2ce5086-bf71-4d39-a60a-7b3c9dbe5fc8"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""DevCheatMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -1743,6 +1796,7 @@ namespace BilgiAdasi.Core
             m_Dev = asset.FindActionMap("Dev", throwIfNotFound: true);
             m_Dev_DevJumpTask = m_Dev.FindAction("DevJumpTask", throwIfNotFound: true);
             m_Dev_DevResetSave = m_Dev.FindAction("DevResetSave", throwIfNotFound: true);
+            m_Dev_DevCheatMenu = m_Dev.FindAction("DevCheatMenu", throwIfNotFound: true);
         }
 
         ~@BilgiAdasiControls()
@@ -2446,6 +2500,7 @@ namespace BilgiAdasi.Core
         private List<IDevActions> m_DevActionsCallbackInterfaces = new List<IDevActions>();
         private readonly InputAction m_Dev_DevJumpTask;
         private readonly InputAction m_Dev_DevResetSave;
+        private readonly InputAction m_Dev_DevCheatMenu;
         /// <summary>
         /// Provides access to input actions defined in input action map "Dev".
         /// </summary>
@@ -2465,6 +2520,10 @@ namespace BilgiAdasi.Core
             /// Provides access to the underlying input action "Dev/DevResetSave".
             /// </summary>
             public InputAction @DevResetSave => m_Wrapper.m_Dev_DevResetSave;
+            /// <summary>
+            /// Provides access to the underlying input action "Dev/DevCheatMenu".
+            /// </summary>
+            public InputAction @DevCheatMenu => m_Wrapper.m_Dev_DevCheatMenu;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -2497,6 +2556,9 @@ namespace BilgiAdasi.Core
                 @DevResetSave.started += instance.OnDevResetSave;
                 @DevResetSave.performed += instance.OnDevResetSave;
                 @DevResetSave.canceled += instance.OnDevResetSave;
+                @DevCheatMenu.started += instance.OnDevCheatMenu;
+                @DevCheatMenu.performed += instance.OnDevCheatMenu;
+                @DevCheatMenu.canceled += instance.OnDevCheatMenu;
             }
 
             /// <summary>
@@ -2514,6 +2576,9 @@ namespace BilgiAdasi.Core
                 @DevResetSave.started -= instance.OnDevResetSave;
                 @DevResetSave.performed -= instance.OnDevResetSave;
                 @DevResetSave.canceled -= instance.OnDevResetSave;
+                @DevCheatMenu.started -= instance.OnDevCheatMenu;
+                @DevCheatMenu.performed -= instance.OnDevCheatMenu;
+                @DevCheatMenu.canceled -= instance.OnDevCheatMenu;
             }
 
             /// <summary>
@@ -2849,6 +2914,13 @@ namespace BilgiAdasi.Core
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnDevResetSave(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "DevCheatMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnDevCheatMenu(InputAction.CallbackContext context);
         }
     }
 }

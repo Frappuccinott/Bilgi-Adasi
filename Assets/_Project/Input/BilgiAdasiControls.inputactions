@@ -175,14 +175,15 @@
             "id": "d3b1f0a2-6c4e-4f7a-9b21-5e8c7a1d0f31",
             "actions": [
                 { "name": "DevJumpTask", "type": "Button", "id": "a1c7e5d3-2b4f-4e6a-8c19-7d3f5b2e9a41", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
-                { "name": "DevResetSave", "type": "Button", "id": "b2d8f6e4-3c5a-4f7b-9d2a-8e4a6c3f0b52", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false }
+                { "name": "DevResetSave", "type": "Button", "id": "b2d8f6e4-3c5a-4f7b-9d2a-8e4a6c3f0b52", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "DevCheatMenu", "type": "Button", "id": "6e8a1c42-7b3d-4f95-a2c6-3d9e5f7a1b84", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false }
             ],
             "bindings": [
                 { "name": "", "id": "c3e9a7f5-4d6b-4a8c-8e3b-9f5b7d4a1c63", "path": "<Keyboard>/f1", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "DevJumpTask", "isComposite": false, "isPartOfComposite": false },
                 { "name": "", "id": "d4fab8a6-5e7c-4b9d-9f4c-af6c8e5b2d74", "path": "<Keyboard>/f2", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "DevJumpTask", "isComposite": false, "isPartOfComposite": false },
                 { "name": "", "id": "e5abc9b7-6f8d-4cae-8a5d-ba7d9f6c3e85", "path": "<Keyboard>/f3", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "DevJumpTask", "isComposite": false, "isPartOfComposite": false },
                 { "name": "", "id": "f6bcdac8-7a9e-4dbf-9b6e-cb8eaa7d4f96", "path": "<Keyboard>/f4", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "DevJumpTask", "isComposite": false, "isPartOfComposite": false },
-                { "name": "", "id": "a7cdebd9-8baf-4ec0-8c7f-dc9fbb8e5a07", "path": "<Keyboard>/f5", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "DevJumpTask", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "a7cdebd9-8baf-4ec0-8c7f-dc9fbb8e5a07", "path": "<Keyboard>/f5", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "DevCheatMenu", "isComposite": false, "isPartOfComposite": false },
                 { "name": "", "id": "b8deface-8cb0-4fd1-9e8a-ed0acf9f6b18", "path": "<Keyboard>/f6", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "DevJumpTask", "isComposite": false, "isPartOfComposite": false },
                 { "name": "LT+RT+DpadRight", "id": "b8defcea-9cb0-4fd1-9d80-ed0acc9f6b18", "path": "TwoModifiers", "interactions": "", "processors": "", "groups": "", "action": "DevJumpTask", "isComposite": true, "isPartOfComposite": false },
                 { "name": "modifier1", "id": "c9ef0dfb-adc1-4ae2-8e91-fe1bdda07c29", "path": "<Gamepad>/leftTrigger", "interactions": "", "processors": "", "groups": "Gamepad", "action": "DevJumpTask", "isComposite": false, "isPartOfComposite": true },
@@ -195,7 +196,12 @@
                 { "name": "LT+RT+DpadLeft", "id": "2f456351-a327-4048-8e7f-5e7b3d06d28f", "path": "TwoModifiers", "interactions": "", "processors": "", "groups": "", "action": "DevResetSave", "isComposite": true, "isPartOfComposite": false },
                 { "name": "modifier1", "id": "30567462-b438-4159-9f80-6f8c4e17e390", "path": "<Gamepad>/leftTrigger", "interactions": "", "processors": "", "groups": "Gamepad", "action": "DevResetSave", "isComposite": false, "isPartOfComposite": true },
                 { "name": "modifier2", "id": "41678573-c549-426a-8091-709d5f28f4a1", "path": "<Gamepad>/rightTrigger", "interactions": "", "processors": "", "groups": "Gamepad", "action": "DevResetSave", "isComposite": false, "isPartOfComposite": true },
-                { "name": "binding", "id": "52789684-d65a-437b-91a2-81ae6039a5b2", "path": "<Gamepad>/dpad/left", "interactions": "", "processors": "", "groups": "Gamepad", "action": "DevResetSave", "isComposite": false, "isPartOfComposite": true }
+                { "name": "binding", "id": "52789684-d65a-437b-91a2-81ae6039a5b2", "path": "<Gamepad>/dpad/left", "interactions": "", "processors": "", "groups": "Gamepad", "action": "DevResetSave", "isComposite": false, "isPartOfComposite": true },
+
+                { "name": "LT+RT+R3", "id": "7f9b2d53-8c4e-4a06-b3d7-4e0f6a8b2c95", "path": "TwoModifiers", "interactions": "", "processors": "", "groups": "", "action": "DevCheatMenu", "isComposite": true, "isPartOfComposite": false },
+                { "name": "modifier1", "id": "80ac3e64-9d5f-4b17-84e8-5f1a7b9c3da6", "path": "<Gamepad>/leftTrigger", "interactions": "", "processors": "", "groups": "Gamepad", "action": "DevCheatMenu", "isComposite": false, "isPartOfComposite": true },
+                { "name": "modifier2", "id": "91bd4f75-ae60-4c28-95f9-6a2b8cad4eb7", "path": "<Gamepad>/rightTrigger", "interactions": "", "processors": "", "groups": "Gamepad", "action": "DevCheatMenu", "isComposite": false, "isPartOfComposite": true },
+                { "name": "binding", "id": "a2ce5086-bf71-4d39-a60a-7b3c9dbe5fc8", "path": "<Gamepad>/rightStickPress", "interactions": "", "processors": "", "groups": "Gamepad", "action": "DevCheatMenu", "isComposite": false, "isPartOfComposite": true }
             ]
         }
     ],

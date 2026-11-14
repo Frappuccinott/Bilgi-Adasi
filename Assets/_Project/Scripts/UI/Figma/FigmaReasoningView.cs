@@ -56,7 +56,7 @@ namespace BilgiAdasi.UI
 
         // ---------- IReasoningView ----------
 
-        public void ShowQuestion(string speakerName, string question, IReadOnlyList<string> optionList, Action<int> chosen)
+        public void ShowQuestion(string speakerName, string question, IReadOnlyList<string> optionList, Action<int> chosen, bool shuffle = true)
         {
             onChosen = chosen;
             onContinue = null;
@@ -65,7 +65,7 @@ namespace BilgiAdasi.UI
             visible = 0;
             for (int i = 0; optionList != null && i < optionList.Count && visible < MaxOptions; i++)
                 if (!string.IsNullOrEmpty(optionList[i])) choiceMap[visible++] = i;
-            for (int i = visible - 1; i > 0; i--)
+            for (int i = shuffle ? visible - 1 : 0; i > 0; i--)
             {
                 int j = UnityEngine.Random.Range(0, i + 1);
                 (choiceMap[i], choiceMap[j]) = (choiceMap[j], choiceMap[i]);

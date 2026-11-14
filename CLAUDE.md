@@ -90,12 +90,13 @@ Yeni paket eklemeden önce **sor**.
 | ExitStation | Station | Esc / sağ tık | B (East) |
 | Navigate / Submit / Cancel | UI | Ok tuşları, Enter, Esc | D-pad / sol çubuk, A, B |
 | PrevTab / NextTab (defter ayracı) | UI | Q / E | LB / RB |
-| DevJumpTask (yalnızca geliştirici) | Dev | F1–F6 (o göreve atla; Denkleştirme 6 görev) | LT+RT+D-pad → (sıradaki görevi bitmiş say) |
+| DevJumpTask (yalnızca geliştirici) | Dev | F1–F4, F6 (o göreve atla; Denkleştirme 6 görev) | LT+RT+D-pad → (sıradaki görevi bitmiş say) |
+| DevCheatMenu (hile menüsü, sunum) | Dev | F5 (masa mektupları ya da kapanış mektubu; karar 14.11) | LT+RT+R3 |
 | DevResetSave (yalnızca geliştirici) | Dev | Ctrl+R | LT+RT+D-pad ← |
 
 Soru/konuşma kutusu açıkken (`DialogueFocus.IsOpen`) harita ve defter açılmaz; soruda gamepad D-pad ↑↓ şık seçer. UI modunda (pazar, Esc, harita) başlatılan birebir konuşma ekran kapanınca başlar (`DialogueDirector`), yol sohbeti altyazısı konuşma/soru açıkken gizlenir.
 
-`Dev` map'i oyun modundan bağımsız hep açıktır ama yalnızca editörde, Development Build'de ya da `BILGIADASI_DEMO` tanımlıyken (`DevShortcuts`).
+`Dev` map'i oyun modundan bağımsız hep açıktır ama yalnızca editörde, Development Build'de ya da `BILGIADASI_DEMO` tanımlıyken (`DevShortcuts`). **Karar 14.11:** sunum için Standalone'da `BILGIADASI_DEMO` tanımlı; teslim build'inde de hile kısayolları açık.
 
 Yeni aksiyon eklenirse bu tablo güncellenir.
 

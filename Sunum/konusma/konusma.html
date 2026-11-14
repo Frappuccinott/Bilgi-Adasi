@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Bilgi Adası · Jüri Konuşma Metni</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;0,800;1,400;1,700&display=swap">
+<style>
+  @page { size: A4; margin: 15mm 16mm 16mm; }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html, body { margin: 0; background: #FFFFFF; }
+  body { font-family: 'Alegreya Sans', Verdana, sans-serif; color: #2E1F15; font-size: 11.5pt; line-height: 1.55; }
+  h1, h2, h3 { font-family: 'Alegreya', Georgia, serif; margin: 0; color: #3E281B; }
+  b { color: #3E281B; }
+
+  /* Kapak */
+  .kapak { height: 262mm; display: flex; flex-direction: column; justify-content: center; break-after: page; position: relative; }
+  .kapak::before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 6px; background: linear-gradient(90deg, #F7A800, #A2411E); border-radius: 3px; }
+  .kapak img { width: 105mm; margin-bottom: 10mm; }
+  .kapak .ust { font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: #A2411E; font-size: 10pt; margin: 0; }
+  .kapak h1 { font-size: 46pt; font-weight: 900; line-height: 1.02; margin: 8px 0 12px; }
+  .kapak .alt { font-family: 'Alegreya', serif; font-style: italic; font-size: 16pt; color: #6A4E3B; max-width: 150mm; margin: 0; }
+  .bilgi { margin-top: 14mm; display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; max-width: 170mm; }
+  .bilgi div { background: #FFFFFF; border: 1px solid #E6DDC6; border-left: 4px solid #F7A800; border-radius: 8px; padding: 9px 14px; font-size: 11pt; }
+  .bilgi b { display: block; font-size: 8.5pt; letter-spacing: 2px; text-transform: uppercase; color: #A2411E; margin-bottom: 2px; }
+
+  /* Hazırlık sayfası */
+  .rehber { break-after: page; }
+  .rehber h2 { font-size: 24pt; margin-bottom: 8px; }
+  .rehber ul { list-style: none; padding: 0; margin: 6px 0 16px; }
+  .rehber li { position: relative; padding: 7px 0 7px 18px; border-bottom: 1px solid #EFE8D6; }
+  .rehber li::before { content: ""; position: absolute; left: 0; top: 15px; width: 8px; height: 8px; border-radius: 50%; background: #F7A800; }
+  table.akis { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 10px; font-size: 10.5pt; border: 1px solid #E6DDC6; border-radius: 8px; overflow: hidden; }
+  table.akis th { background: #3E281B; color: #FFD23F; text-align: left; padding: 7px 10px; font-weight: 700; }
+  table.akis td { padding: 6px 10px; border-top: 1px solid #EFE8D6; }
+  table.akis tr:nth-child(even) td { background: #FBF8F0; }
+
+  /* Slayt kartı */
+  .slayt { break-inside: avoid-page; margin-bottom: 7mm; border: 1px solid #E6DDC6; border-top: 5px solid #F7A800; border-radius: 10px; padding: 6mm 7mm 5mm; }
+  .slayt-bas { display: flex; gap: 6mm; align-items: center; margin-bottom: 4mm; padding-bottom: 4mm; border-bottom: 1px solid #EFE8D6; }
+  .slayt-bas img { width: 58mm; border-radius: 6px; flex: none; box-shadow: 0 2px 8px rgba(62,40,27,0.18); }
+  .no { font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #A2411E; font-size: 8.5pt; margin: 0; }
+  .slayt h3 { font-size: 17pt; line-height: 1.15; margin: 3px 0 7px; }
+  .meta { font-size: 9pt; color: #5A4437; margin: 0; }
+  .meta span { display: inline-block; background: #FBF5E4; border: 1px solid #EADFC2; border-radius: 99px; padding: 1px 10px; margin: 2px 4px 2px 0; font-weight: 700; }
+  .soz p { margin: 0 0 7px; font-size: 12pt; }
+  .soz p.vurgu { font-family: 'Alegreya', serif; font-style: italic; font-weight: 700; font-size: 14.5pt; color: #A2411E; background: #FFF8E6; border-left: 4px solid #F7A800; border-radius: 0 6px 6px 0; padding: 7px 12px; margin: 10px 0 8px; }
+  .yon { font-style: italic; color: #2A7FAE; font-size: 10pt; }
+  p.yon { background: #F3F8FB; border-radius: 6px; padding: 3px 10px; display: inline-block; }
+  .demo { background: #3E281B; color: #EEE8C9; border-radius: 10px; padding: 11px 15px; margin: 8px 0; font-size: 10.5pt; }
+  .demo b { color: #FFD23F; }
+  .demo .yon { color: #9FD3EE; }
+  .demo ol { margin: 5px 0 0; padding-left: 18px; }
+  .demo li { margin-bottom: 3px; }
+  .kisa { font-size: 9.5pt; color: #6A4E3B; margin: 6px 0 0; padding-top: 5px; border-top: 1px dashed #E6DDC6; }
+  .kisa b { color: #A2411E; }
+
+  /* Soru-cevap */
+  .sss { break-before: page; }
+  .sss h2 { font-size: 24pt; margin-bottom: 6px; }
+  .soru { break-inside: avoid; margin: 6px 0; background: #FFFFFF; border: 1px solid #E6DDC6; border-left: 5px solid #A2411E; border-radius: 8px; padding: 6px 12px; font-size: 10.5pt; line-height: 1.45; }
+  .soru b { display: block; font-family: 'Alegreya', serif; font-size: 12.5pt; margin-bottom: 3px; }
+  .soru i { color: #A2411E; font-weight: 700; }
+  .son { margin-top: 6mm; text-align: center; font-family: 'Alegreya', serif; font-style: italic; font-size: 15pt; color: #6A4E3B; }
+</style>
+</head>
+<body>
+
+<section class="kapak">
+  <img src="../gorseller/t_logo_ana.png" alt="Bilgi Adası logosu">
+  <p class="ust">Jüri sunumu · konuşma metni</p>
+  <h1>Kazana ne girerse<br>o çıkar.</h1>
+  <p class="alt">Slayt akışına göre kurgulanmış konuşma metni, sahne notları, canlı demo planı ve jüri soru-cevap hazırlığı.</p>
+  <div class="bilgi">
+    <div><b>Süre</b>≈ 8 dakika konuşma + 2 dakika canlı demo</div>
+    <div><b>Slayt</b>16 slayt (son slayt soru-cevap eki)</div>
+    <div><b>Konuşanlar</b>Mustafa Akbaş ve Mehmet (dağılım öneridir)</div>
+    <div><b>Tarih</b>14 Kasım 2026</div>
+  </div>
+</section>
+
+<section class="rehber">
+  <h2>Sahneye çıkmadan önce</h2>
+  <ul>
+    <li><b>İlk 10 saniye her şeydir.</b> Slayt açılmadan konuşmaya başlamayın; logo ekrana gelsin, üç saniye sessiz kalın, sonra jüriye bakarak soruyu sorun.</li>
+    <li><b>Mavi italik satırlar sahne notudur,</b> okunmaz. Altın çizgili cümleler slayttaki vurgu cümleleridir: yavaşlayın, cümleden önce yarım saniye durun, sonra jüriye bakarak söyleyin.</li>
+    <li><b>Ekrandakini okumayın.</b> Slaytta yazan cümleyi söylerken ekrana değil jüriye bakın; slayt sizin sözünüzü doğrular, tekrar etmez.</li>
+    <li><b>Geçişler bir nefestir.</b> Konuşan değiştiğinde bir önceki kişi son cümlesini bitirir, yeni konuşan bir adım öne çıkar. Elden ele geçen bir hikâye gibi.</li>
+    <li><b>Rakamları yuvarlak ve yavaş söyleyin:</b> “beş virgül yirmi beş milyon”, “iki buçuk milyon”. Rakamdan sonra kısa bir duraklama, anlamın yerine oturmasını sağlar.</li>
+    <li><b>Demo bir hikâyedir, test değildir.</b> Kazanı bilerek köpürtün; bu anın gülümsetmesine izin verin. Hata dilimizi anlatmanın en güçlü yolu budur.</li>
+  </ul>
+  <table class="akis">
+    <tr><th>#</th><th>Slayt</th><th>Süre</th><th>Konuşan (öneri)</th></tr>
+    <tr><td>1–2</td><td>Kapak, Kanca</td><td>0:00–0:45</td><td>Mustafa</td></tr>
+    <tr><td>3–4</td><td>Neden, Fikir</td><td>0:45–2:00</td><td>Mustafa</td></tr>
+    <tr><td>5–7</td><td>Döngü, Kazan, Öğrenme ritmi</td><td>2:00–4:00</td><td>Mehmet</td></tr>
+    <tr><td>8–9</td><td>Masa ve tarla, Ada yaşıyor + canlı demo</td><td>4:00–7:00</td><td>Mustafa → Mehmet (demo)</td></tr>
+    <tr><td>10–12</td><td>Pazar, Alternatifler, Tasarım</td><td>7:00–8:30</td><td>Mustafa</td></tr>
+    <tr><td>13–14</td><td>Teknik, Yol haritası</td><td>8:30–9:30</td><td>Mehmet</td></tr>
+    <tr><td>15</td><td>Kapanış</td><td>9:30–10:00</td><td>Mustafa</td></tr>
+    <tr><td>16</td><td>Ek: kriter tablosu</td><td>Soru-cevap</td><td>İkisi</td></tr>
+  </table>
+  <p class="kisa"><b>Süre kısaysa (≈5 dk):</b> her slaytın altındaki “kısa versiyon” notunu uygulayın, demoyu 1 dakikaya indirin.</p>
+</section>
+
+<!-- 1 -->
+<section class="slayt">
+  <div class="slayt-bas"><img src="s01.jpg" alt="Slayt 1"><div><p class="no">Slayt 1 · Açılış</p><h3>Kapak</h3><p class="meta"><span>0:00–0:15</span><span>Mustafa</span></p></div></div>
+  <div class="soz">
+    <p class="yon">[Logo ekranda. Üç saniye sessizlik. Jüriye dönün, gülümseyin.]</p>
+    <p>Lisede bir kimya dersinde hiç uyuyakaldınız mı?</p>
+    <p class="yon">[Bir saniye bekleyin; birkaç kişi gülümseyecek.]</p>
+    <p>Biz de. Ve bir gün kendimize şunu sorduk: ya o ders, uyandığımız yerde devam etseydi?</p>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="slayt">
+  <div class="slayt-bas"><img src="s02.jpg" alt="Slayt 2"><div><p class="no">Slayt 2 · Kanca</p><h3>…ve Bilgi Adası’nda uyandın.</h3><p class="meta"><span>0:15–0:45</span><span>Mustafa</span></p></div></div>
+  <div class="soz">
+    <p class="yon">[Slayt açılır. Sesinizi biraz alçaltın, hikâye anlatır gibi.]</p>
+    <p>Kimya dersinde uyuyakaldın… <span class="yon">[duraklama]</span> ve Bilgi Adası’nda uyandın.</p>
+    <p>Burası her şehri bir ders olan bir ada. İlk açılan kapı Kimya şehri. Câbir Usta seni kapısında buluyor ve çırağı yapıyor. Arkamda gördüğünüz kare, oyunun kendisinden.</p>
+    <p>Ve bu adanın çok basit bir kuralı var:</p>
+    <p class="vurgu">Burada kimya ezberlenmez; kazanda pişirilir.</p>
+  </div>
+  <p class="kisa"><b>Kısa versiyon:</b> ikinci paragrafın son cümlesini atlayın.</p>
+</section>
+
+<!-- 3 -->
+<section class="slayt">
+  <div class="slayt-bas"><img src="s03.jpg" alt="Slayt 3"><div><p class="no">Slayt 3 · 01 Neden</p><h3>Yarış yok. Süre yok. Usta yanında.</h3><p class="meta"><span>0:45–1:25</span><span>Mustafa</span></p></div></div>
+  <div class="soz">
+    <p>Ama önce, neden bu oyun?</p>
+    <p>Sınıfta oynanan bilgi yarışmalarını hepimiz biliyoruz: geri sayım, liderlik tablosu, en hızlı olan kazanır. Önde olan için harika bir oyun. <span class="yon">[duraklama]</span> Peki ya sonda kalan? Konuyu henüz anlamamış bir öğrenci için o tablo, öğrenmeye başlamadan önce bir baskıya dönüşebiliyor.</p>
+    <p>Biz tersini yaptık. Bilgi Adası’nda <b>yarış yok. Süre yok. Sıralama yok.</b> Onun yerine bir usta var. Her görevden önce bir ders notu, takıldığında ustanın defteri.</p>
+    <p class="yon">[Ekrandaki üç kutuyu elinizle soldan sağa gösterin.]</p>
+    <p>Liderlik tablosunun yerine Keşif Defteri. Geri sayımın yerine kendi temposu. Kırmızı çarpının yerine köpüren bir kazan ve bir ipucu. Çünkü…</p>
+    <p class="vurgu">Burada kimse geride kalmaz; herkes kendi hızında usta olur.</p>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="slayt">
+  <div class="slayt-bas"><img src="s04.jpg" alt="Slayt 4"><div><p class="no">Slayt 4 · 02 Fikir</p><h3>Câbir Usta’nın çırağı ol; kimyayı kazanda tartarak öğren.</h3><p class="meta"><span>1:25–2:00</span><span>Mustafa</span></p></div></div>
+  <div class="soz">
+    <p>Tek cümleyle anlatırsak: Câbir Usta’nın çırağı ol, kimyayı kazanda tartarak öğren.</p>
+    <p>Adanın haritası aslında müfredatın haritası. Şehir bir ders, ilçe bir ünite, köy bir konu. Öğrenci nerede olduğunu hep bilir: “Kimya şehrindeyim, Etkileşim ilçesindeyim, Denkleştirme köyündeyim.”</p>
+    <p>Bugün açtığımız kapı, 2024 Maarif programının Etkileşim teması ve onun dört kazanımı. Ama asıl söylemek istediğimiz şu:</p>
+    <p class="vurgu">Kimya kitabı kapanır, atölyenin kapısı açılır.</p>
+    <p class="yon">[Mehmet bir adım öne çıkar.]</p>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="slayt">
+  <div class="slayt-bas"><img src="s05.jpg" alt="Slayt 5"><div><p class="no">Slayt 5 · 03 Nasıl öğretir</p><h3>Tart. Denkleştir. Pişir. Teslim et.</h3><p class="meta"><span>2:00–2:40</span><span>Mehmet</span></p></div></div>
+  <div class="soz">
+    <p>Peki bu atölyede ne yapıyorsunuz?</p>
+    <p>Atölyenin önündeki tezgâha bir sakin gelir. Muhtar Yusuf: “Çeşme kurudu, su lazım.” Pazara gidersiniz, kavanozları alırsınız, kazana birer birer dökersiniz.</p>
+    <p>Sonra iki terazi konuşur. Biri kazanda ne olduğunu, öteki siparişin ne istediğini <b>atom atom</b> tartar. Kefeler dengeye oturduğunda ocağı yakarsınız. Ürün çıkar, sakine teslim edersiniz, akçenizi alırsınız.</p>
+    <p class="vurgu">Her sipariş bir denklem; her denklem, bir sakinin derdine çare.</p>
+  </div>
+  <p class="kisa"><b>Kısa versiyon:</b> ikinci paragrafı “Bir sakin siparişini verir, kavanozları kazana dökersiniz.” diye tek cümleye indirin.</p>
+</section>
+
+<!-- 6 -->
+<section class="slayt">
+  <div class="slayt-bas"><img src="s06.jpg" alt="Slayt 6"><div><p class="no">Slayt 6 · 03 Nasıl öğretir</p><h3>Kavanoz mühürlü. Alt indis değişmez.</h3><p class="meta"><span>2:40–3:25</span><span>Mehmet</span></p></div></div>
+  <div class="soz">
+    <p class="yon">[Bu sunumun en önemli slaytı. Yavaşlayın.]</p>
+    <p>Şimdi size bu oyunun kalbini göstermek istiyorum.</p>
+    <p>Kavanozlar mühürlü. Öğrenci formüle dokunamaz; yalnızca <b>kaç kavanoz</b> koyacağını seçebilir.</p>
+    <p>Neden bu kadar önemli? Çünkü 1985’ten beri literatürde yazan bir yanılgı var: öğrenci denklemi denkleştirmek için H₂O’yu H₂O₂ yapıverir. Biz bunu bir ders notunda “yapma” diye yazmakla yetinmedik. <span class="yon">[duraklama]</span></p>
+    <p>Gaz çıkınca maddenin yok olduğunu sanan öğrenciye terazi her atomu gösterir. Girenlerin hepsi biter sanan öğrenciye artan madde kefede durur. Sağda gördüğünüz Atom Görüşü ise tepkimede atomların ayrılıp yeniden birleştiğini kazanın üstünde gösterir.</p>
+    <p class="vurgu">Yanlışı yasaklamadık; imkânsız kıldık.</p>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="slayt">
+  <div class="slayt-bas"><img src="s07.jpg" alt="Slayt 7"><div><p class="no">Slayt 7 · 03 Nasıl öğretir</p><h3>Oku, tahmin et, yap, açıkla, kaydet.</h3><p class="meta"><span>3:25–4:00</span><span>Mehmet</span></p></div></div>
+  <div class="soz">
+    <p>Her görev aynı ritimle akar. Önce iki sayfalık bir ders notu. Sonra ustanın sorusu: “Kazana başlamadan söyle çırak…”</p>
+    <p>Sonra görevin kendisi ve içinde bir düşünme katmanı: tahtadaki hatalı denklemi bulduğunuz Hata Dedektifi, atomları kazanın içinde gösteren Atom Görüşü.</p>
+    <p>Görev bitince usta tek bir şey sorar: “Neden?” Ve cevap, öğrencinin <b>kendi keşfi</b> olarak deftere yazılır.</p>
+    <p class="vurgu">Öğrenci cevabı ezberlemez; kendi keşfini deftere yazar.</p>
+    <p class="yon">[Mustafa öne çıkar.]</p>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="slayt">
+  <div class="slayt-bas"><img src="s08.jpg" alt="Slayt 8"><div><p class="no">Slayt 8 · 04 Oyun deneyimi</p><h3>Sözel konular masada · Bir görev, iki ders</h3><p class="meta"><span>4:00–4:40</span><span>Mustafa</span></p></div></div>
+  <div class="soz">
+    <p>Her konu kazana sığmaz. Tanımlar ve sınıflandırmalar masada çözülür: güvercinle bir mektup gelir, masadaki zarf yeşil yeşil ışır. Öğrenci test çözmez; fırıncının mektubunu cevaplar, lonca sınavına girer. Serbest metin yok; yazım hatası yüzünden kimse kaybetmez.</p>
+    <p>Ve tarlada, tek görevde iki ders buluşur. Hesap Ustası olasılığı sorar, Hayat Ustası tohumun neden nefes aldığını. Sonra Câbir Usta’nın buharlı traktörüne binip tarlayı kendiniz ekersiniz.</p>
+    <p class="vurgu">Hayatta dersler ayrı ayrı gelmez; adada da gelmiyor.</p>
+  </div>
+</section>
+
+<!-- 9 -->
+<section class="slayt">
+  <div class="slayt-bas"><img src="s09.jpg" alt="Slayt 9"><div><p class="no">Slayt 9 · 04 Oyun deneyimi</p><h3>Yürü, pedal çevir, sür, sat, büyü.</h3><p class="meta"><span>4:40–7:00</span><span>Mustafa → Mehmet (demo)</span></p></div></div>
+  <div class="soz">
+    <p>Ve ada yaşıyor. Sakinler tezgâha gelir, sırasını bekler, ürününü alıp gider. Bisiklete binersiniz, traktör sürersiniz. Ama anlatmak yerine size göstermek istiyoruz.</p>
+    <div class="demo"><b>Canlı demo · 2 dakika (Mehmet oynar, Mustafa anlatır)</b>
+      <ol>
+        <li>Tezgâhta sakinden siparişi alın. <i>“Bir sakin geldi; derdi bir denklem.”</i></li>
+        <li>Kazana <b>bilerek yanlış oranda</b> dökün, ocağı yakın. Kazan köpürür. <i>“İşte bizim kırmızı çarpımız.”</i> <span class="yon">[Gülümsemeye izin verin.]</span></li>
+        <li>Doğru sayıda kavanoz dökün; terazinin dengeye oturduğunu gösterin. <i>“Şimdi atomlar konuşuyor.”</i></li>
+        <li>Ocağı yakın, ürünü alın, tezgâhta teslim edin. Sağ üstteki “Otomatik kaydedildi” notunu gösterin.</li>
+        <li>Yedek plan: demo takılırsa slayta dönün ve “Ekranda gördüğünüz kareler aynı akıştan” deyin.</li>
+      </ol>
+    </div>
+    <p class="yon">[Demodan dönünce slayt 9’a geri gelin.]</p>
+    <p>Bir de küçük bir sırrımız var: bir köyü bitirdiğinizde boyunuz bir santim uzar. Sınıf atladığınızda belirgin biçimde.</p>
+    <p class="vurgu">Öğrendikçe yalnızca başarımların değil, boyun da uzar.</p>
+  </div>
+  <p class="kisa"><b>Kısa versiyon:</b> demoyu 1, 3 ve 4. adımlarla 1 dakikada bitirin.</p>
+</section>
+
+<!-- 10 -->
+<section class="slayt">
+  <div class="slayt-bas"><img src="s10.jpg" alt="Slayt 10"><div><p class="no">Slayt 10 · 05 Kime ve nerede</p><h3>9. sınıftan mezuna, YKS’ye hazırlanan milyonlar.</h3><p class="meta"><span>7:00–7:40</span><span>Mustafa</span></p></div></div>
+  <div class="soz">
+    <p>Bu oyunu kime yaptık? Bir yolculuğa. 9. sınıfta başlayıp YKS’ye, mezun olduktan sonra yeniden hazırlanan adaylara kadar uzanan bir yolculuğa.</p>
+    <p>Lisede <b>beş virgül yirmi beş milyon</b> öğrenci var. <span class="yon">[duraklama]</span> Geçen yıl TYT’ye <b>iki buçuk milyonu aşkın</b> aday girdi. Kimya bu yolculuğun her yılında, hem TYT’de hem AYT’de karşılarına çıkıyor.</p>
+    <p>Ve biz üç kişiye yazdık: oynayan öğrenciye, onu seçen öğretmene, ona güvenen okula ve veliye.</p>
+    <p class="vurgu">Her yıl milyonlarca genç aynı kapıdan geçiyor; biz o yolun üstüne bir ada kurduk.</p>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="slayt">
+  <div class="slayt-bas"><img src="s11.jpg" alt="Slayt 11"><div><p class="no">Slayt 11 · 05 Kime ve nerede</p><h3>Öğrencinin bugün elinde olanlar.</h3><p class="meta"><span>7:40–8:10</span><span>Mustafa</span></p></div></div>
+  <div class="soz">
+    <p>Bugün bir öğrencinin elinde ne var? Bilgi yarışmaları hızlı, ama yarıştırıyor. Videolar erişilebilir, ama izletiyor. Simülasyonlar doğru, ama hikâyesiz. Simya oyunları büyüleyici, ama müfredatsız.</p>
+    <p>Biz bu dördünün kesiştiği yerde duruyoruz. Ve tablodaki son satırı bilerek dürüst yazdık: henüz bir sınıfta denenmedik. <span class="yon">[jüriye bakın]</span> Bu bir eksik değil; bir sonraki adımımız.</p>
+    <p class="vurgu">Diğerleri soruyor ve sıralıyor; biz uygulatıyor ve yol gösteriyoruz.</p>
+  </div>
+  <p class="kisa"><b>Kısa versiyon:</b> yalnızca ilk paragraf ve vurgu cümlesi.</p>
+</section>
+
+<!-- 12 -->
+<section class="slayt">
+  <div class="slayt-bas"><img src="s12.jpg" alt="Slayt 12"><div><p class="no">Slayt 12 · 06 Nasıl yaptık</p><h3>Arayüz, dünyanın bir parçası.</h3><p class="meta"><span>8:10–8:30</span><span>Mustafa</span></p></div></div>
+  <div class="soz">
+    <p>Tasarımda tek bir kuralımız vardı: arayüz, dünyanın bir parçası olsun. Pazar ekranı kâğıt kartlardan, sipariş mühürlü bir nottan, menüler ahşaptan. Projektörde üç metreden okunsun diye en küçük yazı 28 piksel. Klavyeyle de oynarsınız, gamepad’le de; ekrandaki tuş ipucu elinizdeki cihazı tanır.</p>
+    <p class="vurgu">Tek bir menü bile adanın dışında kalmasın istedik.</p>
+    <p class="yon">[Mehmet öne çıkar.]</p>
+  </div>
+</section>
+
+<!-- 13 -->
+<section class="slayt">
+  <div class="slayt-bas"><img src="s13.jpg" alt="Slayt 13"><div><p class="no">Slayt 13 · 06 Nasıl yaptık</p><h3>Sıfırdan yazıldı, uçtan uca oynanıyor.</h3><p class="meta"><span>8:30–9:05</span><span>Mehmet</span></p></div></div>
+  <div class="soz">
+    <p>Ve hepsi bu yarışmada yazıldı. <span class="yon">[GitHub görselindeki altın çerçeveyi gösterin.]</span> İlk commit: 13 Kasım, saat 11.45.</p>
+    <p>O andan bugüne 56 commit, 214 C# dosyası, kimya hesabını denetleyen otomatik testler ve uçtan uca oynanan 12 görev. Görevler veri dosyalarında yaşıyor; yeni bir görev eklemek kod yazmak değil, yeni bir dosya açmak demek.</p>
+    <p class="vurgu">İlk satırdan son mühre kadar, her şey bu yarışmada yazıldı.</p>
+  </div>
+</section>
+
+<!-- 14 -->
+<section class="slayt">
+  <div class="slayt-bas"><img src="s14.jpg" alt="Slayt 14"><div><p class="no">Slayt 14 · 07 Sırada ne var</p><h3>Bugün bir şehir; yapı altı şehre hazır.</h3><p class="meta"><span>9:05–9:30</span><span>Mehmet</span></p></div></div>
+  <div class="soz">
+    <p>Bugün bir şehir. Yarın? Matematik, Fizik ve Biyoloji için 29 seviyelik görev planı hazır; ilk tarla görevi zaten oyunda. Sonra Türkçe ve Sosyal.</p>
+    <p>Yaygınlaşma yolumuz da net: ilk köy herkese ücretsiz, okullara yıllık lisans, eğitim platformlarıyla iş birliği.</p>
+    <p class="vurgu">Bir dersin kapısını açtık; aynı anahtar diğer beşinde de çalışır.</p>
+    <p class="yon">[Mustafa öne çıkar; son slayt.]</p>
+  </div>
+</section>
+
+<!-- 15 -->
+<section class="slayt">
+  <div class="slayt-bas"><img src="s15.jpg" alt="Slayt 15"><div><p class="no">Slayt 15 · Kapanış</p><h3>Kazana ne girerse o çıkar.</h3><p class="meta"><span>9:30–10:00</span><span>Mustafa</span></p></div></div>
+  <div class="soz">
+    <p class="yon">[Sesi alçaltın. Açılıştaki soruya dönüyoruz; bu, hikâyenin halkasını kapatır.]</p>
+    <p>Başta size bir soru sormuştuk: kimya dersinde hiç uyuyakaldınız mı?</p>
+    <p>Biz o öğrenciyi uyandırmak istemedik. <span class="yon">[duraklama]</span> Onu, uyanmak isteyeceği bir yere götürmek istedik.</p>
+    <p>Câbir Usta’nın sözüyle bitirelim: <b>“Kazana ne girerse o çıkar; ne bir eksik, ne bir fazla.”</b> Bu cümle hem kütlenin korunumu, hem de bizim tasarım ilkemiz: oyuna koyduğumuz her şey bir şey öğretiyor, fazlası yok.</p>
+    <p>Bir sonraki adımımız iki okulda pilot. Ölçeceğiz, dinleyeceğiz, adayı büyüteceğiz. Bunun için tek bir şeye ihtiyacımız var: kapısını açacak okullar ve öğretmenler.</p>
+    <p class="vurgu">Kimya şehri açık. Diğerleri sisin ardında.</p>
+    <p class="yon">[İki saniye sessizlik. Sonra ikiniz birlikte:]</p>
+    <p><b>Teşekkür ederiz.</b></p>
+  </div>
+</section>
+
+<!-- 16 + SSS -->
+<section class="sss">
+  <p class="no">Slayt 16 · Ek</p>
+  <h2>Soru-cevap hazırlığı</h2>
+  <p>Kriter tablosunu soru-cevap boyunca ekranda tutun. Her cevap üç adımlı olsun: <b>doğrudan cevap → oyundan bir kanıt → kısa bir kapanış cümlesi.</b> Bilmediğiniz bir şeyde “henüz ölçmedik, pilotta ölçeceğiz” demek, uydurmaktan her zaman daha güçlüdür.</p>
+
+  <div class="soru"><b>“Oyunun öğrettiğini nereden biliyorsunuz?”</b>Henüz bir sınıfta ölçmedik; bunu açıkça söylüyoruz. Ama tasarım literatürdeki bilinen yanılgılara dayanıyor ve mekanik bu yanılgıları imkânsız kılıyor. Pilotta ön test ve son testle hem öğrenmeyi hem kaygıyı ölçeceğiz. <i>“İddiamızı ölçmeye hazırız.”</i></div>
+
+  <div class="soru"><b>“Liderlik tablosu olmadan öğrenci neden devam etsin?”</b>Rekabet başkalarıyla değil, kendinle: hatasız tamamlama ve defter açmadan bitirme gibi meydan okumalar var. Bunun yanında köy canlanıyor, başarım ağacı doluyor, boyun uzuyor. <i>“Motivasyonu sıralamadan değil, ilerlemeden alıyoruz.”</i></div>
+
+  <div class="soru"><b>“Neden kimya, neden 10. sınıf?”</b>Denkleştirme ve stokiyometri hem 10. sınıfın hem YKS’nin temel konusu; üstelik tartılabilir, sayılabilir, oyunlaştırmaya en uygun konu. <i>“En zor anlaşılanı en somut hâle getirmek istedik.”</i></div>
+
+  <div class="soru"><b>“Öğretmen bunu derste nasıl kullanır?”</b>Her köy bir konuya, her görev bir kazanıma eşli. Konu anlatımından sonra bir köy sınıfça oynanabilir ya da ödev verilebilir; Keşif Defteri sonraki derste tartışma malzemesi olur. <i>“Öğretmenin yerini almıyoruz; elini güçlendiriyoruz.”</i></div>
+
+  <div class="soru"><b>“Diğer dersler gerçekten eklenebilir mi?”</b>Evet; yapı veri odaklı. Matematik ve Biyoloji’yi birlikte işleyen tarla görevi zaten oyunda ve iki dersin başarım sekmesini birden açıyor. <i>“Kanıtı şu an oyunun içinde.”</i></div>
+
+  <div class="soru"><b>“Yapay zekâyı nasıl kullandınız?”</b>Kod, araştırma ve metinlerde yardım aldık; hangi sistemde nasıl kullandığımızı LICENSES.md’deki beyan tablosuna tek tek yazdık. Kararlar, tasarım ve oyun bizim. <i>“Saklamadık, belgeledik.”</i></div>
+
+  <div class="soru"><b>“Hata yapan öğrenciye ne oluyor?”</b>Kazan köpürür, malzeme gider, yeniden dener. Puan kırılmaz, kırmızı çarpı yoktur; usta da cevabı söylemez, nereye bakılacağını söyler. <i>“Hatayı cezalandırmıyoruz; öğretmen yapıyoruz.”</i></div>
+
+  <div class="soru"><b>“Nasıl para kazanacaksınız?”</b>Önerimiz: ilk köy ücretsiz, okullara yıllık lisans ve eğitim platformlarıyla içerik iş birlikleri. Şu an bir gelirimiz yok; önceliğimiz önce sınıfta işe yaradığını göstermek. <i>“Önce etki, sonra ölçek.”</i></div>
+
+  <p class="son">“Kazana ne girerse o çıkar; ne bir eksik, ne bir fazla.” — Câbir Usta</p>
+</section>
+
+</body>
+</html>

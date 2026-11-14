@@ -10,7 +10,8 @@ namespace BilgiAdasi.UI
     /// </summary>
     public interface IReasoningView
     {
-        void ShowQuestion(string speaker, string question, IReadOnlyList<string> options, Action<int> onChosen);
+        /// <summary>shuffle: şıklar karışık sırada (varsayılan); menü gibi sabit sıra gereken yerde false. onChosen verinin sırasıyla döner.</summary>
+        void ShowQuestion(string speaker, string question, IReadOnlyList<string> options, Action<int> onChosen, bool shuffle = true);
         void ShowMessage(string speaker, string text, string continueWord, Action onContinue);
         void Hide();
     }

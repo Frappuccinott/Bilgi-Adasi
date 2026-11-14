@@ -109,7 +109,7 @@ namespace BilgiAdasi.UI
 
         // ---------- IReasoningView ----------
 
-        public void ShowQuestion(string speaker, string question, IReadOnlyList<string> optionTexts, Action<int> chosen)
+        public void ShowQuestion(string speaker, string question, IReadOnlyList<string> optionTexts, Action<int> chosen, bool shuffle = true)
         {
             onChosen = chosen;
             onContinue = null;
