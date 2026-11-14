@@ -15,8 +15,8 @@ namespace BilgiAdasi.Order
         [TextArea(1, 3)] [SerializeField] private string notEnoughMoney = "Keseden yeterince akçe kalmadı.";
         [TextArea(1, 3)] [SerializeField] private string inventoryFull = "Envanterde yer yok.";
         [TextArea(1, 3)] [SerializeField] private string loanGiven = "Usta keseye {1} akçe koydu: \"Sonra ödersin.\"";
-        [TextArea(1, 3)] [SerializeField] private string noOrder = "Bekleyen sipariş yok. Kapıya bir bak.";
-        [TextArea(1, 3)] [SerializeField] private string readyToDeliver = "Sipariş hazır. Kapıdaki sahibine götür.";
+        [TextArea(1, 3)] [SerializeField] private string noOrder = "Bekleyen sipariş yok. Tezgâha bir bak.";
+        [TextArea(1, 3)] [SerializeField] private string readyToDeliver = "Sipariş hazır. Tezgâhta bekleyen sahibine götür.";
         [TextArea(1, 3)] [SerializeField] private string productWaiting = "Envanterde yer yok; ürün kazanda bekliyor.";
         [TextArea(1, 3)] [SerializeField] private string foamLost = "Kazan köpürdü, içindekiler gitti. Teraziye bak, baştan dök.";
         [TextArea(1, 3)] [SerializeField] private string drained = "Kazan boşaltıldı.";

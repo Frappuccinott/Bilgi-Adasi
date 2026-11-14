@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f374c405991362941b9144d0f994fbfa, type: 3}
+  m_Name: MusteriIstekleri
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.CustomerRequestSet
+  requests:
+  - customerName: "A\u015F\xE7\u0131 Melek"
+    portrait: {fileID: 0}
+    female: 1
+    product: {fileID: 11400000, guid: 4d7d1e9c4ee5640419e910786ab51966, type: 2}
+    price: 1
+    askLine: "Kuyunun suyu buland\u0131, \xE7orbaya temiz su laz\u0131m. Bir kavanoz
+      {0} verir misin? {1} ak\xE7e \xF6derim."
+    thanksLine: "Tertemiz! Bug\xFCnk\xFC \xE7orba senden say\u0131l\u0131r."
+  - customerName: "Ambarc\u0131 Kenan"
+    portrait: {fileID: 0}
+    female: 0
+    product: {fileID: 11400000, guid: 50ddecd6f6537fd48aa42ccc142f47e6, type: 2}
+    price: 1
+    askLine: "Ambarda k\u0131v\u0131lc\u0131m s\u0131\xE7rad\u0131. A\u011F\u0131r
+      hava ate\u015Fi bo\u011Farm\u0131\u015F derler; sende {0} var m\u0131? {1}
+      ak\xE7e."
+    thanksLine: "Bunu kap\u0131n\u0131n yan\u0131na koyar\u0131m. Ate\u015F s\xF6ns\xFCn,
+      ambar yanmas\u0131n."
+  - customerName: "Badanac\u0131 Rukiye"
+    portrait: {fileID: 0}
+    female: 1
+    product: {fileID: 11400000, guid: ebee964df288a574aac6253b59b4893d, type: 2}
+    price: 2
+    askLine: "Evin duvarlar\u0131 karard\u0131. Bir kavanoz badana kireci, yani {0}
+      laz\u0131m. {1} ak\xE7e veririm."
+    thanksLine: "Duvarlar bembeyaz olacak. Eline sa\u011Fl\u0131k."
+  - customerName: "Bostanc\u0131 Osman"
+    portrait: {fileID: 0}
+    female: 0
+    product: {fileID: 11400000, guid: 22efa628d4955a043956e0eedbb0503e, type: 2}
+    price: 3
+    askLine: "Elif'in tarlas\u0131 ye\u015Ferdi, benim bostan bak\u0131yor. Bir kavanoz
+      g\xFCbre ruhu ({0}) olur mu? {1} ak\xE7e."
+    thanksLine: "Domatesler sana te\u015Fekk\xFCr edecek."
+  - customerName: "Duvarc\u0131 Tamer"
+    portrait: {fileID: 0}
+    female: 0
+    product: {fileID: 11400000, guid: 09de350f5713fc441bf45c8c039b8186, type: 2}
+    price: 2
+    askLine: "Har\xE7 tutmuyor. Biraz diri kire\xE7, {0}, laz\u0131m. Eldivenim de
+      var merak etme. {1} ak\xE7e."
+    thanksLine: "Bununla har\xE7 ta\u015F gibi olur."
+  wrongItemLine: "Bu de\u011Fil evlad\u0131m, ben {0} istemi\u015Ftim."
+  paidLine: "Al bakal\u0131m, {0} ak\xE7e."
+  cooldown: 25

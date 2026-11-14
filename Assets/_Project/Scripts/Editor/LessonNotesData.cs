@@ -20,6 +20,7 @@ namespace BilgiAdasi.EditorTools
                 case "denk_3": return Denk3();
                 case "denk_4": return Denk4();
                 case "denk_5": return Denk5();
+                case "bereket_2": return Bereket2();
                 default: return new LessonNote();
             }
         }
@@ -212,6 +213,47 @@ namespace BilgiAdasi.EditorTools
                 R(),
                 N("Unutma", "İki giren her zaman birlikte tükenmez. Fazla aldığın kavanoz kazanda artar, boşa gider; kesen de boşalır.")));
 
+        // ---------- Sv2 Tohum Nefes Alır (Bereket Tarlası): Biyoloji + Matematik (15-bereket §3.2) ----------
+        // TYMM: BİY.10.1.7 hücresel solunum, BİY.10.1.8 oksijenli solunum; Matematik Tema 7 Veriden Olasılığa (deneysel olasılık).
+        // "Bu görevde" sayfası cevabı (150 tohum / 15 kese) vermez.
+
+        private static LessonNote Bereket2() => new LessonNote("Tohum nefes alır",
+            Page(
+                K("Ders notu · Biyoloji + Matematik", "Bereket Tarlası, Hayat Ustası"),
+                T("Tohum nefes alır"),
+                B("Tohumun içinde depolanmış besin vardır. Tohum çimlenirken bu besini oksijenli solunumla kullanır ve büyümek için gereken enerjiyi elde eder."),
+                E("besin (glikoz) + O₂ → CO₂ + H₂O + enerji"),
+                R(),
+                S("Toprağı neden süreriz?"),
+                B("Sürülmüş toprak gevşektir; arasında hava (oksijen) ve su tutulur. Sıkışmış toprakta tohum yeterince oksijen bulamaz, çimlenme azalır."),
+                F("Bu denklemi tanıyorsun: yanmaya benzer (K-2). Ama hücrede yavaş ve adım adım olur; alev çıkmaz.")),
+            Page(
+                K("Hesap Ustası"),
+                T("Kaç tanesi çimlenir?"),
+                B("Çimlenme olasılığı 0,8 ise her 10 tohumdan yaklaşık 8'i çimlenir."),
+                St("Beklenen sayı = olasılık × tohum sayısı.",
+                    "Tersinden: istenen filiz biliniyorsa tohum = filiz ÷ olasılık.",
+                    "Tohum kesede satılıyorsa kese sayısını yukarı yuvarla."),
+                R(),
+                W("Dikkat", "Filiz sayısını olasılıkla çarpma, böl. Çarparsan daha az tohum bulursun, tarla boş kalır. Sonucu kendine sor: bu kadar tohumun yüzde 80'i istediğim sayı mı?")),
+            Page(
+                K("Çözümlü örnek"),
+                T("Bostanda karpuz"),
+                B("Bostancı Osman 45 karpuz fidesi istiyor. Karpuz tohumunun çimlenme olasılığı 0,9; tohum 10'luk paketlerde."),
+                St("Tohum = 45 ÷ 0,9 = 50.",
+                    "Kontrol: 50 × 0,9 = 45.",
+                    "Paket: 50 ÷ 10 = 5 paket."),
+                N("Unutma", "Beklenen sayı ortalamadır. 50 tohumdan 44 de çıkabilir, 47 de.")),
+            Page(
+                K("Bu görevde", "Çiftçi Elif, Bereket Tarlası"),
+                T("Tarla boş kalmasın"),
+                B("Elif 120 öbek filiz istiyor. Tohumun çimlenme olasılığı 0,8; pazarda tohum 10'luk keselerde."),
+                St("Kaç tohum gerektiğini hesapla.",
+                    "Pazardan tam o kadar kese al.",
+                    "Tarladaki ekim sandığına dök."),
+                R(),
+                N("Unutma", "Dökülen tohum geri alınmaz; fazla kese akçeni boşa harcar.")));
+
         // ---------- Defter sayfası (Keşiflerim) ve şeritler ----------
 
         /// <summary>Kaydın defter sayfası: görev adı, sakin ve yer, denklem, ikon, kullanım notu, öteki derslerdeki saha notları
@@ -249,6 +291,11 @@ namespace BilgiAdasi.EditorTools
                     e.WithPage("Gübre Ruhu", "Çiftçi Elif, tarla", Rx("N₂ + 3H₂ → 2NH₃"), "NH3", "",
                         Fn("Matematik", "Matematik, doğrusal maliyet", "Maliyet = 3·(N₂ sayısı) + 2·(H₂ sayısı). Fazla alınan kavanoz maliyeti boşuna artırır."),
                         Fn("Biyoloji", "Biyoloji, azot döngüsü", "Bitki havadaki N₂’yi doğrudan kullanamaz; gübre bağlanmış azotu toprağa verir."));
+                    break;
+                case "bereket_2":
+                    e.WithPage("Tohum Nefes Alır", "Çiftçi Elif, Bereket Tarlası", Rx("besin + O₂ → CO₂ + H₂O + enerji"), "", "",
+                        Fn("Matematik", "Matematik, olasılık", "Tohum = filiz ÷ olasılık: 120 ÷ 0,8 = 150 tohum = 15 kese."),
+                        Fn("Biyoloji", "Biyoloji, oksijenli solunum", "Çimlenen tohum besinini O₂ ile kullanır; sıkışmış toprakta çimlenme azalır."));
                     break;
                 case "tur_1":
                     e.WithPage("Ustanın Defteri", "Câbir Usta’nın defteri, çalışma masası", "", "", "");

@@ -14,12 +14,76 @@ MonoBehaviour:
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.ApprenticeshipData
   task: {fileID: 11400000, guid: cea3c30e633e33441823eb697f4a9832, type: 2}
   classroomCards:
-  - "Sonbahar sabah\u0131. 10. s\u0131n\u0131f\u0131n ilk kimya dersi."
-  - "\xD6\u011Fretmen tahtaya yaz\u0131yor: <b>Kimyasal Tepkimeler</b>."
-  - "S\u0131n\u0131f \u0131l\u0131k, sesler uzakla\u015F\u0131yor\u2026 G\xF6zlerin
-    a\u011F\u0131rla\u015F\u0131yor."
-  - "\u2026bir yerde bir kazan fokurduyor."
+  - "Sonbahar sabah\u0131. Kimya dersi.\nTahtada iki kelime: <b>Kimyasal Tepkimeler</b>."
+  - "S\u0131n\u0131f \u0131l\u0131k, \xF6\u011Fretmenin sesi uzakla\u015F\u0131yor\u2026\nG\xF6z
+    kapaklar\u0131n a\u011F\u0131rla\u015F\u0131yor."
+  - "\u2026ve bir yerde, bir kazan fokurdamaya ba\u015Fl\u0131yor."
   cardSeconds: 3.2
+  introShots:
+  - kicker: "Bilgi Adas\u0131"
+    text: "G\xF6z\xFCn\xFC a\xE7t\u0131\u011F\u0131nda s\u0131n\u0131f yok. Hi\xE7bir
+      haritada olmayan bir adadas\u0131n: burada her \u015Fehir bir ders."
+    seconds: 6
+    fromPosition: {x: -80, y: 48, z: -42}
+    toPosition: {x: -64, y: 42, z: -50}
+    fromLook: {x: -8, y: 0, z: 12}
+    toLook: {x: -3, y: 0, z: 10}
+    fieldOfView: 55
+  - kicker: "Sisin ard\u0131nda"
+    text: "Matematik, Fizik, Biyoloji\u2026 \xD6teki \u015Fehirlerin kap\u0131lar\u0131
+      kapal\u0131. Anahtar\u0131, \xF6\u011Frendiklerin."
+    seconds: 5
+    fromPosition: {x: -21.5, y: 9, z: -40}
+    toPosition: {x: -21.5, y: 8.2, z: -46}
+    fromLook: {x: -21.5, y: 7, z: -72}
+    toLook: {x: -21.5, y: 7.5, z: -74}
+    fieldOfView: 55
+  - kicker: "Denkle\u015Ftirme K\xF6y\xFC"
+    text: "\xC7e\u015Fme kurumu\u015F, fenerler isleniyor, f\u0131r\u0131n so\u011Fumu\u015F.
+      K\xF6yl\xFCler bir \xE7are ar\u0131yor. \xC7are sende."
+    seconds: 5
+    fromPosition: {x: -37, y: 2.8, z: 18.2}
+    toPosition: {x: -39.5, y: 2.5, z: 18.6}
+    fromLook: {x: -46, y: 1.3, z: 19}
+    toLook: {x: -48, y: 1.3, z: 19.4}
+    fieldOfView: 55
+  - kicker: "C\xE2bir Usta'n\u0131n at\xF6lyesi"
+    text: "Kap\u0131ya gelen her derdi bu at\xF6lyede \xE7\xF6zeceksin. Usta ya\u015Fland\u0131;
+      ona bir \xE7\u0131rak laz\u0131m."
+    seconds: 5
+    fromPosition: {x: 7.5, y: 3.4, z: 13.5}
+    toPosition: {x: 6, y: 2.8, z: 11.5}
+    fromLook: {x: 0, y: 2, z: 1}
+    toLook: {x: 0.3, y: 2.2, z: 1}
+    fieldOfView: 55
+  - kicker: Kazan ve terazi
+    text: "Kazana ne girerse terazi onu tartar. Tek bir atom eksik kalsa kazan k\xF6p\xFCr\xFCr."
+    seconds: 5
+    fromPosition: {x: 1.3, y: 1.8, z: -0.1}
+    toPosition: {x: 0.5, y: 1.6, z: -0.6}
+    fromLook: {x: -1.2, y: 0.75, z: -2.6}
+    toLook: {x: -1.3, y: 0.7, z: -2.7}
+    fieldOfView: 55
+  - kicker: "At\xF6lyenin tezg\xE2h\u0131"
+    text: "K\xF6yl\xFCler tezg\xE2h\u0131na gelecek. Malzemeyi \xE7ar\u015F\u0131dan
+      al, kazanda pi\u015Fir, sipari\u015Fi kendi elinle teslim et."
+    seconds: 5
+    fromPosition: {x: -6.8, y: 2.2, z: 9.8}
+    toPosition: {x: -5.6, y: 1.9, z: 8.8}
+    fromLook: {x: -2, y: 1.2, z: 5.3}
+    toLook: {x: -1.8, y: 1.2, z: 5}
+    fieldOfView: 55
+  - kicker: "\xC7\u0131rak"
+    text: "D\xFCn s\u0131radan bir \xF6\u011Frenciydin. Bug\xFCn Kimya \u015Fehrinin
+      yeni \xE7\u0131ra\u011F\u0131s\u0131n. Ama \xF6nce\u2026 biri seni uyand\u0131r\u0131yor."
+    seconds: 5.5
+    fromPosition: {x: 2.6, y: 0.45, z: 7.4}
+    toPosition: {x: 2.4, y: 0.5, z: 6.8}
+    fromLook: {x: 1.8, y: 2, z: 3}
+    toLook: {x: 1.9, y: 2.2, z: 3}
+    fieldOfView: 55
+  nextWord: Devam
+  skipWord: Atla
   masterName: "C\xE2bir Usta"
   wakeLines:
   - "Nihayet uyand\u0131n. Kap\u0131m\u0131n \xF6n\xFCnde yat\u0131yordun; \xE7\u0131rak
@@ -44,5 +108,5 @@ MonoBehaviour:
   giftCount: 2
   giftNotice: "Usta eline iki kavanoz H<sub>2</sub> verdi. Kazana d\xF6k, ate\u015Fi
     yak."
-  doneNotice: "Kavanozlar geri geldi: ne girerse o \xE7\u0131kar. Kap\u0131ya bak;
+  doneNotice: "Kavanozlar geri geldi: ne girerse o \xE7\u0131kar. Tezg\xE2ha bak;
     k\xF6yden biri seni ar\u0131yor."

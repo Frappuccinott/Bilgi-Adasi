@@ -87,6 +87,7 @@ namespace BilgiAdasi.City
         private static bool IsBlocked()
         {
             if (GameInput.Mode != InputMode.Player || Time.timeScale <= 0f) return true;
+            if (ApprenticeshipDirector.IsPlaying) return true;   // açılış sinematiği, uyanış, tahmin
             return ViewLocator.Get<IDialogueCommands>() is DialogueDirector director && director.IsPlaying;
         }
 

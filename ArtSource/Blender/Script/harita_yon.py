@@ -823,7 +823,9 @@ def build_yon():
         bk.append(b)
     made.append(put_yon(merge(bk), "SM_Meydan_Banklar", 0.0, 0.0, 0.0, z=0.0))
     pk = []
-    for (px, py, pyaw) in ((2.6, 5.8, math.pi / 2), (36.0, -11.4, 0.05), (-30.0, -0.4, math.pi + 0.08)):
+    # atölye önündeki park yeri kapının doğusuna, cepheye paralel alındı: eski yeri (2.6, 5.8, π/2) atölye pazarının
+    # tezgâhıyla çakışıyordu (14.11). Unity'de aynı düzen: Art/Harita/SM_Bisiklet_Park_Yerleri_Duzen.asset
+    for (px, py, pyaw) in ((-5.17, 6.0, math.pi), (36.0, -11.4, 0.05), (-30.0, -0.4, math.pi + 0.08)):
         b = bisiklet_park_bm()
         transform_bm(b, M(px, py, height(px, py), pyaw))
         pk.append(b)

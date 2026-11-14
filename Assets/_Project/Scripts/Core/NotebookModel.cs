@@ -130,7 +130,7 @@ namespace BilgiAdasi.Core
         [Tooltip("Ders notunun sayfa sırasına göre bölüm adları (Bu notta tablosu).")]
         [SerializeField] private string[] sectionLabels = { "Konu", "Yöntem", "Çözümlü örnek", "Bu görevde" };
         [SerializeField] private string readHint = "Enter ile notu baştan oku. Görev bittikten sonra da burada durur.";
-        [SerializeField] private string notesEmpty = "Usta henüz not bırakmadı. Kapıdan ilk siparişi al.";
+        [SerializeField] private string notesEmpty = "Usta henüz not bırakmadı. Tezgâhtan ilk siparişi al.";
 
         [Header("Ustalık")]
         [SerializeField] private string masteryTitle = "Ustalık";

@@ -232,9 +232,11 @@ namespace BilgiAdasi.Desk
             switch (current.Evaluate())
             {
                 case PaperVerdict.Incomplete:
+                    GameEvents.RaiseSound(SoundId.Info);
                     Note(texts != null ? texts.Incomplete : null, PaperNoteKind.Info);
                     break;
                 case PaperVerdict.NotMinimal:
+                    GameEvents.RaiseSound(SoundId.Info);
                     Note(texts != null ? texts.NotMinimal : null, PaperNoteKind.Info);
                     break;
                 case PaperVerdict.Wrong:
@@ -242,6 +244,7 @@ namespace BilgiAdasi.Desk
                     break;
                 default:
                     Current = State.Checking;
+                    GameEvents.RaiseSound(SoundId.Correct);
                     Note(texts != null ? texts.Correct : null, PaperNoteKind.Correct);
                     paperView?.Refresh(current, focus);
                     flow = StartCoroutine(NextRoutine());
@@ -259,6 +262,7 @@ namespace BilgiAdasi.Desk
         {
             fails++;
             GameEvents.RaiseFailed(task.Id);
+            GameEvents.RaiseSound(SoundId.Wrong);
             bool equation = current is BalancePaper;
             Note(texts != null ? (equation ? texts.WrongEquation : texts.Wrong) : null, PaperNoteKind.Wrong);
             paperView?.Refresh(current, focus);

@@ -117,3 +117,9 @@ MonoBehaviour:
     secret: 0
     manualPosition: 0
     position: {x: 0, y: 0}
+  topicFormat: 'Konu: {0}'
+  flawlessWord: "Hatas\u0131z"
+  failFormat: '{0} hata'
+  noHintWord: "Defter a\xE7\u0131lmadan"
+  hintWord: "Deftere bak\u0131ld\u0131"
+  statsSeparator: " \xB7 "

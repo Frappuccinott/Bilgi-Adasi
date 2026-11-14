@@ -20,6 +20,13 @@ namespace BilgiAdasi.City
         [Tooltip("Bir kartın ekranda kalma süresi (sn). Onay tuşu geçer.")]
         [SerializeField] private float cardSeconds = 3.2f;
 
+        [Header("Açılış: ada (göz açılınca kare kare sinematik)")]
+        [Tooltip("Sırayla oynanır; her kare kamerayı from → to arasında yavaşça kaydırır. Boşsa doğrudan uyanışa geçilir.")]
+        [SerializeField] private IntroShot[] introShots = new IntroShot[0];
+        [Tooltip("Sağ alttaki ipuçları: kareyi geç / bütün açılışı atla.")]
+        [SerializeField] private string nextWord = "Devam";
+        [SerializeField] private string skipWord = "Atla";
+
         [Header("Uyanış: atölye kapısı")]
         [SerializeField] private string masterName = "Câbir Usta";
         [TextArea(2, 4)] [SerializeField] private string[] wakeLines = new string[0];
@@ -36,9 +43,12 @@ namespace BilgiAdasi.City
         [SerializeField] private SpeciesData giftSpecies;
         [Min(0)] [SerializeField] private int giftCount = 2;
         [TextArea(1, 2)] [SerializeField] private string giftNotice = "Usta eline iki kavanoz H<sub>2</sub> verdi. Kazana dök, ateşi yak.";
-        [TextArea(1, 2)] [SerializeField] private string doneNotice = "Kavanozlar geri geldi: ne girerse o çıkar. Kapıya bak; köyden biri seni arıyor.";
+        [TextArea(1, 2)] [SerializeField] private string doneNotice = "Kavanozlar geri geldi: ne girerse o çıkar. Tezgâha bak; köyden biri seni arıyor.";
 
         public OrderTask Task => task;
+        public IntroShot[] IntroShots => introShots;
+        public string NextWord => nextWord;
+        public string SkipWord => skipWord;
         public string[] ClassroomCards => classroomCards;
         public float CardSeconds => cardSeconds;
         public string MasterName => masterName;
@@ -67,6 +77,52 @@ namespace BilgiAdasi.City
             giftSpecies = gift;
             giftCount = count;
         }
+
+        public void SetIntro(IntroShot[] shots) => introShots = shots;
 #endif
+    }
+
+    /// <summary>Açılış sinematiğinin bir karesi: üst satır (yer adı), cümle ve kameranın yavaş kayışı (dünya koordinatı).</summary>
+    [System.Serializable]
+    public sealed class IntroShot
+    {
+        [Tooltip("Küçük altın üst satır: yerin adı.")]
+        [SerializeField] private string kicker;
+        [TextArea(2, 3)] [SerializeField] private string text;
+        [Min(1f)] [SerializeField] private float seconds = 5f;
+        [SerializeField] private Vector3 fromPosition, toPosition;
+        [Tooltip("Kameranın baktığı nokta (başta → sonda).")]
+        [SerializeField] private Vector3 fromLook, toLook;
+        [Range(30f, 80f)] [SerializeField] private float fieldOfView = 55f;
+
+        public string Kicker => kicker;
+        public string Text => text;
+        public float Seconds => seconds;
+        public float FieldOfView => fieldOfView;
+
+        /// <summary>Kareye göre (0–1) kamera konumu ve bakışı; kayış yumuşak başlar ve yumuşak biter.</summary>
+        public void Evaluate(float t, out Vector3 position, out Quaternion rotation)
+        {
+            float e = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t));
+            position = Vector3.Lerp(fromPosition, toPosition, e);
+            var look = Vector3.Lerp(fromLook, toLook, e);
+            var dir = look - position;
+            rotation = dir.sqrMagnitude > 0.0001f ? Quaternion.LookRotation(dir, Vector3.up) : Quaternion.identity;
+        }
+
+        public IntroShot() { }
+
+        public IntroShot(string kicker, string text, Vector3 fromPos, Vector3 toPos, Vector3 fromLook, Vector3 toLook,
+            float seconds = 5f, float fov = 55f)
+        {
+            this.kicker = kicker;
+            this.text = text;
+            fromPosition = fromPos;
+            toPosition = toPos;
+            this.fromLook = fromLook;
+            this.toLook = toLook;
+            this.seconds = seconds;
+            fieldOfView = fov;
+        }
     }
 }

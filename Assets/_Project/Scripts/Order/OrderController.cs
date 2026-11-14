@@ -161,6 +161,7 @@ namespace BilgiAdasi.Order
             SetReadySave(null);
             scaleView?.ClearFoamDifference();
             RefreshAll(); // Done: terazi sıfırlanır (RefreshCauldron)
+            GameEvents.RaiseSound(SoundId.Coins);
             GameEvents.RaiseTaskCompleted(task.Id);
             // Görev kayda işlendikten sonra: pazar "bitince açılır/kalkar" satırlarını doğru görür.
             GameEvents.RaiseActiveOrderChanged(null);
@@ -189,6 +190,7 @@ namespace BilgiAdasi.Order
 
             session.Pour(s);
             cauldronView?.PlayPour(s);
+            GameEvents.RaiseSoundAt(SoundId.Pour, transform.position);
             RefreshCauldron();
         }
 
@@ -198,6 +200,7 @@ namespace BilgiAdasi.Order
             if (session == null || !CanPour || session.IsEmpty) return;
             session.Clear();
             cauldronView?.PlayDrain();
+            GameEvents.RaiseSoundAt(SoundId.Drain, transform.position);
             Notice(texts != null ? texts.Drained : null);
             RefreshCauldron();
         }
@@ -213,6 +216,7 @@ namespace BilgiAdasi.Order
             lastInventory = inventory;
             bool reacts = session.IsSatisfied;
             GameEvents.RaiseStoveFired(reacts);
+            GameEvents.RaiseSoundAt(SoundId.Ignite, transform.position);
             StartCoroutine(reacts ? ReactRoutine() : FoamRoutine());
         }
 
@@ -252,6 +256,7 @@ namespace BilgiAdasi.Order
 
             cauldronView?.SetStoveLit(true);
             cauldronView?.PlayFoam(foamDuration);
+            GameEvents.RaiseSoundAt(SoundId.Foam, transform.position);
             scaleView?.ShowFoamDifference(session.Rows);
             yield return new WaitForSeconds(foamDuration);
 
@@ -279,12 +284,14 @@ namespace BilgiAdasi.Order
             StateChanged?.Invoke();
             cauldronView?.SetStoveLit(true);
             cauldronView?.PlayReaction(reactionDuration);
+            GameEvents.RaiseSoundAt(SoundId.Boil, transform.position);
             // Atom Görüşü: kazan boşalmadan önce girenler, artanlar ve ürünler (view kopyalar).
             atomView?.Play(session.Used, session.Extra, session.Step.TargetProducts);
             yield return new WaitForSeconds(reactionDuration);
 
             var step = session.Step;
             WriteToBoard(FormulaFormatter.Equation(step.Reaction));
+            GameEvents.RaiseSoundAt(SoundId.ReactionSuccess, transform.position);
             cauldronView?.SetStoveLit(false);
             session.Clear();
 

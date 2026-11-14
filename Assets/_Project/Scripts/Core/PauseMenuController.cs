@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 namespace BilgiAdasi.Core
 {
@@ -51,7 +52,8 @@ namespace BilgiAdasi.Core
 
         private void OnPausePressed(InputAction.CallbackContext _)
         {
-            if (!paused) Pause();
+            // Açılış sinematiğinde Esc · Start açılışı atlar (ApprenticeshipDirector), menü açılmaz.
+            if (!paused && !BilgiAdasi.City.ApprenticeshipDirector.InCinematic) Pause();
         }
 
         private void OnCancel(InputAction.CallbackContext _)
@@ -97,6 +99,17 @@ namespace BilgiAdasi.Core
             Cursor.lockState = previousLock;
             Cursor.visible = previousCursorVisible;
             GameEvents.RaisePauseChanged(false);
+        }
+
+        public void ReturnToMainMenu()
+        {
+            if (!paused) return;
+            // Kayıt yalnızca görev sonunda (otomatik): son görev anından sonraki ilerleme yazılmaz.
+            Resume();
+            Time.timeScale = 1f;
+            GameInput.SetMode(InputMode.UI);
+            if (SceneFlow.Instance != null) SceneFlow.Instance.Load(SceneFlow.MenuScene);
+            else SceneManager.LoadScene(SceneFlow.MenuScene);
         }
 
         public void QuitGame()

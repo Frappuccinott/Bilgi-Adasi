@@ -18,6 +18,13 @@ namespace BilgiAdasi.Core
         /// <summary>Diskte devam edilebilecek bir kayıt var mı (ana menüde "Devam et").</summary>
         public static bool HasSave => PlayerPrefs.HasKey(PrefsKey);
 
+        /// <summary>Diskteki kaydı belleğe almadan okur (ana menüdeki kayıt özeti). Yoksa null.</summary>
+        public static SaveData PeekSaved()
+        {
+            string json = PlayerPrefs.GetString(PrefsKey, string.Empty);
+            return string.IsNullOrEmpty(json) ? null : JsonUtility.FromJson<SaveData>(json);
+        }
+
         private void Awake()
         {
             if (Instance != null && Instance != this)

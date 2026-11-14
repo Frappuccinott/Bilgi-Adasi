@@ -30,6 +30,8 @@ namespace BilgiAdasi.Core
         public readonly List<Step> Steps = new List<Step>();
         /// <summary>Ürün hazır, kapıda teslim bekliyor.</summary>
         public bool ReadyToDeliver;
+        /// <summary>Görevin teslim adımı var mı (tarla görevinde yok: sandığa dökülür).</summary>
+        public bool HasDelivery = true;
         /// <summary>Köyün adı.</summary>
         public string Place;
         /// <summary>Köyde biten görev sayısı ve toplam.</summary>

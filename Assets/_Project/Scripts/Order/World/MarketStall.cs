@@ -103,10 +103,12 @@ namespace BilgiAdasi.Order
             if (!user.CanAdd(species))
             {
                 Notice(texts != null ? texts.InventoryFull : null);
+                GameEvents.RaiseSound(SoundId.Wrong);
                 return;
             }
             if (!user.TrySpend(offer.Price))
             {
+                GameEvents.RaiseSound(SoundId.Wrong);
                 Notice(texts != null ? texts.NotEnoughMoney : null);
                 // Siparişin malzemesi alınamıyorsa (ör. 3 akçeyle 5 akçelik propan) Usta yine borç verir.
                 if (orderReactants.Contains(offer.Key)) GiveLoan();
@@ -115,6 +117,7 @@ namespace BilgiAdasi.Order
                 return;
             }
             user.Add(species, 1);
+            GameEvents.RaiseSound(SoundId.CoinSingle);
             AddSold(offer.Key);
             Rebuild();
             Show(ViewLocator.Get<IMarketView>());

@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 6415881214152306204}
   - component: {fileID: 1681832420711516293}
   - component: {fileID: 5335187495949932190}
+  - component: {fileID: 7088452685730527803}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -243,9 +244,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Player.PlayerFootsteps
   motor: {fileID: 662932670467678391}
   source: {fileID: 136639527127376034}
-  footstepClips: []
-  jumpClips: []
-  landClips: []
+  footstepClips:
+  - {fileID: 8300000, guid: 6685129d1e0f75d449d9452c7a2f76ee, type: 3}
+  - {fileID: 8300000, guid: 1ba72eb3f8ac7a541b5070208cc1b326, type: 3}
+  - {fileID: 8300000, guid: da98b063b197587438ee9a85dd210263, type: 3}
+  - {fileID: 8300000, guid: fb347a3701ea0444bb3854200c479286, type: 3}
+  - {fileID: 8300000, guid: e91d2f8b6519d834e94b5a644da274f9, type: 3}
+  - {fileID: 8300000, guid: 1aaa5caa80286e14792c06f048acb7a4, type: 3}
+  jumpClips:
+  - {fileID: 8300000, guid: 587f860687375374898b9a089fdfc9f4, type: 3}
+  landClips:
+  - {fileID: 8300000, guid: 20c5b62c504b73b49a15711f940974f0, type: 3}
   footstepVolume: 0.5
   jumpVolume: 0.5
   landVolume: 0.7
@@ -288,6 +297,19 @@ MonoBehaviour:
   placeMarker: {fileID: 0}
   markerMaterial: {fileID: 2100000, guid: cfd71fffb44d90347a001cdc72205024, type: 2}
   itemsRoot: {fileID: 0}
+--- !u!114 &7088452685730527803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646163880082847868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfff5a25a5e45bf49b3cece5b3a64a4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Player.PlayerGrowth
+  settings: {fileID: 11400000, guid: 94cc9f5c95473f34681b28e7569eaedd, type: 2}
 --- !u!1 &685553353864276106
 GameObject:
   m_ObjectHideFlags: 0
@@ -338,7 +360,15 @@ MonoBehaviour:
   defaultJarPrefab: {fileID: 900802003827707071, guid: 6b993f312c131f342a0fd5c68af7f38f, type: 3}
   gripPoint: {fileID: 0}
   gripEuler: {x: 335.4, y: 162.1, z: 22}
-  gripInset: 0.035
+  wristEuler: {x: -25, y: -60, z: -80}
+  wristBlendTime: 0.2
+  gripWidth: 0.085
+  handMaxSize: 0.17
+  defaultGripHeight: 0.3
+  uprightLongRatio: 1.6
+  uprightInHand: 1
+  handEuler: {x: -6, y: -22, z: 6}
+  gripOffset: {x: 0, y: 0, z: 0}
   armsAnimator: {fileID: 0}
   holdState: Kol_Tut_Dongu
   idleState: Kol_Bekle_Dongu

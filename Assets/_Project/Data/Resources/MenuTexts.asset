@@ -13,11 +13,27 @@ MonoBehaviour:
   m_Name: MenuTexts
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Core.MenuTexts
   title: "Bilgi Adas\u0131"
-  subtitle: "Kimya \u015Fehrinde bir \xE7\u0131ra\u011F\u0131n defteri"
-  play: Oyna
-  continueGame: Devam et
-  quit: "\xC7\u0131k"
+  continueLabel: Devam Et
+  newGame: Yeni Oyun
+  settings: Ayarlar
+  credits: "Eme\u011Fi Ge\xE7enler"
+  quitLabel: "\xC7\u0131k\u0131\u015F"
+  placeFormat: "{0} K\xF6y\xFC"
+  progressFormat: '{0}/{1}'
+  disclaimer: "Bu at\xF6lyedeki tepkimeler bir oyundur. Ger\xE7ek kimyasallar yaln\u0131zca
+    okul laboratuvar\u0131nda, \xF6\u011Fretmen g\xF6zetiminde denenir."
+  hintSelect: "Se\xE7"
+  hintBack: Geri
   newGameWarning: "Yeni oyun ba\u015Flarsa kay\u0131tl\u0131 ilerlemen silinir."
   confirmNewGame: Yeni oyun
   cancel: "Vazge\xE7"
+  creditEntries:
+  - role: 
+    name: "Mustafa Akba\u015F"
+  - role: 
+    name: "Mehmet Emin \xC7oban"
+  - role: 
+    name: Efe Karacabey
+  creditsNote: 
+  creditsTeaser: "Devam edecek: Hesaplamalar K\xF6y\xFC"
   autoSaved: "Otomatik kaydedildi\u2026"

@@ -283,3 +283,13 @@ Kasabada 6 NPC dolaşıyor ve çalışıyor (ayrıntı: `ArtSource/Referans/npc.
 - Sahnede bir `DialogueDirector` varsa onu kullanır (Town'da `NeighborhoodRunner` üzerindeki). Yoksa araç `NPC_Sanat` köküne bir tane ekler. Konuşma balonu `IDialogueView` ile gösterilir.
 - **Mehmet:** Görev akışı bir NPC'yi kullanacaksa (ör. ulağın "atölyeye gel" çağrısı), NPC'nin `NpcProfile` metinleri değiştirilmez; köy akışı kendi konuşmasını `DialogueDirector`'la oynatır. NPC o sırada konuşma durumunda değilse yürümeye devam eder. Gerekirse `NpcAgent`'a bir "dur/devam" çağrısı eklenir; Mustafa'ya yaz.
 - `Town` sahnesine henüz konmadı (Town'da harita yok). Harita Town'a geçince aynı menü bir kez çalıştırılır; rota doğrulaması geçmezse NPC yürümez, yerinde durur ve konsola nedeni yazılır.
+
+## 12. Atölye önü pazarı (14.11)
+
+Sakinler siparişi artık **kapıda değil, atölyenin önündeki tezgâhta** verir; ürün de orada teslim edilir. Ayrıca ürün almaya alıcılar gelir.
+
+- Model: `Art/Prefablar/Atolye_Pazar.prefab` (`atolye_pazar.py`), kapının batısında `(-2, 0, 5.3)`. Çapalar: `Musteri_Nokta_1` (tezgâh önü), `Satici_Nokta`, `Sergi_1..4`, `Tabela_Yazi_Pazar`.
+- `ShopCounter` (tezgâh kökü, BoxCollider, layer `Interactable`): E / X. `NeighborhoodRunner.counter` doluysa sipariş/teslim buradan, kapı yalnızca açılır. Boşsa eski kapı akışı çalışır.
+- `CustomerQueue` (`Pazar_Musteriler` kökü): müşteri gövdeleri (`Musteri_Yusuf/Demir/Zehra/Halil/Elif`, `GiverName` ile eşleşir; eşleşmeyen sipariş, ör. Câbir Usta'nın çıraklık görevi, pazara müşteri getirmez) ve alıcılar (`Alici_*`, adı boş). Yol: `Musteri_Sokak` (atölyenin arkası, görünmez) → `Musteri_Yaklasma_1..2` → tezgâh; sipariş alınınca `Musteri_Bekleme`'de bekler, ürün hazır olunca tezgâha döner, teslimden sonra sokağa gider.
+- Alıcılar: `Data/Market/MusteriIstekleri.asset` (ürün, fiyat, replikler). Yalnızca oyuncunun envanterinde istenen ürün varsa gelir; teslim edilecek sipariş ürününü istemez. Satış sonrası `SaveSystem.Checkpoint`.
+- Kurulum: **Kurulum → 22 (Atölye pazarı)**.

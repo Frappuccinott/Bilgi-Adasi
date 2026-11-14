@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.NeighborhoodTexts
   masterName: "C\xE2bir Usta"
   masterPortrait: {fileID: 21300000, guid: b7e84432d0a627d43a070b2fa049fdc3, type: 3}
-  nobodyAtDoor: "Kap\u0131da kimse yok. \u015Eimdilik herkesin derdine derman olmu\u015Fsun."
+  nobodyAtDoor: "Tezg\xE2hta bekleyen yok. \u015Eimdilik herkesin derdine derman olmu\u015Fsun."
   orderWaiting: "Sipari\u015Fim kazan\u0131n ba\u015F\u0131nda seni bekliyor."
   wrongItem: Ben bunu istemedim.
   notEnough: Hepsi bu mu? Eksik var gibi.

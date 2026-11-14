@@ -133,6 +133,23 @@ namespace BilgiAdasi.Core
         [SerializeField] private string lockedLabel = "Henüz açılmadı";
         [SerializeField] private List<AchievementEntry> entries = new List<AchievementEntry>();
 
+        [Header("Görev sonu özeti (bildirim ve başarım kartı)")]
+        [Tooltip("{0} = öğrenilen konu (LearningData → Topic).")]
+        [SerializeField] private string topicFormat = "Konu: {0}";
+        [SerializeField] private string flawlessWord = "Hatasız";
+        [Tooltip("{0} = hata (köpürme / yanlış cevap) sayısı.")]
+        [SerializeField] private string failFormat = "{0} hata";
+        [SerializeField] private string noHintWord = "Defter açılmadan";
+        [SerializeField] private string hintWord = "Deftere bakıldı";
+        [SerializeField] private string statsSeparator = " · ";
+
+        public string TopicFormat => topicFormat;
+        public string FlawlessWord => flawlessWord;
+        public string FailFormat => failFormat;
+        public string NoHintWord => noHintWord;
+        public string HintWord => hintWord;
+        public string StatsSeparator => statsSeparator;
+
         public string TreeTitle => treeTitle;
         public Sprite TabIcon => tabIcon;
         public bool ComingSoon => comingSoon;

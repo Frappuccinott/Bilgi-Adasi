@@ -9,7 +9,7 @@ namespace BilgiAdasi.City
         [SerializeField] private string masterName = "Câbir Usta";
         [Tooltip("Ustanın portresi (2D). Boş bırakılabilir.")]
         [SerializeField] private Sprite masterPortrait;
-        [TextArea(1, 3)] [SerializeField] private string nobodyAtDoor = "Kapıda kimse yok. Şimdilik herkesin derdine derman olmuşsun.";
+        [TextArea(1, 3)] [SerializeField] private string nobodyAtDoor = "Tezgâhta bekleyen yok. Şimdilik herkesin derdine derman olmuşsun.";
         [TextArea(1, 3)] [SerializeField] private string orderWaiting = "Siparişim kazanın başında seni bekliyor.";
 
         [Header("Teslim (sakin söyler)")]

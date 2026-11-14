@@ -165,6 +165,7 @@ namespace BilgiAdasi.Order
         {
             if (index < 0 || index >= SlotCount || index == Selected) return;
             Selected = index;
+            GameEvents.RaiseSound(SoundId.UiSlot);
             Refresh();
         }
 

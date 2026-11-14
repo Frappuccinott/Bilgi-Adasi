@@ -41,6 +41,15 @@ namespace BilgiAdasi.Core
         /// <summary>Otomatik kayıt diske yazıldı ("Otomatik kaydedildi" bildirimi).</summary>
         public static event Action AutoSaved;
 
+        /// <summary>Ses isteği: kimlik, konum, konumlu mu (3B). AudioDirector çalar; denetleyiciler AudioSource tutmaz.</summary>
+        public static event Action<SoundId, Vector3, bool> SoundRequested;
+
+        /// <summary>2B (arayüz) sesi çalar.</summary>
+        public static void RaiseSound(SoundId id) => SoundRequested?.Invoke(id, Vector3.zero, false);
+
+        /// <summary>Dünyada bir noktadan gelen (3B) ses çalar.</summary>
+        public static void RaiseSoundAt(SoundId id, Vector3 position) => SoundRequested?.Invoke(id, position, true);
+
         public static void RaiseBeforeSave(SaveData data) => BeforeSave?.Invoke(data);
         public static void RaiseAutoSaved() => AutoSaved?.Invoke();
         public static void RaiseStoveFired(bool reacting) => StoveFired?.Invoke(reacting);
@@ -85,6 +94,7 @@ namespace BilgiAdasi.Core
             StoveFired = null;
             BeforeSave = null;
             AutoSaved = null;
+            SoundRequested = null;
         }
     }
 }

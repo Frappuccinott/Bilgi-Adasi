@@ -1,0 +1,129 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d5efb73b21a56e48a81e24e485ec6bd, type: 3}
+  m_Name: bereket_2
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.City.FieldTask
+  id: bereket_2
+  giverName: "\xC7ift\xE7i Elif"
+  giverPortrait: {fileID: 21300000, guid: 0366aa63b404f6742aec29adebb7f8d1, type: 3}
+  giverLines:
+  - "Tarlay\u0131 s\xFCrd\xFCm, toprak havaland\u0131. Bu y\u0131l 120 \xF6bek filiz
+    isterim."
+  - "Tohum pahal\u0131: fazla al\u0131rsam kesem bo\u015Fal\u0131r, az al\u0131rsam
+    tarla bo\u015F kal\u0131r. Tohum paras\u0131n\u0131n bir k\u0131sm\u0131 benden."
+  deliveryLines: []
+  hintText: "Ders notundaki kural\u0131 kullan: tohum = filiz \xF7 olas\u0131l\u0131k.
+    Sonra 10'luk keselere b\xF6l."
+  realLifeText: "\xC7ift\xE7iler ekimden \xF6nce tohumun bir k\u0131sm\u0131n\u0131
+    \u0131slak bezde \xE7imlendirip oran\u0131n\u0131 \xF6l\xE7er (\xE7imlenme testi);
+    ka\xE7 tohum alacaklar\u0131n\u0131 buna g\xF6re hesaplar."
+  seedBag: {fileID: 11400000, guid: f00ff055cb7fca24f8db0a5ec951fd0f, type: 2}
+  seedsPerBag: 10
+  germination: 0.8
+  targetSprouts: 120
+  advance: 20
+  startState: Surulmus
+  endState: Ekili
+  masterOfferLines:
+  - "\xC7\u0131rak, Elif'ten haber var: tarlada ekim zaman\u0131 gelmi\u015F."
+  - "Tarla benim kazan\u0131ma s\u0131\u011Fmaz. Kilitli \u015Fehirlerden iki dostum,
+    Hesap Ustas\u0131 ile Hayat Ustas\u0131, tarlada."
+  tooFewLine: "{0} kese, {1} tohum eder. Bunun yakla\u015F\u0131k {2} tanesi filiz
+    verir; 120'ye yetmez. Pazardan biraz daha getir."
+  exactLine: "Tam yetecek kadar! Bu tohumlar\u0131n yakla\u015F\u0131k 120'si filiz
+    verir. Ustalar sana bir \u015Fey soracakm\u0131\u015F."
+  tooManyLine: "Tarla doldu ama {0} kese fazla geldi; o tohumlar bo\u015Fa gitti.
+    Neyse, ustalar sana bir \u015Fey soracakm\u0131\u015F."
+  noSeedLine: "Elinde tohum kesesi yok. Pazardan tohum al, keseyi elinde tutup sand\u0131\u011Fa
+    d\xF6k."
+  finishLines:
+  - "Ekim tamam! Toprak haval\u0131, tohum nefes alacak."
+  - "Filizler \xE7\u0131k\u0131nca seni yine \xE7a\u011F\u0131r\u0131r\u0131m, \xE7\u0131rak."
+  requiredLaps: 2
+  driveLines:
+  - "Tohumlar\u0131 ekiciye doldurdum, ekiciyi de trakt\xF6r\xFCn arkas\u0131na takt\u0131m."
+  - "Trakt\xF6re bin, tarlada iki tur at. Ekici ge\xE7ti\u011Fi yere tohumu kendi
+    b\u0131rak\u0131r."
+  lapNotice: 'Ekim: {0}. tur tamam ({0} / {1})'
+  lapsDoneLine: "\u0130ki tur tamam! Kalan k\xF6\u015Feleri ekici bitiriyor, izle."
+  questions:
+  - stage: 0
+    speaker: "Hesap Ustas\u0131"
+    question: "Tohumun \xE7imlenme olas\u0131l\u0131\u011F\u0131 0,8. Elif 120 filiz
+      istiyor. En az ka\xE7 tohum ekilmeli?"
+    options:
+    - 96
+    - 150
+    - 120
+    correctIndex: 1
+    replies:
+    - "96, 120'nin y\xFCzde 80'i. Ama 120 filiz istiyoruz: filizi olas\u0131l\u0131\u011Fa
+      b\xF6l. 120 \xF7 0,8 = 150."
+    - "Do\u011Fru: 120 \xF7 0,8 = 150. Kontrol et: 150 \xD7 0,8 = 120."
+    - "120 tohumun hepsi \xE7imlenmez; yakla\u015F\u0131k 96's\u0131 filiz verir.
+      150 tohum gerekir."
+  - stage: 0
+    speaker: "Hesap Ustas\u0131"
+    question: "Tohum 10'luk keselerde sat\u0131l\u0131yor. 150 tohum i\xE7in ka\xE7
+      kese al\u0131n\u0131r?"
+    options:
+    - 12
+    - 16
+    - 15
+    correctIndex: 2
+    replies:
+    - "12 kese 120 tohum eder; onun da yaln\u0131zca 96's\u0131 filiz verir. 15 kese
+      gerekir."
+    - "16 kese 160 tohum eder; bir kese fazla. Tam b\xF6l\xFCn\xFCyorsa yukar\u0131
+      yuvarlamaya gerek yok: 15."
+    - "Do\u011Fru: 150 \xF7 10 = 15 kese."
+  - stage: 2
+    speaker: "Hayat Ustas\u0131"
+    question: "Topra\u011F\u0131n alt\u0131ndaki tohum, \xE7imlenirken gereken enerjiyi
+      nas\u0131l elde eder?"
+    options:
+    - "Depolad\u0131\u011F\u0131 besini oksijenle kullanarak (oksijenli solunum)"
+    - "Topraktan haz\u0131r enerji emerek"
+    - "G\xFCne\u015F \u0131\u015F\u0131\u011F\u0131yla fotosentez yaparak"
+    correctIndex: 0
+    replies:
+    - "Aynen \xF6yle: besin + O\u2082 \u2192 CO\u2082 + H\u2082O + enerji. H\xFCcrede
+      ad\u0131m ad\u0131m olur, alev \xE7\u0131kmaz."
+    - "Toprak su ve mineral verir, enerji vermez. Enerji tohumun kendi besininden,
+      oksijenle \xE7\u0131kar."
+    - "Topra\u011F\u0131n alt\u0131nda yaprak yok, \u0131\u015F\u0131k yok. Fotosentez
+      filiz ye\u015Ferince ba\u015Flar; o zamana dek tohum besinini solunumla kullan\u0131r."
+  - stage: 1
+    speaker: "Hayat Ustas\u0131"
+    question: "Topra\u011F\u0131 s\xFCrmeden ekseydik ne olurdu?"
+    options:
+    - "Hi\xE7 fark etmezdi"
+    - "S\u0131k\u0131\u015F\u0131k toprakta hava az olur, daha az tohum \xE7imlenirdi"
+    - "Tohumlar daha h\u0131zl\u0131 \xE7imlenirdi"
+    correctIndex: 1
+    replies:
+    - "Fark ederdi: tohum nefes al\u0131r. S\u0131k\u0131\u015F\u0131k toprakta oksijen
+      az, \xE7imlenme d\xFC\u015F\xFCk olur."
+    - "Do\u011Fru. S\xFCrmek topra\u011F\u0131 gev\u015Fetir; aras\u0131na giren
+      hava tohumun solunumu i\xE7in oksijen ta\u015F\u0131r."
+    - "Tersine: oksijen azal\u0131nca solunum, solunum azal\u0131nca \xE7imlenme
+      yava\u015Flar."
+  place: "Bereket Tarlas\u0131"
+  wantedText: 120 filiz
+  stepTexts:
+  - Pazardan tohum kesesi al
+  - "Tarladaki ekim sand\u0131\u011F\u0131na d\xF6k"
+  - "Trakt\xF6rle tarlada 2 tur at"
+  - "Ustalar\u0131n sorular\u0131n\u0131 yan\u0131tla"
+  pourPrompt: "Tohumlar\u0131 sand\u0131\u011Fa d\xF6k"
+  continueWord: Devam
+  elifSpeaker: "\xC7ift\xE7i Elif"

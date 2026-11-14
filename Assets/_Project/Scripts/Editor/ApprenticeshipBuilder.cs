@@ -27,10 +27,35 @@ namespace BilgiAdasi.EditorTools
         // 01 §1 (açılış, uyanış) + 04 §4 Seviye 0 — içerik değişirse önce dokümanlar.
         private static readonly string[] ClassroomCards =
         {
-            "Sonbahar sabahı. 10. sınıfın ilk kimya dersi.",
-            "Öğretmen tahtaya yazıyor: <b>Kimyasal Tepkimeler</b>.",
-            "Sınıf ılık, sesler uzaklaşıyor… Gözlerin ağırlaşıyor.",
-            "…bir yerde bir kazan fokurduyor."
+            "Sonbahar sabahı. Kimya dersi.\nTahtada iki kelime: <b>Kimyasal Tepkimeler</b>.",
+            "Sınıf ılık, öğretmenin sesi uzaklaşıyor…\nGöz kapakların ağırlaşıyor.",
+            "…ve bir yerde, bir kazan fokurdamaya başlıyor."
+        };
+
+        // Göz açılınca ada: kare kare sinematik. Kamera konumları Harita sahnesine göre (dünya koordinatı).
+        private static IntroShot[] IntroShots() => new[]
+        {
+            new IntroShot("Bilgi Adası",
+                "Gözünü açtığında sınıf yok. Hiçbir haritada olmayan bir adadasın: burada her şehir bir ders.",
+                new Vector3(-80f, 48f, -42f), new Vector3(-64f, 42f, -50f), new Vector3(-8f, 0f, 12f), new Vector3(-3f, 0f, 10f), 6f),
+            new IntroShot("Sisin ardında",
+                "Matematik, Fizik, Biyoloji… Öteki şehirlerin kapıları kapalı. Anahtarı, öğrendiklerin.",
+                new Vector3(-21.5f, 9f, -40f), new Vector3(-21.5f, 8.2f, -46f), new Vector3(-21.5f, 7f, -72f), new Vector3(-21.5f, 7.5f, -74f)),
+            new IntroShot("Denkleştirme Köyü",
+                "Çeşme kurumuş, fenerler isleniyor, fırın soğumuş. Köylüler bir çare arıyor. Çare sende.",
+                new Vector3(-37f, 2.8f, 18.2f), new Vector3(-39.5f, 2.5f, 18.6f), new Vector3(-46f, 1.3f, 19f), new Vector3(-48f, 1.3f, 19.4f)),
+            new IntroShot("Câbir Usta'nın atölyesi",
+                "Kapıya gelen her derdi bu atölyede çözeceksin. Usta yaşlandı; ona bir çırak lazım.",
+                new Vector3(7.5f, 3.4f, 13.5f), new Vector3(6f, 2.8f, 11.5f), new Vector3(0f, 2f, 1f), new Vector3(0.3f, 2.2f, 1f)),
+            new IntroShot("Kazan ve terazi",
+                "Kazana ne girerse terazi onu tartar. Tek bir atom eksik kalsa kazan köpürür.",
+                new Vector3(1.3f, 1.8f, -0.1f), new Vector3(0.5f, 1.6f, -0.6f), new Vector3(-1.2f, 0.75f, -2.6f), new Vector3(-1.3f, 0.7f, -2.7f)),
+            new IntroShot("Atölyenin tezgâhı",
+                "Köylüler tezgâhına gelecek. Malzemeyi çarşıdan al, kazanda pişir, siparişi kendi elinle teslim et.",
+                new Vector3(-6.8f, 2.2f, 9.8f), new Vector3(-5.6f, 1.9f, 8.8f), new Vector3(-2f, 1.2f, 5.3f), new Vector3(-1.8f, 1.2f, 5f)),
+            new IntroShot("Çırak",
+                "Dün sıradan bir öğrenciydin. Bugün Kimya şehrinin yeni çırağısın. Ama önce… biri seni uyandırıyor.",
+                new Vector3(2.6f, 0.45f, 7.4f), new Vector3(2.4f, 0.5f, 6.8f), new Vector3(1.8f, 2f, 3f), new Vector3(1.9f, 2.2f, 3f), 5.5f),
         };
 
         private static readonly string[] WakeLines =
@@ -39,6 +64,27 @@ namespace BilgiAdasi.EditorTools
             "Bu şehirde her köyün bir derdi var; dertler de ancak ölçüyle çözülür. Gel, sana ilk kuralı göstereyim.",
             "Al, bu defter senin. Gördüğünü yaz. Gördüğün şey kazanda kaybolmaz."
         };
+
+        /// <summary>Yalnızca açılışı (sınıf kartları + ada kareleri) Ciraklik.asset'e yeniden yazar; sahneye dokunmaz.</summary>
+        [MenuItem("BilgiAdasi/Kurulum/17b - Çıraklık: açılış sinematiği (metin + kareler)", priority = 18)]
+        public static void RunIntro()
+        {
+            var texts = AssetDatabase.LoadAssetAtPath<ApprenticeshipData>(TextsPath);
+            if (texts == null)
+            {
+                Debug.LogWarning("[Çıraklık] " + TextsPath + " yok; önce Kurulum 17.");
+                return;
+            }
+            var so = new SerializedObject(texts);
+            var cards = so.FindProperty("classroomCards");
+            cards.arraySize = ClassroomCards.Length;
+            for (int i = 0; i < ClassroomCards.Length; i++) cards.GetArrayElementAtIndex(i).stringValue = ClassroomCards[i];
+            so.ApplyModifiedPropertiesWithoutUndo();
+            texts.SetIntro(IntroShots());
+            EditorUtility.SetDirty(texts);
+            AssetDatabase.SaveAssets();
+            Debug.Log("[Çıraklık] Açılış: " + ClassroomCards.Length + " kart + " + texts.IntroShots.Length + " kare yazıldı.");
+        }
 
         [MenuItem("BilgiAdasi/Kurulum/17 - Çıraklık (Seviye 0): veri + sahne", priority = 17)]
         public static void Run()
@@ -96,6 +142,7 @@ namespace BilgiAdasi.EditorTools
                     "Isı madde yapsaydı ocak zengin olurdu. Dök de görelim."
                 },
                 h2, 2);
+            texts.SetIntro(IntroShots());
             EditorUtility.SetDirty(texts);
 
             LearningDataBuilder.Build();

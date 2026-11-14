@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BilgiAdasi.Order;
 using UnityEngine;
 
 namespace BilgiAdasi.Core
@@ -24,6 +25,9 @@ namespace BilgiAdasi.Core
         private bool started;
         // Olayın bildirdiği ama GameManager'ın kayda henüz yazmamış olabileceği kimlikler (dinleyici sırası belirsiz).
         private string pendingTask, pendingNeighborhood;
+        // Öğrenilen konu (görev sonu özeti) için: Resources/LearningData, ilk gerektiğinde yüklenir.
+        private LearningData learning;
+        private bool learningLoaded;
 
         public IReadOnlyList<AchievementTree> Trees => trees;
 
@@ -196,9 +200,47 @@ namespace BilgiAdasi.Core
 
             GameEvents.RaiseAchievementUnlocked(e.Id);
             if (!notify) return;
+            GameEvents.RaiseSound(SoundId.Achievement);
             var style = tree.StyleFor(e.Kind);
+            // Görev sonu özeti yalnızca görevin kendi bildiriminde (meydan okumalar ayrıca gelir, tekrar etmesin).
+            bool summary = e.Trigger == AchievementTrigger.TaskCompleted;
             ViewLocator.Get<IAchievementToastView>()?.ShowToast(
-                new AchievementToastInfo(style.Header, e.Title, e.Description, tree.IconFor(e), style.Color, e.Kind));
+                new AchievementToastInfo(style.Header, e.Title, e.Description, tree.IconFor(e), style.Color, e.Kind,
+                    summary ? TopicLine(tree, e) : string.Empty, summary ? StatsLine(tree, e.Target) : string.Empty));
+        }
+
+        // ---------- Görev sonu özeti ----------
+
+        private static bool IsTaskTrigger(AchievementTrigger t) =>
+            t == AchievementTrigger.TaskCompleted || t == AchievementTrigger.TaskFlawless || t == AchievementTrigger.TaskWithoutHint;
+
+        /// <summary>Görevin öğrenilen konusu (LearningData). Görev başarımı değilse ya da konu girilmemişse boş.</summary>
+        private string TopicOf(AchievementEntry e)
+        {
+            if (!IsTaskTrigger(e.Trigger)) return string.Empty;
+            if (!learningLoaded)
+            {
+                learning = Resources.Load<LearningData>(LearningData.ResourcePath);
+                learningLoaded = true;
+            }
+            var entry = learning != null ? learning.Find(e.Target) : null;
+            return entry != null ? entry.Topic : string.Empty;
+        }
+
+        private string TopicLine(AchievementTree tree, AchievementEntry e)
+        {
+            string topic = TopicOf(e);
+            return string.IsNullOrEmpty(topic) ? string.Empty : string.Format(tree.TopicFormat, topic);
+        }
+
+        /// <summary>"Hatasız · Defter açılmadan" / "2 hata · Deftere bakıldı". Kayıt yoksa boş.</summary>
+        private static string StatsLine(AchievementTree tree, string taskId)
+        {
+            var data = Data;
+            if (data == null || string.IsNullOrEmpty(taskId)) return string.Empty;
+            int fails = data.GetFailCount(taskId);
+            string failText = fails == 0 ? tree.FlawlessWord : string.Format(tree.FailFormat, fails);
+            return failText + tree.StatsSeparator + (data.IsHintOpened(taskId) ? tree.HintWord : tree.NoHintWord);
         }
 
         // ---------- Esc menüsü ----------
@@ -249,7 +291,9 @@ namespace BilgiAdasi.Core
                     secret ? tree.SecretTitle : e.Title,
                     secret ? string.Empty : e.Description,
                     style.Header, secret ? null : tree.IconFor(e), style.Color,
-                    e.Kind, state, parentBuffer[i], columns[i], rows[i]));
+                    e.Kind, state, parentBuffer[i], columns[i], rows[i],
+                    unlocked ? TopicOf(e) : string.Empty,
+                    unlocked && e.Trigger == AchievementTrigger.TaskCompleted ? StatsLine(tree, e.Target) : string.Empty));
             }
             return tab;
         }

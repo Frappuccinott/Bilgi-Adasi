@@ -11,6 +11,8 @@ namespace BilgiAdasi.UI
     /// ve "Başarım bildirimi/HUD içinde". Kâğıt şerit + ahşap çerçeve, solda mum mühür (üstünde başarım simgesi),
     /// sağda başlık (tür rengi) / ad / açıklama, altta tür renginde boşalan süre çubuğu.
     /// Hareket: sağdan kayar (0,35 sn), mühür basılır (1,35× → 1×, −8° → 0°), 4,5 sn bekler, sağa kayarak çıkar.
+    /// Görev sonu özeti (görev bildiriminde): ince çizginin altında öğrenilen konu ve "Hatasız · Defter açılmadan";
+    /// özet varken kart biraz uzar (genişlik aynı) ve bildirim daha uzun kalır.
     /// Sıraya alır; zaman ölçeğinden bağımsızdır. HUD Canvas'ı altına tam ekran (stretch) konur.
     /// </summary>
     public sealed class FigmaAchievementToast : FigmaView<IAchievementToastView>, IAchievementToastView
@@ -25,6 +27,10 @@ namespace BilgiAdasi.UI
         [SerializeField] private Vector2 size = new Vector2(640, 170);
         [Tooltip("Sağ ve alt kenardan uzaklık. Alt: envanter şeridinin (alttan ~135) ve tuş ipuçlarının üstünde kalır.")]
         [SerializeField] private Vector2 margin = new Vector2(72, 210);
+        [Tooltip("Görev sonu özeti varken kartın boyu (normal kart + konu ve hata/defter satırı).")]
+        [SerializeField] private Vector2 summarySize = new Vector2(600, 196);
+        [Tooltip("Özetli bildirim bu kadar daha uzun kalır (sn): okumaya zaman.")]
+        [SerializeField] private float summaryExtraSeconds = 3f;
 
         [Header("Renk")]
         [Tooltip("Kapalı: renk türden gelir (Görev altın, Köy mühür, Meydan okuma su — marka paleti). Açık: sekme asset'indeki tür rengi.")]
@@ -36,8 +42,9 @@ namespace BilgiAdasi.UI
         private readonly Queue<AchievementToastInfo> queue = new Queue<AchievementToastInfo>();
         private RectTransform box, sealRoot, barFill;
         private Image sealImage, iconImage, barImage;
-        private TextMeshProUGUI header, title, description;
-        private float timer, quietTime;
+        private TextMeshProUGUI header, title, description, topic, stats;
+        private GameObject summaryRule;
+        private float timer, quietTime, holdSeconds;
         private bool showing;
         private AchievementToastInfo current;
         private bool hasPaused;           // konuşma açılınca geri çekilen bildirim: önce o yeniden gösterilir
@@ -110,6 +117,19 @@ namespace BilgiAdasi.UI
             description.gameObject.SetActive(!string.IsNullOrEmpty(info.Description));
             barImage.color = accent;
 
+            // Görev sonu özeti
+            bool summary = info.HasSummary;
+            box.sizeDelta = summary ? summarySize : size;
+            holdSeconds = showSeconds + (summary ? summaryExtraSeconds : 0f);
+            title.fontSize = summary ? 34f : 40f;
+            description.fontSize = summary ? 24f : 28f;
+            summaryRule.SetActive(summary);
+            topic.text = info.Topic;
+            topic.color = accent;
+            topic.gameObject.SetActive(!string.IsNullOrEmpty(info.Topic));
+            stats.text = info.Stats;
+            stats.gameObject.SetActive(!string.IsNullOrEmpty(info.Stats));
+
             var th = Theme;
             bool hasIcon = info.Icon != null;
             // Simge varsa mum gövdesi + simge; yoksa Figma'daki tam mühür.
@@ -135,7 +155,7 @@ namespace BilgiAdasi.UI
                 return;
             }
             timer += Time.unscaledDeltaTime;
-            if (timer >= showSeconds + 2f * slideSeconds)
+            if (timer >= holdSeconds + 2f * slideSeconds)
             {
                 // Sıradaki de aynı sessizlik beklemesiyle başlar (arka arkaya bildirimler arası kısa ara).
                 showing = false;
@@ -148,19 +168,19 @@ namespace BilgiAdasi.UI
 
         private void Animate()
         {
-            float total = showSeconds + 2f * slideSeconds;
+            float total = holdSeconds + 2f * slideSeconds;
             float slide = timer < slideSeconds ? timer / slideSeconds
                 : timer > total - slideSeconds ? (total - timer) / slideSeconds
                 : 1f;
             float eased = 1f - (1f - slide) * (1f - slide);
-            box.anchoredPosition = new Vector2(Mathf.Lerp(size.x + margin.x + 24f, -margin.x, eased), margin.y);
+            box.anchoredPosition = new Vector2(Mathf.Lerp(box.sizeDelta.x + margin.x + 24f, -margin.x, eased), margin.y);
 
             float s = Mathf.Clamp01((timer - stampDelay) / stampSeconds);
             float stamp = 1f - (1f - s) * (1f - s) * (1f - s);
             sealRoot.localScale = Vector3.one * Mathf.Lerp(1.35f, 1f, stamp);
             sealRoot.localEulerAngles = new Vector3(0f, 0f, Mathf.Lerp(8f, 0f, stamp));
 
-            float remain = 1f - Mathf.Clamp01((timer - slideSeconds) / showSeconds);
+            float remain = 1f - Mathf.Clamp01((timer - slideSeconds) / holdSeconds);
             barFill.anchorMax = new Vector2(remain, 1f);
         }
 
@@ -195,6 +215,18 @@ namespace BilgiAdasi.UI
             header = Line(col, "Header", th.BodyFont, 28f, th.GoldDark, FontStyles.Bold);
             title = Line(col, "Title", th.HeadingFont, 40f, th.InkDark, FontStyles.Bold);
             description = Line(col, "Description", th.BodyFont, 28f, th.PaperShade, FontStyles.Normal);
+
+            // Görev sonu özeti: ince çizgi, konu (tür renginde), hata · defter
+            var rule = UiKit.Img(col, "SummaryRule", th.PaperMid);
+            var ruleLayout = rule.gameObject.AddComponent<LayoutElement>();
+            ruleLayout.minHeight = ruleLayout.preferredHeight = 2f;
+            summaryRule = rule.gameObject;
+            topic = Line(col, "Topic", th.BodyFont, 24f, th.GoldDark, FontStyles.Bold);
+            stats = Line(col, "Stats", th.BodyFont, 20f, th.PaperShade, FontStyles.Italic);
+            summaryRule.SetActive(false);
+            topic.gameObject.SetActive(false);
+            stats.gameObject.SetActive(false);
+            holdSeconds = showSeconds;
 
             // Süre çubuğu: kâğıdın alt kenarı, 6 px
             var track = UiKit.Img(paper, "Timer", th.PaperMid);

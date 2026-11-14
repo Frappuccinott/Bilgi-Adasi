@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Core.AchievementTree
   treeTitle: Matematik
   tabIcon: {fileID: 0}
-  comingSoon: 1
+  comingSoon: 0
   comingSoonLabel: "Yak\u0131nda"
   tabOrder: 1
   accentColor: {r: 0.30980393, g: 0.49803922, b: 0.5882353, a: 1}
@@ -33,20 +33,20 @@ MonoBehaviour:
   secretTitle: ???
   lockedLabel: "Hen\xFCz a\xE7\u0131lmad\u0131"
   entries:
-  - id: ach_tarla_4
+  - id: ach_bereket_2
     parentId: 
     kind: 0
     trigger: 1
-    target: tarla_4
-    title: "Tohum Hesab\u0131"
-    description: "K-14 \xB7 Bereket Tarlas\u0131. Beklenen say\u0131 = olas\u0131l\u0131k
-      \xD7 deneme say\u0131s\u0131."
+    target: bereket_2
+    title: "Tohum Nefes Al\u0131r"
+    description: "K-12 \xB7 Bereket Tarlas\u0131. Beklenen say\u0131 = olas\u0131l\u0131k
+      \xD7 deneme; tohum = filiz \xF7 olas\u0131l\u0131k (120 \xF7 0,8 = 150)."
     icon: {fileID: 0}
     secret: 0
     manualPosition: 0
     position: {x: 0, y: 0}
   - id: ach_tarla_5
-    parentId: ach_tarla_4
+    parentId: ach_bereket_2
     kind: 0
     trigger: 1
     target: tarla_5
@@ -71,7 +71,7 @@ MonoBehaviour:
     manualPosition: 0
     position: {x: 0, y: 0}
   - id: ach_orman_2
-    parentId: ach_tarla_4
+    parentId: ach_bereket_2
     kind: 0
     trigger: 1
     target: orman_2
@@ -83,7 +83,7 @@ MonoBehaviour:
     manualPosition: 0
     position: {x: 0, y: 0}
   - id: ach_carsi_1
-    parentId: ach_tarla_4
+    parentId: ach_bereket_2
     kind: 0
     trigger: 1
     target: carsi_1
@@ -132,7 +132,7 @@ MonoBehaviour:
     parentId: ach_tarla_9
     kind: 1
     trigger: 5
-    target: ach_tarla_4, ach_tarla_5, ach_tarla_9, ach_orman_2, ach_carsi_1, ach_carsi_2,
+    target: ach_bereket_2, ach_tarla_5, ach_tarla_9, ach_orman_2, ach_carsi_1, ach_carsi_2,
       ach_carsi_3
     title: "Hesap Ustas\u0131'n\u0131n M\xFChr\xFC"
     description: "Matematik g\xF6revlerinin hepsini bitirdin. Hesap Ustas\u0131 kap\u0131n\u0131n
@@ -141,3 +141,9 @@ MonoBehaviour:
     secret: 0
     manualPosition: 0
     position: {x: 0, y: 0}
+  topicFormat: 'Konu: {0}'
+  flawlessWord: "Hatas\u0131z"
+  failFormat: '{0} hata'
+  noHintWord: "Defter a\xE7\u0131lmadan"
+  hintWord: "Deftere bak\u0131ld\u0131"
+  statsSeparator: " \xB7 "

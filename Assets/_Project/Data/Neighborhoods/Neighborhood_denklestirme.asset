@@ -21,6 +21,7 @@ MonoBehaviour:
     ka\xE7 tane koyaca\u011F\u0131n\u0131 se\xE7ersin."
   tasks:
   - {fileID: 11400000, guid: 3badd807bc6567342899ac7841ee6f76, type: 2}
+  - {fileID: 11400000, guid: b1a818b6ca3901649910406b66ffc2d0, type: 2}
   - {fileID: 11400000, guid: 997dd2fddb9bd9f489fba066a8c21c41, type: 2}
   - {fileID: 11400000, guid: 41f915253cfc6454990e154e844daab4, type: 2}
   - {fileID: 11400000, guid: f72755424f81372428fce51afeb9af89, type: 2}

@@ -27,6 +27,7 @@ namespace BilgiAdasi.UI
         [SerializeField] private string discoveryWord = "Keşif Defteri";
         [Tooltip("Alınmış görevin ders notu (yalnızca notu olan bir sipariş alınmışken görünür).")]
         [SerializeField] private string lessonWord = "Ders Notu";
+        [SerializeField] private string mainMenuWord = "Ana Menüye Dön";
         [SerializeField] private string quitWord = "Oyundan Çık";
         [SerializeField] private string selectWord = "Seç";
         [SerializeField] private string browseWord = "Gez";
@@ -35,6 +36,8 @@ namespace BilgiAdasi.UI
         [SerializeField] private string backWord = "Geri";
         [SerializeField] private string tabsWord = "Ders";
         [SerializeField] private string learnedWord = "Öğrendiğin";
+        [Tooltip("Kartın en altı: açılmış görev başarımının öğrenilen konusu (LearningData → Topic).")]
+        [SerializeField] private string topicWord = "Öğrenilen konu";
         [SerializeField] private string doneWord = "Tamamlandı";
         [SerializeField] private string nextWord = "Sıradaki";
         [SerializeField] private string openWord = "Açık";
@@ -51,6 +54,8 @@ namespace BilgiAdasi.UI
         [SerializeField] private string wantedWord = "İstenen";
         [SerializeField] private string deliverWord = "Kapıya götür, teslim et";
         [SerializeField] private string orderWord = "Sipariş";
+        [Tooltip("Teslimi olmayan görevde (tarla) ilerleme kelimesi.")]
+        [SerializeField] private string taskWord = "Görev";
 
         [Header("Ayarlar")]
         [SerializeField] private string settingsWord = "Ayarlar";
@@ -62,7 +67,8 @@ namespace BilgiAdasi.UI
         private Button resumeButton, achievementsButton, settingsButton, discoveryButton, lessonButton;
         private TextMeshProUGUI achievementsCount;
         private RectTransform tabBar, viewport, content;
-        private TextMeshProUGUI detailCode, detailTitle, detailHeader, detailBody;
+        private TextMeshProUGUI detailCode, detailTitle, detailHeader, detailBody, detailTopic, detailStats;
+        private GameObject detailTopicBlock;
         private GameObject detailCard;
         private readonly List<Button> tabButtons = new List<Button>();
         private readonly List<Button> nodeButtons = new List<Button>();
@@ -459,6 +465,11 @@ namespace BilgiAdasi.UI
             detailTitle.text = n.Title;
             detailHeader.text = look == NodeLook.Done ? $"{n.Header} · {doneWord}" : look == NodeLook.Next ? nextWord : tab.LockedLabel;
             detailBody.text = string.IsNullOrEmpty(n.Description) ? "—" : n.Description;
+            bool hasTopic = !string.IsNullOrEmpty(n.Topic);
+            detailTopicBlock.SetActive(hasTopic);
+            detailTopic.text = n.Topic;
+            detailStats.text = n.Stats;
+            detailStats.gameObject.SetActive(hasTopic && !string.IsNullOrEmpty(n.Stats));
             detailCard.SetActive(true);
         }
 
@@ -531,6 +542,7 @@ namespace BilgiAdasi.UI
             lessonButton = MenuItem(menu, lessonWord, th, OpenLesson, out _);
             discoveryButton = MenuItem(menu, discoveryWord, th, OpenDiscoveryBook, out _);
             settingsButton = MenuItem(menu, settingsWord, th, ShowSettingsPage, out _);
+            MenuItem(menu, mainMenuWord, th, () => ViewLocator.Get<IPauseMenuCommands>()?.ReturnToMainMenu(), out _);
             MenuItem(menu, quitWord, th, () => ViewLocator.Get<IPauseMenuCommands>()?.QuitGame(), out _);
 
             var bar = HintBar(page, th, new Vector2(0f, 0f), new Vector2(120f, 52f));
@@ -561,7 +573,7 @@ namespace BilgiAdasi.UI
 
             Clear(taskSteps);
             for (int i = 0; i < task.Steps.Count; i++) StepRow(taskSteps, th, task.Steps[i].Text, task.Steps[i].Done);
-            StepRow(taskSteps, th, deliverWord, false, task.ReadyToDeliver);
+            if (task.HasDelivery) StepRow(taskSteps, th, deliverWord, false, task.ReadyToDeliver);
 
             Clear(taskDots);
             for (int i = 0; i < task.Total; i++)
@@ -572,7 +584,7 @@ namespace BilgiAdasi.UI
                 le.preferredWidth = le.preferredHeight = 16f;
             }
             taskPlace.text = task.Place;
-            taskProgress.text = task.Total > 0 ? $"{orderWord} {Mathf.Min(task.Done + 1, task.Total)} / {task.Total}" : string.Empty;
+            taskProgress.text = task.Total > 0 ? $"{(task.HasDelivery ? orderWord : taskWord)} {Mathf.Min(task.Done + 1, task.Total)} / {task.Total}" : string.Empty;
         }
 
         private void StepRow(RectTransform parent, UiTheme th, string text, bool done, bool highlight = false)
@@ -793,6 +805,23 @@ namespace BilgiAdasi.UI
             var learned = UiKit.Text(paper, "LearnedLabel", th.BodyFont, 28f, th.WaxMid, TextAlignmentOptions.Left, FontStyles.Bold);
             learned.text = learnedWord;
             detailBody = UiKit.Text(paper, "Body", th.HeadingFont, 30f, th.Ink, TextAlignmentOptions.TopLeft, FontStyles.Italic);
+
+            // En alt: öğrenilen konu (yalnızca açılmış görev başarımında)
+            var topicBlock = UiKit.Rect(paper, "Topic");
+            var tb = topicBlock.gameObject.AddComponent<VerticalLayoutGroup>();
+            tb.padding = new RectOffset(0, 0, 10, 0);
+            tb.spacing = 4f;
+            tb.childControlWidth = tb.childControlHeight = true;
+            tb.childForceExpandWidth = true;
+            tb.childForceExpandHeight = false;
+            var topicRule = UiKit.Img(topicBlock, "Rule", th.PaperShade);
+            topicRule.gameObject.AddComponent<LayoutElement>().preferredHeight = 2f;
+            var topicLabel = UiKit.Text(topicBlock, "TopicLabel", th.BodyFont, 24f, th.WaxMid, TextAlignmentOptions.Left, FontStyles.Bold);
+            topicLabel.text = topicWord;
+            detailTopic = UiKit.Text(topicBlock, "TopicName", th.HeadingFont, 32f, th.InkDark, TextAlignmentOptions.TopLeft, FontStyles.Bold);
+            detailStats = UiKit.Text(topicBlock, "Stats", th.BodyFont, 24f, th.PaperShade, TextAlignmentOptions.Left, FontStyles.Italic);
+            detailTopicBlock = topicBlock.gameObject;
+            detailTopicBlock.SetActive(false);
             card.gameObject.AddComponent<CardSizer>().Init(paper, 4f);
 
             // Lejant (Figma: x 120, y 998)

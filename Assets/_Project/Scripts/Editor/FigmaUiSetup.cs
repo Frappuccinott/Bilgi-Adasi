@@ -56,6 +56,7 @@ namespace BilgiAdasi.EditorTools
             if (heading != null) so.FindProperty("headingFont").objectReferenceValue = heading;
             if (body != null) so.FindProperty("bodyFont").objectReferenceValue = body;
             so.ApplyModifiedPropertiesWithoutUndo();
+            AssignWeightFonts(theme);
             AssetDatabase.SaveAssets();
             if (heading == null || body == null)
                 Debug.LogWarning("[BilgiAdasi] Alegreya TTF'leri " + FontDir + " içinde yok; TMP varsayılan fontu kullanılacak. " +
@@ -72,6 +73,29 @@ namespace BilgiAdasi.EditorTools
             ti.alphaIsTransparency = true;
             ti.mipmapEnabled = false;
             ti.SaveAndReimport();
+        }
+
+        /// <summary>
+        /// Figma'daki ağırlıklar (Alegreya Black / Italic, Alegreya Sans Regular / Italic / Bold) için TMP asset'leri
+        /// üretir ve temaya bağlar. TTF yoksa alan boş kalır (tema temel fonta düşer). Kurulum 14 ve 20 çağırır.
+        /// </summary>
+        public static void AssignWeightFonts(UiTheme theme)
+        {
+            if (theme == null) return;
+            var so = new SerializedObject(theme);
+            void Set(string field, string file)
+            {
+                var fa = FontAsset(file);
+                if (fa != null) so.FindProperty(field).objectReferenceValue = fa;
+            }
+            Set("headingBlackFont", "Alegreya-Black");
+            Set("headingItalicFont", "Alegreya-Italic");
+            Set("bodyRegularFont", "AlegreyaSans-Regular");
+            Set("bodyItalicFont", "AlegreyaSans-Italic");
+            Set("bodyBoldFont", "AlegreyaSans-Bold");
+            so.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(theme);
+            AssetDatabase.SaveAssets();
         }
 
         /// <summary>Fonts/&lt;ad&gt;.ttf varsa yanına dinamik TMP font asset'i (&lt;ad&gt; SDF.asset) üretir ya da var olanı döner.</summary>
@@ -97,7 +121,11 @@ namespace BilgiAdasi.EditorTools
             }
             // Gamepad glifleri (× ○ □ ▲ ↑↓) Alegreya'da olmayabilir: TMP varsayılanı yedek.
             var fallback = TMP_Settings.defaultFontAsset;
-            if (fallback != null && fallback != fa) fa.fallbackFontAssetTable.Add(fallback);
+            if (fallback != null && fallback != fa)
+            {
+                if (fa.fallbackFontAssetTable == null) fa.fallbackFontAssetTable = new System.Collections.Generic.List<TMP_FontAsset>();
+                fa.fallbackFontAssetTable.Add(fallback);
+            }
             EditorUtility.SetDirty(fa);
             AssetDatabase.SaveAssets();
             return fa;

@@ -30,8 +30,16 @@ MonoBehaviour:
   water: {r: 0.20784314, g: 0.7411765, b: 0.92156863, a: 1}
   waterDark: {r: 0.11764706, g: 0.5254902, b: 0.76862746, a: 1}
   scrim: {r: 0.243, g: 0.157, b: 0.106, a: 0.62}
+  scrimInk: {r: 0.14117648, g: 0.09019608, b: 0.05882353, a: 1}
+  shadowInk: {r: 0.12156863, g: 0.078431375, b: 0.050980393, a: 1}
+  logoAccent: {r: 0.9098039, g: 0.3764706, b: 0.16470589, a: 1}
   headingFont: {fileID: 11400000, guid: 7227027f02a05c14dbcf0804f3245f47, type: 2}
   bodyFont: {fileID: 11400000, guid: 33368820dea61504bb7b7d3569ab2e33, type: 2}
+  headingBlackFont: {fileID: 11400000, guid: ed1d137e43689da419be6038f205fdae, type: 2}
+  headingItalicFont: {fileID: 11400000, guid: d643249b569107b40a66a3fd754aa779, type: 2}
+  bodyRegularFont: {fileID: 11400000, guid: 88aff7a2a5bbe584c8d5c52cc49cfbe5, type: 2}
+  bodyItalicFont: {fileID: 11400000, guid: 658107f309cb2564f98d5a2ed2ec295e, type: 2}
+  bodyBoldFont: {fileID: 11400000, guid: ffce11631d4b65f49b10d4f2a8eef624, type: 2}
   seal: {fileID: 21300000, guid: dd6267044d3f09d4b9c97d37626af307, type: 3}
   sealWax: {fileID: 21300000, guid: 0d1b9b9d06b476a49afb755c600313b1, type: 3}
   coin: {fileID: 21300000, guid: 8f76c460223e36a4a93ee32e45e63e7f, type: 3}
@@ -58,3 +66,4 @@ MonoBehaviour:
   - {fileID: 21300000, guid: cffceab4cae71ea418ab5ca98607ed76, type: 3}
   - {fileID: 21300000, guid: 54f85c2bcec84a9cab05273762fa0eea, type: 3}
   - {fileID: 21300000, guid: 29fb249be11146f18b03511dc7f05748, type: 3}
+  - {fileID: 21300000, guid: 90c5a6062fa2c2144b061c4dea6f04fc, type: 3}

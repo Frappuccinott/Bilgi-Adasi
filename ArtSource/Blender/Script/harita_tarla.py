@@ -88,6 +88,7 @@ TR_EXPORT = r"C:\Users\Mustafa Akbaş\Desktop\Bilgi-Adasi\Assets\_Project\Art\Tr
 # ================================================================== SİMYA TRAKTÖRÜ
 # Yerel: ön = -Y (Unity +Z), zemin z=0. Arka aks y=+0.9, ön aks y=-1.55.
 R_ARKA_T, R_ON_T = 0.88, 0.48
+STEER_TILT = 65.0           # direksiyon simidinin yataydan eğimi (°); Unity TractorRig.steeringWheelAxis ile aynı
 Y_ARKA, Y_ON = 0.9, -1.55
 HITCH = Vector((0.0, 1.85, 0.55))
 
@@ -163,7 +164,8 @@ def traktor_govde_bm():
     paint_by(ch, lambda f, l: c_iron(0.4 + 0.3 * smooth01(l.vert.co.z / 3.0)) if l.vert.co.z < bz + br + 1.25 else pal("bakir", 0))
     parts.append(ch)
     # ocak (arka: kil tuğla kutu, küçük kemerli kapak)
-    fb = box(0.9, 0.7, 1.05, y=0.68, z=0.85, bevel=0.04)
+    # Ocak kutusu sürücünün hemen önünde: üstü 1.65'te kalır, sürücü onun üstünden yola bakar (Play 14.11: 1.90'dı, görüşü kesiyordu)
+    fb = box(0.9, 0.7, 0.8, y=0.68, z=0.85, bevel=0.04)
     paint_by(fb, lambda f, l: tone(mix(pal("kil", 2), pal("kil", 1), 0.4 + 0.4 * (int(l.vert.co.z / 0.18) % 2)), 1.0))
     parts.append(fb)
     fd = bm_prism(pointed_arch(0, 0.32, 0.0, 0.18, 0.12), -0.03, 0.02)
@@ -203,32 +205,53 @@ def traktor_govde_bm():
         bd = box(0.4, 0.05, 0.54, x=-0.74, y=y, z=0.8)
         flat(bd, c_iron(0.5))
         parts.append(bd)
-    # sürücü platformu, koltuk, direksiyon mili, kollar, tente
-    pf = box(1.5, 0.95, 0.08, y=1.45, z=0.62, bevel=0.02)
+    # sürücü platformu, koltuk, direksiyon mili, kollar, tente.
+    # Platform DRV_UP kadar yüksekte (buharlı çekiş arabalarında sürücü arkada, yüksek durur): göz ≈ 2.40 m,
+    # kazanın (1.88) ve ocak kutusunun (1.65) üstünden yola bakar (Play 14.11: göz 1.91'deydi, önü görünmüyordu).
+    DRV_UP = 0.4
+    pf = box(1.5, 0.95, 0.08, y=1.45, z=0.62 + DRV_UP, bevel=0.02)
     paint_by(pf, lambda f, l: mix(pal("ahsap", 1), pal("ahsap", 0), 0.3 + 0.4 * (int((l.vert.co.x + 3) / 0.2) % 2)))
     parts.append(pf)
-    seat = box(0.75, 0.42, 0.12, y=1.6, z=1.05, bevel=0.04)
+    for sx in (-0.5, 0.5):                                     # platform şasi kirişinin (üstü 0.92) üstüne oturur
+        for sy in (1.05, 1.4):
+            st = box(0.12, 0.12, 0.62 + DRV_UP - 0.92, x=sx, y=sy, z=0.92)
+            flat(st, c_iron(0.45))
+            parts.append(st)
+        br_ = tube_pts([(sx, 1.4, 0.8), (sx * 1.2, 1.88, 0.62 + DRV_UP - 0.01)], 0.03, sides=5)   # arka çıkmaya dayanak
+        flat(br_, c_iron(0.5))
+        parts.append(br_)
+    for k, z in enumerate((0.45, 0.78)):                       # sol yanda iki basamak (sürücü soldan biner)
+        stp = box(0.3, 0.32, 0.05, x=0.88, y=1.45, z=z)
+        grad(stp, "ahsap", 2, 1)
+        parts.append(stp)
+        hb = tube_pts([(0.75, 1.45, z + 0.04), (0.88, 1.45, z + 0.02)], 0.02, sides=5)
+        flat(hb, c_iron(0.5))
+        parts.append(hb)
+    seat = box(0.75, 0.42, 0.12, y=1.6, z=1.05 + DRV_UP, bevel=0.04)
     paint_by(seat, lambda f, l: c_leather(0.45))
     parts.append(seat)
-    back = box(0.75, 0.1, 0.45, y=1.84, z=1.12, bevel=0.03)
+    back = box(0.75, 0.1, 0.45, y=1.84, z=1.12 + DRV_UP, bevel=0.03)
     paint_by(back, lambda f, l: c_leather(0.35))
     parts.append(back)
     for sx in (-0.3, 0.3):
-        lg = box(0.08, 0.08, 0.45, x=sx, y=1.6, z=0.66)
+        lg = box(0.08, 0.08, 0.4, x=sx, y=1.6, z=0.66 + DRV_UP)
         flat(lg, c_iron(0.5))
         parts.append(lg)
-    col_ = tube_pts([(0.0, 1.12, 0.7), (0.0, 1.02, 1.2), (0.0, 0.98, 1.38)], 0.035, sides=6)
+    # direksiyon mili: simit araba direksiyonu gibi sürücüye dönük (yataydan 65°; Play 14.11: 35°'de yatıktı,
+    # eller yana açıkken simit dik görünüyordu). Mil ocak kutusunun üstünden simidin merkezine, simit ekseni boyunca.
+    col_ = tube_pts([(0.0, 0.72, 1.6), (0.0, 0.9, 1.69), (0.0, 1.075, 1.779)], 0.035, sides=6)
     flat(col_, c_iron(0.5))
     parts.append(col_)
     for k, x in enumerate((-0.42, 0.42)):
-        lv = tube_pts([(x, 1.15, 0.68), (x, 1.12, 1.05), (x, 1.08, 1.25)], 0.02, sides=5)
+        lv = tube_pts([(x, 1.05, 0.68 + DRV_UP), (x, 1.02, 1.05 + DRV_UP), (x, 0.98, 1.25 + DRV_UP)], 0.02, sides=5)
         flat(lv, pal("bakir", 1))
-        kn = _blob(Vector((x, 1.08, 1.28)), 0.045, sub=1, jit=0.0)
+        kn = _blob(Vector((x, 0.98, 1.28 + DRV_UP)), 0.045, sub=1, jit=0.0)
         flat(kn, pal("cati", 1) if k == 0 else pal("altin", 0))
         parts += [lv, kn]
+    CAN_UP = 0.3                                                # tente başın üstünde kalsın
     for sx in (-0.7, 0.7):
         for sy in (1.0, 1.9):
-            po = box(0.07, 0.07, 2.05, x=sx, y=sy, z=0.66)
+            po = box(0.07, 0.07, 2.05 + CAN_UP, x=sx, y=sy, z=0.66)
             grad(po, "ahsap", 2, 1)
             parts.append(po)
     n = 7
@@ -236,7 +259,7 @@ def traktor_govde_bm():
         x0 = -0.85 + 1.7 * i / n
         x1 = -0.85 + 1.7 * (i + 1) / n
         tb = bmesh.new()
-        vs = [tb.verts.new(p) for p in ((x0, 0.85, 2.62), (x1, 0.85, 2.62), (x1, 2.1, 2.78), (x0, 2.1, 2.78))]
+        vs = [tb.verts.new(p) for p in ((x0, 0.85, 2.62 + CAN_UP), (x1, 0.85, 2.62 + CAN_UP), (x1, 2.1, 2.78 + CAN_UP), (x0, 2.1, 2.78 + CAN_UP))]
         tb.faces.new(vs)
         flat(tb, pal("cati", 1) if i % 2 == 0 else pal("siva", 0))
         parts.append(tb)
@@ -325,7 +348,7 @@ def traktor_direksiyon_bm():
         flat(sp, c_iron(0.55))
         parts.append(sp)
     kn = bm_cyl(0.03, 0.03, 0.12, sides=6)
-    transform_bm(kn, Matrix.Translation((0.21, 0, 0.0)))
+    transform_bm(kn, Matrix.Translation((0.0, -0.21, 0.0)))     # topuz simidin tepesinde (eller 9 ve 3'te, çakışmasın)
     flat(kn, pal("bakir", 0))
     parts.append(kn)
     return merge(parts)
@@ -377,13 +400,30 @@ def build_traktor(loc=(44.6, 14.8), yaw_deg=90.0):          # doğuya bakar; çi
     transform_bm(v, Matrix.Translation((0.82, -0.2, 1.25)))
     obs.append(mk(v, "Traktor_Volan", (0.82, -0.2, 1.25)))
     d = traktor_direksiyon_bm()
-    piv = Vector((0.0, 0.98, 1.42))
-    transform_bm(d, Matrix.Translation(piv) @ Matrix.Rotation(math.radians(-35), 4, "X") @ Matrix.Rotation(math.pi / 2, 4, "Y"))
+    piv = Vector((0.0, 1.12, 1.80))                              # sürücüye yakın, yükseltilmiş platforma göre
+    # traktor_direksiyon_bm simidi zaten yatay (XY düzlemi) kurar; burada yalnızca eğilir. Eskiden bir kez daha Y'de
+    # 90° dönüyordu: simit dik ve ileri-geri doğrultuda (YZ düzleminde) duruyor, eller arasında kalmıyordu (Play 14.11).
+    transform_bm(d, Matrix.Translation(piv) @ Matrix.Rotation(math.radians(-STEER_TILT), 4, "X"))
     obs.append(mk(d, "Traktor_Direksiyon", tuple(piv)))
-    for nm, p in (("Traktor_Koltuk_Kamera", (0.0, 1.55, 1.95)), ("Traktor_Duman_Noktasi", (0.0, -1.3, 3.45)),
+    for nm, p in (("Traktor_Koltuk_Kamera", (0.0, 1.55, 2.40)), ("Traktor_Duman_Noktasi", (0.0, -1.3, 3.45)),
                   ("Traktor_Baglanti", tuple(HITCH))):
         e = empty(nm, col, kind="SINGLE_ARROW", size=0.3)
         e.matrix_world = W @ Matrix.Translation(p) @ Matrix.Rotation(math.pi, 4, "Z")
+        parent_keep(e, root)
+    # Sürücü noktaları (16-traktor §2): kalça koltukta, ayaklar platformda, eller simitte saat 10 ve 2'de.
+    # Sürücü −Y'ye bakar; solu +X. Tutma noktaları köke bağlı dışa verilir (FBX bake_space_transform iç içe
+    # çocukta dönüşümü bozuyor); Unity kurulumu onları Traktor_Direksiyon altına taşır (simitle dönsün diye).
+    for nm, p in (("Traktor_Sele_Oturma", (0.0, 1.62, 1.57)), ("Traktor_Ayak_Sol", (0.2, 1.3, 1.1)),
+                  ("Traktor_Ayak_Sag", (-0.2, 1.3, 1.1))):
+        e = empty(nm, col, kind="PLAIN_AXES", size=0.12)
+        e.matrix_world = W @ Matrix.Translation(p) @ Matrix.Rotation(math.pi, 4, "Z")
+        parent_keep(e, root)
+    tw = Matrix.Translation(piv) @ Matrix.Rotation(math.radians(-STEER_TILT), 4, "X") @ Matrix.Rotation(math.pi / 2, 4, "Y")
+    rim = [tw @ Vector((0.0, 0.22 * math.cos(2 * math.pi * i / 72), 0.22 * math.sin(2 * math.pi * i / 72))) for i in range(72)]
+    for nm, sx in (("Traktor_Tutma_Sol", 1.0), ("Traktor_Tutma_Sag", -1.0)):
+        g = max(rim, key=lambda q: 0.2 * (q.z - piv.z) + 0.98 * sx * q.x)
+        e = empty(nm, col, kind="PLAIN_AXES", size=0.06)
+        e.matrix_world = W @ Matrix.Translation(g) @ Matrix.Rotation(math.pi, 4, "Z")
         parent_keep(e, root)
     print("Traktör:", {o.name: tri_count([o]) for o in obs}, "toplam", tri_count(obs))
     return root
@@ -421,14 +461,14 @@ def alet_pulluk_bm():
         parts.append(sh)
     wh = _teker_bm(0.25, 0.08, 6, 77, cleats=False)
     transform_bm(wh, Matrix.Translation((0.7, 1.9, -0.3)))
-    parts.append(wh)
     ak = tube_pts([(0.0, 1.9, -0.15), (0.35, 1.9, -0.26), (0.7, 1.9, -0.3)], 0.03, sides=5)   # teker kolu (tekerlek kopuktu)
     flat(ak, c_iron(0.5))
     parts.append(ak)
     hd = tube_pts([(0, 1.9, -0.15), (0, 2.3, 0.4), (-0.25, 2.45, 0.55)], 0.03, sides=5)
     grad(hd, "ahsap", 2, 1)
     parts.append(hd)
-    return merge(parts)
+    pts = {"Pulluk_Toprak_%d" % (k + 1): (x, 0.9 + k * 0.35 - 0.1, -0.55) for k, x in enumerate((-0.55, 0.0, 0.55))}
+    return merge(parts), {"Pulluk_Teker": (wh, (0.7, 1.9, -0.3))}, pts
 
 def alet_ekici_bm():
     parts = []
@@ -442,6 +482,7 @@ def alet_ekici_bm():
         v.co.x *= 2.0
     paint_by(hp, lambda f, l: mix(pal("ahsap", 2), pal("ahsap", 1), 0.3 + 0.4 * (int((l.vert.co.z + 3) / 0.15) % 2)))
     parts.append(hp)
+    disks, wheels, pts = [], [], {}
     for k in range(6):
         x = -0.75 + k * 0.3
         tb = tube_pts([(x, 1.15, -0.25), (x, 1.3, -0.55), (x, 1.32, -0.75)], 0.025, sides=5)
@@ -450,18 +491,23 @@ def alet_ekici_bm():
         ds = bm_cyl(0.13, 0.13, 0.03, sides=10)
         transform_bm(ds, M(x, 1.4, -0.72, ry=math.pi / 2) @ Matrix.Translation((0, 0, -0.015)))
         flat(ds, c_iron(0.7))
-        parts.append(ds)
+        disks.append(ds)
+        pts["Ekici_Cikis_%d" % (k + 1)] = (x, 1.33, -0.78)        # tohum borunun ucundan düşer
+    ml = tube_pts([(-0.8, 1.4, -0.72), (0.8, 1.4, -0.72)], 0.018, sides=5)   # diskleri taşıyan mil (dönen parça)
+    flat(ml, c_iron(0.55))
+    disks.append(ml)
     for sx in (-1, 1):
         wh = _teker_bm(0.38, 0.1, 8, 79 + sx, cleats=False)
         transform_bm(wh, Matrix.Translation((sx * 1.15, 1.2, -0.5)))
-        parts.append(wh)
+        wheels.append(wh)
     ax = tube_pts([(-1.15, 1.2, -0.5), (1.15, 1.2, -0.5)], 0.03, sides=6)
     flat(ax, c_iron(0.5))
-    parts.append(ax)
+    wheels.append(ax)
     for k in range(2):
         cv = _cuval(-0.4 + k * 0.8, 1.15, 0.36, 81 + k, pal("altin", 1))
         parts.append(cv)
-    return merge(parts)
+    return merge(parts), {"Ekici_Diskler": (merge(disks), (0.0, 1.4, -0.72)),
+                          "Ekici_Tekerler": (merge(wheels), (0.0, 1.2, -0.5))}, pts
 
 def alet_su_tanki_bm():
     parts = []
@@ -483,19 +529,26 @@ def alet_su_tanki_bm():
     pp = tube_pts([(0, 1.6, -0.3), (0, 1.9, -0.32), (0, 2.0, -0.3)], 0.03, sides=5)
     grad(pp, "bakir", 2, 0)
     parts.append(pp)
+    wheels = []
     for sx in (-1, 1):
         wh = _teker_bm(0.42, 0.12, 8, 85 + sx, cleats=False)
         transform_bm(wh, Matrix.Translation((sx * 0.85, 1.4, -0.15)))
-        parts.append(wh)
+        wheels.append(wh)
     # aks + fıçı beşiği: tekerler hiçbir şeye bağlı değildi (13.11)
     ax = tube_pts([(-0.85, 1.4, -0.15), (0.85, 1.4, -0.15)], 0.035, sides=6)
     flat(ax, c_iron(0.5))
-    parts.append(ax)
+    wheels.append(ax)
+    for x in (-0.9, -0.45, 0.0, 0.45, 0.9):                    # fıskiye memeleri (su efektinin çıkışı)
+        nz = bm_cyl(0.022, 0.016, 0.06, sides=6)
+        transform_bm(nz, Matrix.Translation((x, 2.0, -0.39)))
+        grad(nz, "bakir", 2, 0)
+        parts.append(nz)
     for xx in (-0.45, 0.45):                                   # fıçının oturduğu iki beşik tahtası aksa biner
         bs = box(0.1, 0.9, 0.14, x=xx, y=1.4, z=-0.3)
         grad(bs, "ahsap", 2, 1)
         parts.append(bs)
-    return merge(parts)
+    pts = {"Fiskiye_%d" % (k + 1): (x, 2.0, -0.4) for k, x in enumerate((-0.9, -0.45, 0.0, 0.45, 0.9))}
+    return merge(parts), {"SuTanki_Tekerler": (merge(wheels), (0.0, 1.4, -0.15))}, pts
 
 def alet_serpici_bm():
     parts = []
@@ -510,22 +563,24 @@ def alet_serpici_bm():
     transform_bm(fill, Matrix.Translation((0, 1.0, -0.05)))
     flat(fill, mix(pal("siva", 0), pal("gok", 0), 0.3))
     parts.append(fill)
+    disk = []
     dk = bm_cyl(0.3, 0.3, 0.03, sides=12)
     transform_bm(dk, Matrix.Translation((0, 1.0, -0.4)))
     flat(dk, c_iron(0.7))
-    parts.append(dk)
+    disk.append(dk)
     for k in range(4):
         vn = box(0.26, 0.02, 0.05, origin="center")
         transform_bm(vn, M(0, 1.0, -0.35, yaw=k * math.pi / 4) @ Matrix.Translation((0.13, 0, 0)))
         flat(vn, c_iron(0.5))
-        parts.append(vn)
+        disk.append(vn)
+    wheels = []
     # tekerler diskin arkasında bir aks üstünde; aks yan kollarla huniyi taşır, disk mille huniye bağlanır.
     # Eski sürümde iki teker huninin iki yanında, hiçbir şeye bağlı değildi (Play 13.11).
     YA = 1.45
     for sx in (-1, 1):
         wh = _teker_bm(0.35, 0.1, 6, 88 + sx, cleats=False)
         transform_bm(wh, Matrix.Translation((sx * 0.75, YA, -0.35)))
-        parts.append(wh)
+        wheels.append(wh)
         kol = tube_pts([(sx * 0.68, YA, -0.35), (sx * 0.55, 1.2, 0.0), (sx * 0.4, 1.0, 0.2)], 0.028, sides=5)
         flat(kol, c_iron(0.5))
         parts.append(kol)
@@ -534,11 +589,12 @@ def alet_serpici_bm():
         parts.append(on)
     ax = tube_pts([(-0.75, YA, -0.35), (0.75, YA, -0.35)], 0.03, sides=6)
     flat(ax, c_iron(0.5))
-    parts.append(ax)
+    wheels.append(ax)
     mil = tube_pts([(0.0, 1.0, -0.22), (0.0, 1.0, -0.39)], 0.03, sides=6)
     flat(mil, c_iron(0.6))
     parts.append(mil)
-    return merge(parts)
+    return merge(parts), {"Serpici_Disk": (merge(disk), (0.0, 1.0, -0.4)),
+                          "Serpici_Tekerler": (merge(wheels), (0.0, YA, -0.35))}, {"Serpici_Cikis": (0.0, 1.0, -0.36)}
 
 def alet_bicer_bm():
     parts = []
@@ -554,18 +610,18 @@ def alet_bicer_bm():
         flat(tt, c_iron(0.85))
         parts.append(tt)
     # döner tırmık çarkı (reel): 5 kanatlı ahşap
+    reel = []
     for k in range(5):
         a = 2 * math.pi * k / 5
         bl = box(2.4, 0.05, 0.05, x=1.2, y=1.3 + math.cos(a) * 0.45, z=-0.05 + math.sin(a) * 0.45)
         flat(bl, pal("ahsap", 1))
-        parts.append(bl)
+        reel.append(bl)
         for sx in (0.1, 2.3):
             sp = tube_pts([(sx, 1.3, -0.05), (sx, 1.3 + math.cos(a) * 0.45, -0.05 + math.sin(a) * 0.45)], 0.02, sides=4)
             flat(sp, pal("ahsap", 2))
-            parts.append(sp)
+            reel.append(sp)
     wh = _teker_bm(0.4, 0.12, 8, 91, cleats=False)
     transform_bm(wh, Matrix.Translation((-0.25, 1.0, -0.2)))
-    parts.append(wh)
     # çark mili + iki taşıyıcı kol + teker kolu + çeki demirinden bıçak kirişine dikme. Eski sürümde döner çark
     # hiçbir şeye bağlı değildi, tekerlek de çerçeveden kopuktu (Play 13.11).
     mil = tube_pts([(0.05, 1.3, -0.05), (2.35, 1.3, -0.05)], 0.035, sides=6)
@@ -581,7 +637,8 @@ def alet_bicer_bm():
     dk = tube_pts([(0.9, 0.9, -0.3), (0.9, 1.25, -0.5)], 0.04, sides=5)
     flat(dk, c_iron(0.5))
     parts.append(dk)
-    return merge(parts)
+    return merge(parts), {"Bicer_Cark": (merge(reel), (1.2, 1.3, -0.05)),
+                          "Bicer_Teker": (wh, (-0.25, 1.0, -0.2))}, {"Bicer_Cikis": (1.2, 1.15, -0.5)}
 
 def alet_kizak_bm():
     parts = []
@@ -622,13 +679,25 @@ def build_aletler(origin=(40.0, 10.5)):
     out = []
     for i, (nm, fn) in enumerate(fns):
         x, y = origin[0] + i * 3.4, origin[1]
-        bm = fn()
-        minz = min(v.co.z for v in bm.verts)
-        xs = [v.co.x for v in bm.verts]
-        ys = [v.co.y for v in bm.verts]
+        res = fn()
+        # Parçalı alet (16-traktor §6): (sabit gövde, {dönen parça: (bm, pivot)}, {efekt noktası: konum}).
+        bm, moving, points = res if isinstance(res, tuple) else (res, {}, {})
+        allv = [v.co for v in bm.verts] + [v.co for b, _ in moving.values() for v in b.verts]
+        minz = min(v.z for v in allv)
+        xs = [v.x for v in allv]
+        ys = [v.y for v in allv]
         z = ground_min(x + (min(xs) + max(xs)) / 2, y + (min(ys) + max(ys)) / 2,
                        (max(xs) - min(xs)) / 2, (max(ys) - min(ys)) / 2, 0.0)      # alet tabanı ağın en alçak noktasına
-        ob = to_object(bm, nm, col, loc=(x, y, z - minz), sharp_angle=40)
+        base = Vector((x, y, z - minz))
+        ob = to_object(bm, nm, col, loc=tuple(base), sharp_angle=40)
+        for pn, (pbm, piv) in moving.items():                 # pivot = dönme ekseninin merkezi
+            transform_bm(pbm, Matrix.Translation(-Vector(piv)))
+            po = to_object(pbm, pn, col, loc=tuple(base + Vector(piv)), sharp_angle=40)
+            parent_keep(po, ob)
+        for en, p in points.items():
+            e = empty(en, col, loc=tuple(base + Vector(p)), kind="SINGLE_ARROW", size=0.15)
+            e.rotation_euler = (math.pi, 0.0, 0.0)               # ok aşağı bakar (efekt yönü)
+            parent_keep(e, ob)
         out.append(ob)
         # Unity bu işareti aynen kullanır (Blender ile birebir konum; Unity'de ayrıca yere oturtma yok)
         empty("Konum_" + nm, collection(COL), loc=(x, y, z - minz), kind="PLAIN_AXES", size=0.4)
@@ -789,9 +858,9 @@ def build_bereket():
                 rl = tube_pts([rail[-2], rail[-1]], 0.045, sides=4)
                 grad(rl, "ahsap", 2, 1)
                 parts.append(rl)
-    # giriş direkleri + tarla levhası. Levha altı 2.9 m: oyuncu (1.66) ve traktör (≈2.6) altından geçer
-    # (eskiden 1.45 m'deydi, kapıdan yürünemiyordu — denetim 13.11)
-    GZ = 1.45
+    # giriş direkleri + tarla levhası. Levha altı ≈ 3.45 m: oyuncu (1.66) ve traktör tentesi (3.08, 14.11 sürücü yeri
+    # yükseltildi) altından geçer (eskiden 1.45 m'deydi, kapıdan yürünemiyordu — denetim 13.11; sonra 2.9 — tente değiyordu)
+    GZ = 2.0
     for sx in (-1, 1):
         gp = box(0.22, 0.22, 2.2 + GZ, x=sx * 3.0, y=-BT_D / 2 - 0.5, z=-0.3)
         grad(gp, "ahsap", 2, 1)
@@ -968,6 +1037,21 @@ def build_koru():
     return root
 
 def export_tarla():
+    out = export_traktor()
+    for cn, fn in ((TARLA_COL, "Bereket_Tarlasi.fbx"), (KORU_COL, "Ormanci_Korusu.fbx")):
+        objs = list(bpy.data.collections[cn].all_objects)
+        hidden = [o for o in objs if o.hide_get()]
+        for o in hidden:
+            o.hide_set(False)
+        try:
+            out.append(_fbx(os.path.join(EXPORT_DIR, fn), objs))
+        finally:
+            for o in hidden:
+                o.hide_set(True)
+    return out
+
+def export_traktor():
+    """Yalnızca Traktor.fbx + Traktor_Aletler.fbx (tarla ve koru FBX'lerine dokunmaz)."""
     os.makedirs(TR_EXPORT, exist_ok=True)
     out = []
     tr = [o for o in bpy.data.collections[TR_COL].all_objects if o.name.startswith("Traktor") or o.name.startswith("SM_Traktor")]
@@ -979,23 +1063,14 @@ def export_tarla():
         out.append(_fbx(os.path.join(TR_EXPORT, "Traktor.fbx"), tr))
     finally:
         root.matrix_world = keep
-    al = [o for o in bpy.data.collections[TR_COL].objects if o.name.startswith("Alet_")]
+    al = [o for o in bpy.data.collections[TR_COL].objects if o.name.startswith("Alet_") and o.parent is None]
     keepl = {o.name: o.location.copy() for o in al}
     for o in al:
         o.location = (0, 0, 0)
+    bpy.context.view_layer.update()
     try:
-        out.append(_fbx(os.path.join(TR_EXPORT, "Traktor_Aletler.fbx"), al))
+        out.append(_fbx(os.path.join(TR_EXPORT, "Traktor_Aletler.fbx"), al + [c for o in al for c in o.children_recursive]))
     finally:
         for o in al:
             o.location = keepl[o.name]
-    for cn, fn in ((TARLA_COL, "Bereket_Tarlasi.fbx"), (KORU_COL, "Ormanci_Korusu.fbx")):
-        objs = list(bpy.data.collections[cn].all_objects)
-        hidden = [o for o in objs if o.hide_get()]
-        for o in hidden:
-            o.hide_set(False)
-        try:
-            out.append(_fbx(os.path.join(EXPORT_DIR, fn), objs))
-        finally:
-            for o in hidden:
-                o.hide_set(True)
     return out

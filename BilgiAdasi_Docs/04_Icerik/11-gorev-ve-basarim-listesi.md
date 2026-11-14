@@ -3,7 +3,8 @@
 > Kaynak: `02_Mekanik/04-gorev-plani.md` (Mustafa + Claude, 13.11) ve `05-icerik-prototip.md`. Bu dosya o planı **kodun kullandığı kimliklerle** tek listede toplar: her görevin `taskId`'si, dersi, köyün `neighborhoodId`'si ve bitince açılan başarımlar.
 > Başarımlar **ders bazlı** ayrılır (karar 13.11): Esc → Başarımlar'da her ders bir sekme = bir `AchievementTree` asset'i (`Data/Achievements/AchievementTree_<Ders>.asset`). Bir görev, **defter kaydının (K-n) dersine** göre tek sekmeye girer; yeri (atölye, tarla, koru, çarşı) açıklamada yazar.
 > İlk sürüm menü **Kurulum → 13b** ile bu listeden üretilir; sonra metin, renk, simge, konum Inspector'dan düzenlenir (kod değişmez). Yeni ders = yeni asset; Achievements objesine kendiliğinden bağlanır.
-> Kimlik kuralı: görev `denk_n · tur_n · tarla_n · orman_n · carsi_n`, başarım `ach_<görev>` / `ach_<görev>_<koşul>`. Görev verisi yazılırken (`TaskData.id`) **bu kimlikler kullanılmalı**, yoksa başarım açılmaz.
+> **Güncelleme 14.11:** Bereket Tarlası'nın Mat/Biyo görevleri tek köyde toplandı: `bereket_1…5` (köy `bereket_tarlasi`, K-11…K-15), her görev hem Matematik hem Biyoloji sekmesinde. Ayrıntı ve ders notları: `04_Icerik/15-bereket-tarlasi-mat-biyo.md`. Traktörlü Kimya/Fizik tarla görevleri (`tarla_1, 2, 3, 6, 10`) sonraki sürümde, defterleri K-16'dan devam eder.
+> Kimlik kuralı: görev `denk_n · tur_n · bereket_n · tarla_n · orman_n · carsi_n`, başarım `ach_<görev>` / `ach_<görev>_<koşul>`. Görev verisi yazılırken (`TaskData.id`) **bu kimlikler kullanılmalı**, yoksa başarım açılmaz.
 
 ## Başarım türleri (sağ alttaki bildirim)
 
@@ -48,18 +49,22 @@ Ağaç: kök **İlk Kural** → üst dal Denkleştirme (D-1 → D-5 → köy), o
 | 10 | T-5 Lonca Sınavı | `tur_5` | Tepk · lonca · Kâtip Nevin | Transfer | K-10 | Lonca Sınavı · *Tek Seferde: Lonca* (gizli) |
 | — | Köy bitti | köy `tepkime_turleri` | | | | **Tepkime Türleri Köyü** |
 | — | İki köy bitti (kapanış) | `AllOf` | | | | **Hiçbir Atom Eksik Değil** |
-| 11 | Makineyi Uyandır (A1) | `tarla_1` | Bereket Tarlası (Sürüm 2) | Hata Dedektifi (yanma) | K-11 | Makineyi Uyandır |
-| 13 | Toprağı Tanı (A3) | `tarla_3` | Bereket Tarlası (Sürüm 2) | Tahmin (asit–baz) | K-13 | Toprağı Tanı |
+| 11 | Makineyi Uyandır (A1) | `tarla_1` | Bereket Tarlası (Sürüm 2) | Hata Dedektifi (yanma) | K-16 | Makineyi Uyandır |
+| 13 | Toprağı Tanı (A3) | `tarla_3` | Bereket Tarlası (Sürüm 2) | Tahmin (asit–baz) | K-18 | Toprağı Tanı |
 
 ## Matematik (Sürüm 2)
 
-Ağaç: kök Tohum Hesabı → tarla dalı; koru dalı ve çarşı dalı kökten ayrılır. Bütün Matematik görevleri → **Hesap Ustası'nın Mührü**.
+Ağaç: kök Toprağın Canlıları (bereket_1) → tarla dalı (1 → 5 → köy); koru dalı ve çarşı dalı kökten ayrılır. Bütün Matematik görevleri → **Hesap Ustası'nın Mührü**.
 
-| Sv | Görev | taskId | Yer | Konu | Defter |
-|---|---|---|---|---|---|
-| 14 | Tohum Hesabı (A4) | `tarla_4` | Bereket Tarlası | Veriden olasılığa | K-14 |
-| 15 | Ekim Düzeni (A5) | `tarla_5` | Bereket Tarlası | Sayma, algoritma | K-15 |
-| 19 | Hasat Raporu (A9) | `tarla_9` | Bereket Tarlası | İstatistik | K-19 |
+| Sv | Görev | taskId | Yer | Konu | Defter | Başarım |
+|---|---|---|---|---|---|---|
+| 11 | Toprağın Canlıları | `bereket_1` | Bereket Tarlası | Örneklemden tahmin, ortalama | K-11 | `ach_bereket_1_mat` Örnekten Bütüne |
+| 12 | Tohum Nefes Alır | `bereket_2` | Bereket Tarlası | Olasılık | K-12 | `ach_bereket_2_mat` Beklenen Sayı · *Tek Kese Fazla Yok* (gizli) |
+| 13 | Işık ve Boy | `bereket_3` | Bereket Tarlası | Eğim (MAT.10.6.2) | K-13 | `ach_bereket_3_mat` Tablodan Doğruya |
+| 14 | Tırtıl, Kuş, Şahin | `bereket_4` | Bereket Tarlası | Yüzde, oran | K-14 | `ach_bereket_4_mat` Yüzde On |
+| 15 | Hasat Raporu | `bereket_5` | Bereket Tarlası | İki kategorik değişken (MAT.10.2.1), ortalama | K-15 | `ach_bereket_5_mat` Hasat Raporu · *Defter Kapalı: Hasat* (gizli) |
+| — | Köy bitti | köy `bereket_tarlasi` | | | | `ach_bereket_tarlasi_mat` **Bereket Tarlası** |
+| ~~14~~ | ~~Tohum Hesabı (A4) `tarla_4`~~ → bereket_2 · ~~Ekim Düzeni (A5) `tarla_5`~~ çıkarıldı · ~~Hasat Raporu (A9) `tarla_9`~~ → bereket_5 | | | | | |
 | 22 | Yön Çentiği (B2) | `orman_2` | Ormancı Korusu | Açı, yüzde | K-22 |
 | 27 | Teraziyle Satış | `carsi_1` | Çarşı | Oran | K-27 |
 | 28 | İndirim mi Kazık mı? | `carsi_2` | Çarşı | Yüzde | K-28 |
@@ -73,8 +78,8 @@ Ağaç: kök İlk Saban → tarla dalı; koru dalı kökten ayrılır. → **Mak
 
 | Sv | Görev | taskId | Yer | Konu | Defter |
 |---|---|---|---|---|---|
-| 12 | İlk Saban (A2) | `tarla_2` | Bereket Tarlası | Sabit hız (FİZ.10.1.1) | K-12 |
-| 16 | Kuyudan Tarlaya (A6) | `tarla_6` | Bereket Tarlası | İş, güç (FİZ.10.2.2) | K-16 |
+| 12 | İlk Saban (A2) | `tarla_2` | Bereket Tarlası | Sabit hız (FİZ.10.1.1) | K-17 |
+| 16 | Kuyudan Tarlaya (A6) | `tarla_6` | Bereket Tarlası | İş, güç (FİZ.10.2.2) | K-19 |
 | 20 | Değirmenden Fırına (A10) | `tarla_10` | Bereket Tarlası | Enerji kaynakları (FİZ.10.2.5) | K-20 |
 | 23 | Ağaç Düşüyor! (B3) | `orman_3` | Ormancı Korusu | Mekanik enerjinin korunumu (FİZ.10.2.4) | K-23 |
 | 24 | Kızakla Taşı (B4) | `orman_4` | Ormancı Korusu | İş, güç (FİZ.10.2.1–2) | K-24 |
@@ -83,19 +88,26 @@ Ağaç: kök İlk Saban → tarla dalı; koru dalı kökten ayrılır. → **Mak
 
 ## Biyoloji (Sürüm 2)
 
-Ağaç: kök Elif'in Gübresi → tarla dalı; koru dalı kökten ayrılır. → **Hayat Ustası'nın Mührü**.
+Ağaç: kök Toprağın Canlıları (bereket_1) → tarla dalı (1 → 5 → köy); koru dalı kökten ayrılır. → **Hayat Ustası'nın Mührü**.
 
-| Sv | Görev | taskId | Yer | Konu | Defter |
-|---|---|---|---|---|---|
-| 17 | Elif'in Gübresi (A7) | `tarla_7` | Bereket Tarlası | Azot döngüsü | K-17 |
-| 18 | Güneşten Besine (A8) | `tarla_8` | Bereket Tarlası | Fotosentez (BİY.10.1.2) | K-18 |
+| Sv | Görev | taskId | Yer | Konu | Defter | Başarım |
+|---|---|---|---|---|---|---|
+| 11 | Toprağın Canlıları | `bereket_1` | Bereket Tarlası | Ekosistem bileşenleri, ayrıştırıcılar (BİY.10.2.1, 10.2.3, 10.2.4) | K-11 | `ach_bereket_1_biyo` Toprağın Canlıları |
+| 12 | Tohum Nefes Alır | `bereket_2` | Bereket Tarlası | Oksijenli solunum (BİY.10.1.7, 10.1.8) | K-12 | `ach_bereket_2_biyo` Tohum Nefes Alır |
+| 13 | Işık ve Boy | `bereket_3` | Bereket Tarlası | Fotosentez, çevresel faktörler (BİY.10.1.2, 10.1.3) | K-13 | `ach_bereket_3_biyo` Işıktan Besine |
+| 14 | Tırtıl, Kuş, Şahin | `bereket_4` | Bereket Tarlası | Enerji akışı (BİY.10.2.3, 10.2.2) | K-14 | `ach_bereket_4_biyo` Zehirsiz Çare |
+| 15 | Hasat Raporu | `bereket_5` | Bereket Tarlası | Deney, değişkenler, azot (BİY.10.1.3, 10.2.4) | K-15 | `ach_bereket_5_biyo` Kontrol Grubu |
+| — | Köy bitti | köy `bereket_tarlasi` | | | | `ach_bereket_tarlasi_biyo` **Bereket Tarlası** |
+| ~~17~~ | ~~Elif'in Gübresi (A7) `tarla_7`~~ → bereket_5 · ~~Güneşten Besine (A8) `tarla_8`~~ → bereket_3 | | | | | |
 | 21 | Hangi Ağaç? (B1) | `orman_1` | Ormancı Korusu | Sürdürülebilirlik | K-21 |
 | 25 | Bir Kes, Üç Dik (B5) | `orman_5` | Ormancı Korusu | Ekolojik ayak izi | K-25 |
 | — | Dersin bütün görevleri | `AllOf` | | | **Hayat Ustası'nın Mührü** |
 
 ## Ders ataması (birden çok derse dokunan görevler)
 
-Görev, **defter cümlesinin dersine** girer. Planda iki ders yazanlar: A2 İlk Saban (Mat · alan + Fizik · hız → K-12 hız: **Fizik**), A10 Değirmenden Fırına (Mat · oran + Biyo + Fizik → K-20 enerji: **Fizik**), A1 Makineyi Uyandır (Kimya · yanma → **Kimya**), B5 Bir Kes, Üç Dik (Mat · olasılık + Biyo → K-25: **Biyoloji**). Değiştirmek için: başarımı ilgili asset'e taşı (kimlik aynı kalır, kayıt bozulmaz).
+**İstisna — Bereket Tarlası (`bereket_1…5`):** iki dersli köy; her görevin iki başarımı var (`_mat`, `_biyo`), aynı koşul `TaskCompleted bereket_n`, iki ayrı asset'te. Kod değişikliği gerekmez.
+
+Görev, **defter cümlesinin dersine** girer. Planda iki ders yazanlar: A2 İlk Saban (Mat · alan + Fizik · hız → K-17 hız: **Fizik**), A10 Değirmenden Fırına (Mat · oran + Biyo + Fizik → K-20 enerji: **Fizik**), A1 Makineyi Uyandır (Kimya · yanma → **Kimya**), B5 Bir Kes, Üç Dik (Mat · olasılık + Biyo → K-25: **Biyoloji**). Değiştirmek için: başarımı ilgili asset'e taşı (kimlik aynı kalır, kayıt bozulmaz).
 
 Bölüm başarımları "Bereket Tarlası" ve "Ormancı Korusu" birden çok derse ait olduğu için kaldırıldı; köy olayları gelince istenirse Kimya sekmesine eklenebilir.
 

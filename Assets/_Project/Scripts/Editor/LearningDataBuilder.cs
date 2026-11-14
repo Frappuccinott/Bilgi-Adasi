@@ -113,6 +113,23 @@ namespace BilgiAdasi.EditorTools
                     },
                     "K-5", "Tepkime girenleri katsayıları oranında harcar. Biri biterse tepkime durur; fazla olan artar."),
 
+                // ---------- Bereket Tarlası: Tohum Nefes Alır (Sv2, Matematik + Biyoloji; 15-bereket §3.2) ----------
+                Entry("bereket_2",
+                    "150 tohum ektin. Tarlada kesin 120 filiz mi çıkar?",
+                    new[]
+                    {
+                        "Hayır; 120 beklenen sayıdır, biraz az ya da çok çıkabilir.",
+                        "Evet, hesap doğruysa tam 120 çıkar.",
+                        "Hayır; olasılık 0,8 olduğu için hep 80 çıkar."
+                    }, 0,
+                    new[]
+                    {
+                        "Aynen öyle. Beklenen sayı ortalamadır: 150 tohumdan 114 de çıkabilir, 126 da. Çok kez ekersen ortalaması 120'ye yaklaşır.",
+                        "Olasılık kesinlik vermez, çırak. 120 beklediğimiz ortalamadır; bu yıl biraz az ya da çok çıkabilir.",
+                        "0,8 bir oran: her 10 tohumdan yaklaşık 8'i. 150 tohumda bu 120 eder, 80 değil."
+                    },
+                    "K-12", "Beklenen sayı = olasılık × deneme; tersinden tohum = filiz ÷ olasılık. Çimlenen tohum besinini oksijenle kullanır (oksijenli solunum), bu yüzden toprak havalı olmalı."),
+
                 // ---------- Tepkime Türleri (Seviye 6–10, masa) ----------
                 Entry("tur_1", null, null, 0, null,
                     "K-6", "Sentez: birden çok madde → tek ürün. Analiz: tek madde → daha basit maddeler. Yanma: madde + O₂ → ısı ve ışık. (Kanıtlarım: çeşme, kireç taşı, fener.)"),
@@ -172,7 +189,32 @@ namespace BilgiAdasi.EditorTools
                 ? new ReasoningPrompt()
                 : new ReasoningPrompt(Rich(question), RichAll(options), correct, RichAll(replies));
             // Ders Notu (görevden önce): LessonNotesData; notu olmayan görevde boş kalır.
-            return new LearningEntry(taskId, prompt, discoveryId, Rich(discovery), LessonNotesData.For(taskId));
+            return new LearningEntry(taskId, prompt, discoveryId, Rich(discovery), LessonNotesData.For(taskId))
+                .WithTopic(TopicFor(taskId));
+        }
+
+        /// <summary>
+        /// Öğrenilen konu (müfredat dili): görev sonu bildiriminde "Konu: …" ve başarım kartının en altında görünür.
+        /// Öğretmen/veli özetinin temeli; 10. sınıf Kimya "Kimyasal Tepkimeler" ünitesi.
+        /// </summary>
+        internal static string TopicFor(string taskId)
+        {
+            switch (taskId)
+            {
+                case "cirak_0": return "Kütlenin korunumu";
+                case "denk_1": return "Kütlenin korunumu ve denklem denkleştirme";
+                case "denk_2": return "Yanma tepkimeleri";
+                case "denk_3": return "Denklem denkleştirme yöntemi";
+                case "denk_4": return "Ardışık tepkimeler ve ara ürün";
+                case "denk_5": return "Mol oranı ve sınırlayıcı bileşen";
+                case "tur_1": return "Tepkime türleri: sentez, analiz, yanma";
+                case "tur_2": return "Tepkime türünü denklemden tanıma";
+                case "tur_3": return "Fiziksel ve kimyasal değişim";
+                case "tur_4": return "Tepkime türlerinde kanıt ve karşı örnek";
+                case "tur_5": return "Tepkime türleri ve maddenin döngüsü";
+                case "bereket_2": return "Olasılık (beklenen sayı) ve oksijenli solunum";
+                default: return string.Empty;
+            }
         }
 
         internal static string[] RichAll(string[] values)

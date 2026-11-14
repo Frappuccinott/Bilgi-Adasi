@@ -235,6 +235,8 @@ Köy sırası serbest (01 §3). Masa köyü (T) önce oynanırsa, Kimya köyüne
 
 ## 5. Bölüm 2 — Bereket Tarlası (Sürüm 2, Seviye 11–20)
 
+> **Güncelleme 14.11:** Bu bölümün Matematik ve Biyoloji görevleri (A4, A5, A7, A8, A9) **Bereket Tarlası köyü** olarak yeniden yazıldı: 5 görev, her biri hem Mat hem Biyo, traktörsüz, ders notlarıyla → `04_Icerik/15-bereket-tarlasi-mat-biyo.md` (geçerli olan o). Aşağıdaki tablo traktörlü Kimya/Fizik görevleri (A1, A2, A3, A6, A10) için referans olarak kalır.
+
 ### 5.1 Kurgu
 D-5'ten sonra Elif çırağı tarlasına çağırır: *"Gübre tamam, ama tarlayı kim sürecek? Ustan bir makine yapmış, ahırda tozlanıyor."* Ahırda **Simya Traktörü**: Câbir Usta'nın, el-Cezerî'nin makine kitabından esinlenip yaptığı buharlı çekiş arabası (büyük ahşap tekerlek, bakır kazan, baca, çark). Tarlanın işi tek derse sığmadığı için kilitli şehirlerin ustaları yardıma gelir (§8).
 

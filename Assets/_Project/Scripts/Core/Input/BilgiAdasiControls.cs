@@ -1428,6 +1428,17 @@ namespace BilgiAdasi.Core
                     ""isPartOfComposite"": false
                 },
                 {
+                    ""name"": """",
+                    ""id"": ""b8deface-8cb0-4fd1-9e8a-ed0acf9f6b18"",
+                    ""path"": ""<Keyboard>/f6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""DevJumpTask"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
                     ""name"": ""LT+RT+DpadRight"",
                     ""id"": ""b8defcea-9cb0-4fd1-9d80-ed0acc9f6b18"",
                     ""path"": ""TwoModifiers"",

@@ -81,6 +81,7 @@ namespace BilgiAdasi.City
         {
             if (isOpen) return;
             SetOpen(true);
+            GameEvents.RaiseSoundAt(SoundId.DoorOpen, transform.position);
             lastSide = player != null ? SideOf(player.position) : 0;
         }
 
@@ -89,6 +90,7 @@ namespace BilgiAdasi.City
         {
             if (!isOpen) return;
             SetOpen(false);
+            GameEvents.RaiseSoundAt(SoundId.DoorClose, transform.position);
         }
 
         private void SetOpen(bool open)

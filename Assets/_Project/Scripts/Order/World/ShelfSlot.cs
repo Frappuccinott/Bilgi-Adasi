@@ -112,11 +112,13 @@ namespace BilgiAdasi.Order
                     return;
                 }
                 Set(null, 0, true);
+                GameEvents.RaiseSoundAt(SoundId.Jar, transform.position);
             }
             else if (inv.SelectedSpecies != null)
             {
                 var stack = inv.TakeSelected();
                 Set(stack.Species, stack.Count, true);
+                GameEvents.RaiseSoundAt(SoundId.Jar, transform.position);
             }
         }
 

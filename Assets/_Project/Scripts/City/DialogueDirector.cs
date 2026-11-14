@@ -76,6 +76,7 @@ namespace BilgiAdasi.City
         public void Advance()
         {
             if (!IsPlaying) return;
+            GameEvents.RaiseSound(SoundId.DialogueAdvance);
             index++;
             if (index >= lines.Count)
             {

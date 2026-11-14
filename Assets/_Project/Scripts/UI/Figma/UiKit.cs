@@ -20,6 +20,9 @@ namespace BilgiAdasi.UI
         public static Sprite Pill => pill ? pill : pill = MakeRound(32);
         public static Sprite Disc => disc ? disc : disc = MakeRing(64, 0f, false);
         public static Sprite Ring => ring ? ring : ring = MakeRing(64, 5f, false);
+        /// <summary>İnce halka (Figma ilerleme noktası: 12 px'de 1.5 px çizgi).</summary>
+        public static Sprite RingThin => ringThin ? ringThin : ringThin = MakeRing(64, 8f, false);
+        private static Sprite ringThin;
         public static Sprite RingDashed => ringDashed ? ringDashed : ringDashed = MakeRing(64, 4f, true);
         public static Sprite Check => check ? check : check = MakeCheck(64);
         private static Sprite arrow;
@@ -245,7 +248,8 @@ namespace BilgiAdasi.UI
             Fill(frame.rectTransform);
             var face = Img(frame.transform, "Face", th.Paper, Round8);
             Fill(face.rectTransform, 3, 3, 3, 5);
-            var label = Text(face.transform, "Label", th.BodyFont, height * 0.5f, th.InkDeep, TextAlignmentOptions.Center, FontStyles.Bold);
+            var label = Text(face.transform, "Label", th.BodyBoldFont, height * 0.5f, th.InkDeep, TextAlignmentOptions.Center,
+                th.HasBodyBold ? FontStyles.Normal : FontStyles.Bold);
             Fill(label.rectTransform, 6, 0, 6, 0);
             label.textWrappingMode = TextWrappingModes.NoWrap;
             var fitter = root.gameObject.AddComponent<LayoutElement>();
@@ -327,6 +331,58 @@ namespace BilgiAdasi.UI
             img.sprite = sprite;
             img.type = sprite.border != Vector4.zero ? Image.Type.Sliced : Image.Type.Simple;
             img.color = color;
+        }
+
+        /// <summary>
+        /// Çok duraklı doğrusal degrade (CSS linear-gradient gibi): stops = (konum 0–1, opaklık). Beyaz; Image rengiyle boyanır.
+        /// vertical: konum 0 = üst (CSS "to bottom"); değilse konum 0 = sol ("to right"). Her çağrı yeni sprite döner.
+        /// </summary>
+        public static Sprite Gradient(bool vertical, params Vector2[] stops)
+        {
+            const int n = 256;
+            var tex = vertical ? NewTex(1, n) : NewTex(n, 1);
+            var px = new Color32[n];
+            for (int i = 0; i < n; i++)
+            {
+                float t = i / (n - 1f);
+                if (vertical) t = 1f - t;   // dokunun y=0 satırı altta
+                float a = stops[0].y;
+                for (int s = 0; s < stops.Length; s++)
+                {
+                    if (t <= stops[s].x)
+                    {
+                        a = s == 0 ? stops[0].y
+                            : Mathf.Lerp(stops[s - 1].y, stops[s].y, Mathf.InverseLerp(stops[s - 1].x, stops[s].x, t));
+                        break;
+                    }
+                    a = stops[s].y;
+                }
+                px[i] = new Color32(255, 255, 255, (byte)(255 * Mathf.Clamp01(a)));
+            }
+            tex.SetPixels32(px);
+            tex.wrapMode = TextureWrapMode.Clamp;
+            tex.Apply(false, true);
+            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        /// <summary>
+        /// Yazı gölgesi (CSS text-shadow 0 offsetY blur renk): TMP underlay, yazıya özel malzeme kopyasıyla.
+        /// Piksel değerleri 1920×1080 referansındadır; fontun SDF aralığına göre çevrilir.
+        /// </summary>
+        public static void TextShadow(TMP_Text text, Color color, float offsetY, float blur)
+        {
+            if (text == null || text.font == null) return;
+            var mat = new Material(text.fontSharedMaterial) { name = text.fontSharedMaterial.name + " (Gölge)" };
+            float gradient = mat.HasProperty("_GradientScale") ? mat.GetFloat("_GradientScale") : 10f;
+            float point = Mathf.Max(1f, text.font.faceInfo.pointSize);
+            float k = Mathf.Max(0.01f, gradient * text.fontSize / point);
+            mat.EnableKeyword("UNDERLAY_ON");
+            mat.SetColor("_UnderlayColor", color);
+            mat.SetFloat("_UnderlayOffsetX", 0f);
+            mat.SetFloat("_UnderlayOffsetY", Mathf.Clamp(-offsetY / k, -1f, 1f));
+            mat.SetFloat("_UnderlayDilate", 0f);
+            mat.SetFloat("_UnderlaySoftness", Mathf.Clamp01(blur / k));
+            text.fontSharedMaterial = mat;
         }
 
         public static Color WithAlpha(Color c, float a)

@@ -23,8 +23,15 @@ namespace BilgiAdasi.Core
         public readonly Sprite Icon;        // boş olabilir
         public readonly Color Color;        // türün rengi
         public readonly AchievementKind Kind;
+        /// <summary>Görev sonu özeti: öğrenilen konu ("Konu: Yanma tepkimeleri"). Boş = özet yok.</summary>
+        public readonly string Topic;
+        /// <summary>Görev sonu özeti: hata ve defter kullanımı ("Hatasız · Defter açılmadan"). Boş olabilir.</summary>
+        public readonly string Stats;
 
-        public AchievementToastInfo(string header, string title, string description, Sprite icon, Color color, AchievementKind kind)
+        public bool HasSummary => !string.IsNullOrEmpty(Topic) || !string.IsNullOrEmpty(Stats);
+
+        public AchievementToastInfo(string header, string title, string description, Sprite icon, Color color, AchievementKind kind,
+            string topic = "", string stats = "")
         {
             Header = header;
             Title = title;
@@ -32,6 +39,8 @@ namespace BilgiAdasi.Core
             Icon = icon;
             Color = color;
             Kind = kind;
+            Topic = topic ?? string.Empty;
+            Stats = stats ?? string.Empty;
         }
     }
 
@@ -49,10 +58,16 @@ namespace BilgiAdasi.Core
         public readonly int ParentIndex;    // -1 = kök (aynı sekmede)
         public readonly int Column;
         public readonly int Row;
+        /// <summary>Görev başarımıysa ve açıldıysa öğrenilen konu; değilse boş.</summary>
+        public readonly string Topic;
+        /// <summary>Açılmış görev başarımında hata ve defter kullanımı; değilse boş.</summary>
+        public readonly string Stats;
 
         public AchievementNodeInfo(string id, string title, string description, string header, Sprite icon, Color color,
-            AchievementKind kind, AchievementState state, int parentIndex, int column, int row)
+            AchievementKind kind, AchievementState state, int parentIndex, int column, int row, string topic = "", string stats = "")
         {
+            Topic = topic ?? string.Empty;
+            Stats = stats ?? string.Empty;
             Id = id;
             Title = title;
             Description = description;
@@ -113,6 +128,8 @@ namespace BilgiAdasi.Core
     public interface IPauseMenuCommands
     {
         void Resume();
+        /// <summary>Ana menüye döner (kayıt yazılmaz; "Devam Et" son otomatik kayda döner).</summary>
+        void ReturnToMainMenu();
         void QuitGame();
     }
 }

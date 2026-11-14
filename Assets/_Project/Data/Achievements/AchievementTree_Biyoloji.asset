@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Core.AchievementTree
   treeTitle: Biyoloji
   tabIcon: {fileID: 0}
-  comingSoon: 1
+  comingSoon: 0
   comingSoonLabel: "Yak\u0131nda"
   tabOrder: 3
   accentColor: {r: 0.24705882, g: 0.65882355, b: 0.22745098, a: 1}
@@ -33,8 +33,20 @@ MonoBehaviour:
   secretTitle: ???
   lockedLabel: "Hen\xFCz a\xE7\u0131lmad\u0131"
   entries:
-  - id: ach_tarla_7
+  - id: ach_bereket_2
     parentId: 
+    kind: 0
+    trigger: 1
+    target: bereket_2
+    title: "Tohum Nefes Al\u0131r"
+    description: "K-12 \xB7 Bereket Tarlas\u0131. \xC7imlenen tohum besinini oksijenle
+      kullan\u0131r (oksijenli solunum); toprak bu y\xFCzden s\xFCr\xFCl\xFCr."
+    icon: {fileID: 0}
+    secret: 0
+    manualPosition: 0
+    position: {x: 0, y: 0}
+  - id: ach_tarla_7
+    parentId: ach_bereket_2
     kind: 0
     trigger: 1
     target: tarla_7
@@ -58,7 +70,7 @@ MonoBehaviour:
     manualPosition: 0
     position: {x: 0, y: 0}
   - id: ach_orman_1
-    parentId: ach_tarla_7
+    parentId: ach_bereket_2
     kind: 0
     trigger: 1
     target: orman_1
@@ -85,7 +97,7 @@ MonoBehaviour:
     parentId: ach_tarla_8
     kind: 1
     trigger: 5
-    target: ach_tarla_7, ach_tarla_8, ach_orman_1, ach_orman_5
+    target: ach_bereket_2, ach_tarla_7, ach_tarla_8, ach_orman_1, ach_orman_5
     title: "Hayat Ustas\u0131'n\u0131n M\xFChr\xFC"
     description: "Biyoloji g\xF6revlerinin hepsini bitirdin. Hayat Ustas\u0131 defterine
       bir yaprak bast\u0131rd\u0131."
@@ -93,3 +105,9 @@ MonoBehaviour:
     secret: 0
     manualPosition: 0
     position: {x: 0, y: 0}
+  topicFormat: 'Konu: {0}'
+  flawlessWord: "Hatas\u0131z"
+  failFormat: '{0} hata'
+  noHintWord: "Defter a\xE7\u0131lmadan"
+  hintWord: "Deftere bak\u0131ld\u0131"
+  statsSeparator: " \xB7 "

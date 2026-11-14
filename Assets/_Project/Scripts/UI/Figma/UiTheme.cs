@@ -46,12 +46,30 @@ namespace BilgiAdasi.UI
         [Header("Oyun görüntüsü üstü (scrim)")]
         [Tooltip("Ekran karartması: mürekkep koyusu, saydam.")]
         [SerializeField] private Color scrim = new Color(0.243f, 0.157f, 0.106f, 0.62f);
+        [Tooltip("Oyun görüntüsü üstü degrade scrim'lerinin rengi (Figma Ekran/Giriş: #24170F).")]
+        [SerializeField] private Color scrimInk = Hex(0x24170F);
+        [Tooltip("Yazı gölgesi ve tam karartma (Figma: #1F140D).")]
+        [SerializeField] private Color shadowInk = Hex(0x1F140D);
+
+        [Header("Logo")]
+        [Tooltip("Logo/Yazı altındaki kısa turuncu çizgi (Figma: #E8602A).")]
+        [SerializeField] private Color logoAccent = Hex(0xE8602A);
 
         [Header("Fontlar (Alegreya + Alegreya Sans, SIL OFL 1.1). Boş = TMP varsayılanı")]
         [Tooltip("Başlık / usta konuşması: Alegreya.")]
         [SerializeField] private TMP_FontAsset headingFont;
         [Tooltip("Gövde / etiket / formül: Alegreya Sans.")]
         [SerializeField] private TMP_FontAsset bodyFont;
+        [Tooltip("Logo/Yazı: Alegreya Black. Boşsa başlık fontu.")]
+        [SerializeField] private TMP_FontAsset headingBlackFont;
+        [Tooltip("Alegreya Italic (kayıt özeti, \"Devam edecek\"). Boşsa başlık fontu.")]
+        [SerializeField] private TMP_FontAsset headingItalicFont;
+        [Tooltip("Alegreya Sans Regular. Boşsa gövde fontu.")]
+        [SerializeField] private TMP_FontAsset bodyRegularFont;
+        [Tooltip("Alegreya Sans Italic (güvenlik notu). Boşsa gövde fontu.")]
+        [SerializeField] private TMP_FontAsset bodyItalicFont;
+        [Tooltip("Alegreya Sans Bold (Glyph/Klavye tuş kapağı). Boşsa gövde fontu.")]
+        [SerializeField] private TMP_FontAsset bodyBoldFont;
 
         [Header("Sprite'lar (Figma'dan dışa aktarılmış)")]
         [Tooltip("UI/Mühür — tam mühür (çeşme simgeli).")]
@@ -81,8 +99,21 @@ namespace BilgiAdasi.UI
         public Color Water => water;
         public Color WaterDark => waterDark;
         public Color Scrim => scrim;
+        public Color ScrimInk => scrimInk;
+        public Color ShadowInk => shadowInk;
+        public Color LogoAccent => logoAccent;
         public TMP_FontAsset HeadingFont => headingFont;
         public TMP_FontAsset BodyFont => bodyFont;
+        public TMP_FontAsset HeadingBlackFont => headingBlackFont != null ? headingBlackFont : headingFont;
+        public TMP_FontAsset HeadingItalicFont => headingItalicFont != null ? headingItalicFont : headingFont;
+        public TMP_FontAsset BodyRegularFont => bodyRegularFont != null ? bodyRegularFont : bodyFont;
+        public TMP_FontAsset BodyItalicFont => bodyItalicFont != null ? bodyItalicFont : bodyFont;
+        public TMP_FontAsset BodyBoldFont => bodyBoldFont != null ? bodyBoldFont : bodyFont;
+        /// <summary>Gerçek ağırlık/eğik font yoksa yapay stil gerekir (fallback).</summary>
+        public bool HasHeadingBlack => headingBlackFont != null;
+        public bool HasHeadingItalic => headingItalicFont != null;
+        public bool HasBodyItalic => bodyItalicFont != null;
+        public bool HasBodyBold => bodyBoldFont != null;
         public Sprite Seal => seal;
         public Sprite SealWax => sealWax;
         public Sprite Coin => coin;

@@ -1,15 +1,23 @@
+using System.Collections.Generic;
+using BilgiAdasi.City;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 namespace BilgiAdasi.Core
 {
     /// <summary>
-    /// Ana menü (oyunun ilk sahnesi, SceneFlow.MenuScene). Oyna: yeni oyun (kayıt varsa önce onay) → Harita.
-    /// Devam et: diskteki son otomatik kayıt (son görev anı) yüklenir → Harita. Görünümü yalnızca IMainMenuView ile tanır.
+    /// Ana menü (oyunun ilk sahnesi, SceneFlow.MenuScene). Yeni Oyun: yeni oyun (kayıt varsa önce onay) → Harita.
+    /// Devam Et: diskteki son otomatik kayıt (son görev anı) yüklenir → Harita. Görünümü yalnızca IMainMenuView ile tanır.
+    /// UI/Cancel (Esc · B) açık sayfayı (Ayarlar, Emeği Geçenler, onay) kapatır.
     /// </summary>
     public sealed class MainMenuController : MonoBehaviour
     {
+        [Tooltip("Köy sırası (Harita'daki NeighborhoodRunner ile aynı; Kurulum 20 doldurur). Kayıt özeti ilk bitmemiş köyü gösterir.")]
+        [SerializeField] private List<NeighborhoodData> neighborhoods = new List<NeighborhoodData>();
+
         private IMainMenuView view;
+        private InputAction cancel;
         private bool loading;
 
         private void Start()
@@ -25,10 +33,44 @@ namespace BilgiAdasi.Core
                 Debug.LogError("[MainMenu] IMainMenuView yok (Kurulum 20).", this);
                 return;
             }
-            view.Show(MenuTexts.Load(), SaveSystem.HasSave, OnPlay, OnContinue, OnQuit);
+            bool hasSave = SaveSystem.HasSave;
+            view.Show(MenuTexts.Load(), hasSave, hasSave ? BuildSummary() : null, OnNewGame, OnContinue, OnQuit);
+
+            cancel = GameInput.FindAction("UI/Cancel");
+            cancel.performed += OnCancel;
         }
 
-        private void OnPlay()
+        private void OnDestroy()
+        {
+            if (cancel != null) cancel.performed -= OnCancel;
+        }
+
+        private void OnCancel(InputAction.CallbackContext _)
+        {
+            if (!loading) view?.TryGoBack();
+        }
+
+        /// <summary>Kayıttaki ilk bitmemiş köy (hepsi bittiyse sonuncusu) ve sıradan biten görev sayısı.</summary>
+        private MainMenuSaveSummary BuildSummary()
+        {
+            var data = SaveSystem.PeekSaved();
+            if (data == null) return null;
+            NeighborhoodData last = null;
+            int lastDone = 0;
+            for (int i = 0; i < neighborhoods.Count; i++)
+            {
+                var n = neighborhoods[i];
+                if (n == null || n.Tasks.Count == 0) continue;
+                int done = 0;
+                while (done < n.Tasks.Count && n.Tasks[done] != null && data.IsTaskCompleted(n.Tasks[done].Id)) done++;
+                last = n;
+                lastDone = done;
+                if (done < n.Tasks.Count) break;
+            }
+            return last == null ? null : new MainMenuSaveSummary { Place = last.Title, Done = lastDone, Total = last.Tasks.Count };
+        }
+
+        private void OnNewGame()
         {
             if (loading) return;
             if (SaveSystem.HasSave) view.AskNewGame(StartNewGame, null);

@@ -34,11 +34,11 @@
 - [x] `[KOD]` Lonca Sınavı: rastgele çekme + yanlışta soru değişimi — 13.11, Mustafa dalı (Kurulum 16)
 - [x] `[İÇERİK]` Tepkime Türleri köyünün 5 görevi SO olarak girildi — `DeskDataBuilder`
 - [x] `[KOD]` Harita: şehir/ilçe/köy düğümleri, kilit durumları, 5 nokta göstergesi — 14.11, mini harita dahil (Kurulum 19)
-- [ ] `[KOD]` İpucu defteri (iki tip için ortak)
-- [ ] `[KOD]` Boy uzama (`PlayerGrowth`, `CLAUDE.md` §7)
+- [x] `[KOD]` İpucu defteri (iki tip için ortak) — `FigmaHintBook`
+- [x] `[KOD]` Boy uzama (`PlayerGrowth`, `CLAUDE.md` §7) — 14.11, Kurulum 25, `GrowthTests`
 - [x] `[KOD]` Gamepad istasyon kontrolü (odak tabanlı, imleçsiz)
-- [ ] `[KOD]` "Gerçek hayatta" kartı
-- [ ] `[KOD]` Emeği Geçenler ekranı (`05_Uretim/LICENSES.md`'den elle aktarılır) — **lisans kuralı için zorunlu**
+- [x] `[KOD]` "Gerçek hayatta" kartı — `IRealLifeCardView`; metin kontrolü: `04_Icerik/17-icerik-kontrol-listesi.md`
+- [x] `[KOD]` Emeği Geçenler ekranı (`05_Uretim/LICENSES.md`'den elle aktarılır) — **lisans kuralı için zorunlu** — ana menüde (Kurulum 20); LICENSES.md 14.11'de düzeltildi, ekranla eşitliği kontrol et
 
 ## P2 — Cila
 
@@ -76,6 +76,6 @@
 ## Açık işler / sorulacaklar
 
 - [ ] **Organizasyona sor:** "0'dan üret" eski kendi model/kodlarımızı kapsıyor mu? Cevaba göre `README` güncellenir.
-- [ ] Tür adları (analiz/ayrışma), 10. sınıf Maarif ders kitabıyla kontrol.
-- [ ] "Gerçek hayatta" cümleleri kitap/öğretmen kontrolü.
+- [ ] Tür adları (analiz/ayrışma), 10. sınıf Maarif ders kitabıyla kontrol. → `04_Icerik/17-icerik-kontrol-listesi.md`
+- [ ] "Gerçek hayatta" cümleleri kitap/öğretmen kontrolü. → `04_Icerik/17-icerik-kontrol-listesi.md`
 - [ ] Görev 5 fiyatları oynanarak ayarlanacak.

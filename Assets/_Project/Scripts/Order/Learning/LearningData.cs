@@ -49,6 +49,8 @@ namespace BilgiAdasi.Order
         [Tooltip("Keşif Defteri kayıt numarası: K-1")]
         [SerializeField] private string discoveryId = "";
         [TextArea(2, 4)] [SerializeField] private string discoveryText = "";
+        [Tooltip("Öğrenilen konunun kısa adı (müfredat dili): \"Yanma tepkimeleri\". Görev sonu bildiriminde ve başarım kartının altında görünür. Boşsa ders notunun adı.")]
+        [SerializeField] private string topic = "";
 
         [Header("Defter sayfası (Keşiflerim)")]
         [Tooltip("Görevin defterdeki adı: \"Kuru Çeşme\".")]
@@ -74,6 +76,9 @@ namespace BilgiAdasi.Order
         public ReasoningPrompt Reasoning => reasoning;
         public string DiscoveryId => discoveryId;
         public string DiscoveryText => discoveryText;
+        /// <summary>Öğrenilen konu: elle girilen ad, yoksa ders notunun adı, o da yoksa boş.</summary>
+        public string Topic => !string.IsNullOrWhiteSpace(topic) ? topic
+            : lesson != null && !string.IsNullOrWhiteSpace(lesson.Title) ? lesson.Title : string.Empty;
 
         public LearningEntry() { }
 
@@ -88,6 +93,13 @@ namespace BilgiAdasi.Order
         }
 
 #if UNITY_EDITOR
+        /// <summary>Editör veri üreticisi için: öğrenilen konunun kısa adı.</summary>
+        public LearningEntry WithTopic(string topicName)
+        {
+            topic = topicName ?? string.Empty;
+            return this;
+        }
+
         /// <summary>Editör veri üreticisi için: defter sayfasının alanları.</summary>
         public LearningEntry WithPage(string pageTitle, string place, string richEquation, string icon, string usageNote,
             params FieldNote[] notes)

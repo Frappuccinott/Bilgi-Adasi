@@ -120,9 +120,10 @@ namespace BilgiAdasi.EditorTools
         private static TabSeed[] Seeds() => new[]
         {
             new TabSeed { File = "Kimya", Order = 0, Title = "Kimya", Accent = Hex("#9F4E2B"), Entries = Kimya() },
-            new TabSeed { File = "Matematik", Order = 1, Title = "Matematik", Accent = Hex("#4F7F96"), ComingSoon = true, Entries = Matematik() },
+            // Matematik ve Biyoloji: Sv2 Tohum Nefes Alır (bereket_2) oynanabilir → sekme açık (14.11).
+            new TabSeed { File = "Matematik", Order = 1, Title = "Matematik", Accent = Hex("#4F7F96"), ComingSoon = false, Entries = Matematik() },
             new TabSeed { File = "Fizik", Order = 2, Title = "Fizik", Accent = Hex("#6E8090"), ComingSoon = true, Entries = Fizik() },
-            new TabSeed { File = "Biyoloji", Order = 3, Title = "Biyoloji", Accent = Hex("#3FA83A"), ComingSoon = true, Entries = Biyoloji() },
+            new TabSeed { File = "Biyoloji", Order = 3, Title = "Biyoloji", Accent = Hex("#3FA83A"), ComingSoon = false, Entries = Biyoloji() },
         };
 
         // Önceki sürümün bölüm sekmeleri (görevleri artık ders sekmelerinde): yeniden yazarken kaldırılır.
@@ -199,7 +200,8 @@ namespace BilgiAdasi.EditorTools
             var list = Subject(
                 new[]
                 {
-                    T("tarla_4", "Tohum Hesabı", "K-14 · Bereket Tarlası. Beklenen sayı = olasılık × deneme sayısı."),
+                    // Sv2: iki derse ait görev; aynı başarım iki sekmede (tek bildirim). tarla_4 Tohum Hesabı bunun içine girdi.
+                    T("bereket_2", "Tohum Nefes Alır", "K-12 · Bereket Tarlası. Beklenen sayı = olasılık × deneme; tohum = filiz ÷ olasılık (120 ÷ 0,8 = 150)."),
                     T("tarla_5", "Ekim Düzeni", "K-15 · Bereket Tarlası. Bir işi adım adım yazınca (algoritma) kaç dönüş, kaç seçenek olduğunu sayabilirim."),
                     T("tarla_9", "Hasat Raporu", "K-19 · Bereket Tarlası. Ortalama tek sayıyla özetler; grafik farkları gösterir."),
                 },
@@ -241,6 +243,7 @@ namespace BilgiAdasi.EditorTools
             var list = Subject(
                 new[]
                 {
+                    T("bereket_2", "Tohum Nefes Alır", "K-12 · Bereket Tarlası. Çimlenen tohum besinini oksijenle kullanır (oksijenli solunum); toprak bu yüzden sürülür."),
                     T("tarla_7", "Elif'in Gübresi", "K-17 · Bereket Tarlası. Azot döngüsü: havadaki N<sub>2</sub> bağlanmadan bitkiye geçmez."),
                     T("tarla_8", "Güneşten Besine", "K-18 · Bereket Tarlası. Fotosentez, solunum ve yanmanın tersi gibidir."),
                 },

@@ -89,7 +89,7 @@ Yeni paket eklemeden önce **sor**.
 | ExitStation | Station | Esc / sağ tık | B (East) |
 | Navigate / Submit / Cancel | UI | Ok tuşları, Enter, Esc | D-pad / sol çubuk, A, B |
 | PrevTab / NextTab (defter ayracı) | UI | Q / E | LB / RB |
-| DevJumpTask (yalnızca geliştirici) | Dev | F1–F5 (o göreve atla) | LT+RT+D-pad → (sıradaki görevi bitmiş say) |
+| DevJumpTask (yalnızca geliştirici) | Dev | F1–F6 (o göreve atla; Denkleştirme 6 görev) | LT+RT+D-pad → (sıradaki görevi bitmiş say) |
 | DevResetSave (yalnızca geliştirici) | Dev | Ctrl+R | LT+RT+D-pad ← |
 
 `Dev` map'i oyun modundan bağımsız hep açıktır ama yalnızca editörde, Development Build'de ya da `BILGIADASI_DEMO` tanımlıyken (`DevShortcuts`).
@@ -158,6 +158,7 @@ Tüm değerler `PlayerMovementSettings` ScriptableObject'inde; play mode'da canl
 - **3D terazi** (`ScaleModel`): sol kefe kazan, sağ kefe sipariş; UI değil.
 - **Ocak** (`CauldronStove`): dengedeyse tepkime → ürün envantere (doluysa kazanda bekler); değilse ya da tepkimeye girmeyen madde varsa köpürür, malzeme gider, hata sayılır.
 - **Kapı** (`DoorStation`): **F** (gamepad X) ile açılır (`TriggerAction = Use`, karar 13.11); konuşmada hareket durur, E/Space ilerletir. Sipariş burada alınır; teslim elle: seçili slotta istenen ürün olmalı ("Ben bunu istemedim"). Teslimde ödeme alınır ve oyun kaydedilir.
+- **Atölye önü pazarı** (karar 14.11, `ShopCounter` + `CustomerQueue`): sipariş ve teslim artık **kapıda değil, atölyenin önündeki tezgâhta** (E / X). Kapı yalnızca açılır (`NeighborhoodRunner.counter` boşsa eski kapı akışı). Siparişi veren sakin sokaktan gelir, tezgâhta bekler; sipariş alınınca bankın yanında bekler, ürün hazır olunca tezgâha döner, teslimden sonra gider. Tezgâh boşken oyuncunun envanterindeki ürünü almaya alıcılar gelir (`Data/Market/MusteriIstekleri.asset`; teslim edilecek sipariş ürünü istenmez). Kurulum: **Kurulum → 22**.
 
 İstasyon modu yalnızca masa ve tahtada kalır (Faz 5). Oyuncu bir istasyona yaklaşıp Interact yapınca:
 1. `Player` map kapanır, `Station` map açılır; hareket ve bakış durur.
@@ -176,7 +177,7 @@ Oyuncu köyler arasında **yürüyerek** gider (karar: 13.11). Bu, dokümanlarda
 **24 saat kapsamı için sınırlar:**
 - Prototipteki şehir **küçük ve kompakt**: atölye + iki köy alanı + aradaki tek sokak/meydan. Uçtan uca yürüyüş ≤ 40 sn.
 - Kilitli köy/ilçeler: sis + kapalı kapı/bariyer ile kesilir, içleri modellenmez.
-- Şehir greybox'ı ve modelleri **Mustafa** yapar; kod `08-mustafa-entegrasyon.md`'deki bağlantı noktalarına dayanır. Tek oyun sahnesi: `Harita` (atölye + şehir; `SceneFlow.GameScene`). Boot/Classroom/Town kaldırıldı (13.11). İlk açılan sahne `AnaMenu` (`SceneFlow.MenuScene`; Oyna / Devam et / Çık; Kurulum → 20).
+- Şehir greybox'ı ve modelleri **Mustafa** yapar; kod `08-mustafa-entegrasyon.md`'deki bağlantı noktalarına dayanır. Tek oyun sahnesi: `Harita` (atölye + şehir; `SceneFlow.GameScene`). Boot/Classroom/Town kaldırıldı (13.11). İlk açılan sahne `AnaMenu` (`SceneFlow.MenuScene`; Figma Ekran/Giriş birebir: Devam Et + kayıt özeti / Yeni Oyun / Ayarlar / Emeği Geçenler / Çıkış; Kurulum → 20). **Karar 14.11:** menü arkasında oyun içi kamera haritanın üstünde kuş bakışı 360° döner (`MenuFlyover`); harita sanatı betiksiz kopya olarak `Prefabs/Menu/MenuBackdrop.prefab`'a pişirilir, ışık/sis/post-process Harita'dan taşınır. Harita modeli değişince Kurulum 20 yeniden çalıştırılır.
 - **Kayıt (karar 14.11):** diske yalnızca otomatik kayıtla yazılır: her görev bitince `GameManager.RequestCheckpoint` → `SaveSystem.Checkpoint` (önce `GameEvents.BeforeSave`: oyuncu konumu `PlayerSpawn`, sürülen bisiklet `Bicycle`), sağ üstte "Otomatik kaydedildi…" (`IAutoSaveNoticeView`). Çıkışta kaydedilmez; "Devam et" son görev anına döner. Oyun içinde `SaveSystem.Save()` çağırmayın, `Data`ya yazın. Kodumuz sıfırdan; dış kayıt paketi kullanılmaz (yarışma kuralı).
 - Harita ekranı (`OpenMap`: M / Tab / Select; aynı tuş ya da Esc/B kapatır): bilgi + ilerleme ekranı (köy durumu, 5 nokta, kilitli şehirler). Sol altta dönen mini harita (yalnızca oyuncu modunda). Görüntü sahneden pişirilir; veri `Data/Map/MapData.asset`. Kurulum: **Kurulum → 19** (harita modeli değişince yeniden çalıştır). Hızlı seyahat: P2, zaman kalırsa.
 - Yön tabelalarında simge yok, hedefin adı yazar (karar 14.11): `Tabela_Yazi_*` çapalarına TMP, Kurulum → 19.
@@ -219,6 +220,7 @@ Oyuncu öğrendikçe büyür: sınıf atladıkça belirgin, her köy bittikçe �
 - Prototipte görünen: 1.66 → 1.67 → 1.68 (iki köy). Sunumda vurgulanacak bir detay.
 - Seviye tasarımı uyarısı: kapı, tezgâh, raf yükseklikleri 1.50–1.65 m göz aralığında rahat görünecek şekilde yapılır.
 - Kayıt: `SaveData.grade`, `SaveData.completedNeighborhoods` → boy her yüklemede hesaplanır (ayrıca kaydedilmez).
+- Kod: `PlayerGrowth` + `GrowthSettings` (`Data/Player/GrowthSettings.asset`: sınıf tablosu, köy artışı, sayılmayan köyler — çıraklık sayılmaz, notlar). PlayerRig prefab'ında; kurulum: **Kurulum → 25**.
 
 ---
 

@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f86cc45667be4b24994dc2b717aa7104, type: 3}
+  m_Name: TractorSettings
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Player.TractorSettings
+  cruiseSpeed: 3
+  fastSpeed: 4
+  workSpeed: 1.6
+  reverseSpeed: 1.5
+  acceleration: 1.8
+  brakeDeceleration: 4
+  coastDeceleration: 3
+  slopeAcceleration: 3
+  wheelBase: 2.45
+  maxSteerAngleSlow: 32
+  maxSteerAngleFast: 18
+  steerResponse: 2.2
+  steerReturn: 2.8
+  steeringWheelRatio: 4
+  yawLimit: 120
+  recenterDelay: 1.5
+  recenterSpeed: 60
+  speedFovBoost: 2
+  colliderRadius: 1
+  colliderHeight: 2.4
+  colliderCenterZ: 0.3
+  slopeLimit: 30
+  stepOffset: 0.3
+  gravity: -20
+  probeRadius: 0.5
+  probeHeight: 0.8
+  frontReach: 2.3
+  rearReach: 1.6
+  frontContactZ: 1.55
+  rearContactZ: -0.9
+  maxGroundProbe: 0.4
+  wheelGroundSharpness: 8
+  mountDuration: 0.6
+  dismountSideOffset: 1.9
+  dismountMaxSpeed: 0.3
+  promptMaxSpeed: 0.5
+  idleFlywheelRps: 1.2
+  maxFlywheelRps: 4
+  mountPrompt: "Trakt\xF6re bin"
+  dismountPrompt: "Trakt\xF6rden in"

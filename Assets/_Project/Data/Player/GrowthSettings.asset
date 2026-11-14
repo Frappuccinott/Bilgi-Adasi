@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7f3ac233b85c4f4884d83a521a876b2, type: 3}
+  m_Name: GrowthSettings
+  m_EditorClassIdentifier: BilgiAdasi::BilgiAdasi.Player.GrowthSettings
+  grades:
+  - grade: 9
+    height: 1.6
+  - grade: 10
+    height: 1.66
+  - grade: 11
+    height: 1.71
+  - grade: 12
+    height: 1.75
+  perNeighborhood: 0.01
+  ignoredNeighborhoods:
+  - ciraklik
+  transitionSeconds: 2
+  noticeDelay: 2.5
+  grewNotice: "Biraz uzad\u0131n gibi\u2026"
+  gradeUpNotice: "Bir s\u0131n\u0131f daha atlad\u0131n. Boyun da uzad\u0131!"

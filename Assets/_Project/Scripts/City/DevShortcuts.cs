@@ -9,7 +9,7 @@ namespace BilgiAdasi.City
     /// <summary>
     /// Geliştirici kısayolları (04 §7; demo ve test için). Yalnızca editörde, Development Build'de ya da
     /// BILGIADASI_DEMO tanımlıyken çalışır. "Dev" action map'i oyun modundan bağımsız hep açıktır.
-    ///   DevJumpTask : klavye F1–F5 → odaktaki köyün o görevine atla · gamepad LT+RT+→ → sıradaki görevi bitmiş say
+    ///   DevJumpTask : klavye F1–F6 → odaktaki köyün o görevine atla · gamepad LT+RT+→ → sıradaki görevi bitmiş say
     ///   DevResetSave: klavye Ctrl+R · gamepad LT+RT+← → kaydı sil, sahneyi yeniden yükle
     /// </summary>
     [RequireComponent(typeof(NeighborhoodRunner))]
@@ -58,7 +58,7 @@ namespace BilgiAdasi.City
             if (ctx.control is KeyControl key)
             {
                 int index = key.keyCode - Key.F1; // F1 → 0 (1–6 envanter slotlarına ayrıldı)
-                if (index >= 0 && index <= 4) runner.DevJumpTo(index);
+                if (index >= 0 && index <= 5) runner.DevJumpTo(index); // F6: Denkleştirme 6 görev (Sv2 tarla, 14.11)
                 return;
             }
             runner.DevSkipCurrent();

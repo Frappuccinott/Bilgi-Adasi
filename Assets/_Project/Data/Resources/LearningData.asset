@@ -97,7 +97,7 @@ MonoBehaviour:
     - "Bu g\xF6revde"
     readHint: "Enter ile notu ba\u015Ftan oku. G\xF6rev bittikten sonra da burada
       durur."
-    notesEmpty: "Usta hen\xFCz not b\u0131rakmad\u0131. Kap\u0131dan ilk sipari\u015Fi
+    notesEmpty: "Usta hen\xFCz not b\u0131rakmad\u0131. Tezg\xE2htan ilk sipari\u015Fi
       al."
     masteryTitle: "Ustal\u0131k"
     masterySubtitle: "C\xE2bir Usta\u2019n\u0131n \xE7\u0131ra\u011F\u0131"
@@ -145,6 +145,7 @@ MonoBehaviour:
     discoveryId: K-0
     discoveryText: "Kazana ne girerse o \xE7\u0131kar: tepkimede atomlar kaybolmaz,
       yoktan var olmaz."
+    topic: "K\xFCtlenin korunumu"
     title: "\xC7\u0131rakl\u0131k: \u0130lk Kural"
     placeLine: "C\xE2bir Usta, at\xF6lye"
     equation: "2H<sub>2</sub> \u2192 2H<sub>2</sub>"
@@ -335,6 +336,7 @@ MonoBehaviour:
     discoveryText: "Tepkimede atomlar\u0131n t\xFCr\xFC ve say\u0131s\u0131 korunur;
       de\u011Fi\u015Fen, atomlar\u0131n birbirine ba\u011Flan\u0131\u015F\u0131d\u0131r.
       Su olu\u015Furken her 2 H<sub>2</sub> i\xE7in 1 O<sub>2</sub> harcan\u0131r."
+    topic: "K\xFCtlenin korunumu ve denklem denkle\u015Ftirme"
     title: "Kuru \xC7e\u015Fme"
     placeLine: "Muhtar Yusuf, meydan \xE7e\u015Fmesi"
     equation: "2H<sub>2</sub> + O<sub>2</sub> \u2192 2H<sub>2</sub>O"
@@ -521,6 +523,7 @@ MonoBehaviour:
     discoveryText: "Yanma tepkimelerinde oksijenin rol\xFC vard\u0131r: yak\u0131t
       O<sub>2</sub> ile birle\u015Fir. Karbon ve hidrojen i\xE7eren yak\u0131tlar
       CO<sub>2</sub> ve H<sub>2</sub>O verir. Hava yetmezse is (karbon) ve CO \xE7\u0131kar."
+    topic: Yanma tepkimeleri
     title: "\u0130sli Fenerler"
     placeLine: "Fenerci Demir, \xE7ar\u015F\u0131 fenerleri"
     equation: "CH<sub>4</sub> + 2O<sub>2</sub> \u2192 CO<sub>2</sub> + 2H<sub>2</sub>O"
@@ -702,6 +705,7 @@ MonoBehaviour:
     discoveryText: "Dengesizli\u011Fi bulmak i\xE7in her elementi iki kefede ayr\u0131
       say. Denkle\u015Ftirirken \xF6nce tek yerde ge\xE7en elementler (C, H), oksijen
       en son."
+    topic: "Denklem denkle\u015Ftirme y\xF6ntemi"
     title: "So\u011Fuk F\u0131r\u0131n"
     placeLine: "F\u0131r\u0131nc\u0131 Zehra, kasaba f\u0131r\u0131n\u0131"
     equation: "C<sub>3</sub>H<sub>8</sub> + 5O<sub>2</sub> \u2192 3CO<sub>2</sub>
@@ -888,6 +892,7 @@ MonoBehaviour:
     discoveryId: K-4
     discoveryText: "Bir tepkimenin \xFCr\xFCn\xFC ba\u015Fka bir tepkimenin gireni
       olabilir (ara \xFCr\xFCn). Kire\xE7: CaCO<sub>3</sub> \u2192 CaO \u2192 Ca(OH)<sub>2</sub>."
+    topic: "Ard\u0131\u015F\u0131k tepkimeler ve ara \xFCr\xFCn"
     title: "Y\u0131k\u0131k K\xF6pr\xFC"
     placeLine: "Duvarc\u0131 Halil, ta\u015F k\xF6pr\xFC"
     equation: "CaO + H<sub>2</sub>O \u2192 Ca(OH)<sub>2</sub>"
@@ -1085,6 +1090,7 @@ MonoBehaviour:
     discoveryId: K-5
     discoveryText: "Tepkime girenleri katsay\u0131lar\u0131 oran\u0131nda harcar.
       Biri biterse tepkime durur; fazla olan artar."
+    topic: "Mol oran\u0131 ve s\u0131n\u0131rlay\u0131c\u0131 bile\u015Fen"
     title: "G\xFCbre Ruhu"
     placeLine: "\xC7ift\xE7i Elif, tarla"
     equation: "N<sub>2</sub> + 3H<sub>2</sub> \u2192 2NH<sub>3</sub>"
@@ -1099,6 +1105,196 @@ MonoBehaviour:
       heading: "Biyoloji, azot d\xF6ng\xFCs\xFC"
       text: "Bitki havadaki N<sub>2</sub>\u2019yi do\u011Frudan kullanamaz; g\xFCbre
         ba\u011Flanm\u0131\u015F azotu topra\u011Fa verir."
+  - taskId: bereket_2
+    lesson:
+      title: "Tohum nefes al\u0131r"
+      pages:
+      - blocks:
+        - kind: 0
+          text: "Ders notu \xB7 Biyoloji + Matematik"
+          detail: "Bereket Tarlas\u0131, Hayat Ustas\u0131"
+          items: []
+          counts: []
+        - kind: 1
+          text: "Tohum nefes al\u0131r"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Tohumun i\xE7inde depolanm\u0131\u015F besin vard\u0131r. Tohum
+            \xE7imlenirken bu besini oksijenli solunumla kullan\u0131r ve b\xFCy\xFCmek
+            i\xE7in gereken enerjiyi elde eder."
+          detail: 
+          items: []
+          counts: []
+        - kind: 4
+          text: "besin (glikoz) + O<sub>2</sub> \u2192 CO<sub>2</sub> + H<sub>2</sub>O
+            + enerji"
+          detail: 
+          items: []
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 2
+          text: "Topra\u011F\u0131 neden s\xFCreriz?"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "S\xFCr\xFClm\xFC\u015F toprak gev\u015Fektir; aras\u0131nda hava
+            (oksijen) ve su tutulur. S\u0131k\u0131\u015Fm\u0131\u015F toprakta tohum
+            yeterince oksijen bulamaz, \xE7imlenme azal\u0131r."
+          detail: 
+          items: []
+          counts: []
+        - kind: 10
+          text: "Bu denklemi tan\u0131yorsun: yanmaya benzer (K-2). Ama h\xFCcrede
+            yava\u015F ve ad\u0131m ad\u0131m olur; alev \xE7\u0131kmaz."
+          detail: 
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "Hesap Ustas\u0131"
+          detail: 
+          items: []
+          counts: []
+        - kind: 1
+          text: "Ka\xE7 tanesi \xE7imlenir?"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "\xC7imlenme olas\u0131l\u0131\u011F\u0131 0,8 ise her 10 tohumdan
+            yakla\u015F\u0131k 8'i \xE7imlenir."
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "Beklenen say\u0131 = olas\u0131l\u0131k \xD7 tohum say\u0131s\u0131."
+          - "Tersinden: istenen filiz biliniyorsa tohum = filiz \xF7 olas\u0131l\u0131k."
+          - "Tohum kesede sat\u0131l\u0131yorsa kese say\u0131s\u0131n\u0131 yukar\u0131
+            yuvarla."
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 8
+          text: "Filiz say\u0131s\u0131n\u0131 olas\u0131l\u0131kla \xE7arpma, b\xF6l.
+            \xC7arparsan daha az tohum bulursun, tarla bo\u015F kal\u0131r. Sonucu
+            kendine sor: bu kadar tohumun y\xFCzde 80'i istedi\u011Fim say\u0131
+            m\u0131?"
+          detail: Dikkat
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "\xC7\xF6z\xFCml\xFC \xF6rnek"
+          detail: 
+          items: []
+          counts: []
+        - kind: 1
+          text: Bostanda karpuz
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Bostanc\u0131 Osman 45 karpuz fidesi istiyor. Karpuz tohumunun \xE7imlenme
+            olas\u0131l\u0131\u011F\u0131 0,9; tohum 10'luk paketlerde."
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "Tohum = 45 \xF7 0,9 = 50."
+          - "Kontrol: 50 \xD7 0,9 = 45."
+          - "Paket: 50 \xF7 10 = 5 paket."
+          counts: []
+        - kind: 7
+          text: "Beklenen say\u0131 ortalamad\u0131r. 50 tohumdan 44 de \xE7\u0131kabilir,
+            47 de."
+          detail: Unutma
+          items: []
+          counts: []
+      - blocks:
+        - kind: 0
+          text: "Bu g\xF6revde"
+          detail: "\xC7ift\xE7i Elif, Bereket Tarlas\u0131"
+          items: []
+          counts: []
+        - kind: 1
+          text: "Tarla bo\u015F kalmas\u0131n"
+          detail: 
+          items: []
+          counts: []
+        - kind: 3
+          text: "Elif 120 \xF6bek filiz istiyor. Tohumun \xE7imlenme olas\u0131l\u0131\u011F\u0131
+            0,8; pazarda tohum 10'luk keselerde."
+          detail: 
+          items: []
+          counts: []
+        - kind: 6
+          text: 
+          detail: 
+          items:
+          - "Ka\xE7 tohum gerekti\u011Fini hesapla."
+          - Pazardan tam o kadar kese al.
+          - "Tarladaki ekim sand\u0131\u011F\u0131na d\xF6k."
+          counts: []
+        - kind: 9
+          text: 
+          detail: 
+          items: []
+          counts: []
+        - kind: 7
+          text: "D\xF6k\xFClen tohum geri al\u0131nmaz; fazla kese ak\xE7eni bo\u015Fa
+            harcar."
+          detail: Unutma
+          items: []
+          counts: []
+    reasoning:
+      question: "150 tohum ektin. Tarlada kesin 120 filiz mi \xE7\u0131kar?"
+      options:
+      - "Hay\u0131r; 120 beklenen say\u0131d\u0131r, biraz az ya da \xE7ok \xE7\u0131kabilir."
+      - "Evet, hesap do\u011Fruysa tam 120 \xE7\u0131kar."
+      - "Hay\u0131r; olas\u0131l\u0131k 0,8 oldu\u011Fu i\xE7in hep 80 \xE7\u0131kar."
+      correctIndex: 0
+      replies:
+      - "Aynen \xF6yle. Beklenen say\u0131 ortalamad\u0131r: 150 tohumdan 114 de
+        \xE7\u0131kabilir, 126 da. \xC7ok kez ekersen ortalamas\u0131 120'ye yakla\u015F\u0131r."
+      - "Olas\u0131l\u0131k kesinlik vermez, \xE7\u0131rak. 120 bekledi\u011Fimiz
+        ortalamad\u0131r; bu y\u0131l biraz az ya da \xE7ok \xE7\u0131kabilir."
+      - "0,8 bir oran: her 10 tohumdan yakla\u015F\u0131k 8'i. 150 tohumda bu 120
+        eder, 80 de\u011Fil."
+    discoveryId: K-12
+    discoveryText: "Beklenen say\u0131 = olas\u0131l\u0131k \xD7 deneme; tersinden
+      tohum = filiz \xF7 olas\u0131l\u0131k. \xC7imlenen tohum besinini oksijenle
+      kullan\u0131r (oksijenli solunum), bu y\xFCzden toprak haval\u0131 olmal\u0131."
+    topic: "Olas\u0131l\u0131k (beklenen say\u0131) ve oksijenli solunum"
+    title: "Tohum Nefes Al\u0131r"
+    placeLine: "\xC7ift\xE7i Elif, Bereket Tarlas\u0131"
+    equation: "besin + O<sub>2</sub> \u2192 CO<sub>2</sub> + H<sub>2</sub>O + enerji"
+    iconFormula: 
+    usage: 
+    fieldNotes:
+    - subject: Matematik
+      heading: "Matematik, olas\u0131l\u0131k"
+      text: "Tohum = filiz \xF7 olas\u0131l\u0131k: 120 \xF7 0,8 = 150 tohum = 15
+        kese."
+    - subject: Biyoloji
+      heading: Biyoloji, oksijenli solunum
+      text: "\xC7imlenen tohum besinini O<sub>2</sub> ile kullan\u0131r; s\u0131k\u0131\u015Fm\u0131\u015F
+        toprakta \xE7imlenme azal\u0131r."
   - taskId: tur_1
     lesson:
       title: 
@@ -1119,6 +1315,7 @@ MonoBehaviour:
       madde \u2192 daha basit maddeler. Yanma: madde + O<sub>2</sub> \u2192 \u0131s\u0131
       ve \u0131\u015F\u0131k. (Kan\u0131tlar\u0131m: \xE7e\u015Fme, kire\xE7 ta\u015F\u0131,
       fener.)"
+    topic: "Tepkime t\xFCrleri: sentez, analiz, yanma"
     title: "Ustan\u0131n Defteri"
     placeLine: "C\xE2bir Usta\u2019n\u0131n defteri, \xE7al\u0131\u015Fma masas\u0131"
     equation: 
@@ -1144,6 +1341,7 @@ MonoBehaviour:
     discoveryText: "T\xFCr\xFC anlamak i\xE7in: tek giren varsa analiz, tek \xFCr\xFCn
       varsa sentez, girenlerde O<sub>2</sub> var ve \u0131s\u0131-\u0131\u015F\u0131k
       \xE7\u0131k\u0131yorsa yanma."
+    topic: "Tepkime t\xFCr\xFCn\xFC denklemden tan\u0131ma"
     title: "Etiket Masas\u0131"
     placeLine: "G\xFCvercinle gelen mektup, \xE7al\u0131\u015Fma masas\u0131"
     equation: 
@@ -1181,6 +1379,7 @@ MonoBehaviour:
     discoveryText: "Kimyasal de\u011Fi\u015Fimin kan\u0131tlar\u0131: yeni madde,
       gaz \xE7\u0131k\u0131\u015F\u0131, renk de\u011Fi\u015Fimi, \u0131s\u0131-\u0131\u015F\u0131k,
       koku. Yaln\u0131z \u015Fekil ya da h\xE2l de\u011Fi\u015Fimi fizikseldir."
+    topic: "Fiziksel ve kimyasal de\u011Fi\u015Fim"
     title: "F\u0131r\u0131nc\u0131n\u0131n Mektubu"
     placeLine: "F\u0131r\u0131nc\u0131 Zehra\u2019n\u0131n mektubu, \xE7al\u0131\u015Fma
       masas\u0131"
@@ -1206,6 +1405,7 @@ MonoBehaviour:
     discoveryId: K-9
     discoveryText: "Bir iddiay\u0131 \xE7\xFCr\xFCtmek i\xE7in tek kar\u015F\u0131
       \xF6rnek yeter; d\xFCzeltirken kan\u0131t g\xF6ster."
+    topic: "Tepkime t\xFCrlerinde kan\u0131t ve kar\u015F\u0131 \xF6rnek"
     title: "Muhtar\u0131n Mektubu"
     placeLine: "Muhtar Yusuf\u2019un mektubu, \xE7al\u0131\u015Fma masas\u0131"
     equation: 
@@ -1243,6 +1443,7 @@ MonoBehaviour:
     discoveryText: "T\xFCr, atomlar\u0131n nas\u0131l yeniden dizildi\u011Fini anlat\u0131r.
       Ayn\u0131 atomlar (C, H, O) do\u011Fada d\xF6ng\xFC h\xE2linde dola\u015F\u0131r:
       yak\u0131tta, havada, bitkide, bizde."
+    topic: "Tepkime t\xFCrleri ve maddenin d\xF6ng\xFCs\xFC"
     title: "Lonca S\u0131nav\u0131"
     placeLine: "K\xE2tip Nevin, lonca"
     equation: 
