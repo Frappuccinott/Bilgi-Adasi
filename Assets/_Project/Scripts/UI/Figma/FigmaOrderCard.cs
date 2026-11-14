@@ -9,14 +9,15 @@ using UnityEngine.UI;
 namespace BilgiAdasi.UI
 {
     /// <summary>
-    /// Sipariş kartı — Figma: Marka Kimliği / Arayüz dili → UI/Sipariş kartı (kâğıt, 10 px ahşap çerçeve, sağ üstte mum
-    /// mühür; sipariş veren Alegreya Black, "İstenen" altında büyük formül). Hazırsa altın "Teslim et" şeridi.
-    /// HUD'da sol üstte durur. Yalnızca IOrderCardView; envanter/pazar hâlâ PlaceholderWorkshopHud'da.
+    /// Sipariş kartı — Figma: Marka Kimliği / Arayüz dili → UI/Sipariş kartı (kâğıt, ahşap çerçeve, sağ üstte mum
+    /// mühür; sipariş veren Alegreya). Ortada adım rehberi (karar 14.11): biten adım soluk + mürekkep tik, sıradaki
+    /// adım altın şeritte numaralı altın mühür + kısa açıklama, bekleyenler numaralı halka. En altta her zaman
+    /// "İstenen" (büyük formül), malzemeler ve ödeme; hazırsa altın "kapıya götür" şeridi. HUD'da sol üstte.
     /// </summary>
     public sealed class FigmaOrderCard : FigmaView<IOrderCardView>, IOrderCardView
     {
         [Header("Etiketler")]
-        [SerializeField] private string stepWord = "Sipariş";
+        [SerializeField] private string stepWord = "Aşama";
         [SerializeField] private string wantedWord = "İstenen";
         [SerializeField] private string ingredientsWord = "Malzemeler";
         [SerializeField] private string rewardWord = "Ödeme";
@@ -24,13 +25,23 @@ namespace BilgiAdasi.UI
         [SerializeField] private string readyWord = "Hazır, kapıya götür";
 
         [Header("Yerleşim")]
-        [SerializeField] private float width = 360f;
+        [SerializeField] private float width = HudLayout.OrderCardWidth;   // diyalog bu genişliğin sağından başlar
         [SerializeField] private Vector2 margin = new Vector2(28f, 28f);
+
+        private const int MaxGuide = 6;
 
         private RectTransform card;
         private TextMeshProUGUI giver, sub, formula, ingredients, reward, ready;
-        private GameObject readyStrip;
+        private GameObject readyStrip, guideRoot;
+        private readonly GuideRow[] rows = new GuideRow[MaxGuide];
         private readonly StringBuilder sb = new StringBuilder(128);
+
+        private sealed class GuideRow
+        {
+            public GameObject Root;
+            public Image Band, Marker, Tick;
+            public TextMeshProUGUI Number, Text, Detail;
+        }
 
         private void Awake() => Build();
 
@@ -41,6 +52,8 @@ namespace BilgiAdasi.UI
             if (info.StepCount > 1) sb.Append(stepWord).Append(' ').Append(info.StepIndex + 1).Append('/').Append(info.StepCount);
             sub.text = sb.ToString();
             sub.gameObject.SetActive(sb.Length > 0);
+
+            ShowGuide(info.Guide);
 
             sb.Clear();
             AppendAmounts(info.Products);
@@ -70,6 +83,59 @@ namespace BilgiAdasi.UI
             if (card != null) card.gameObject.SetActive(false);
         }
 
+        private void ShowGuide(IReadOnlyList<OrderGuideStep> guide)
+        {
+            int count = guide != null ? Mathf.Min(guide.Count, MaxGuide) : 0;
+            guideRoot.SetActive(count > 0);
+            var th = Theme;
+            for (int i = 0; i < MaxGuide; i++)
+            {
+                var row = rows[i];
+                bool on = i < count;
+                row.Root.SetActive(on);
+                if (!on) continue;
+                var step = guide[i];
+                row.Text.text = step.Text;
+                row.Number.text = (i + 1).ToString();
+                bool hasDetail = step.State == GuideState.Current && !string.IsNullOrEmpty(step.Detail);
+                row.Detail.gameObject.SetActive(hasDetail);
+                if (hasDetail) row.Detail.text = step.Detail;
+
+                switch (step.State)
+                {
+                    case GuideState.Done:
+                        row.Band.enabled = false;
+                        row.Marker.sprite = UiKit.Disc;
+                        row.Marker.color = UiKit.WithAlpha(th.PaperShade, 0.35f);
+                        row.Tick.enabled = true;
+                        row.Number.enabled = false;
+                        row.Text.color = th.PaperShade;
+                        row.Text.fontStyle = FontStyles.Normal;
+                        break;
+                    case GuideState.Current:
+                        row.Band.enabled = true;
+                        row.Marker.sprite = th.SealWax != null ? th.SealWax : UiKit.Disc;
+                        row.Marker.color = th.SealWax != null ? Color.white : th.GoldDark;
+                        row.Tick.enabled = false;
+                        row.Number.enabled = true;
+                        row.Number.color = th.Paper;
+                        row.Text.color = th.InkDeep;
+                        row.Text.fontStyle = FontStyles.Bold;
+                        break;
+                    default:
+                        row.Band.enabled = false;
+                        row.Marker.sprite = UiKit.Ring;
+                        row.Marker.color = UiKit.WithAlpha(th.PaperShade, 0.8f);
+                        row.Tick.enabled = false;
+                        row.Number.enabled = true;
+                        row.Number.color = th.PaperShade;
+                        row.Text.color = UiKit.WithAlpha(th.Ink, 0.75f);
+                        row.Text.fontStyle = FontStyles.Normal;
+                        break;
+                }
+            }
+        }
+
         private void AppendAmounts(IReadOnlyList<SpeciesAmount> list)
         {
             for (int i = 0; i < list.Count; i++)
@@ -80,6 +146,8 @@ namespace BilgiAdasi.UI
             }
         }
 
+        // ---------- Kurulum ----------
+
         private void Build()
         {
             var th = Theme;
@@ -87,18 +155,30 @@ namespace BilgiAdasi.UI
             UiKit.Place(card, new Vector2(0f, 1f), new Vector2(margin.x, -margin.y), new Vector2(width, 0f));
 
             var col = paper.gameObject.AddComponent<VerticalLayoutGroup>();
-            col.padding = new RectOffset(22, 70, 16, 18);
+            col.padding = new RectOffset(22, 22, 16, 18);
             col.spacing = 2f;
             col.childControlWidth = col.childControlHeight = true;
             col.childForceExpandWidth = true;
             col.childForceExpandHeight = false;
 
+            // Üst: sipariş veren (mühre yer bırak) + aşama
             giver = UiKit.Text(paper, "Giver", th.HeadingFont, 30f, th.Ink, TextAlignmentOptions.Left, FontStyles.Bold);
+            giver.margin = new Vector4(0f, 0f, 52f, 0f);
             sub = UiKit.Text(paper, "Step", th.BodyFont, 22f, th.PaperShade);
-            var rule = UiKit.Img(paper, "Rule", th.PaperShade);
-            var ruleLe = rule.gameObject.AddComponent<LayoutElement>();
-            ruleLe.preferredHeight = 2f;
-            ruleLe.minHeight = 2f;
+            Rule(paper, th, 8f);
+
+            // Orta: adım rehberi
+            var g = UiKit.Rect(paper, "Guide");
+            guideRoot = g.gameObject;
+            var gcol = guideRoot.AddComponent<VerticalLayoutGroup>();
+            gcol.spacing = 2f;
+            gcol.childControlWidth = gcol.childControlHeight = true;
+            gcol.childForceExpandWidth = true;
+            gcol.childForceExpandHeight = false;
+            for (int i = 0; i < MaxGuide; i++) rows[i] = MakeRow(g, th, i);
+            Rule(paper, th, 8f);
+
+            // Alt: her zaman İstenen
             var wanted = UiKit.Text(paper, "Wanted", th.BodyFont, 22f, th.PaperShade);
             wanted.text = wantedWord;
             formula = UiKit.Text(paper, "Formula", th.BodyFont, 40f, th.Ink, TextAlignmentOptions.Left, FontStyles.Bold);
@@ -121,6 +201,62 @@ namespace BilgiAdasi.UI
 
             card.gameObject.AddComponent<CardSizer>().Init(paper, 6f);
             card.gameObject.SetActive(false);
+        }
+
+        private static void Rule(RectTransform parent, UiTheme th, float space)
+        {
+            var holder = UiKit.Rect(parent, "RuleSpace");
+            holder.gameObject.AddComponent<LayoutElement>().preferredHeight = space * 2f + 2f;
+            var rule = UiKit.Img(holder, "Rule", UiKit.WithAlpha(th.PaperShade, 0.7f));
+            var rt = rule.rectTransform;
+            rt.anchorMin = new Vector2(0f, 0.5f);
+            rt.anchorMax = new Vector2(1f, 0.5f);
+            rt.sizeDelta = new Vector2(0f, 2f);
+            rt.anchoredPosition = Vector2.zero;
+        }
+
+        private static GuideRow MakeRow(RectTransform parent, UiTheme th, int index)
+        {
+            var r = new GuideRow();
+            var rt = UiKit.Rect(parent, "Step_" + (index + 1));
+            r.Root = rt.gameObject;
+            var h = r.Root.AddComponent<HorizontalLayoutGroup>();
+            h.padding = new RectOffset(6, 8, 4, 4);
+            h.spacing = 10f;
+            h.childAlignment = TextAnchor.UpperLeft;
+            h.childControlWidth = h.childControlHeight = true;
+            h.childForceExpandWidth = false;
+            h.childForceExpandHeight = false;
+
+            // Sıradaki adımın altın şeridi (satırın arkasında, düzene katılmaz)
+            r.Band = UiKit.Img(rt, "Band", UiKit.WithAlpha(th.GoldLight, 0.28f), UiKit.Round4);
+            r.Band.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+            UiKit.Fill(r.Band.rectTransform, -6f, 0f, -6f, 0f);
+            r.Band.rectTransform.SetAsFirstSibling();
+
+            var markerRt = UiKit.Rect(rt, "Marker");
+            var mle = markerRt.gameObject.AddComponent<LayoutElement>();
+            mle.preferredWidth = mle.minWidth = 28f;
+            mle.preferredHeight = mle.minHeight = 28f;
+            r.Marker = markerRt.gameObject.AddComponent<Image>();
+            r.Marker.preserveAspect = true;
+            r.Number = UiKit.Text(markerRt, "N", th.HeadingFont, 17f, th.Paper, TextAlignmentOptions.Center, FontStyles.Bold);
+            UiKit.Fill(r.Number.rectTransform, 0f, 0f, 0f, 1f);
+            r.Tick = UiKit.Img(markerRt, "Tick", th.InkDark, UiKit.Check);
+            UiKit.Fill(r.Tick.rectTransform, 5f, 5f, 5f, 5f);
+            r.Tick.preserveAspect = true;
+
+            var textCol = UiKit.Rect(rt, "Texts");
+            var v = textCol.gameObject.AddComponent<VerticalLayoutGroup>();
+            v.spacing = 0f;
+            v.childControlWidth = v.childControlHeight = true;
+            v.childForceExpandWidth = true;
+            v.childForceExpandHeight = false;
+            textCol.gameObject.AddComponent<LayoutElement>().flexibleWidth = 1f;
+            r.Text = UiKit.Text(textCol, "Text", th.BodyFont, 23f, th.Ink, TextAlignmentOptions.Left);
+            r.Detail = UiKit.Text(textCol, "Detail", th.BodyFont, 18f, th.Ink, TextAlignmentOptions.Left, FontStyles.Italic);
+            r.Detail.color = UiKit.WithAlpha(th.InkDark, 0.85f);
+            return r;
         }
     }
 }

@@ -158,6 +158,8 @@ Tüm değerler `PlayerMovementSettings` ScriptableObject'inde; play mode'da canl
 - **3D terazi** (`ScaleModel`): sol kefe kazan, sağ kefe sipariş; UI değil.
 - **Ocak** (`CauldronStove`): dengedeyse tepkime → ürün envantere (doluysa kazanda bekler); değilse ya da tepkimeye girmeyen madde varsa köpürür, malzeme gider, hata sayılır.
 - **Kapı** (`DoorStation`): **F** (gamepad X) ile açılır (`TriggerAction = Use`, karar 13.11); konuşmada hareket durur, E/Space ilerletir. Sipariş burada alınır; teslim elle: seçili slotta istenen ürün olmalı ("Ben bunu istemedim"). Teslimde ödeme alınır ve oyun kaydedilir.
+- **Atölye ışığı (karar 14.11):** atölye içi bake edilir. `Fener_1/2/3_Isik` noktalarında yalnızca bake edilen sıcak nokta ışıklar var. `Atolye_Statik` objeleri yalnızca Contribute GI statik; fener gövdeleri ışığı hapsetmesin diye hariç. Lightmap UV'leri `SanatIceAktarma` üretir; `Stilize` shader lightmap okur ve Meta pass içerir. Ayarlar `Scenes/Harita_Isik.lighting`. Hareketli objeler ve oyuncu ışığı `Isik_Sondalari` ile alır (atölye içi, duvar halkası, kasaba ızgarası); gerçek zamanlı nokta ışık yok. Atölyede bir şey taşınırsa yeniden bake edin (Window → Rendering → Lighting → Generate Lighting).
+- **Kazan buharı:** `ArtCauldronView` başarılı tepkimede kodla puf üretir; modelin buhar kütleleri kapalı. Ayarlar Inspector'da (`steam*` alanları).
 
 İstasyon modu yalnızca masa ve tahtada kalır (Faz 5). Oyuncu bir istasyona yaklaşıp Interact yapınca:
 1. `Player` map kapanır, `Station` map açılır; hareket ve bakış durur.

@@ -58,6 +58,9 @@ Shader "BilgiAdasi/Stilize"
             #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
+            // Bake edilmiş atölye (karar 14.11): lightmap'li objeler ortam ışığını lightmap'ten alır, diğerleri SH'tan.
+            #pragma multi_compile _ LIGHTMAP_ON
+            #pragma multi_compile _ DIRLIGHTMAP_COMBINED
 
             #if defined(_SAYDAM)
                 #define _SURFACE_TYPE_TRANSPARENT 1
@@ -69,6 +72,7 @@ Shader "BilgiAdasi/Stilize"
                 float4 positionOS : POSITION;
                 float3 normalOS   : NORMAL;
                 half4  color      : COLOR;
+                float2 staticLightmapUV : TEXCOORD1;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -79,6 +83,7 @@ Shader "BilgiAdasi/Stilize"
                 half3  normalWS   : TEXCOORD1;
                 half4  color      : TEXCOORD2;
                 half4  fogVL      : TEXCOORD3;   // x: sis, yzw: köşe ışığı
+                float2 lightmapUV : TEXCOORD4;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
                 UNITY_VERTEX_OUTPUT_STEREO
             };
@@ -97,6 +102,9 @@ Shader "BilgiAdasi/Stilize"
                 o.color = v.color;
                 o.fogVL.x = ComputeFogFactor(p.positionCS.z);
                 o.fogVL.yzw = VertexLighting(p.positionWS, n.normalWS);
+                #if defined(LIGHTMAP_ON)
+                    o.lightmapUV = v.staticLightmapUV * unity_LightmapST.xy + unity_LightmapST.zw;
+                #endif
                 return o;
             }
 
@@ -114,7 +122,11 @@ Shader "BilgiAdasi/Stilize"
                 d.shadowCoord = TransformWorldToShadowCoord(i.positionWS);
                 d.fogCoord = i.fogVL.x;
                 d.vertexLighting = i.fogVL.yzw;
-                d.bakedGI = SampleSH(nrm);
+                #if defined(LIGHTMAP_ON)
+                    d.bakedGI = SampleLightmap(i.lightmapUV, nrm);
+                #else
+                    d.bakedGI = SampleSH(nrm);
+                #endif
                 d.normalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(i.positionCS);
                 d.shadowMask = half4(1, 1, 1, 1);
 
@@ -135,6 +147,54 @@ Shader "BilgiAdasi/Stilize"
                     c.a = 1;
                 #endif
                 return c;
+            }
+            ENDHLSL
+        }
+
+        // ------------------------------------------------------------ ışık pişirme (Meta): köşe rengi = yüzey rengi,
+        // köşe rengi × Işıma = ışık saçan yüzey (fener camı). Yalnızca bake sırasında kullanılır.
+        Pass
+        {
+            Name "Meta"
+            Tags { "LightMode" = "Meta" }
+            Cull Off
+
+            HLSLPROGRAM
+            #pragma target 3.5
+            #pragma vertex vertMeta
+            #pragma fragment fragMeta
+            #pragma shader_feature EDITOR_VISUALIZATION
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/MetaInput.hlsl"
+
+            struct MetaAttributes
+            {
+                float4 positionOS : POSITION;
+                half4  color      : COLOR;
+                float2 uv1        : TEXCOORD1;
+                float2 uv2        : TEXCOORD2;
+            };
+
+            struct MetaVaryings
+            {
+                float4 positionCS : SV_POSITION;
+                half4  color      : TEXCOORD0;
+            };
+
+            MetaVaryings vertMeta(MetaAttributes v)
+            {
+                MetaVaryings o;
+                o.positionCS = UnityMetaVertexPosition(v.positionOS.xyz, v.uv1, v.uv2);
+                o.color = v.color;
+                return o;
+            }
+
+            half4 fragMeta(MetaVaryings i) : SV_Target
+            {
+                UnityMetaInput m = (UnityMetaInput)0;
+                half3 albedo = i.color.rgb * _Renk.rgb;
+                m.Albedo = albedo;
+                m.Emission = albedo * _Isima;
+                return UnityMetaFragment(m);
             }
             ENDHLSL
         }

@@ -39,6 +39,8 @@ namespace BilgiAdasi.SanatAraclari
             if (!Kapsamda(assetPath))
             {
                 mi.animationType = ModelImporterAnimationType.None;   // hareketsiz atölye
+                // Atölye içi bake edilir (fenerler, karar 14.11): lightmap UV'leri Unity üretir.
+                if (assetPath == Kok + "Atolye/Atolye_Statik.fbx") mi.generateSecondaryUV = true;
                 return;
             }
             mi.animationType = ModelImporterAnimationType.Generic;

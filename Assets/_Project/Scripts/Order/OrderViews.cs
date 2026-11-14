@@ -7,9 +7,34 @@ namespace BilgiAdasi.Order
     // RegisteredView<IArayüz>'den türeyerek kendini kaydeder. Denetleyiciler yalnızca bu arayüzleri tanır.
     // Kazan, terazi ve raf 3D'dir (dünyada); envanter, sipariş kartı ve pazar ekranı HUD'dadır.
 
+    /// <summary>Sipariş kartındaki adım rehberinde bir adımın durumu.</summary>
+    public enum GuideState
+    {
+        Pending,
+        Current,
+        Done
+    }
+
+    /// <summary>Sipariş kartında bir rehber adımı: "Kazana dök" + (sıradaki adımda) kısa açıklama.</summary>
+    public readonly struct OrderGuideStep
+    {
+        public readonly string Text;
+        public readonly string Detail;
+        public readonly GuideState State;
+
+        public OrderGuideStep(string text, string detail, GuideState state)
+        {
+            Text = text;
+            Detail = detail;
+            State = state;
+        }
+    }
+
     /// <summary>Sipariş kartında (HUD) gösterilecek bilgi.</summary>
     public readonly struct OrderCardInfo
     {
+        /// <summary>Görevin adım adım rehberi (sıradaki adım Current). Boş olabilir.</summary>
+        public readonly IReadOnlyList<OrderGuideStep> Guide;
         public readonly string GiverName;
         /// <summary>Bu adımın hedef ürünleri (sağ kefe).</summary>
         public readonly IReadOnlyList<SpeciesAmount> Products;
@@ -22,8 +47,9 @@ namespace BilgiAdasi.Order
         public readonly bool ReadyToDeliver;
 
         public OrderCardInfo(string giverName, IReadOnlyList<SpeciesAmount> products, IReadOnlyList<SpeciesData> reactants,
-            int stepIndex, int stepCount, int reward, bool readyToDeliver)
+            int stepIndex, int stepCount, int reward, bool readyToDeliver, IReadOnlyList<OrderGuideStep> guide = null)
         {
+            Guide = guide;
             GiverName = giverName;
             Products = products;
             Reactants = reactants;

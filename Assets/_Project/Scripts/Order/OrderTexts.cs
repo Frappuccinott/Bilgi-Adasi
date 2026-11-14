@@ -35,6 +35,28 @@ namespace BilgiAdasi.Order
         [SerializeField] private string marketPrompt = "Pazar";
         [SerializeField] private string toolNotPourable = "Alet kazana dökülmez.";
 
+        [Header("Sipariş kartı: adım rehberi")]
+        [SerializeField] private string guideCollect = "Malzemeleri al";
+        [Tooltip("Kart girenleri gösteriyorsa sonuna adları eklenir.")]
+        [SerializeField] private string guideCollectDetail = "Pazardan ya da raftan";
+        [Tooltip("Kart girenleri saklıyorsa (oyuncu kendisi bulur).")]
+        [SerializeField] private string guideCollectHidden = "Hangi maddeler? Ürünün atomlarına bak";
+        [SerializeField] private string guidePour = "Kazana dök";
+        [SerializeField] private string guidePourDetail = "Elindeki kavanozla kazana bak. Dökülen geri alınmaz";
+        [SerializeField] private string guideBalance = "Teraziyi dengele";
+        [SerializeField] private string guideBalanceDetail = "Sol kefedeki atomlar sağ kefedekilere eşit olsun";
+        [SerializeField] private string guidePurchase = "Yeterince koy";
+        [SerializeField] private string guidePurchaseDetail = "İstenen ürün kadar malzeme olsun";
+        [SerializeField] private string guideFire = "Ateşi yak";
+        [SerializeField] private string guideFireDetail = "Ocağa bak; terazi dengedeyse tepkime başlar";
+        [SerializeField] private string guideReacting = "Tepkime sürüyor…";
+        [SerializeField] private string guideNextStage = "Ürün sonraki aşamanın malzemesi";
+        [SerializeField] private string guideDeliver = "Kapıya götür";
+        [Tooltip("{0} = sipariş veren.")]
+        [SerializeField] private string guideDeliverDetail = "{0} kapıda bekliyor; ürünü elinde tut";
+        [SerializeField] private string guideMasterTakes = "Usta bakıyor";
+        [SerializeField] private string guideMasterTakesDetail = "Ürün sende kalır";
+
         public string SealNote => sealNote;
         public string NotEnoughMoney => notEnoughMoney;
         public string InventoryFull => inventoryFull;
@@ -57,5 +79,23 @@ namespace BilgiAdasi.Order
         public string EmptyShelfPrompt => emptyShelfPrompt;
         public string MarketPrompt => marketPrompt;
         public string ToolNotPourable => toolNotPourable;
+
+        public string GuideCollect => guideCollect;
+        public string GuideCollectDetail => guideCollectDetail;
+        public string GuideCollectHidden => guideCollectHidden;
+        public string GuidePour => guidePour;
+        public string GuidePourDetail => guidePourDetail;
+        public string GuideBalance => guideBalance;
+        public string GuideBalanceDetail => guideBalanceDetail;
+        public string GuidePurchase => guidePurchase;
+        public string GuidePurchaseDetail => guidePurchaseDetail;
+        public string GuideFire => guideFire;
+        public string GuideFireDetail => guideFireDetail;
+        public string GuideReacting => guideReacting;
+        public string GuideNextStage => guideNextStage;
+        public string GuideDeliver => guideDeliver;
+        public string GuideDeliverDetail => guideDeliverDetail;
+        public string GuideMasterTakes => guideMasterTakes;
+        public string GuideMasterTakesDetail => guideMasterTakesDetail;
     }
 }

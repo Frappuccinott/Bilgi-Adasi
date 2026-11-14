@@ -91,6 +91,8 @@ namespace BilgiAdasi.Order
         {
             ViewLocator.Changed -= OnViewsChanged;
             if (GameInput.TryGetControls(out _)) hintAction.performed -= OnHintAction;
+            if (watchedInventory != null) watchedInventory.Changed -= OnInventoryChanged;
+            watchedInventory = null;
 
             // Devre dışı kalınca coroutine'ler durur; köpürme/tepkime ortasında kalırsa görev kilitlenmesin.
             if (IsBusy)
@@ -390,6 +392,7 @@ namespace BilgiAdasi.Order
             if (step.CardShowsReactants)
                 for (int i = 0; i < step.Reaction.Reactants.Count; i++) reactantBuffer.Add(step.Reaction.Reactants[i].Species);
 
+            BuildGuide(step);
             cardView.ShowOrder(new OrderCardInfo(
                 session.Task.GiverName,
                 Current == State.ReadyToDeliver ? session.Task.DeliveryProducts : step.TargetProducts,
@@ -397,7 +400,98 @@ namespace BilgiAdasi.Order
                 session.StepIndex,
                 session.Task.Steps.Count,
                 session.Task.Reward,
-                Current == State.ReadyToDeliver));
+                Current == State.ReadyToDeliver,
+                guide));
+        }
+
+        // ---------- Sipariş kartı: adım rehberi ----------
+
+        private readonly List<OrderGuideStep> guide = new List<OrderGuideStep>(6);
+        private readonly System.Text.StringBuilder guideSb = new System.Text.StringBuilder(64);
+        private PlayerInventory watchedInventory;
+
+        /// <summary>
+        /// Kapıda teslim edilmeyen görev (Çıraklık: usta ürüne bakar, görev hemen biter). Son adım "Kapıya götür"
+        /// yerine "Usta bakıyor" olur. ApprenticeshipDirector ayarlar.
+        /// </summary>
+        public OrderTask NoDoorTask { get; set; }
+
+        /// <summary>
+        /// Malzemeleri al → Kazana dök → Teraziyi dengele (satın alma: Yeterince koy) → Ateşi yak →
+        /// son aşamada Kapıya götür, ara aşamada "ürün sonraki aşamanın malzemesi". Sıradaki adım Current.
+        /// Durum kazan/terazi/ocak ve envanterden okunur; kart her değişimde yeniden çizilir.
+        /// </summary>
+        private void BuildGuide(OrderStep step)
+        {
+            guide.Clear();
+            if (texts == null) return;
+            WatchInventory();
+
+            bool reacting = Current == State.Reacting;
+            bool ready = Current == State.ReadyToDeliver;
+            bool poured = reacting || ready || !session.IsEmpty;
+            bool inHand = poured || HasReactantInHand(step);
+            bool balanced = reacting || ready || session.IsSatisfied;
+
+            guideSb.Clear().Append(texts.GuideCollectDetail);
+            if (step.CardShowsReactants && reactantBuffer.Count > 0)
+            {
+                guideSb.Append(": ");
+                for (int i = 0; i < reactantBuffer.Count; i++)
+                {
+                    if (i > 0) guideSb.Append(", ");
+                    guideSb.Append(reactantBuffer[i].FormulaRich);
+                }
+            }
+            string collectDetail = step.CardShowsReactants ? guideSb.ToString() : texts.GuideCollectHidden;
+
+            bool current = false;
+            AddGuide(texts.GuideCollect, collectDetail, inHand, ref current);
+            AddGuide(texts.GuidePour, texts.GuidePourDetail, poured, ref current);
+            if (session.IsPurchase) AddGuide(texts.GuidePurchase, texts.GuidePurchaseDetail, balanced, ref current);
+            else AddGuide(texts.GuideBalance, texts.GuideBalanceDetail, balanced, ref current);
+            AddGuide(reacting ? texts.GuideReacting : texts.GuideFire, texts.GuideFireDetail, ready, ref current);
+
+            if (session.HasNextStep)
+                AddGuide(texts.GuideNextStage, null, false, ref current);
+            else if (session.Task == NoDoorTask)
+                AddGuide(texts.GuideMasterTakes, texts.GuideMasterTakesDetail, false, ref current);
+            else
+                AddGuide(texts.GuideDeliver, string.Format(texts.GuideDeliverDetail, session.Task.GiverName), false, ref current);
+        }
+
+        private void AddGuide(string text, string detail, bool done, ref bool currentTaken)
+        {
+            var state = GuideState.Done;
+            if (!done)
+            {
+                state = currentTaken ? GuideState.Pending : GuideState.Current;
+                currentTaken = true;
+            }
+            guide.Add(new OrderGuideStep(text, state == GuideState.Current ? detail : null, state));
+        }
+
+        private bool HasReactantInHand(OrderStep step)
+        {
+            var inv = watchedInventory;
+            if (inv == null || step.Reaction == null) return false;
+            var reactants = step.Reaction.Reactants;
+            for (int i = 0; i < reactants.Count; i++)
+                if (reactants[i].Species != null && inv.CountOf(reactants[i].Species) > 0) return true;
+            return false;
+        }
+
+        // Pazardan/raftan alınca rehber güncellensin. Oyuncu PlayerSpawn ile sonradan doğar: ilk çizimde bulunur.
+        private void WatchInventory()
+        {
+            if (watchedInventory != null) return;
+            watchedInventory = lastInventory != null ? lastInventory : FindAnyObjectByType<PlayerInventory>();
+            if (watchedInventory != null) watchedInventory.Changed += OnInventoryChanged;
+        }
+
+        private void OnInventoryChanged()
+        {
+            if (session != null && Current != State.Done) RefreshCard();
         }
 
         // ---------- Kayıt: kazanda kalanlar ----------

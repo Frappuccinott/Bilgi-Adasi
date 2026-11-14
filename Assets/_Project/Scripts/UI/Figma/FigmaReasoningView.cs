@@ -10,27 +10,25 @@ using UnityEngine.UI;
 namespace BilgiAdasi.UI
 {
     /// <summary>
-    /// Ustanın Sorgusu (IReasoningView) — konuşma balonuyla aynı dil: alttan karartma, altın konuşmacı adı, kâğıt
-    /// rengi soru; altında üç seçenek kâğıt şeridi (1/2/3 mum mührü), seçili olanın altın çerçevesi. Seçimden sonra
-    /// ustanın cevabı ve defter notu aynı yerde, sağ altta "[E] Devam".
-    /// Fare: tıkla. Klavye/gamepad: Move ↑↓ (W/S, sol çubuk) seç, Interact/Jump (E, Space / X, A) onayla;
-    /// klavyede 1/2/3 doğrudan seçer. Açıkken envanter gezinmesi kilitli (GameInput.LockInventory).
+    /// Ustanın Sorgusu / tahmin sorusu (IReasoningView) — normal konuşmayla birebir aynı çerçeve (DialogueFrame):
+    /// alttan karartma, portre, altın konuşan adı, kâğıt rengi soru. Altında seçenekler: kâğıt tuş kapağında numara +
+    /// kâğıt rengi metin; seçili olan koyu şerit, ince altın çerçeve ve altın yazı. Sağ altta "[E] Seç" (soru) ya da
+    /// "[E] Devam" (cevap). Fare: tıkla / üstüne gel. Klavye/gamepad: Move ↑↓ (W/S, sol çubuk) seç, Interact/Jump
+    /// (E, Space / X, A) onayla; klavyede 1/2/3 doğrudan seçer. Açıkken envanter gezinmesi kilitli.
     /// </summary>
     public sealed class FigmaReasoningView : FigmaView<IReasoningView>, IReasoningView
     {
         private const int MaxOptions = 3;
-        private static readonly string[] Letters = { "1", "2", "3" };
 
-        [SerializeField] private float left = 160f;
-        [SerializeField] private float textWidth = 1300f;
+        [SerializeField] private string chooseWord = "Seç";
         [SerializeField] private float inputGrace = 0.35f;
 
         private GameObject root;
-        private RectTransform column, hintRoot, hintKeyRoot;
-        private TextMeshProUGUI speaker, body, hintKey, hintWord;
+        private DialogueFrame frame;
         private readonly Button[] options = new Button[MaxOptions];
         private readonly TextMeshProUGUI[] optionTexts = new TextMeshProUGUI[MaxOptions];
-        private readonly Image[] optionFrames = new Image[MaxOptions];
+        private readonly Image[] optionBorders = new Image[MaxOptions];
+        private readonly Image[] optionBands = new Image[MaxOptions];
 
         private Action<int> onChosen;
         private Action onContinue;
@@ -61,17 +59,17 @@ namespace BilgiAdasi.UI
         {
             onChosen = chosen;
             onContinue = null;
-            Open(speakerName, question);
             visible = 0;
             for (int i = 0; i < MaxOptions; i++)
             {
                 bool on = optionList != null && i < optionList.Count && !string.IsNullOrEmpty(optionList[i]);
-                options[i].gameObject.SetActive(on);
+                options[i].transform.parent.gameObject.SetActive(on);
                 if (!on) continue;
                 optionTexts[i].text = optionList[i];
                 visible++;
             }
-            hintRoot.gameObject.SetActive(false);
+            frame.HintWord.text = chooseWord;
+            Open(speakerName, question);
             Select(0);
         }
 
@@ -79,12 +77,10 @@ namespace BilgiAdasi.UI
         {
             onChosen = null;
             onContinue = continued;
-            Open(speakerName, text);
             visible = 0;
-            for (int i = 0; i < MaxOptions; i++) options[i].gameObject.SetActive(false);
-            hintWord.text = continueWord;
-            hintRoot.gameObject.SetActive(true);
-            OnScheme(GameInput.LastScheme);
+            for (int i = 0; i < MaxOptions; i++) options[i].transform.parent.gameObject.SetActive(false);
+            frame.HintWord.text = continueWord;
+            Open(speakerName, text);
             EventSystem.current?.SetSelectedGameObject(null);
         }
 
@@ -106,13 +102,14 @@ namespace BilgiAdasi.UI
 
         private void Open(string speakerName, string text)
         {
-            speaker.text = speakerName;
-            body.text = text;
+            frame.SetSpeaker(speakerName, null);
+            frame.Body.text = text;
+            OnScheme(GameInput.LastScheme);
             root.SetActive(true);
             SetHolding(true);
             shownAt = Time.unscaledTime;
             Listen(true);
-            LayoutRebuilder.ForceRebuildLayoutImmediate(column);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(frame.Column);
         }
 
         // ---------- Girdi ----------
@@ -179,7 +176,13 @@ namespace BilgiAdasi.UI
         {
             selected = Mathf.Clamp(index, 0, Mathf.Max(0, visible - 1));
             var th = Theme;
-            for (int i = 0; i < MaxOptions; i++) optionFrames[i].color = i == selected ? th.Gold : th.Wood;
+            for (int i = 0; i < MaxOptions; i++)
+            {
+                bool on = i == selected;
+                optionBorders[i].enabled = on;
+                optionBands[i].enabled = on;
+                optionTexts[i].color = on ? th.GoldLight : th.Paper;
+            }
             if (visible > 0) EventSystem.current?.SetSelectedGameObject(options[selected].gameObject);
         }
 
@@ -199,7 +202,7 @@ namespace BilgiAdasi.UI
 
         private void OnScheme(ControlScheme _)
         {
-            if (hintKey != null) UiKit.SetKeyCap(hintKey, hintKeyRoot, ControlGlyphs.For(PromptAction.Interact), 40f);
+            if (frame != null) UiKit.SetKeyCap(frame.HintKey, frame.HintKeyRoot, ControlGlyphs.For(PromptAction.Interact), 40f);
         }
 
         // ---------- Kurulum ----------
@@ -207,94 +210,56 @@ namespace BilgiAdasi.UI
         private void Build()
         {
             var th = Theme;
-            var rootRt = UiKit.Fill(UiKit.Rect(transform, "Reasoning"));
-            root = rootRt.gameObject;
+            frame = DialogueFrame.Build(transform, "Reasoning", th);
+            root = frame.Root.gameObject;
+            // Cevapta ekrana tıklamak devam ettirir; soruda yalnızca seçenekler tıklanır.
+            frame.Catcher.onClick.AddListener(() => { if (onContinue != null) Continue(); });
 
-            // Ekranın tamamı: arkaya tıklanmasın; mesajdayken tıklama devam ettirir.
-            var catcher = UiKit.Img(rootRt, "ClickCatcher", new Color(0, 0, 0, 0), null, true);
-            UiKit.Fill(catcher.rectTransform);
-            catcher.gameObject.AddComponent<Button>().onClick.AddListener(() => { if (onContinue != null) Continue(); });
-            var fade = UiKit.Img(rootRt, "BottomFade", UiKit.WithAlpha(th.InkDeep, 0.9f), UiKit.FadeUp);
-            var frt = fade.rectTransform;
-            frt.anchorMin = Vector2.zero;
-            frt.anchorMax = new Vector2(1f, 0f);
-            frt.pivot = new Vector2(0.5f, 0f);
-            frt.offsetMin = Vector2.zero;
-            frt.offsetMax = new Vector2(0f, 620f);
-
-            // Sütun: konuşmacı, soru/metin, seçenekler — alttan yukarı büyür
-            column = UiKit.Rect(rootRt, "Column");
-            column.anchorMin = column.anchorMax = new Vector2(0f, 0f);
-            column.pivot = new Vector2(0f, 0f);
-            // Envanter çubuğunun (altta ~150 px) üstünde kalır; sorgu sırasında envanter açık durur.
-            column.anchoredPosition = new Vector2(left, 190f);
-            column.sizeDelta = new Vector2(textWidth, 0f);
-            var col = column.gameObject.AddComponent<VerticalLayoutGroup>();
-            col.spacing = 12f;
-            col.childControlWidth = col.childControlHeight = true;
-            col.childForceExpandWidth = true;
-            col.childForceExpandHeight = false;
-            column.gameObject.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-
-            speaker = UiKit.Text(column, "Speaker", th.BodyFont, 24f, th.GoldLight, TextAlignmentOptions.Left, FontStyles.Bold);
-            body = UiKit.Text(column, "Body", th.BodyFont, 32f, th.Paper);
-            foreach (var t in new[] { speaker, body })
-            {
-                var sh = t.gameObject.AddComponent<Shadow>();
-                sh.effectColor = UiKit.WithAlpha(th.InkDeep, 0.6f);
-                sh.effectDistance = new Vector2(0f, -2f);
-            }
-
+            // Seçenekler sütunda metnin altında; aralarında biraz boşluk.
+            var gap = UiKit.Rect(frame.Column, "OptionsGap");
+            gap.gameObject.AddComponent<LayoutElement>().preferredHeight = 4f;
             for (int i = 0; i < MaxOptions; i++)
             {
                 int index = i;
-                var opt = UiKit.Rect(column, "Option_" + Letters[i]);
-                opt.gameObject.AddComponent<LayoutElement>().minHeight = 64f;
-                var frame = UiKit.Img(opt, "Frame", th.Wood, UiKit.Round8, true);
-                UiKit.Fill(frame.rectTransform);
-                optionFrames[i] = frame;
-                var paper = UiKit.Img(frame.transform, "Paper", th.Paper, UiKit.Round8);
-                UiKit.Fill(paper.rectTransform, 4, 4, 4, 4);
+                // Satır tam genişlik tutucu; seçenek içeriği kadar (seçili şerit yazıyı sarar, referanstaki gibi).
+                var holder = UiKit.Rect(frame.Column, "OptionRow_" + (i + 1));
+                var hl = holder.gameObject.AddComponent<HorizontalLayoutGroup>();
+                hl.childAlignment = TextAnchor.UpperLeft;
+                hl.childControlWidth = hl.childControlHeight = true;
+                hl.childForceExpandWidth = hl.childForceExpandHeight = false;
+                var opt = UiKit.Rect(holder, "Option_" + (i + 1));
                 var row = opt.gameObject.AddComponent<HorizontalLayoutGroup>();
-                row.padding = new RectOffset(14, 22, 10, 10);
-                row.spacing = 16f;
+                row.padding = new RectOffset(10, 18, 6, 6);
+                row.spacing = 14f;
                 row.childAlignment = TextAnchor.MiddleLeft;
                 row.childControlWidth = row.childControlHeight = true;
                 row.childForceExpandWidth = false;
                 row.childForceExpandHeight = false;
-                frame.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+                var hit = opt.gameObject.AddComponent<Image>();
+                hit.color = new Color(0f, 0f, 0f, 0f);
 
-                var wax = UiKit.Img(opt, "Wax", th.Wax, UiKit.Disc);
-                var wl = wax.gameObject.AddComponent<LayoutElement>();
-                wl.preferredWidth = wl.preferredHeight = 40f;
-                var letter = UiKit.Text(wax.transform, "Letter", th.HeadingFont, 24f, th.Paper, TextAlignmentOptions.Center, FontStyles.Bold);
-                UiKit.Fill(letter.rectTransform);
-                letter.text = Letters[i];
-                optionTexts[i] = UiKit.Text(opt, "Text", th.BodyFont, 28f, th.Ink, TextAlignmentOptions.MidlineLeft);
-                optionTexts[i].gameObject.AddComponent<LayoutElement>().flexibleWidth = 1f;
+                // Seçili: ince altın çerçeve + koyu mürekkep şerit (yalnızca seçiliyken görünür)
+                var border = UiKit.Img(opt, "Border", UiKit.WithAlpha(th.GoldDark, 0.8f), UiKit.Round8);
+                border.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+                UiKit.Fill(border.rectTransform);
+                optionBorders[i] = border;
+                var band = UiKit.Img(opt, "Band", UiKit.WithAlpha(th.InkDeep, 0.88f), UiKit.Round8);
+                band.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+                UiKit.Fill(band.rectTransform, 2f, 2f, 2f, 2f);
+                optionBands[i] = band;
+
+                var key = UiKit.KeyCap(opt, th, 34f, out var keyRoot);
+                UiKit.SetKeyCap(key, keyRoot, "<b>[" + (i + 1) + "]</b>", 34f);
+                optionTexts[i] = UiKit.Text(opt, "Text", th.BodyFont, 27f, th.Paper, TextAlignmentOptions.MidlineLeft);
+                DialogueFrame.Shade(optionTexts[i], th);
 
                 var btn = opt.gameObject.AddComponent<Button>();
-                btn.targetGraphic = frame;
+                btn.targetGraphic = hit;
                 btn.transition = Selectable.Transition.None;
                 btn.onClick.AddListener(() => Choose(index));
                 options[i] = btn;
-                var hover = opt.gameObject.AddComponent<OptionHover>();
-                hover.Init(() => Select(index));
+                opt.gameObject.AddComponent<OptionHover>().Init(() => Select(index));
             }
-
-            // Sağ alt: tuş kapağı + "Devam"
-            hintRoot = UiKit.Rect(rootRt, "Hint");
-            UiKit.Place(hintRoot, new Vector2(1f, 0f), new Vector2(-72f, 56f), new Vector2(0f, 40f));
-            var hrow = hintRoot.gameObject.AddComponent<HorizontalLayoutGroup>();
-            hrow.spacing = 10f;
-            hrow.childAlignment = TextAnchor.MiddleRight;
-            hrow.childControlWidth = hrow.childControlHeight = true;
-            hrow.childForceExpandWidth = hrow.childForceExpandHeight = false;
-            hintRoot.gameObject.AddComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-            hintKey = UiKit.KeyCap(hintRoot, th, 40f, out hintKeyRoot);
-            hintWord = UiKit.Text(hintRoot, "Word", th.BodyFont, 26f, th.Paper, TextAlignmentOptions.Left);
-            hintWord.textWrappingMode = TextWrappingModes.NoWrap;
-
             root.SetActive(false);
         }
 
